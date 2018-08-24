@@ -1,0 +1,13 @@
+#!/usr/local/env zsh
+
+alias a="atom"
+alias a.="atom ."
+alias a..="atom .."
+alias c="code"
+alias c.="code ."
+alias c..="code .."
+alias brewin="brew info"
+alias caskin="brew cask info"
+alias serv="brew services"
+alias disk="diskutil"
+alias eject="diskutil eject"

@@ -1,0 +1,11 @@
+#!/usr/local/env zsh
+
+export CLICOLOR=1
+export LSCOLORS=ExGxfxDxbxexexcxcxcxcx
+export GPG_TTY=$(tty)
+export GOPATH=$(go env GOPATH)
+export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="$PATH:$HOME/.yarn/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.conduit/bin"
+export MICRO_TRUECOLOR=1

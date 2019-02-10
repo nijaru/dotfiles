@@ -36,9 +36,14 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'git' \
+  'homebrew' \
   'syntax-highlighting' \
   'history-substring-search' \
-  'prompt'
+  'autosuggestions' \
+  'command-not-found' \
+  'archive' \
+  'prompt' \
+  'fasd' 
 
 #
 # Autosuggestions

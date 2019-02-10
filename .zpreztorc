@@ -40,10 +40,9 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'history-substring-search' \
   'autosuggestions' \
-  'command-not-found' \
   'archive' \
   'prompt' \
-  'fasd' 
+  'fasd'
 
 #
 # Autosuggestions

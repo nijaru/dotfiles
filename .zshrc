@@ -13,9 +13,9 @@ done
 
 unamestr=`uname`
 if [[ unamestr == 'Darwin' ]]; then
-	source .macrc
+	source ${HOME}/.macrc
 else
-    source .linuxrc
+    source ${HOME}/.linuxrc
 fi
 
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh

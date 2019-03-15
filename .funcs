@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # Git upstream branch syncer.
 # Usage: gsync master (checks out master, pull upstream, push origin).
 function gsync() {

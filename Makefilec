@@ -1,8 +1,8 @@
 CC=cc
-CFLAGS=-c -Wall -Wextra -std=c++14 -march=native -O2 -pipe
+CFLAGS=-c -Wall -Werror -march=native -O2 -pipe
 LDFLAGS=
-SOURCES=main.cc
-OBJECTS=$(SOURCES:.cc=.o)
+SOURCES=main.c
+OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
@@ -10,7 +10,7 @@ all: $(SOURCES) $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-.cc.o:
+.c.o:
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:

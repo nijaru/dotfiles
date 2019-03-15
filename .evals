@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+
+eval "$(rbenv init -)"
+eval "$(pyenv init -)" 
+eval "$(pipenv --completion)"
+source ~/.zsh-nvm/zsh-nvm.plugin.zsh

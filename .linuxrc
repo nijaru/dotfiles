@@ -1,8 +1,9 @@
 #!/usr/bin/env zsh
 
-alias dnfu="sudo dnf check-update"
+alias open="xdg-open"
+alias dnfu="dnf check-update"
 alias dnfup="sudo dnf update"
 alias dnfi="sudo dnf install"
 alias dnfx="sudo dnf remove"
-alias dnfs="sudo dnf search"
+alias dnfs="dnf search"
 alias dnfax="sudo dnf autoremove"

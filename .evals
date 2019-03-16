@@ -4,3 +4,4 @@ eval "$(rbenv init -)"
 eval "$(pyenv init -)" 
 eval "$(pipenv --completion)"
 source ~/.zsh-nvm/zsh-nvm.plugin.zsh
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh

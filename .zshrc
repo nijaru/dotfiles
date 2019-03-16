@@ -17,5 +17,3 @@ if [[ unamestr == 'Darwin' ]]; then
 else
     source ${HOME}/.linuxrc
 fi
-
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh

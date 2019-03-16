@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 export CLICOLOR=1
-export LSCOLORS=ExGxfxDxbxexexcxcxcxcx
+# export LSCOLORS=xGxfxDxbxexexcxcxcxcx
 
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"

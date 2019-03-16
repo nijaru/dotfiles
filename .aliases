@@ -15,10 +15,19 @@ alias ez="exec zsh"
 alias wgq="wg-quick"
 alias wgqu="wg-quick up"
 alias wgqd="wg-quick down"
+
 alias wgqu2="wg-quick up mullvad-us2"
-alias wgqu12="wg-quick up mullvad-us12"
 alias wgqd2="wg-quick down mullvad-us2"
+
+alias wgqu11="wg-quick up mullvad-us11"
+alias wgqd11="wg-quick down mullvad-us11"
+
+alias wgqu12="wg-quick up mullvad-us12"
 alias wgqd12="wg-quick down mullvad-us12"
+
+alias wgquca="wg-quick up mullvad-ca2"
+alias wgqdca="wg-quick down mullvad-ca2"
+
 # editors 
 alias v="nvim"
 alias a="atom"

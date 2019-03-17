@@ -8,6 +8,10 @@ alias grep="rg"
 alias dk="docker"
 alias k="kubectl"
 alias mk="minikube"
+alias tar="tar cf"
+alias untar="tar xf"
+alias zstd="zstd -T0"
+
 alias sethosts='sudo resethosts; sudo curl "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts" | sudo tee -a /etc/hosts'
 alias resethosts="sudo cp -f ~/.hosts /etc/hosts"
 alias ez="exec zsh"
@@ -28,7 +32,7 @@ alias wgqd12="wg-quick down mullvad-us12"
 alias wgquca="wg-quick up mullvad-ca2"
 alias wgqdca="wg-quick down mullvad-ca2"
 
-# editors 
+# editors
 alias v="nvim"
 alias a="atom"
 alias a.="atom ."

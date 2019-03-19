@@ -1,7 +1,6 @@
 #!/usr/bin/env zsh
 
 # bin
-alias sc="sudo systemctl"
 alias t="touch"
 alias rmf="rm -rf"
 alias grep="rg"

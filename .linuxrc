@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 
-alias open="xdg-open"
 alias dnfu="dnf check-update"
 alias dnfup="sudo dnf update"
 alias up="sudo dnf update"
@@ -9,3 +8,6 @@ alias dnfx="sudo dnf remove"
 alias dnfs="dnf search"
 alias dnfin="dnf info"
 alias dnfax="sudo dnf autoremove"
+
+alias sc="sudo systemctl"
+alias open="xdg-open"

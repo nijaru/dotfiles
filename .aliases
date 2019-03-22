@@ -128,7 +128,7 @@ alias grv="git remote -v"
 alias gl="git log -n 20 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
 alias gl4="git log -n 40 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
 alias gll="git log --topo-order --pretty=format:'${_git_log_medium_format}'"
-alias glg="git log --graph --all --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
+alias glg="git log --graph --all -n 40 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
 alias gsall="git stash save --include-untracked"
 alias gsm="gsync master"
 # hub

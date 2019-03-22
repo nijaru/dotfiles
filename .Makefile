@@ -1,4 +1,4 @@
-CC=gcc
+CC=cc
 CFLAGS=-c -Wall -Wextra -std=c++14 -march=native -O2 -pipe
 LDFLAGS=
 SOURCES=main.cc

@@ -1,5 +1,5 @@
-CC=gcc
-CFLAGS=-c -Wall -Werror -march=native -O2 -pipe
+CC=cc
+CFLAGS=-c -Wall -Wextra -std=c11 -march=native -O2 -pipe
 LDFLAGS=
 SOURCES=main.c
 OBJECTS=$(SOURCES:.c=.o)

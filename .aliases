@@ -31,6 +31,7 @@ alias wgqdca="sudo wg-quick down mullvad-ca2"
 
 # editors
 alias v="nvim"
+alias ec="emacsclient -t"
 alias a="atom"
 alias a.="atom ."
 alias a..="atom .."
@@ -41,7 +42,6 @@ alias c..="code .."
 alias gh="cd $HOME/github"
 alias ws="cd $HOME/go/src/github.com/nijaru"
 alias config="cd $HOME/.config"
-alias license="cp $HOME/.LICENSE ./LICENSE"
 alias makefile="cp $HOME/.Makefile ."
 alias makefilec="cp $HOME/.Makefilec ./Makefile"
 alias mf=makefile

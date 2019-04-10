@@ -1,18 +1,19 @@
-CC=cc
-CFLAGS=-c -Wall -Wextra -std=c++14 -march=native -O2 -pipe
-LDFLAGS=
-SOURCES=main.cc
+CC=g++
+CFLAGS=-Wall -Wextra -std=c++14 -march=native -O2 -pipe
+SOURCES=$(wildcard src/*.cc)
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(OBJECTS) -o $@
 
-.cc.o:
-	$(CC) $(CFLAGS) $< -o $@
+%.o: %.cc
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(OBJECTS)
-	rm $(EXECUTABLE)
+	$(RM) $(OBJECTS)
+	$(RM) $(EXECUTABLE)
+
+.PHONY: all clean

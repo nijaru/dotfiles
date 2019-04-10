@@ -1,18 +1,19 @@
 CC=cc
-CFLAGS=-c -Wall -Wextra -std=c11 -march=native -O2 -pipe
-LDFLAGS=
-SOURCES=main.c
+CFLAGS=-Wall -Wextra -std=c11 -march=native -O2 -pipe
+SOURCES=$(wildcard src/*.c)
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(OBJECTS) -o $@
 
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(OBJECTS)
-	rm $(EXECUTABLE)
+	$(RM) $(OBJECTS)
+	$(RM) $(EXECUTABLE)
+
+.PHONY: all clean

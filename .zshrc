@@ -6,7 +6,7 @@ source $HOME/.aliases
 source $HOME/.linuxrc
 
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
-source $HOME/.fzf.zsh
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 eval "$(rbenv init -)"
 eval "$(pyenv init -)" 
 eval "$(pipenv --completion)"

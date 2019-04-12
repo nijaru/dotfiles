@@ -6,7 +6,8 @@ source $HOME/.aliases
 source $HOME/.linuxrc
 
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+#[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+source /usr/share/fzf/shell/key-bindings.zsh
 eval "$(rbenv init -)"
 eval "$(pyenv init -)" 
 eval "$(pipenv --completion)"
@@ -15,14 +16,14 @@ eval "$(pipenv --completion)"
 # Usage: gsync master (checks out master, pull upstream, push origin).
 function gsync() {
   if [ ! "$1" ] ; then
-      echo "You must supply a branch."
-      return 0
+    echo "You must supply a branch."
+    return 0
   fi
 
   BRANCHES=$(git branch --list $1)
   if [ ! "$BRANCHES" ] ; then
-     echo "Branch $1 does not exist."
-     return 0
+    echo "Branch $1 does not exist."
+    return 0
   fi
 
   git checkout "$1" && \

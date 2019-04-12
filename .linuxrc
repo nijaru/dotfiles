@@ -2,7 +2,7 @@
 
 alias dnfu="dnf check-update"
 alias dnfup="sudo dnf update"
-alias up="sudo dnf update; rustup update; gem update; zprezto-update"
+alias up="sudo dnf update; rustup update; gem update; zprezto-update; git -C ~/.SpaceVim pull"
 alias dnfi="sudo dnf install"
 alias dnfx="sudo dnf remove"
 alias dnfs="dnf search"

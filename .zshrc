@@ -2,13 +2,30 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# [ -f .aliases ] && source .aliases
-# [ -f .exports ] && source .exports
-# [ -f .evals ] && source .evals
-# [ -f .funcs ] && source .funcs
+source $HOME/.aliases
+source $HOME/.linuxrc
 
-for file in ${HOME}/.{aliases,exports,evals,funcs}; do
-    [ -f "$file" ] && source "$file"
-done
+source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
+source $HOME/.fzf.zsh
+eval "$(rbenv init -)"
+eval "$(pyenv init -)" 
+eval "$(pipenv --completion)"
 
-source ${HOME}/.linuxrc
+# Git upstream branch syncer.
+# Usage: gsync master (checks out master, pull upstream, push origin).
+function gsync() {
+  if [ ! "$1" ] ; then
+      echo "You must supply a branch."
+      return 0
+  fi
+
+  BRANCHES=$(git branch --list $1)
+  if [ ! "$BRANCHES" ] ; then
+     echo "Branch $1 does not exist."
+     return 0
+  fi
+
+  git checkout "$1" && \
+  git pull upstream "$1" && \
+  git push origin "$1"
+}

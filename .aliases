@@ -3,6 +3,7 @@
 alias t="touch"
 alias rmf="rm -rf"
 alias v="nvim"
+alias ec="emacsclient -t"
 alias ez="exec zsh"
 alias grep="rg"
 alias zstd="zstd -T0"
@@ -14,6 +15,7 @@ alias a="atom --force-device-scale-factor=2.25"
 alias sethosts='sudo resethosts; sudo curl "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts" | sudo tee -a /etc/hosts'
 alias resethosts="sudo cp -f ~/.hosts /etc/hosts"
 alias upz="zprezto-update"
+alias upv="git -C ~/.SpaceVim pull"
 # dirs/files
 alias gh="cd $HOME/github"
 alias ws="cd $HOME/go/src/github.com/nijaru"

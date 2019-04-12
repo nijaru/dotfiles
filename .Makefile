@@ -4,10 +4,8 @@ SOURCES=$(wildcard src/*.cc)
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 
-all: $(SOURCES) $(EXECUTABLE)
-
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@
+	$(CC) $< -o $@
 
 %.o: %.cc
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -16,4 +14,4 @@ clean:
 	$(RM) $(OBJECTS)
 	$(RM) $(EXECUTABLE)
 
-.PHONY: all clean
+.PHONY: clean

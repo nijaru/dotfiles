@@ -42,6 +42,8 @@ alias pie="pipenv"
 alias rb="ruby"
 alias rspec="rspec -c"
 alias be="bundle exec"
+alias bu="bundle update"
+alias bi="bundle install"
 alias gemi="gem install"
 alias gemu="gem update"
 # go
@@ -51,6 +53,7 @@ alias got="go test -cover"
 alias gtb="go test -bench=. -benchmem"
 # rs
 alias ru="rustup"
+alias rup="rustup update"
 alias cb="cargo build"
 alias cr="cargo run"
 # js

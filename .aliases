@@ -2,7 +2,7 @@
 # bin
 alias t="touch"
 alias rmf="rm -rf"
-alias v="nvim"
+alias v="vim"
 alias ec="emacsclient -t"
 alias ez="exec zsh"
 alias grep="rg"

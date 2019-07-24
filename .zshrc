@@ -4,6 +4,7 @@ fi
 
 source $HOME/.aliases
 source $HOME/.linuxrc
+source $HOME/.42
 
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
 #[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh

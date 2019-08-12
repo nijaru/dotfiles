@@ -7,8 +7,8 @@ source $HOME/.linuxrc
 source $HOME/.42
 
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
-#[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 source /usr/share/fzf/shell/key-bindings.zsh
+
 eval "$(rbenv init -)"
 eval "$(pyenv init -)" 
 eval "$(pipenv --completion)"
@@ -31,3 +31,5 @@ function gsync() {
   git pull upstream "$1" && \
   git push origin "$1"
 }
+
+#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

@@ -64,8 +64,8 @@ fi
 
 export CLICOLOR=1
 # export LSCOLORS=xGxfxDxbxexexcxcxcxcx
-# export PATH=$PATH:/usr/local/go/bin
-# export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH=$PATH:/usr/local/go/bin
+export PATH="$PATH:$(go env GOPATH)/bin"
 
 export PATH="$HOME/.cargo/bin:$PATH"
 

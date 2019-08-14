@@ -16,6 +16,7 @@ alias sethosts='sudo resethosts; sudo curl "https://raw.githubusercontent.com/St
 alias resethosts="sudo cp -f ~/.hosts /etc/hosts"
 alias upz="zprezto-update"
 alias upv="git -C ~/.SpaceVim pull"
+alias please="sudo"
 # dirs/files
 alias gh="cd $HOME/github"
 alias ws="cd $HOME/go/src/github.com/nijaru"

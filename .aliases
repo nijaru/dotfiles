@@ -114,6 +114,8 @@ alias hubcr="hub create"
 alias hubc="hub clone"
 alias hubf="hub fork"
 alias hubpr="hub pull-request"
+# dotfiles
+alias backup="cp -f ~/.aliases ~/github/dotfiles; cp -f ~/.gitconfig ~/github/dotfiles; cp -f ~/.linuxrc ~/github/dotfiles; cp -f ~/.zpreztorc ~/github/dotfiles; cp -f ~/.zprofile ~/github/dotfiles; cp -f ~/.zshrc ~/github/dotfiles; cp -f ~/.zprezto/modules/prompt/functions/prompt_nijaru_setup ~/github/dotfiles" 
 # wireguard
 alias wgq="sudo wg-quick"
 alias wgqu="sudo wg-quick up"

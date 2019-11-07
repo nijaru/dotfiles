@@ -64,6 +64,7 @@ fi
 
 export CLICOLOR=1
 # export LSCOLORS=xGxfxDxbxexexcxcxcxcx
+
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
 
@@ -75,3 +76,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
 #export PATH="$PATH:$HOME/.yarn/bin"
+#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+fpath+=~/.zfunc

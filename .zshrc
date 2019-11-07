@@ -4,14 +4,13 @@ fi
 
 source $HOME/.aliases
 source $HOME/.linuxrc
-source $HOME/.42
 
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
 source /usr/share/fzf/shell/key-bindings.zsh
 
 eval "$(rbenv init -)"
 eval "$(pyenv init -)" 
-eval "$(pipenv --completion)"
+#eval "$(pipenv --completion)"
 
 # Git upstream branch syncer.
 # Usage: gsync master (checks out master, pull upstream, push origin).
@@ -32,4 +31,4 @@ function gsync() {
   git push origin "$1"
 }
 
-#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

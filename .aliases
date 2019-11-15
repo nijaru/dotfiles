@@ -60,6 +60,7 @@ alias cb="cargo build"
 alias cr="cargo run"
 alias ca="cargo add"
 alias cx="cargo rm"
+alias cu="cargo update"
 alias cup="cargo upgrade"
 # js
 alias n="node"
@@ -118,7 +119,7 @@ alias hubc="hub clone"
 alias hubf="hub fork"
 alias hubpr="hub pull-request"
 # dotfiles
-alias backup="cp -f ~/.aliases ~/github/dotfiles; cp -f ~/.gitconfig ~/github/dotfiles; cp -f ~/.linuxrc ~/github/dotfiles; cp -f ~/.zpreztorc ~/github/dotfiles; cp -f ~/.zprofile ~/github/dotfiles; cp -f ~/.zshrc ~/github/dotfiles; cp -f ~/.zprezto/modules/prompt/functions/prompt_nijaru_setup ~/github/dotfiles" 
+alias backup="cp -f ~/.aliases ~/github/dotfiles; cp -f ~/.gitconfig ~/github/dotfiles; cp -f ~/.linuxrc ~/github/dotfiles; cp -f ~/.zpreztorc ~/github/dotfiles; cp -f ~/.zprofile ~/github/dotfiles; cp -f ~/.zshrc ~/github/dotfiles; cp -f ~/.zprezto/modules/prompt/functions/prompt_nijaru_setup ~/github/dotfiles"
 # wireguard
 alias wgq="sudo wg-quick"
 alias wgqu="sudo wg-quick up"

@@ -9,9 +9,6 @@
   insteadOf = https://github.com/
 [color "status"]
   changed = yellow
-[color "diff"]
-  old = red
-  new = green
 [commit]
   gpgsign = true
 [diff]

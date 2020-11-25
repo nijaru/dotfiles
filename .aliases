@@ -35,8 +35,8 @@ alias tree="exa -T"
 alias tre="exa -T -L 2"
 # py
 alias py="python"
-alias pi="pip"
-alias pipi="pip install"
+alias pip="pip3"
+alias pipi="pip3 install"
 alias pye="pyenv"
 alias pie="pipenv"
 # rb

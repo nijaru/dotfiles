@@ -1,10 +1,12 @@
 #!/usr/bin/env zsh
 
-cp -nf .aliases $HOME
-cp -nf .p10k.zsh $HOME
-cp -nf .zpreztorc $HOME
-cp -nf .zprofile $HOME
-cp -nf .zshrc $HOME
-cp -nf vimrc $HOME/.vim
+cp -f .aliases $HOME
+cp -f .p10k.zsh $HOME
+cp -f .zpreztorc $HOME
+cp -f .zprofile $HOME
+cp -f .zshrc $HOME
+cp -f vimrc $HOME/.vim
+cp -f linuxrc $HOME
+cp -f macrc $HOME
 
 echo "Installation to $HOME complete."

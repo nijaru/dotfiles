@@ -41,7 +41,9 @@ zstyle ':prezto:load' pmodule \
   'autosuggestions' \
   'archive' \
   'prompt' \
-  'fasd'
+  'fasd' \
+  'node' \
+  'homebrew'
 
 #
 # Autosuggestions

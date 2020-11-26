@@ -10,10 +10,10 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 source $HOME/.aliases
-source $HOME/.linuxrc
+source $HOME/.macrc
 
-source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
-source /usr/share/fzf/shell/key-bindings.zsh
+# source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
+# source /usr/share/fzf/shell/key-bindings.zsh
 
 eval "$(rbenv init -)"
 eval "$(pyenv init -)"

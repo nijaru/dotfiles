@@ -50,6 +50,7 @@ alias gemu="gem update"
 # go
 alias ggt="go get -u -v"
 alias ggtd="go get -u -v -d"
+alias grun="go run"
 alias got="go test -cover"
 alias gtb="go test -bench=. -benchmem"
 # rs

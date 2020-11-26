@@ -6,5 +6,7 @@ cp -f $HOME/.zpreztorc .
 cp -f $HOME/.zprofile .
 cp -f $HOME/.zshrc .
 cp -f $HOME/.vim/vimrc .
+cp -f $HOME/.linuxrc .
+cp -f $HOME/.macrc .
 
 echo "Backup complete."

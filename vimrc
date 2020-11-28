@@ -26,8 +26,8 @@ if 1
 endif
 
 " tabs
-"set sw=2 ts=2
+"set sw=4 ts=4
 " spaces
-set et sw=2 "sts=2
+"set et sw=2 "sts=2
 " rm trailing whitespace
 autocmd BufWritePre * %s/\s\+$//e

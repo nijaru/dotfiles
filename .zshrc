@@ -10,6 +10,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 source $HOME/.aliases
+source $HOME/.linuxrc
 source $HOME/.macrc
 
 # source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh

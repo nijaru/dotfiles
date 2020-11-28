@@ -6,7 +6,7 @@ cp -f .zpreztorc $HOME
 cp -f .zprofile $HOME
 cp -f .zshrc $HOME
 cp -f vimrc $HOME/.vim
-cp -f linuxrc $HOME
-cp -f macrc $HOME
+cp -f .linuxrc $HOME
+cp -f .macrc $HOME
 
 echo "Installation to $HOME complete."

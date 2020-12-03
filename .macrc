@@ -1,3 +1,12 @@
 #!/usr/bin/env zsh
 
 alias brewin="brew info"
+
+# this may need to be called earlier in zshrc
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+

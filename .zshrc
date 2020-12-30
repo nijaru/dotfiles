@@ -10,8 +10,9 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 source $HOME/.aliases
-source $HOME/.linuxrc
 source $HOME/.macrc
+
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 # source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
 # source /usr/share/fzf/shell/key-bindings.zsh
@@ -43,3 +44,11 @@ function gsync() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+

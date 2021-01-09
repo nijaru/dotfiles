@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 cp -f $HOME/.aliases .
+cp -f $HOME/.functions .
 cp -f $HOME/.p10k.zsh .
 cp -f $HOME/.zpreztorc .
 cp -f $HOME/.zprofile .

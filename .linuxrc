@@ -2,13 +2,16 @@
 
 alias dnfu="dnf check-update"
 alias dnfup="sudo dnf update"
-alias up="sudo dnf update; rustup update; gem update; zprezto-update; git -C ~/.SpaceVim pull"
-alias dnfi="sudo dnf install"
+# alias dnfi="sudo dnf install"
 alias dnfx="sudo dnf remove"
-alias dnfs="dnf search"
+# alias dnfs="dnf search"
 alias dnfin="dnf info"
 alias dnfax="sudo dnf autoremove"
+alias up="sudo dnf update; zprezto-update; git -C ~/.SpaceVim pull"
 
 alias sc="systemctl"
 alias ssc="sudo systemctl"
 alias open="xdg-open"
+
+alias pbcopy="xclip -selection clipboard"
+alias pbpaste="xclip -selection clipboard -o"

@@ -63,6 +63,8 @@ alias cup="cargo upgrade"
 # js
 alias n="node"
 alias y="yarn"
+alias yb="yarn build"
+alias ys="yarn start"
 alias ya="yarn add"
 alias yad="yarn add --dev"
 alias yu="yarn upgrade"

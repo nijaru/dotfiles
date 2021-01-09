@@ -1,7 +1,7 @@
 [user]
   name = Nick Russo
   email = nijaru0x@gmail.com
-  signingkey = 5E6CE7282F48C274
+  signingkey = 6C09713D1BF8E813
 [core]
   editor = vim
 [url "git@github.com:"]

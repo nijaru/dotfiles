@@ -43,7 +43,7 @@ zstyle ':prezto:load' pmodule \
   'prompt' \
   'fasd' \
   'node' \
-  'homebrew'
+  'dnf'
 
 #
 # Autosuggestions

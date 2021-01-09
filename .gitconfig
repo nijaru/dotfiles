@@ -1,10 +1,9 @@
 [user]
   name = Nick Russo
   email = nijaru0x@gmail.com
-  signingkey = 403D399073A3E248
+  signingkey = 5E6CE7282F48C274
 [core]
   editor = vim
-  # excludesfile = ~/.gitignore
 [url "git@github.com:"]
   insteadOf = https://github.com/
 [color "status"]
@@ -25,4 +24,3 @@
 [transfer]
   fsckobjects = true
 [alias]
-

@@ -9,7 +9,6 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-source ~/.fzf.zsh
 source ~/.p10k.zsh
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
 source /usr/share/fzf/shell/key-bindings.zsh

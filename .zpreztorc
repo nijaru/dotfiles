@@ -43,6 +43,8 @@ zstyle ':prezto:load' pmodule \
   'prompt' \
   'fasd' \
   'node' \
+  'ruby' \
+  'homebrew' \
   'dnf'
 
 #
@@ -147,7 +149,7 @@ zstyle ':prezto:module:prompt' theme 'powerlevel10k'
 #
 
 # Auto switch the Ruby version on directory change.
-# zstyle ':prezto:module:ruby:chruby' auto-switch 'yes'
+zstyle ':prezto:module:ruby:chruby' auto-switch 'yes'
 
 #
 # Screen

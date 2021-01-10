@@ -11,14 +11,14 @@
 [commit]
   gpgsign = true
 [diff]
-	algorithm = patience
+  algorithm = patience
 [merge]
   ff = only
 [push]
   default = simple
   followTags = true
 [rebase]
-	autosquash = true
+  autosquash = true
 [status]
   showUntrackedFiles = all
 [transfer]

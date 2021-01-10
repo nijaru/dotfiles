@@ -9,5 +9,7 @@ cp -f $HOME/.zshrc .
 cp -f $HOME/.vim/vimrc .
 cp -f $HOME/.linuxrc .
 cp -f $HOME/.macrc .
+cp -f $HOME/.Spacevim/vimrc .
+cp -f $HOME/.Spacevim.d/init.toml .
 
 echo "Backup complete."

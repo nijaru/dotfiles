@@ -1,26 +1,28 @@
 [user]
-  name = Nick Russo
-  email = nijaru0x@gmail.com
-  signingkey = 6C09713D1BF8E813
+	name = Nick Russo
+	email = nijaru0x@gmail.com
+	signingkey = 6C09713D1BF8E813
 [core]
-  editor = vim
-[url "git@github.com:"]
-  insteadOf = https://github.com/
+	editor = vim
 [color "status"]
-  changed = yellow
+	changed = yellow
 [commit]
-  gpgsign = true
+	gpgsign = true
 [diff]
-  algorithm = patience
+	algorithm = patience
+[init]
+	defaultBranch = main
 [merge]
-  ff = only
+	ff = only
 [push]
-  default = simple
-  followTags = true
+	default = simple
+	followTags = true
 [rebase]
-  autosquash = true
+	autosquash = true
 [status]
-  showUntrackedFiles = all
+	showUntrackedFiles = all
 [transfer]
-  fsckobjects = true
+	fsckobjects = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
 [alias]

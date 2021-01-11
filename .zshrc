@@ -11,9 +11,9 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-source ~/.p10k.zsh
+source $HOME/.p10k.zsh
+source $HOME/.fzf.zsh
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
-- [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source $HOME/.aliases
 source $HOME/.functions

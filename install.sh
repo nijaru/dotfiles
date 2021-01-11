@@ -1,13 +1,14 @@
 #!/usr/bin/env zsh
 
-cp -f .aliases $HOME
-cp -f .functions $HOME
-cp -f .p10k.zsh $HOME
-cp -f .zpreztorc $HOME
-cp -f .zprofile $HOME
-cp -f .zshrc $HOME
-cp -f vimrc $HOME/.vim
-cp -f .linuxrc $HOME
-cp -f .macrc $HOME
+ln -svf $HOME/github/dotfiles/.aliases $HOME/.aliases
+ln -svf $HOME/github/dotfiles/.functions $HOME/.functions
+ln -svf $HOME/github/dotfiles/.p10k.zsh $HOME/.p10k.zsh
+ln -svf $HOME/github/dotfiles/.zpreztorc $HOME/.zpreztorc
+ln -svf $HOME/github/dotfiles/.zprofile $HOME/.zprofile
+ln -svf $HOME/github/dotfiles/.zshrc $HOME/.zshrc
+ln -svf $HOME/github/dotfiles/.linuxrc $HOME/.linuxrc
+ln -svf $HOME/github/dotfiles/.macrc $HOME/.macrc
+ln -svf $HOME/github/dotfiles/vimrc $HOME/.vim/vimrc
+ln -svf $HOME/github/dotfiles/init.toml $HOME/.Spacevim.d/init.toml
 
-echo "Installation to $HOME complete."
+echo "Install complete."

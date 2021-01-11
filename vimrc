@@ -25,7 +25,9 @@ if 1
     execute 'source' fnamemodify(expand('<sfile>'), ':h').'/main.vim'
 endif
 
-" tabs
+" tabs 2
+"set sw=2 ts=2
+" tabs 4
 "set sw=4 ts=4
 " spaces
 "set et sw=2 "sts=2

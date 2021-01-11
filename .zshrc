@@ -12,13 +12,13 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 source $HOME/.p10k.zsh
-source $HOME/.fzf.zsh
 source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
+- [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source $HOME/.aliases
 source $HOME/.functions
 source $HOME/.macrc
 
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
 # eval "$(pyenv init -)"
 # eval "$(pipenv --completion)"

@@ -13,6 +13,8 @@
 	gpgsign = true
 [diff]
 	algorithm = patience
+[fetch]
+	prune = true
 [init]
 	defaultBranch = main
 [merge]
@@ -40,7 +42,12 @@
 	ls = ls-files
 	m = merge
 	pl = pull
+	plr = pull --rebase
 	ps = push
-	st = status
+	rs = restore
+	s = stash
+	sp = stash pop
 	sw = switch
-	undo = reset HEAD~1 --soft
+	undo = restore --staged
+	w = status
+	ws = status --short

@@ -17,8 +17,8 @@ source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
 
 source $HOME/.aliases
 source $HOME/.functions
-source $HOME/.linuxrc
-source $HOME/.macrc
+source $HOME/.linux
+source $HOME/.macos
 
 # eval "$(rbenv init -)"
 # eval "$(pyenv init -)"

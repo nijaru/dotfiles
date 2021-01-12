@@ -77,56 +77,44 @@ alias ygx="yarn global remove"
 alias ygu="yarn global upgrade"
 alias ygul="yarn global upgrade --latest"
 alias ygl="yarn global list"
-# git - init
+### git
 # alias g="git"
 alias gi="git init"
 alias gcln="git clone"
-# git - working
-alias st="git status"
+## git - working
+alias gw="git status"
+alias gws="git status --short"
 alias ga="git add"
 alias ga.="git add ."
 alias gcm="git commit -sm"
-# git - branches
+## git - branches
 # alias gb="git branch"
 alias gco="git checkout"
 alias gsw="git switch"
+# alias gf="git fetch"
+# alias gm="git merge"
+alias gpl="git pull"
+alias gplr="git pull --rebase"
+alias gsall="git stash save --include-untracked"
+# alias gsp="git stash pop"
 alias gbmv="git branch --move"
-# git - diff
+## git - diff
 alias gd="git diff"
 alias gds="git diff --staged"
 alias gdh="git diff HEAD"
-# git - remote
+## git - remote
 alias gr="git remote"
 alias grv="git remote -v"
 alias gpsu="git push --set-upstream"
 alias gpsuom="git push --set-upstream origin main"
+alias grau="git remote add upstream"
 alias gsm="gsync main"
-# git - changes
-alias grstr="git restore"
-alias grstrs="git restore --staged"
-# git - extra or old
-# alias gcx="git checkout --"
-# alias gcx.="git checkout -- ."
-# alias gfx="git commit --fixup"
-# alias gsq="git commit --squash"
-# alias gpu="git push -u"
-# alias gfp="git fetch --prune"
-# alias gpl="git pull"
-# alias gpr="git pull --rebase"
-# alias gmf="git merge --ff-only"
-# alias gmnf="git merge --no-ff"
-# alias gria="git rebase -i --autosquash"
-# alias gundo="git reset --soft"
-# alias grst="git reset --hard"
-# alias grh="git reset HEAD"
-# alias grh1="git reset HEAD~1"
-# alias gclean="git clean -dfx"
-# alias grau="git remote add upstream"
-# alias grv="git remote -v"
-# alias gsall="git stash save --include-untracked"
-# git log
-alias gl="git log -n 20 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
-alias glg="git log --graph --all -n 40 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
-alias gla="git log --graph --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
-alias gl4="git log -n 40 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
+## git - changes
+alias grs="git restore"
+alias gundo="git restore --staged"
+## git log
+alias gl="git log -n 10 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
+alias gln="git log --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset' -n"
+alias glg="git log --graph --all -n 50 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
+alias glga="git log --graph --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
 alias gll="git log --topo-order --pretty=format:'${_git_log_medium_format}'"

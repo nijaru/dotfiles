@@ -4,6 +4,9 @@
 	signingkey = 6C09713D1BF8E813
 [core]
 	editor = vim
+
+[checkout]
+	defaultRemote = origin
 [color "status"]
 	changed = yellow
 [commit]
@@ -26,3 +29,11 @@
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [alias]
+	br = branch
+	ci = commit
+	co = checkout
+	pl = pull
+	ps = push
+	st = status
+	sw = switch
+	undo =  --soft HEAD^

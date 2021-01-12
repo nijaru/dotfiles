@@ -17,6 +17,7 @@ source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
 
 source $HOME/.aliases
 source $HOME/.functions
+source $HOME/.linuxrc
 source $HOME/.macrc
 
 # eval "$(rbenv init -)"

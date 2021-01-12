@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
 
 alias brewu="brew update && brew upgrade"
-alias up=brewu
+alias up="brewu; gemu && gemc; rup; upz; upv"
 alias brewin="brew info"

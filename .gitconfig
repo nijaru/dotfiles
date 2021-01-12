@@ -29,11 +29,18 @@
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [alias]
-	br = branch
-	ci = commit
+	a = add
+	b = branch
+	c = commit
+	cm = commit -sm
+	cln = clone
 	co = checkout
+	d = diff
+	f = fetch
+	ls = ls-files
+	m = merge
 	pl = pull
 	ps = push
 	st = status
 	sw = switch
-	undo =  --soft HEAD^
+	undo = reset HEAD~1 --soft

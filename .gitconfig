@@ -46,10 +46,12 @@
 	pl = pull
 	plr = pull --rebase
 	ps = push
+	rb = rebase
 	rs = restore
 	s = stash
 	sp = stash pop
 	sw = switch
+	swc = switch -c
 	undo = restore --staged
 	w = status
 	ws = status --short

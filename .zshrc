@@ -19,6 +19,9 @@ source $HOME/.aliases
 source $HOME/.functions
 source $HOME/.linux
 source $HOME/.macos
+if [[ -s "$HOME/.fedora" ]]; then
+  source "$HOME/.fedora"
+fi
 
 # eval "$(rbenv init -)"
 # eval "$(pyenv init -)"

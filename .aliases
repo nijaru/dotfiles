@@ -111,6 +111,7 @@ alias gdh="git diff HEAD"
 alias grv="git remote -v"
 alias gpsu="git push --set-upstream"
 alias gpsuom="git push --set-upstream origin main"
+alias gpsuob="git symbolic-ref --short HEAD | xargs git push --set-upstream origin"
 alias grau="git remote add upstream"
 alias gsm="gsync main"
 ## git - changes

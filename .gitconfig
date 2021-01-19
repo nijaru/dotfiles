@@ -4,7 +4,6 @@
 	signingkey = 6C09713D1BF8E813
 [core]
 	editor = vim
-
 [checkout]
 	defaultRemote = origin
 [color "status"]
@@ -26,6 +25,8 @@
 	followTags = true
 [rebase]
 	autosquash = true
+[rerere]
+    enabled = true
 [status]
 	showUntrackedFiles = all
 [transfer]

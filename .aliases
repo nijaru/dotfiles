@@ -2,6 +2,7 @@
 # bin
 alias t="touch"
 alias rmf="rm -rf"
+alias c.="code ."
 alias v="vim"
 alias ec="emacsclient"
 alias ecd="emacs --daemon"

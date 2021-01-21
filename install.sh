@@ -11,5 +11,8 @@ ln -svf $HOME/github/dotfiles/.macos $HOME/.macos
 ln -svf $HOME/github/dotfiles/.gitconfig $HOME/.gitconfig
 ln -svf $HOME/github/dotfiles/vimrc $HOME/.vim/vimrc
 ln -svf $HOME/github/dotfiles/init.toml $HOME/.Spacevim.d/init.toml
+ln -svf $HOME/github/dotfiles/.doom.d $HOME/.doom.d/config.el
+ln -svf $HOME/github/dotfiles/.doom.d $HOME/.doom.d/init.el
+ln -svf $HOME/github/dotfiles/.doom.d $HOME/.doom.d/packages.el
 
 echo "Install complete."

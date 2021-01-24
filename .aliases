@@ -122,7 +122,8 @@ alias grau="git remote add upstream"
 alias gsm="gsync main"
 ## git - changes
 alias grs="git restore"
-alias gundo="git restore --staged"
+alias grss="git restore --staged"
+alias gmv="git mv"
 ## git log
 alias gl="git log -n 10 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"
 alias gln="git log --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset' -n"

@@ -1,1 +1,0 @@
-/home/nick/github/dotfiles/.doom.d

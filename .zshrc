@@ -15,10 +15,10 @@ source "$HOME/.cargo/env"
 
 source "$HOME/.aliases"
 source "$HOME/.functions"
-source "$HOME/.linux"
-source "$HOME/.macos"
-if [[ -s "$HOME/.fedora" ]]; then
-  source "$HOME/.fedora"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  source "$HOME/.linux"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  source "$HOME/.macos"
 fi
 
 if [[ -f ~/.fzf.zsh ]]; then

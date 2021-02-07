@@ -6,23 +6,24 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-source $HOME/.p10k.zsh
-source $HOME/.zsh-nvm/zsh-nvm.plugin.zsh
-- [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source "$HOME/.p10k.zsh"
+source "$HOME/.cargo/env"
 
-source $HOME/.aliases
-source $HOME/.functions
-source $HOME/.linux
-source $HOME/.macos
+source "$HOME/.aliases"
+source "$HOME/.functions"
+source "$HOME/.linux"
+source "$HOME/.macos"
 if [[ -s "$HOME/.fedora" ]]; then
   source "$HOME/.fedora"
 fi
 
+if [[ -f ~/.fzf.zsh ]]; then
+  source ~/.fzf.zsh
+fi
 # eval "$(rbenv init -)"
 # eval "$(pyenv init -)"
 # eval "$(pipenv --completion)"

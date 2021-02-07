@@ -1,7 +1,6 @@
 #!/usr/bin/env zsh
 
-source "$HOME/.zsh-nvm/zsh-nvm.plugin.zsh"
-
+# source "$HOME/.zsh-nvm/zsh-nvm.plugin.zsh"
 alias disk="diskutil"
 alias brewu="brew update && brew upgrade"
 alias brewin="brew info"

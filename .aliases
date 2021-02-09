@@ -2,6 +2,7 @@
 # bin
 alias t="touch"
 alias rmf="rm -rf"
+alias c="code"
 alias c.="code ."
 alias v="vim"
 alias ec="emacsclient"
@@ -57,7 +58,6 @@ alias gtb="go test -bench=. -benchmem"
 # rs
 alias ru="rustup"
 alias rup="rustup update"
-alias c="cargo"
 alias cb="cargo build"
 alias cr="cargo run"
 alias ct="cargo test"

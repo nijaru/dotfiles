@@ -3,5 +3,7 @@
 source "$HOME/.zsh-nvm/zsh-nvm.plugin.zsh"
 
 alias disk="diskutil"
+alias tar="gtar"
+
 alias brewu="brew update && brew upgrade"
 alias brewin="brew info"

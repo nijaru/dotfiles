@@ -18,6 +18,7 @@ alias upv="git -C ~/.SpaceVim pull"
 alias cfmt="clang-format -i -style=google"
 # dirs/files
 alias github="cd $HOME/github"
+alias dotfiles="cd $HOME/github/dotfiles"
 alias ghub="github"
 alias gopath="cd $HOME/go/src/github.com/nijaru"
 # ls
@@ -26,7 +27,7 @@ alias l="ls -1"
 alias ll="ls -lh"
 alias la="ls -1a"
 alias lsa="ls -a"
-alias lla="ls -la"
+alias lla="ls -lha"
 alias tree="exa -T -L 2"
 alias trees="exa -T"
 # docker

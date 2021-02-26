@@ -23,6 +23,9 @@ alias gopath="cd $HOME/go/src/github.com/nijaru"
 # coreutils
 alias grep="rg"
 alias find="fd"
+alias ps="procs"
+alias du="dust"
+# alias sed="sd"
 # ls
 alias ls="exa"
 alias l="ls -1"

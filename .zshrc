@@ -24,6 +24,7 @@ fi
 if [[ -f ~/.fzf.zsh ]]; then
   source ~/.fzf.zsh
 fi
+
 # eval "$(rbenv init -)"
 # eval "$(pyenv init -)"
 # eval "$(pipenv --completion)"

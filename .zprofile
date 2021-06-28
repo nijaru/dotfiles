@@ -67,7 +67,6 @@ export CLICOLOR=1
 
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
-export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 
 export CMAKE_GENERATOR=Ninja

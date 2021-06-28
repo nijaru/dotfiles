@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 
 alias dnfu="dnf check-update"
-alias dnfup="sudo dnf update"
+alias dnfup="sudo dnf upgrade"
 # alias dnfi="sudo dnf install"
 alias dnfx="sudo dnf remove"
 # alias dnfs="dnf search"
 alias dnfin="dnf info"
 alias dnfax="sudo dnf autoremove"
-alias up="sudo dnf update; zprezto-update; git -C ~/.SpaceVim pull"
+alias up="sudo dnf upgrade; rustup update; zprezto-update; git -C ~/.SpaceVim pull"
 
 alias sc="systemctl"
 alias ssc="sudo systemctl"

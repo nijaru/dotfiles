@@ -2,6 +2,7 @@
 
 alias dnfu="dnf check-update"
 alias dnfup="sudo dnf upgrade"
+alias dnfupr="sudo dnf upgrade --refresh"
 # alias dnfi="sudo dnf install"
 alias dnfx="sudo dnf remove"
 # alias dnfs="dnf search"

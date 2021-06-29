@@ -134,6 +134,7 @@ alias grss="git restore --staged"
 alias grst="git reset"
 alias grsts="git reset --soft"
 alias grstsh="git reset --soft HEAD~"
+alias grh1="git reset --soft HEAD~"
 alias gmv="git mv"
 ## git log
 alias gl="git log -n 10 --pretty=format:'%Cgreen%h%C(auto)%d %s %C(bold cyan)%cr %C(bold blue)<%an>%Creset'"

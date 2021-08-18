@@ -56,3 +56,7 @@
 	undo = restore --staged
 	w = status
 	ws = status --short
+[tag]
+	forceSignAnnotated = true
+[gpg]
+	program = gpg

@@ -73,10 +73,12 @@ export CMAKE_GENERATOR=Ninja
 export ZSTD_NBTHREADS=0
 export ZSTD_CLEVEL=19
 
+export PATH="$HOME/.local/bin:$PATH"
 #export PYENV_ROOT="$HOME/.pyenv"
 #export PATH="$PYENV_ROOT/bin:$PATH"
 
-#export PATH="$PATH:$HOME/.yarn/bin"
-#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+# export PATH=~/.npm-global/bin:$PATH
+export PATH="$PATH:$HOME/.yarn/bin"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 fpath+=~/.zfunc

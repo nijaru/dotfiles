@@ -68,14 +68,14 @@ export CLICOLOR=1
 # cmake
 export CMAKE_GENERATOR=Ninja
 # go
-export PATH=$PATH:/usr/local/go/bin
+export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$(go env GOPATH)/bin"
 # .local
 export PATH="$HOME/.local/bin:$PATH"
 # nim
-export PATH=/home/nick/.nimble/bin:$PATH
+export PATH="$HOME/.nimble/bin:$PATH"
 # npm
-# export PATH=~/.npm-global/bin:$PATH
+# export PATH="~/.npm-global/bin:$PATH"
 # python
 #export PYENV_ROOT="$HOME/.pyenv"
 #export PATH="$PYENV_ROOT/bin:$PATH"

@@ -62,23 +62,30 @@ if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
 
+# cli
 export CLICOLOR=1
 # export LSCOLORS=xGxfxDxbxexexcxcxcxcx
-
+# cmake
+export CMAKE_GENERATOR=Ninja
+# go
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
-export PATH="$HOME/.rbenv/bin:$PATH"
-
-export CMAKE_GENERATOR=Ninja
-export ZSTD_NBTHREADS=0
-export ZSTD_CLEVEL=19
-
+# .local
 export PATH="$HOME/.local/bin:$PATH"
+# nim
+export PATH=/home/nick/.nimble/bin:$PATH
+# npm
+# export PATH=~/.npm-global/bin:$PATH
+# python
 #export PYENV_ROOT="$HOME/.pyenv"
 #export PATH="$PYENV_ROOT/bin:$PATH"
-
-# export PATH=~/.npm-global/bin:$PATH
+# ruby
+export PATH="$HOME/.rbenv/bin:$PATH"
+# yarn
 export PATH="$PATH:$HOME/.yarn/bin"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+# zstd
+export ZSTD_NBTHREADS=0
+export ZSTD_CLEVEL=19
 
 fpath+=~/.zfunc

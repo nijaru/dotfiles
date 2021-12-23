@@ -28,3 +28,5 @@ fi
 eval "$(rbenv init -)"
 # eval "$(pyenv init -)"
 # eval "$(pipenv --completion)"
+
+export PATH="$HOME/.nimble/bin:$PATH"

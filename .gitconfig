@@ -1,19 +1,21 @@
 [user]
 	name = Nick Russo
 	email = nijaru0x@gmail.com
-	signingkey = 2182EF61748F21C5 
-[core]
-	editor = vim
+	signingkey = 2182EF61748F21C5
 [checkout]
 	defaultRemote = origin
 [color "status"]
 	changed = yellow
 [commit]
 	gpgsign = true
+[core]
+	editor = vim
 [diff]
 	algorithm = patience
 [fetch]
 	prune = true
+[gpg]
+	program = gpg
 [init]
 	defaultBranch = main
 [merge]
@@ -29,6 +31,8 @@
 	enabled = true
 [status]
 	showUntrackedFiles = all
+[tag]
+	forceSignAnnotated = true
 [transfer]
 	fsckobjects = true
 [url "git@github.com:"]
@@ -56,7 +60,3 @@
 	undo = restore --staged
 	w = status
 	ws = status --short
-[tag]
-	forceSignAnnotated = true
-[gpg]
-	program = gpg

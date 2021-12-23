@@ -17,8 +17,8 @@ fi
 # Editors
 #
 
-export EDITOR='vim'
-export VISUAL='vim'
+export EDITOR='lvim'
+export VISUAL='lvim'
 export PAGER='less'
 
 #
@@ -87,5 +87,6 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # zstd
 export ZSTD_NBTHREADS=0
 export ZSTD_CLEVEL=19
+
 
 fpath+=~/.zfunc

@@ -4,33 +4,45 @@
 	signingkey = 2182EF61748F21C5
 [checkout]
 	defaultRemote = origin
+	workers = 0
 [color "status"]
 	changed = yellow
 [commit]
 	gpgsign = true
 [core]
-	editor = vim
-[diff]
-	algorithm = patience
+	editor = code --wait
 [fetch]
+	parallel = 0
 	prune = true
+	pruneTags = true
 [gpg]
 	program = gpg
 [init]
 	defaultBranch = main
 [merge]
 	ff = only
+	tool = vscode
+[mergetool "vscode"]
+	cmd = code --wait $MERGED
+[pack]
+	threads = 0
 [pull]
 	ff = only
+	prune = true
+	pruneTags = true
+	rebase = true
 [push]
-	default = simple
+	default = upstream
 	followTags = true
 [rebase]
-	autosquash = true
+	autoSquash = true
 [rerere]
+	autoupdate = true
 	enabled = true
 [status]
 	showUntrackedFiles = all
+[submodule]
+	fetchJobs = 0
 [tag]
 	forceSignAnnotated = true
 [transfer]

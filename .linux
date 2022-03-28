@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+# dnf
 alias dnfu="dnf check-update"
 alias dnfup="sudo dnf upgrade"
 alias dnfupy="sudo dnf upgrade -y"
@@ -9,7 +10,12 @@ alias dnfx="sudo dnf remove"
 # alias dnfs="dnf search"
 alias dnfin="dnf info"
 alias dnfax="sudo dnf autoremove"
-alias up="sudo dnf upgrade; rustup update; zprezto-update; git -C ~/.SpaceVim pull"
+# flatpak
+alias fp="flatpak"
+alias fpu="fp update"
+alias fpuy="fp update -y"
+
+alias up="sudo dnf upgrade; fpu; rustup update; zprezto-update; git -C ~/.SpaceVim pull"
 
 alias sc="systemctl"
 alias ssc="sudo systemctl"

@@ -15,7 +15,7 @@ alias fp="flatpak"
 alias fpu="fp update"
 alias fpuy="fp update -y"
 
-alias up="sudo dnf upgrade; fpu; rustup update; zprezto-update; git -C ~/.SpaceVim pull"
+alias up="sudo dnf upgrade; fpu; rustup update; zprezto-update"
 
 alias sc="systemctl"
 alias ssc="sudo systemctl"

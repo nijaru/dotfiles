@@ -13,7 +13,6 @@ alias ez="exec zsh"
 alias zstd="zstd -T0"
 alias tarz="gtar --zstd -cf"
 alias upz="zprezto-update"
-alias upv="git -C ~/.SpaceVim pull"
 alias cfmt="clang-format -i -style=google"
 # dirs/files
 alias github="cd $HOME/github"

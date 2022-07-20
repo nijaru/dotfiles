@@ -12,4 +12,10 @@ ln -svf $HOME/github/dotfiles/.macos $HOME/.macos
 ln -svf $HOME/github/dotfiles/.gitconfig $HOME/.gitconfig
 ln -svf $HOME/github/dotfiles/htoprc $HOME/.config/htop/htoprc
 
+# emacs
+mkdir $HOME/.doom.d
+ln -svf $HOME/github/dotfiles/.doom.d/config.el $HOME/.doom.d/config.el
+ln -svf $HOME/github/dotfiles/.doom.d/init.el $HOME/.doom.d/init.el
+ln -svf $HOME/github/dotfiles/.doom.d/packages.el $HOME/.doom.d/packages.el
+
 echo "Install complete."

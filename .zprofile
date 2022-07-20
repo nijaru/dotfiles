@@ -72,21 +72,13 @@ export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$(go env GOPATH)/bin"
 # .local
 export PATH="$HOME/.local/bin:$PATH"
-# nim
-export PATH="$HOME/.nimble/bin:$PATH"
 # npm
-# export PATH="~/.npm-global/bin:$PATH"
-# python
-#export PYENV_ROOT="$HOME/.pyenv"
-#export PATH="$PYENV_ROOT/bin:$PATH"
-# ruby
-export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="~/.npm-global/bin:$PATH"
 # yarn
 export PATH="$PATH:$HOME/.yarn/bin"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # zstd
 export ZSTD_NBTHREADS=0
 export ZSTD_CLEVEL=19
-
 
 fpath+=~/.zfunc

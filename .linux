@@ -12,10 +12,12 @@ alias dnfin="dnf info"
 alias dnfax="sudo dnf autoremove"
 # flatpak
 alias fp="flatpak"
+alias fpi="flatpak install"
+alias fpx="flatpak uninstall"
 alias fpu="fp update"
 alias fpuy="fp update -y"
 
-alias up="sudo dnf upgrade; fpu; rustup update; zprezto-update"
+alias up="sudo dnf upgrade; fpu; rustup update; zprezto-update; doom up"
 
 alias sc="systemctl"
 alias ssc="sudo systemctl"

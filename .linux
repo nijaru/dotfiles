@@ -17,7 +17,7 @@ alias fpx="flatpak uninstall"
 alias fpu="fp update"
 alias fpuy="fp update -y"
 
-alias up="sudo dnf upgrade; fpu; rustup update; zprezto-update; lvim +LvimUpdate +q; doom up"
+alias up="dnfup; fpu; rustup update; zprezto-update; lvim +LvimUpdate +q"
 
 alias sc="systemctl"
 alias ssc="sudo systemctl"

@@ -1,7 +1,7 @@
 [user]
 	name = Nick Russo
 	email = nijaru0x@gmail.com
-	signingkey = 9C3CF472C6791D53
+	signingkey = CAF625A80BEEE6AF
 [checkout]
 	defaultRemote = origin
 	workers = 0

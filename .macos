@@ -9,5 +9,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 alias disk="diskutil"
 alias tar="gtar"
 
+alias up="brewu"
 alias brewu="brew update && brew upgrade"
 alias brewin="brew info"

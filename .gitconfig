@@ -1,7 +1,7 @@
 [user]
 	name = Nick Russo
 	email = nijaru0x@gmail.com
-	signingkey = CAF625A80BEEE6AF
+	signingkey = AFD9338C1DD4BC6A
 [checkout]
 	defaultRemote = origin
 	workers = 0
@@ -11,6 +11,7 @@
 	gpgsign = true
 [core]
 	editor = code --wait
+	excludesFile = ~/.gitignore
 [fetch]
 	parallel = 0
 	prune = true
@@ -72,3 +73,9 @@
 	undo = restore --staged
 	w = status
 	ws = status --short
+	scrub = reset --hard @{upstream}
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

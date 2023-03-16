@@ -68,17 +68,19 @@ export CLICOLOR=1
 # cmake
 export CMAKE_GENERATOR=Ninja
 # go
-export PATH="$PATH:/usr/local/go/bin"
-export PATH="$PATH:$(go env GOPATH)/bin"
+# export PATH="$PATH:/usr/local/go/bin"
+# export PATH="$PATH:$(go env GOPATH)/bin"
 # .local
 export PATH="$HOME/.local/bin:$PATH"
 # npm
-export PATH="~/.npm-global/bin:$PATH"
+export PATH="$PATH:~/.npm-global/bin"
 # yarn
 export PATH="$PATH:$HOME/.yarn/bin"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:"
 # zstd
 export ZSTD_NBTHREADS=0
 export ZSTD_CLEVEL=19
+
+export PATH="$PATH:/Users/nick/Library/Application Support/JetBrains/Toolbox/scripts"
 
 fpath+=~/.zfunc

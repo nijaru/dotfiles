@@ -84,3 +84,6 @@ export ZSTD_CLEVEL=19
 export PATH="$PATH:/Users/nick/Library/Application Support/JetBrains/Toolbox/scripts"
 
 fpath+=~/.zfunc
+
+# Added by OrbStack: command-line tools and integration
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :

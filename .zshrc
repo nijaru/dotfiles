@@ -32,9 +32,8 @@ source "$HOME/.cargo/env"
 export MODULAR_HOME="$HOME/.modular"
 export PATH="$MODULAR_HOME/pkg/packages.modular.com_mojo/bin:$PATH"
 
-eval "$(mise activate zsh)"
+# eval "$(mise activate zsh)"
 
-autoload -U bashcompinit
-bashcompinit
-
+# autoload -U bashcompinit
+# bashcompinit
 eval "$(register-python-argcomplete pipx)"

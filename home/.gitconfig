@@ -1,7 +1,7 @@
 [user]
 	name = Nick Russo
 	email = nijaru0x@gmail.com
-	signingkey = 9AB362BF51A1D3A2
+	# signingkey = D6703FB644204E34
 [checkout]
 	defaultRemote = origin
 	workers = 0
@@ -11,7 +11,7 @@
 	gpgsign = true
 [core]
 	editor = zed --wait
-	excludesFile = ~/.gitignore
+	excludesFile = ~/github/dotfiles/misc/gitignore
 [fetch]
 	parallel = 0
 	prune = true
@@ -68,11 +68,11 @@
 	rs = restore
 	s = stash
 	sp = stash pop
+	sd = stash drop
 	sw = switch
 	swc = switch -c
 	undo = restore --staged
-	w = status
-	ws = status --short
+	st = status
 	scrub = reset --hard @{upstream}
 [filter "lfs"]
 	clean = git-lfs clean -- %f

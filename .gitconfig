@@ -10,7 +10,7 @@
 [commit]
 	gpgsign = true
 [core]
-	editor = code --wait
+	editor = zed --wait
 	excludesFile = ~/.gitignore
 [fetch]
 	parallel = 0

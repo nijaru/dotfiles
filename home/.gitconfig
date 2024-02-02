@@ -5,30 +5,31 @@
 [checkout]
 	defaultRemote = origin
 	workers = 0
-[color "status"]
-	changed = yellow
 [commit]
 	gpgsign = true
 [core]
-	editor = zed --wait
+	editor = $EDITOR --wait
 	excludesFile = ~/github/dotfiles/misc/gitignore
+	untrackedCache = true
+[difftool]
+	prompt = false
 [fetch]
 	parallel = 0
 	prune = true
 	pruneTags = true
-[gpg]
-	program = gpg
+# [gpg]
+# 	program = gpg
 [init]
 	defaultBranch = main
 [merge]
 	ff = only
 	tool = vscode
-[mergetool "vscode"]
-	cmd = code --wait $MERGED
+[mergetool "$EDITOR"]
+	cmd = $EDITOR --wait $MERGED
 [pack]
 	threads = 0
 [pull]
-	ff = only
+	# ff = only
 	prune = true
 	pruneTags = true
 	rebase = true
@@ -36,13 +37,15 @@
 	default = upstream
 	followTags = true
 [rebase]
-	autoSquash = true
+	autoStash = true
+	# autoSquash = true
 [rerere]
 	autoupdate = true
 	enabled = true
 [status]
 	showUntrackedFiles = all
 [submodule]
+	# recurse = true
 	fetchJobs = 0
 [tag]
 	forceSignAnnotated = true
@@ -50,32 +53,18 @@
 	fsckobjects = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
+# [filter "lfs"]
+# 	clean = git-lfs clean -- %f
+# 	smudge = git-lfs smudge -- %f
+# 	process = git-lfs filter-process
+# 	required = true
+
+[color]
+	ui = true
+[color "status"]
+	changed = yellow
+
 [alias]
-	a = add
-	b = branch
-	c = commit
-	cm = commit -sm
-	cln = clone
-	co = checkout
-	d = diff
-	f = fetch
-	ls = ls-files
-	m = merge
-	pl = pull
-	plr = pull --rebase
-	ps = push
-	rb = rebase
-	rs = restore
-	s = stash
-	sp = stash pop
-	sd = stash drop
-	sw = switch
-	swc = switch -c
-	undo = restore --staged
-	st = status
+	patch = apply --ignore-space-change --ignore-whitespace
 	scrub = reset --hard @{upstream}
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true

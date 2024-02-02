@@ -13,6 +13,8 @@
 	untrackedCache = true
 [difftool]
 	prompt = false
+[difftool "branchless"]
+  cmd = git-branchless difftool --read-only --dir-diff $LOCAL $REMOTE
 [fetch]
 	parallel = 0
 	prune = true
@@ -26,6 +28,8 @@
 	tool = vscode
 [mergetool "$EDITOR"]
 	cmd = $EDITOR --wait $MERGED
+[mergetool "branchless"]
+  cmd = git-branchless difftool $LOCAL $REMOTE --base $BASE --output $MERGED
 [pack]
 	threads = 0
 [pull]

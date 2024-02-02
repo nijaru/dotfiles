@@ -1,0 +1,51 @@
+{
+	"[html]": {
+		// "editor.defaultFormatter": "vscode.html-language-features"
+		// "editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[python]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "explicit"
+		},
+		"editor.defaultFormatter": "charliermarsh.ruff",
+		"editor.insertSpaces": true,
+		"editor.tabSize": 4,
+		"editor.useTabStops": true,
+	},
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.fontFamily": "JetBrainsMono NF, Menlo, Monaco, 'Courier New', monospace",
+	"editor.fontLigatures": true,
+	"editor.fontSize": 13,
+	"editor.formatOnSave": true,
+	"editor.inlineSuggest.enabled": true,
+	"editor.insertSpaces": false,
+	"editor.minimap.enabled": false,
+	"editor.smoothScrolling": true,
+	"editor.wordWrap": "on",
+	"files.autoSave": "afterDelay",
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"files.trimTrailingWhitespace": true,
+	"github.copilot.enable": {
+		"*": true,
+		"markdown": true,
+		"plaintext": true,
+		"scminput": false,
+		"yaml": false
+	},
+	"go.toolsManagement.autoUpdate": true,
+	"julia.completionmode": "import",
+	"julia.enableTelemetry": false,
+	"julia.symbolCacheDownload": true,
+	"prettier.useTabs": true,
+	"python.diagnostics.sourceMapsEnabled": true,
+	"python.formatting.provider": "none",
+	"redhat.telemetry.enabled": false,
+	"security.workspace.trust.untrustedFiles": "open",
+	"telemetry.telemetryLevel": "off",
+	"terminal.integrated.commandsToSkipShell": ["language-julia.interrupt"],
+	"window.titleBarStyle": "custom",
+	"workbench.colorTheme": "Atom One Dark",
+	"workbench.iconTheme": "file-icons",
+	"workbench.list.smoothScrolling": true,
+}

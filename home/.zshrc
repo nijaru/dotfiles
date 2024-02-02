@@ -6,9 +6,9 @@
 
 # Periodic auto-update on Zsh startup: 'ask' or 'no'.
 # You can manually run `z4h update` to update everything.
-zstyle ':z4h:' auto-update      'ask'
+zstyle ':z4h:' auto-update      'no'
 # Ask whether to auto-update this often; has no effect if auto-update is 'no'.
-zstyle ':z4h:' auto-update-days '28'
+# zstyle ':z4h:' auto-update-days '28'
 
 # Keyboard type: 'mac' or 'pc'.
 zstyle ':z4h:bindkey' keyboard  'mac'

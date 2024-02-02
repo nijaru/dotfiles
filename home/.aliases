@@ -16,6 +16,8 @@ alias upz="z4h update"
 # alias up="rustup update; upz; pipx upgrade-all"
 alias tarz="tar --zstd -cf"
 # editors
+alias e="$EDITOR"
+alias e.="$EDITOR ."
 alias c="code"
 alias c.="code ."
 alias z="zed"

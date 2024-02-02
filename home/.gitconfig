@@ -10,6 +10,7 @@
 [core]
 	editor = $EDITOR --wait
 	excludesFile = ~/github/dotfiles/misc/gitignore
+	preloadIndex = true
 	untrackedCache = true
 [difftool]
 	prompt = false

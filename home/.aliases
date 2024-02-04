@@ -10,11 +10,12 @@ alias grep="rg"
 alias find="fd"
 # alias ps="procs"
 # alias du="dust"
+
 # misc
-alias g="git"
 alias upz="z4h update"
 # alias up="rustup update; upz; pipx upgrade-all"
 alias tarz="tar --zstd -cf"
+
 # editors
 alias e="$EDITOR"
 alias e.="$EDITOR ."
@@ -27,6 +28,7 @@ alias dotfiles="cd $HOME/github/dotfiles"
 alias github="cd $HOME/github"
 alias ghub="github"
 alias gopath="cd $HOME/go/src/github.com/nijaru"
+
 # ls
 alias ls="eza"
 alias l="ls -1"
@@ -41,11 +43,13 @@ alias lst2="ls -T -L 2"
 alias lt="lst"
 alias lta="lsta"
 alias lt2="lst2"
+
 # docker
 alias dk="docker"
 alias k="kubectl"
 alias mk="minikube"
-# py
+
+# python
 alias py="python"
 alias python="python3"
 alias pypy="pypy3"
@@ -60,6 +64,7 @@ alias pr="poetry run"
 alias prp="poetry run python"
 alias psh="poetry shell"
 alias pu="poetry update"
+
 # go
 alias ggt="go get -u"
 alias ggtv="go get -u -v"
@@ -67,6 +72,7 @@ alias ggtd="go get -u -v -d"
 alias grun="go run"
 alias got="go test -cover"
 alias gtb="go test -bench=. -benchmem"
+
 # rs
 alias ru="rustup"
 alias rup="rustup update"
@@ -78,21 +84,43 @@ alias cx="cargo rm"
 alias cu="cargo update"
 alias cup="cargo upgrade"
 
-# Git upstream branch syncer.
-# Usage: gsync master (checks out master, pull upstream, push origin).
-function gsync() {
-  if [ ! "$1" ] ; then
-    echo "You must supply a branch."
-    return 0
-  fi
-
-  BRANCHES=$(git branch --list $1)
-  if [ ! "$BRANCHES" ] ; then
-    echo "Branch $1 does not exist."
-    return 0
-  fi
-
-  git checkout "$1" && \
-  git pull upstream "$1" && \
-  git push origin "$1"
-}
+# git
+alias g="git"
+# status
+alias gw="git status"
+alias gd="git diff"
+alias gdh="git diff HEAD"
+alias gds="git diff --staged"
+# stash
+alias gs="git stash"
+alias gsa="git stash apply"
+alias gsp="git stash pop"
+alias gsd="git stash drop"
+alias gsl="git stash list"
+# alias gsc="git stash clear"
+# commit
+alias grs="git restore"
+alias grst="git restore --staged"
+alias ga="git add"
+alias ga.="git add ."
+alias gaa="git add -A"
+alias gcm="git commit -sm"
+alias gca="git commit -asm"
+# branch
+alias gb="git branch"
+alias gsw="git switch"
+alias gm="git merge"
+alias gr="git rebase"
+alias grc="git rebase --continue"
+alias gra="git rebase --abort"
+# remote
+alias gcl="git clone"
+alias grm="git remote"
+alias grmv="git remote -v"
+alias gpl="git pull"
+alias gp="git push"
+alias gpf="git push --force-with-lease"
+# log
+alias gl="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 10"
+alias gln="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n"
+alias gsync="git sync"

@@ -8,7 +8,7 @@
 	gpgsign = true
 [core]
 	editor = $EDITOR --wait
-	excludesFile = ~/github/dotfiles/misc/gitignore
+	excludesFile = ~/.gitignore
 	preloadIndex = true
 	untrackedCache = true
 [difftool]

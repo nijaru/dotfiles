@@ -100,12 +100,17 @@ alias gsl="git stash list"
 # alias gsc="git stash clear"
 # commit
 alias grs="git restore"
-alias grst="git restore --staged"
+alias grss="git restore --staged"
 alias ga="git add"
 alias ga.="git add ."
-alias gaa="git add -A"
-alias gcm="git commit -sm"
-alias gca="git commit -asm"
+alias gaa="git add --all"
+alias gcm='git commit --gpg-sign --message'
+alias gcf='git commit --amend --reuse-message HEAD --gpg-sign'
+alias gcF='git commit --amend --gpg-sign'
+# cherry-pick
+alias gcp='git cherry-pick --ff'
+alias gcpc='git cherry-pick --continue'
+alias gcpa='git cherry-pick --abort'
 # branch
 alias gb="git branch"
 alias gsw="git switch"
@@ -116,11 +121,13 @@ alias gra="git rebase --abort"
 # remote
 alias gcl="git clone"
 alias grm="git remote"
-alias grmv="git remote -v"
+alias grmv="git remote --verbose"
 alias gpl="git pull"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
 # log
 alias gl="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 10"
 alias gln="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n"
+alias glg="git log --graph --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 20"
+alias glgn="git log --graph --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n"
 alias gsync="git sync"

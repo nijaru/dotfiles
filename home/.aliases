@@ -83,7 +83,6 @@ alias ct="cargo test"
 alias ca="cargo add"
 alias cx="cargo rm"
 alias cu="cargo update"
-alias cup="cargo upgrade"
 
 # git
 alias g="git"

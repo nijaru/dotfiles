@@ -1,7 +1,6 @@
 [user]
 	name = Nick Russo
 	email = nijaru0x@gmail.com
-	# signingkey = D6703FB644204E34
 [checkout]
 	defaultRemote = origin
 	workers = 0
@@ -15,13 +14,11 @@
 [difftool]
 	prompt = false
 [difftool "branchless"]
-  cmd = git-branchless difftool --read-only --dir-diff $LOCAL $REMOTE
+	cmd = git-branchless difftool --read-only --dir-diff $LOCAL $REMOTE
 [fetch]
 	parallel = 0
 	prune = true
 	pruneTags = true
-# [gpg]
-# 	program = gpg
 [init]
 	defaultBranch = main
 [merge]
@@ -30,11 +27,10 @@
 [mergetool "$EDITOR"]
 	cmd = $EDITOR --wait $MERGED
 [mergetool "branchless"]
-  cmd = git-branchless difftool $LOCAL $REMOTE --base $BASE --output $MERGED
+	cmd = git-branchless difftool $LOCAL $REMOTE --base $BASE --output $MERGED
 [pack]
 	threads = 0
 [pull]
-	# ff = only
 	prune = true
 	pruneTags = true
 	rebase = true
@@ -43,7 +39,7 @@
 	followTags = true
 [rebase]
 	autoStash = true
-	# autoSquash = true
+	autoSquash = true
 [rerere]
 	autoupdate = true
 	enabled = true
@@ -58,12 +54,6 @@
 	fsckobjects = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
-
-# [filter "lfs"]
-# 	clean = git-lfs clean -- %f
-# 	smudge = git-lfs smudge -- %f
-# 	process = git-lfs filter-process
-# 	required = true
 
 [color]
 	ui = true

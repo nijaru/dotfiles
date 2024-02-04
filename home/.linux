@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 
-alias up="dnfup; fpuy"
 # systemctl
 alias sc="systemctl"
 alias ssc="sudo systemctl"
@@ -8,16 +7,31 @@ alias ssc="sudo systemctl"
 alias open="xdg-open"
 alias pbcopy="xclip -selection clipboard"
 alias pbpaste="xclip -selection clipboard -o"
-# dnf
-alias dnfu="dnf check-update"
-alias dnfup="sudo dnf upgrade"
-alias dnfupy="sudo dnf upgrade -y"
-alias dnfupr="sudo dnf upgrade --refresh"
-# alias dnfi="sudo dnf install"
-alias dnfx="sudo dnf remove"
-# alias dnfs="dnf search"
-alias dnfin="dnf info"
-alias dnfax="sudo dnf autoremove"
+
+if [  -n "$(uname -a | grep Ubuntu)" ]; then
+    alias up="sudo apt update && sudo apt upgrade"
+    alias aptu="sudo apt update"
+    alias aptup="sudo apt upgrade"
+    alias aptupy="sudo apt upgrade -y"
+    alias apti="sudo apt install"
+    alias aptx="sudo apt remove"
+    alias aptxx="sudo apt purge"
+    alias aptax="sudo apt autoremove"
+    alias aptin="apt show"
+    alias aptse="apt search"
+elif [  -n "$(uname -a | grep Fedora)" ]; then
+    alias up="sudo dnf check-update && sudo dnf upgrade"
+    alias dnfu="dnf check-update"
+    alias dnfup="sudo dnf upgrade"
+    alias dnfupy="sudo dnf upgrade -y"
+    alias dnfupr="sudo dnf upgrade --refresh"
+    alias dnfi="sudo dnf install"
+    alias dnfx="sudo dnf remove"
+    alias dnfax="sudo dnf autoremove"
+    alias dnfin="dnf info"
+    alias dnfs="dnf search"
+fi
+
 # flatpak
 alias fp="flatpak"
 alias fpi="flatpak install"

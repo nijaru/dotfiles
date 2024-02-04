@@ -4,6 +4,7 @@
 alias t="touch"
 alias rmf="rm -rf"
 alias ez="exec zsh"
+alias cp="cp -a"
 alias cpa="cp -a"
 # alias sed="sd"
 alias grep="rg"
@@ -86,6 +87,7 @@ alias cup="cargo upgrade"
 
 # git
 alias g="git"
+alias gi="git init"
 # status
 alias gw="git status"
 alias gd="git diff"

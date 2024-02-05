@@ -3,10 +3,13 @@
 # systemctl
 alias sc="systemctl"
 alias ssc="sudo systemctl"
+
 # misc
 alias open="xdg-open"
 alias pbcopy="xclip -selection clipboard"
+alias pbc="pbcopy"
 alias pbpaste="xclip -selection clipboard -o"
+alias pbp="pbpaste"
 
 # Debian/Ubuntu
 # if [  -n "$(uname -a | grep Ubuntu)" ]; then

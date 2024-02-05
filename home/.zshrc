@@ -78,7 +78,7 @@ z4h source ~/.env.zsh
 
 # ---
 z4h source ~/.aliases
-# z4h source ~/.aliases-git
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   z4h source ~/.linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then

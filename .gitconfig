@@ -1,9 +1,13 @@
 [user]
     name = Nick Russo
     email = nijaru0x@gmail.com
+[branch]
+	sort = -commiterdate
 [checkout]
     defaultRemote = origin
     workers = 0
+[column]
+	ui = auto
 [commit]
     gpgsign = true
 [core]

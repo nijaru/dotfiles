@@ -66,10 +66,16 @@ path=(~/bin $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
+
 export EDITOR=zed
+
 export CMAKE_GENERATOR=Ninja
+
 export ZSTD_NBTHREADS=0
 # export ZSTD_CLEVEL=3
+
+export MODULAR_HOME="/Users/nick/.modular"
+export PATH="/Users/nick/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 
 # Source additional local files if they exist.
 z4h source ~/.env.zsh

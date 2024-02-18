@@ -10,24 +10,26 @@
 	editor = $EDITOR --wait
 	excludesFile = ~/.gitignore
 	preloadIndex = true
-	untrackedCache = true
-[difftool]
-	prompt = false
-[difftool "branchless"]
-	cmd = git-branchless difftool --read-only --dir-diff $LOCAL $REMOTE
+    untrackedCache = true
+    pager = delta
+    autocrlf = input
+    safecrlf = true
+[diff]
+    colorMoved = default
 [fetch]
 	parallel = 0
 	prune = true
 	pruneTags = true
 [init]
 	defaultBranch = main
+[interactive]
+    diffFilter = delta --color-only
 [merge]
+    conflictstyle = zdiff3
 	ff = only
-	tool = vscode
+	tool = $EDITOR
 [mergetool "$EDITOR"]
 	cmd = $EDITOR --wait $MERGED
-[mergetool "branchless"]
-	cmd = git-branchless difftool $LOCAL $REMOTE --base $BASE --output $MERGED
 [pack]
 	threads = 0
 [pull]
@@ -35,7 +37,8 @@
 	pruneTags = true
 	rebase = true
 [push]
-	default = upstream
+    default = current
+	autoSetupRemote = true
 	followTags = true
 [rebase]
 	autoStash = true

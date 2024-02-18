@@ -1,68 +1,69 @@
 [user]
-	name = Nick Russo
-	email = nijaru0x@gmail.com
+    name = Nick Russo
+    email = nijaru0x@gmail.com
 [checkout]
-	defaultRemote = origin
-	workers = 0
+    defaultRemote = origin
+    workers = 0
 [commit]
-	gpgsign = true
+    gpgsign = true
 [core]
-	editor = $EDITOR --wait
-	excludesFile = ~/.gitignore
-	preloadIndex = true
+    editor = $EDITOR --wait
+    excludesFile = ~/.gitignore
+    preloadIndex = true
     untrackedCache = true
     pager = delta
     autocrlf = input
     safecrlf = true
 [diff]
+    algorithm = histogram
     colorMoved = default
 [fetch]
-	parallel = 0
-	prune = true
-	pruneTags = true
+    parallel = 0
+    prune = true
+    pruneTags = true
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [interactive]
     diffFilter = delta --color-only
 [merge]
     conflictstyle = zdiff3
-	ff = only
-	tool = $EDITOR
+    ff = only
+    tool = $EDITOR
 [mergetool "$EDITOR"]
-	cmd = $EDITOR --wait $MERGED
+    cmd = $EDITOR --wait $MERGED
 [pack]
-	threads = 0
+    threads = 0
 [pull]
-	prune = true
-	pruneTags = true
-	rebase = true
+    prune = true
+    pruneTags = true
+    rebase = true
 [push]
+    autoSetupRemote = true
     default = current
-	autoSetupRemote = true
-	followTags = true
+    followTags = true
 [rebase]
-	autoStash = true
-	autoSquash = true
+    autoStash = true
+    autoSquash = true
 [rerere]
-	autoupdate = true
-	enabled = true
+    autoupdate = true
+    enabled = true
 [status]
-	showUntrackedFiles = all
+    showUntrackedFiles = all
 [submodule]
-	# recurse = true
-	fetchJobs = 0
+    recurse = true
+    fetchJobs = 0
 [tag]
-	forceSignAnnotated = true
+    forceSignAnnotated = true
 [transfer]
-	fsckobjects = true
+    fsckobjects = true
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+    insteadOf = https://github.com/
 
 [color]
-	ui = true
+    ui = true
 [color "status"]
-	changed = yellow
+    changed = yellow
 
 [alias]
-	patch = apply --ignore-space-change --ignore-whitespace
-	scrub = reset --hard @{upstream}
+    patch = apply --ignore-space-change --ignore-whitespace
+    scrub = reset --hard @{upstream}

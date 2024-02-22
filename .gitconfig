@@ -1,8 +1,6 @@
 [user]
     name = Nick Russo
     email = nijaru0x@gmail.com
-[branch]
-	sort = -commiterdate
 [checkout]
     defaultRemote = origin
     workers = 0
@@ -13,11 +11,10 @@
 [core]
     editor = $EDITOR --wait
     excludesFile = ~/.gitignore
+	fsmonitor = true
     preloadIndex = true
     untrackedCache = true
     pager = delta
-    autocrlf = input
-    safecrlf = true
 [diff]
     algorithm = histogram
     colorMoved = default
@@ -25,6 +22,7 @@
     parallel = 0
     prune = true
     pruneTags = true
+	writeCommitGraph = true
 [init]
     defaultBranch = main
 [interactive]
@@ -69,5 +67,6 @@
     changed = yellow
 
 [alias]
+    gc = git maintenance run --task=gc
     patch = apply --ignore-space-change --ignore-whitespace
     scrub = reset --hard @{upstream}

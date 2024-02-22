@@ -109,6 +109,8 @@ alias gcpc='git cherry-pick --continue'
 alias gcpa='git cherry-pick --abort'
 # branch
 alias gb="git branch"
+alias gbd="git branch -d"
+alias gbD="git branch -D"
 alias gsw="git switch"
 alias gswc="git switch -c"
 alias gm="git merge"

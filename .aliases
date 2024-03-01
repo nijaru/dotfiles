@@ -22,7 +22,7 @@ alias e="$EDITOR"
 alias e.="$EDITOR ."
 alias c="code"
 alias c.="code ."
-alias v="lvim"
+alias v="nvim"
 alias z="zed"
 alias z.="zed ."
 # paths
@@ -66,6 +66,27 @@ alias pr="poetry run"
 alias prp="poetry run python"
 alias psh="poetry shell"
 alias pu="poetry update"
+
+# ruby
+alias rb="ruby"
+alias gemi="gem install"
+
+# node
+alias n="node"
+alias npmi="npm install"
+alias npmu="npm update"
+alias npmr="npm run"
+alias npmt="npm test"
+alias npmb="npm build"
+alias npmd="npm dev"
+alias npms="npm start"
+
+# yarn
+alias y="yarn"
+alias yu="yarn upgrade"
+alias yrm="yarn remove"
+alias ya="yarn add"
+alias yga="yarn global add"
 
 # go
 alias ggt="go get"

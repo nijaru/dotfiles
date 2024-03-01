@@ -83,13 +83,11 @@ z4h source ~/.env.zsh
 # Use additional Git repositories pulled in with `z4h install`.
 
 # ---
-z4h source ~/.aliases
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  z4h source ~/.linux
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  z4h source ~/.macos
-fi
+eval "$(rbenv init - zsh)"
 
 z4h source ~/.cargo/env
 # ---
@@ -111,7 +109,7 @@ autoload -Uz zmv
 # pipx completion.
 # autoload -U bashcompinit
 # bashcompinit
-eval "$(register-python-argcomplete pipx)"
+# eval "$(register-python-argcomplete pipx)"
 
 # Define functions and completions.
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
@@ -123,8 +121,16 @@ compdef _directories md
 # Define aliases.
 # alias tree='tree -a -I .git'
 
+z4h source ~/.aliases
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  z4h source ~/.linux
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  z4h source ~/.macos
+fi
+
 # Add flags to existing aliases.
-# alias ls="${aliases[ls]:-ls} -A"
+alias up="${aliases[up]:-up}; rustup update; pipx upgrade-all; z4h update"
 
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 setopt glob_dots     # no special treatment for file names with a leading dot

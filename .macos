@@ -14,5 +14,11 @@ alias brewx="brew uninstall"
 alias brewl="brew list"
 alias brewc="brew cleanup"
 
+alias caskin="brew info --cask"
+alias casks="brew search --cask"
+alias caski="brew install --cask"
+alias caskx="brew uninstall --cask"
+alias caskl="brew list --cask"
+
 alias disk="diskutil"
 alias tar="gtar"

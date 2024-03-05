@@ -9,7 +9,8 @@
 [commit]
     gpgsign = true
 [core]
-    editor = $EDITOR --wait
+    # editor = $EDITOR --wait
+    editor = nvim
     excludesFile = ~/.gitignore
 	fsmonitor = true
     preloadIndex = true
@@ -31,8 +32,8 @@
     conflictstyle = zdiff3
     ff = only
     tool = $EDITOR
-[mergetool "$EDITOR"]
-    cmd = $EDITOR --wait $MERGED
+# [mergetool "$EDITOR"]
+#     cmd = $EDITOR --wait $MERGED
 [pack]
     threads = 0
 [pull]

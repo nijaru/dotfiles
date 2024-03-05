@@ -67,7 +67,7 @@ path=(~/bin $path)
 # Export environment variables.
 export GPG_TTY=$TTY
 
-export EDITOR=code
+export EDITOR=nvim
 
 export CMAKE_GENERATOR=Ninja
 

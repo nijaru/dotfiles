@@ -147,9 +147,11 @@ alias grsa="git restore --staged ."
 alias grh="git reset HEAD"
 alias grh1="git reset HEAD~1"
 # remote
-alias gcl="git clone"
+alias gcln="git clone"
 alias grm="git remote"
 alias grmv="git remote --verbose"
+alias gf="git fetch"
+alias gfu="git fetch --unshallow"
 alias gpl="git pull"
 # push
 alias gp="git push"

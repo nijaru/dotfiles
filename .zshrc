@@ -11,10 +11,10 @@ zstyle ':z4h:' auto-update      'no'
 # zstyle ':z4h:' auto-update-days '28'
 
 # Keyboard type: 'mac' or 'pc'.
-zstyle ':z4h:bindkey' keyboard  'mac'
+zstyle ':z4h:bindkey' keyboard  'pc'
 
 # Start tmux if not already in tmux.
-zstyle ':z4h:' start-tmux command tmux -u new -A -D -t z4h
+# zstyle ':z4h:' start-tmux command tmux -u new -A -D -t z4h
 
 # Whether to move prompt to the bottom when zsh starts and on Ctrl+L.
 zstyle ':z4h:' prompt-at-bottom 'no'
@@ -39,7 +39,7 @@ zstyle ':z4h:direnv:success' notify 'yes'
 # zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
 # zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
 # The default value if none of the overrides above match the hostname.
-zstyle ':z4h:ssh:*'                   enable 'yes'
+zstyle ':z4h:ssh:*'                   enable 'no'
 
 # Send these files over to the remote host when connecting over SSH to the
 # enabled hosts.
@@ -74,23 +74,11 @@ export CMAKE_GENERATOR=Ninja
 export ZSTD_NBTHREADS=0
 # export ZSTD_CLEVEL=3
 
-export MODULAR_HOME="/Users/nick/.modular"
-export PATH="/Users/nick/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
-
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
+z4h source ~/.cargo/env
 
 # Use additional Git repositories pulled in with `z4h install`.
-
-# ---
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-eval "$(rbenv init - zsh)"
-
-z4h source ~/.cargo/env
-# ---
 
 # z4h load   ohmyzsh/ohmyzsh/plugins/emoji-clock  # load a plugin
 
@@ -126,6 +114,16 @@ z4h source ~/.aliases
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   z4h source ~/.linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
+  zstyle ':z4h:bindkey' keyboard  'mac'
+  export PYENV_ROOT="$HOME/.pyenv"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+
+  eval "$(rbenv init - zsh)"
+
+  export MODULAR_HOME="/Users/nick/.modular"
+  export PATH="/Users/nick/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
+  
   z4h source ~/.macos
 fi
 

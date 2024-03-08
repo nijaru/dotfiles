@@ -13,6 +13,9 @@ ln -svf $HOME/github/dotfiles/.gitconfig $HOME/.gitconfig
 mkdir -p $HOME/.ssh
 ln -svf $HOME/github/dotfiles/.ssh/config $HOME/.ssh/config
 
+# kitty
+ln -svf $HOME/github/dotfiles/misc/kitty.conf $HOME/.config/kitty/kitty.conf
+
 # OS specific
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # linux

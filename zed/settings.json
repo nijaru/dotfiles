@@ -1,6 +1,6 @@
 {
   // The name of the Zed theme to use for the UI
-  "theme": "One Dark",
+  "theme": "Gruvbox Dark Hard",
   "base_keymap": "VSCode",
   "features": {
     "copilot": true

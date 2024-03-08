@@ -11,22 +11,8 @@ alias pbc="pbcopy"
 alias pbpaste="xclip -selection clipboard -o"
 alias pbp="pbpaste"
 
-# Debian/Ubuntu
-# if [  -n "$(uname -a | grep Ubuntu)" ]; then
-if [  -n "$(which apt)" ]; then
-    alias up="sudo apt update && sudo apt upgrade"
-    alias aptu="sudo apt update"
-    alias aptup="sudo apt upgrade"
-    alias aptupy="sudo apt upgrade -y"
-    alias apti="sudo apt install"
-    alias aptx="sudo apt remove"
-    alias aptxx="sudo apt purge"
-    alias aptax="sudo apt autoremove"
-    alias aptin="apt show"
-    alias aptse="apt search"
 # RHEL/Fedora
-# elif [  -n "$(uname -a | grep Fedora)" ]; then
-elif [  -n "$(which dnf)" ]; then
+if [  -n "$(uname -a | grep fedora)" ]; then
     alias up="sudo dnf check-update && sudo dnf upgrade"
     alias dnfu="dnf check-update"
     alias dnfup="sudo dnf upgrade"
@@ -37,6 +23,20 @@ elif [  -n "$(which dnf)" ]; then
     alias dnfax="sudo dnf autoremove"
     alias dnfin="dnf info"
     alias dnfs="dnf search"
+fi
+
+# Debian/Ubuntu
+if [  -n "$(uname -a | grep Ubuntu)" ]; then
+    alias up="sudo apt update && sudo apt upgrade"
+    alias aptu="sudo apt update"
+    alias aptup="sudo apt upgrade"
+    alias aptupy="sudo apt upgrade -y"
+    alias apti="sudo apt install"
+    alias aptx="sudo apt remove"
+    alias aptxx="sudo apt purge"
+    alias aptax="sudo apt autoremove"
+    alias aptin="apt show"
+    alias aptse="apt search"
 fi
 
 # flatpak

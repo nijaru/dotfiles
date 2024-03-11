@@ -66,11 +66,8 @@ path=(~/bin $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
-
 export EDITOR=nvim
-
 export CMAKE_GENERATOR=Ninja
-
 export ZSTD_NBTHREADS=0
 # export ZSTD_CLEVEL=3
 
@@ -91,12 +88,14 @@ z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
 z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
 z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
 
-# Autoload functions.
-autoload -Uz zmv
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
 
-# pipx completion.
-# autoload -U bashcompinit
-# bashcompinit
+# Autoload functions.
+autoload -Uz zmv compinit
+compinit
+
 # eval "$(register-python-argcomplete pipx)"
 
 # Define functions and completions.
@@ -114,16 +113,13 @@ z4h source ~/.aliases
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   z4h source ~/.linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  zstyle ':z4h:bindkey' keyboard  'mac'
   export PYENV_ROOT="$HOME/.pyenv"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
-
   eval "$(rbenv init - zsh)"
-
   export MODULAR_HOME="/Users/nick/.modular"
   export PATH="/Users/nick/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
-  
+
   z4h source ~/.macos
 fi
 

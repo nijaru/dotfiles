@@ -2,6 +2,8 @@
 
 export HOMEBREW_NO_ANALYTICS=1
 
+zstyle ':z4h:bindkey' keyboard  'mac'
+
 if (( $+commands[orbctl] )); then
   eval "$(orbctl completion zsh)"
   compdef _orb orbctl

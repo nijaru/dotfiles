@@ -14,6 +14,7 @@ mkdir -p $HOME/.ssh
 ln -svf $HOME/github/dotfiles/.ssh/config $HOME/.ssh/config
 
 # kitty
+mkdir -p $HOME/.config/kitty
 ln -svf $HOME/github/dotfiles/misc/kitty.conf $HOME/.config/kitty/kitty.conf
 
 # OS specific

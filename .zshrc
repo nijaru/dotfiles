@@ -113,14 +113,15 @@ z4h source ~/.aliases
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   z4h source ~/.linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
   eval "$(rbenv init - zsh)"
   export MODULAR_HOME="/Users/nick/.modular"
   export PATH="/Users/nick/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 
   z4h source ~/.macos
+
+  export PYENV_ROOT="$HOME/.pyenv"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
 fi
 
 # Add flags to existing aliases.

@@ -66,7 +66,7 @@ path=(~/bin $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
-export EDITOR=nvim
+export EDITOR=zed
 export CMAKE_GENERATOR=Ninja
 export ZSTD_NBTHREADS=0
 # export ZSTD_CLEVEL=3

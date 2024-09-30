@@ -410,9 +410,9 @@
         // The default model to use when creating new contexts.
         "default_model": {
             // The provider to use.
-            "provider": "zed.dev",
+            "provider": "copilot_chat",
             // The model to use.
-            "model": "claude-3-5-sonnet"
+            "model": "gpt-4o"
         }
     },
     // The settings for slash commands.
@@ -450,7 +450,7 @@
     //     "autosave": "on_focus_change",
     // 4. Save when idle for a certain amount of time:
     //     "autosave": { "after_delay": {"milliseconds": 500} },
-    "autosave": "off",
+    "autosave": { "after_delay": { "milliseconds": 500 } },
     // Settings related to the editor's tab bar.
     "tab_bar": {
         // Whether or not to show the tab bar in the editor

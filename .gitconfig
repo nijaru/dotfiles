@@ -9,8 +9,7 @@
 [commit]
     gpgsign = true
 [core]
-    # editor = $EDITOR --wait
-    editor = nvim
+    editor = $EDITOR --wait
     excludesFile = ~/.gitignore
 	fsmonitor = true
     preloadIndex = true

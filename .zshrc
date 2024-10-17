@@ -114,8 +114,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   z4h source ~/.linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   eval "$(rbenv init - zsh)"
-  export MODULAR_HOME="/Users/nick/.modular"
-  export PATH="/Users/nick/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
+  
+  export PATH="$PATH:/Users/nick/.modular/bin"
+  eval "$(magic completion --shell zsh)"
+  
   z4h source ~/.macos
 
   export PYENV_ROOT="$HOME/.pyenv"

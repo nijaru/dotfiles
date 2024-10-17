@@ -156,6 +156,7 @@ alias gpl="git pull"
 # push
 alias gp="git push"
 alias gpf="git push --force-with-lease"
+alias gpa="git push --all"
 alias gpsu="git push --set-upstream"
 alias gpsuom="git push --set-upstream origin main"
 alias gpsuob="git symbolic-ref --short HEAD | xargs git push --set-upstream origin"

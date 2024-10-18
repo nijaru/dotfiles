@@ -842,11 +842,10 @@
             }
         },
         "Python": {
-            "language_servers": ["ruff", "pyls", "!pyright", "..."],
-                "format_on_save": "on",
-                "formatter": [
-                    {
-                        "code_actions": {
+            "language_servers": ["...", "ruff"],
+            "formatter": [
+                {
+                    "code_actions": {
                         "source.organizeImports.ruff": true,
                         "source.fixAll.ruff": true
                     }

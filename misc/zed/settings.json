@@ -1,0 +1,151 @@
+{
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    // "dark": "One Dark"
+    "dark": "Ayu Mirage"
+  },
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_size": 14,
+
+  "format_on_save": "on",
+  "ensure_final_newline_on_save": true,
+  "remove_trailing_whitespace_on_save": true,
+  "autosave": "on_focus_change",
+
+  "terminal": {
+    "shell": {
+      "with_arguments": {
+        "program": "/bin/zsh",
+        "args": ["--login"]
+      }
+    },
+    "font_family": "JetBrainsMono Nerd Font",
+    "font_size": 14,
+    "detect_venv": {
+      "on": {
+        "directories": [".venv", "venv", ".env", "env"]
+      }
+    }
+  },
+
+  "assistant": {
+    "version": "2",
+    "enabled": true,
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-3-sonnet"
+    }
+  },
+
+  "git": {
+    "git_gutter": "tracked_files",
+    "inline_blame": {
+      "enabled": true,
+      "delay_ms": 500
+    }
+  },
+
+  "languages": {
+    "JavaScript": {
+      "language_servers": ["...", "biome"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+    "TypeScript": {
+      "language_servers": ["...", "biome"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+    "TSX": {
+      "language_servers": ["...", "biome"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+    "JSON": {
+      "language_servers": ["...", "biome"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+    "Python": {
+      "language_servers": ["...", "ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    },
+    "Rust": {
+      "language_servers": ["rust-analyzer", "..."],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports": true,
+            "source.fixAll": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "rust-analyzer"
+          }
+        }
+      ]
+    }
+  }
+}

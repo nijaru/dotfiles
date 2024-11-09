@@ -1,33 +1,83 @@
-# Compiled source #
-###################
-*.com
+# Compiled source and binaries #
+##############################
 *.class
 *.dll
+*.dylib
 *.exe
 *.o
 *.so
+*.com
+*.bin
+*.ko
+*.obj
+*.elf
+*.lib
+*.a
+*.la
+*.lo
 
-# Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
+# Packages and archives #
+#######################
 *.7z
-*.dmg
+*.bz2
 *.gz
 *.iso
 *.jar
 *.rar
 *.tar
+*.xz
 *.zip
+*.tgz
+*.tbz
+*.deb
+*.rpm
+*.dmg
+*.pkg
 
-# Logs and databases #
-######################
+# Logs, databases and temporary files #
+####################################
 *.log
 *.sql
 *.sqlite
+*.sqlite3
+*.db
+*.dat
+*.cache
+*.tmp
+*.temp
+*.swp
+*~
+
+# IDE and editor files #
+######################
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.project
+.settings/
+*.tmproj
+nbproject/
+*.iml
+*.iws
+*.ipr
+
+# Build and dependency directories #
+#################################
+node_modules/
+build/
+dist/
+target/
+out/
+bin/
+obj/
+_build/
+vendor/
+.bundle/
+.gradle/
 
 # OS generated files #
-######################
+####################
 .DS_Store
 .DS_Store?
 ._*
@@ -35,3 +85,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+*~
+.fuse_hidden*
+.directory
+.nfs*

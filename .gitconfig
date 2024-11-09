@@ -1,40 +1,49 @@
+# User Information
 [user]
     name = Nick Russo
     email = nijaru7@gmail.com
-[checkout]
-    defaultRemote = origin
-    workers = 0
-[column]
-	ui = auto
-[commit]
-    gpgsign = true
+    signingkey = /Users/nick/.ssh/id_ed25519.pub
+
+# Core Settings
 [core]
     editor = $EDITOR --wait
     excludesFile = ~/.gitignore
-	fsmonitor = true
+    fsmonitor = true
     preloadIndex = true
     untrackedCache = true
     pager = delta
+    autocrlf = input
+    safecrlf = true
+    longpaths = true
+
+# Branch and Checkout Settings
+[init]
+    defaultBranch = main
+[branch]
+    sort = -committerdate
+[checkout]
+    defaultRemote = origin
+    workers = 0
+
+# Diff and Merge Settings
 [diff]
     algorithm = histogram
     colorMoved = default
+    renames = copies
+    wsErrorHighlight = all
+[merge]
+    conflictstyle = zdiff3
+    ff = only
+[interactive]
+    diffFilter = delta --color-only
+
+# Remote Operation Settings
 [fetch]
     parallel = 0
     prune = true
     pruneTags = true
-	writeCommitGraph = true
-[init]
-    defaultBranch = main
-[interactive]
-    diffFilter = delta --color-only
-[merge]
-    conflictstyle = zdiff3
-    ff = only
-    tool = $EDITOR
-# [mergetool "$EDITOR"]
-#     cmd = $EDITOR --wait $MERGED
-[pack]
-    threads = 0
+    writeCommitGraph = true
+    recurseSubmodules = on-demand
 [pull]
     prune = true
     pruneTags = true
@@ -43,35 +52,81 @@
     autoSetupRemote = true
     default = current
     followTags = true
+
+# Rebase and History Settings
 [rebase]
     autoStash = true
     autoSquash = true
+    updateRefs = true
+    missingCommitsCheck = error
 [rerere]
     autoupdate = true
     enabled = true
-[status]
-    showUntrackedFiles = all
+
+# Submodule Settings
 [submodule]
     recurse = true
     fetchJobs = 0
+
+# Security and Signing
+[gpg]
+    format = ssh
 [tag]
     forceSignAnnotated = true
+[commit]
+    gpgsign = true
 [transfer]
     fsckobjects = true
-[url "git@github.com:"]
-    insteadOf = https://github.com/
 
+# Display and UI Settings
 [color]
     ui = true
 [color "status"]
     changed = yellow
+[column]
+    ui = auto
+[status]
+    showUntrackedFiles = all
+    showStash = true
+[log]
+    date = iso
+[help]
+    autocorrect = immediate
 
+# Delta Configuration
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
+    line-numbers = true
+
+# Performance Settings
+[pack]
+    threads = 0
+[maintenance]
+    auto = true
+    strategy = incremental
+
+# URL Handling
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+# LFS Settings
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+# Aliases
 [alias]
-    gc = git maintenance run --task=gc
+    gc = maintenance run --task=gc
     patch = apply --ignore-space-change --ignore-whitespace
     scrub = reset --hard @{upstream}
-[filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+    rb = rebase
+    rbi = rebase -i
+    rba = rebase --abort
+    rbc = rebase --continue
+    rbs = rebase --skip
+    unpushed = log @{push}..
+    staged = diff --cached

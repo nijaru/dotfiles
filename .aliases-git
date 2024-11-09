@@ -1,0 +1,75 @@
+#!/usr/bin/env zsh
+
+# Core commands
+alias g="git"
+alias gi="git init"
+
+# Status and information
+alias gs="git status -sb"                # Most common status alias, short format
+alias gss="git status"                   # Full status (alternative)
+alias gd="git diff --color-words"        # Better word diff visualization
+alias gdh="git diff HEAD"
+alias gds="git diff --staged"
+
+# Modern branch management
+alias gb="git branch --verbose"          # Show branches with last commit
+alias gba="git branch --all --verbose"   # Show all branches with details
+alias gbd="git branch -d"                # Safe delete (only merged)
+alias gbD="git branch -D"                # Force delete
+alias gsw="git switch"                   # Modern way to change branches
+alias gswc="git switch -c"               # Create and switch
+alias gswm="git switch main"             # Quick switch to main
+alias gswd="git switch dev"              # Quick switch to dev
+
+# Staging and commits
+alias ga="git add"
+alias ga.="git add ."
+alias gaa="git add --all"               # Add all changes including untracked
+alias gap="git add --patch"              # Interactive staging
+alias gc="git commit --gpg-sign"         # Base commit with signing
+alias gcm="git commit --gpg-sign -m"     # Commit with message
+alias gca="git commit --gpg-sign --amend"  # Amend last commit
+alias gcf="git commit --gpg-sign --amend --reuse-message HEAD"  # Quick amend keeping message
+alias gfix="git commit --gpg-sign --fixup"  # Create fixup commit for later squashing
+
+# Stash operations
+alias gst="git stash"                    # Quick stash
+alias gstp="git stash pop"               # Pop latest stash
+alias gstl="git stash list"              # List stashes
+alias gsta="git stash apply"             # Apply stash without removing it
+alias gstu="git stash --include-untracked" # Stash including untracked files
+alias gstd="git stash drop"              # Drop latest stash
+
+# Reset and restore (modern commands)
+alias grs="git restore"                  # Modern way to restore files
+alias grss="git restore --staged"        # Unstage files
+alias grh="git reset --hard"             # Hard reset
+alias grhh="git reset --hard HEAD"       # Reset to HEAD
+
+# Remote operations
+alias gf="git fetch --all --prune"       # Fetch and clean up
+alias gpl="git pull --rebase"            # Pull with rebase by default
+alias gp="git push"
+alias gpf="git push --force-with-lease"  # Safer force push
+alias gpu="git push --set-upstream"      # Set upstream while pushing
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
+
+# Logging
+alias gl="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 10"
+alias gln="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n"
+alias glg="git log --graph --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 20"
+alias glast="git log -1 HEAD --stat"     # Show last commit
+
+# GitHub CLI integration
+alias ghpr="gh pr create"                # Create PR
+alias ghprv="gh pr view"                 # View PR details
+alias ghprc="gh pr checkout"             # Checkout PR
+
+# Modern maintenance
+alias gprune="git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D"
+alias gsync="git switch main && git pull origin main"
+
+# Helper functions
+git_current_branch() {
+    git branch --show-current 2>/dev/null
+}

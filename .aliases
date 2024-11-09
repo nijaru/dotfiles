@@ -1,170 +1,153 @@
 #!/usr/bin/env zsh
 
-# bin
-alias t="touch"
-alias rmf="rm -rf"
-alias ez="exec zsh"
-alias cp="cp -a"
-alias cpa="cp -a"
-# alias sed="sd"
-alias grep="rg"
-alias find="fd"
-# alias ps="procs"
-# alias du="dust"
+# Source git aliases
+source ~/.aliases-git
 
-# misc
-alias upz="z4h update"
-# alias up="rustup update; upz; pipx upgrade-all"
-alias tarz="tar --zstd -cf"
+###################
+# Modern CLI Tools
+###################
+# Use modern alternatives when available
+command -v bat >/dev/null 2>&1 && alias cat="bat --plain --paging=never"
+command -v eza >/dev/null 2>&1 && alias ls="eza --icons --git" && alias ll="eza -la --icons --git" && alias tree="eza --tree --icons"
+command -v rg >/dev/null 2>&1 && alias grep="rg"
+command -v fd >/dev/null 2>&1 && alias find="fd"
+command -v duf >/dev/null 2>&1 && alias df="duf"
+command -v dust >/dev/null 2>&1 && alias du="dust"
+command -v procs >/dev/null 2>&1 && alias ps="procs"
+command -v btop >/dev/null 2>&1 && alias top="btop"
+command -v delta >/dev/null 2>&1 && alias diff="delta"
+command -v fzf >/dev/null 2>&1 && alias preview="fzf --preview 'bat --color=always {}'"
+command -v hyperfine >/dev/null 2>&1 && alias bench="hyperfine"
+command -v doggo >/dev/null 2>&1 && alias dig="doggo"
 
-# editors
-alias e="$EDITOR"
-alias e.="$EDITOR ."
-alias c="code"
-alias c.="code ."
-alias v="nvim"
-alias z="zed"
-alias z.="zed ."
-# paths
-alias dotfiles="cd $HOME/github/dotfiles"
-alias github="cd $HOME/github"
-alias ghub="github"
-alias gopath="cd $HOME/go/src/github.com/nijaru"
+###################
+# File Operations
+###################
+alias t="touch"                   # Create new file
+alias cp="cp -ia"                 # Interactive and archive
+alias mv="mv -i"                  # Interactive move
+alias rm="rm -I"                  # Interactive remove
+alias mkdir="mkdir -pv"           # Create parent directories and verbose
+alias chmod="chmod -v --preserve-root"  # Verbose mode with root protection
+alias chown="chown -v --preserve-root"  # Verbose mode with root protection
+alias tarz="tar --zstd -cf"       # Modern compression with zstd
+alias extract='if [ -f "$1" ] ; then case "$1" in *.tar.bz2|*.tbz2) tar xjf "$1";; *.tar.gz|*.tgz) tar xzf "$1";; *.tar.xz) tar xJf "$1";; *.tar.zst) tar --zstd -xf "$1";; *.bz2) bunzip2 "$1";; *.rar) unrar x "$1";; *.gz) gunzip "$1";; *.tar) tar xf "$1";; *.zip) unzip "$1";; *.Z) uncompress "$1";; *.7z) 7z x "$1";; *) echo "\"$1\" cannot be extracted"; fi else echo "\"$1\" is not a valid file"; fi'
 
-# ls
-alias ls="eza"
-alias l="ls -1"
-alias ll="ls -lh"
-alias la="ls -1a"
-alias lsa="ls -a"
-alias lla="ls -lha"
-# ls with tree
-alias lst="ls -T"
-alias lsta="ls -T -a -I .git"
-alias lst2="ls -T -L 2"
-alias lt="lst"
-alias lta="lsta"
-alias lt2="lst2"
+###################
+# Navigation
+###################
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias -- -="cd -"
+alias d='dirs -v'
+for index ({1..9}) alias "$index"="cd -${index}"; unset index
 
-# docker
+###################
+# Modern Development
+###################
+# Docker
 alias dk="docker"
+alias dkc="docker compose"        # New docker compose command
+alias dkp="docker system prune -af --volumes"  # Clean all unused
+alias dkt="docker container top"  # Process list in container
+alias dkps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
+alias dklf="docker logs -f"
+
+# Kubernetes
 alias k="kubectl"
-alias mk="minikube"
+alias kn="kubens"                 # Kubernetes namespace switching
+alias kx="kubectx"               # Kubernetes context switching
+alias stern="stern --tail 50"     # Better kubernetes logs
+alias kgp="kubectl get pods"
+alias kgn="kubectl get nodes"
+alias kdp="kubectl describe pod"
 
-# python
-alias py="python"
+# Development Environments
+alias py="python3"
 alias python="python3"
-alias pypy="pypy3"
-# pip
-alias pip="py -m pip"
-alias pipi="pip install --upgrade"
-alias piprm="pip uninstall"
-# poetry
-alias p="poetry"
-alias pi="poetry install"
-alias pr="poetry run"
-alias prp="poetry run python"
-alias psh="poetry shell"
-alias pu="poetry update"
+alias pip="python3 -m pip"        # Always use module form
+alias venv="python3 -m venv .venv && source .venv/bin/activate"
+alias dva="deactivate"
+alias pip-update="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U"
 
-# ruby
-alias rb="ruby"
-alias gemi="gem install"
+# Node.js - using modern practices
+alias pnpm="corepack pnpm"        # Use corepack for package managers
+alias nx="pnpm nx"                # Modern monorepo tool
+alias nr="npm run"
+alias nrd="npm run dev"
+alias nrb="npm run build"
+alias nrt="npm run test"
+alias ncu="npx npm-check-updates"
 
-# node
-alias n="node"
-alias npmi="npm install"
-alias npmu="npm update"
-alias npmr="npm run"
-alias npmt="npm test"
-alias npmb="npm build"
-alias npmd="npm dev"
-alias npms="npm start"
+# Go
+alias gmt="go mod tidy"
+alias gv="go vet"
+alias gta="go test ./..."
+alias gcv="go mod verify"
+alias gow="gopls watch"           # Language server watch
+alias gob="go build -v"
+alias gor="go run -v"
 
-# yarn
-alias y="yarn"
-alias yu="yarn upgrade"
-alias yrm="yarn remove"
-alias ya="yarn add"
-alias yga="yarn global add"
-
-# go
-alias ggt="go get"
-alias grun="go run"
-alias got="go test -cover"
-alias gtb="go test -bench=. -benchmem"
-
-# rs
-alias ru="rustup"
-alias rup="rustup update"
+# Rust
 alias cb="cargo build"
 alias cr="cargo run"
 alias ct="cargo test"
-alias ca="cargo add"
-alias cx="cargo rm"
+alias cf="cargo fmt"
+alias cc="cargo check"
+alias cl="cargo clippy"
+alias cw="cargo watch -x run"     # Watch mode
 alias cu="cargo update"
+alias coc="cargo outdated -R"
 
-# git
-alias g="git"
-alias gi="git init"
-# status
-alias gw="git status"
-alias gd="git diff"
-alias gdh="git diff HEAD"
-alias gds="git diff --staged"
-# stash
-alias gs="git stash"
-alias gsa="git stash apply"
-alias gsp="git stash pop"
-alias gsd="git stash drop"
-alias gsl="git stash list"
-# commit
-alias ga="git add"
-alias ga.="git add ."
-alias gaa="git add --all"
-alias gcm='git commit --gpg-sign --message'
-alias gcf='git commit --amend --reuse-message HEAD --gpg-sign'
-alias gcF='git commit --amend --gpg-sign'
-# cherry-pick
-alias gcp='git cherry-pick --ff'
-alias gcpc='git cherry-pick --continue'
-alias gcpa='git cherry-pick --abort'
-# branch
-alias gb="git branch"
-alias gbd="git branch -d"
-alias gbD="git branch -D"
-alias gsw="git switch"
-alias gswc="git switch -c"
-alias gm="git merge"
-alias gr="git rebase"
-alias grc="git rebase --continue"
-alias gra="git rebase --abort"
-# restore
-alias grs="git restore"
-alias grss="git restore --staged"
-alias grsa="git restore --staged ."
-# reset
-alias grh="git reset HEAD"
-alias grh1="git reset HEAD~1"
-# remote
-alias gcln="git clone"
-alias grm="git remote"
-alias grmv="git remote --verbose"
-alias gf="git fetch"
-alias gfu="git fetch --unshallow"
-alias gpl="git pull"
-# push
-alias gp="git push"
-alias gpf="git push --force-with-lease"
-alias gpa="git push --all"
-alias gpsu="git push --set-upstream"
-alias gpsuom="git push --set-upstream origin main"
-alias gpsuob="git symbolic-ref --short HEAD | xargs git push --set-upstream origin"
-alias gbsu="git symbolic-ref --short HEAD | xargs git branch --set-upstream-to=origin"
-alias grau="git remote add upstream"
-# log
-alias gl="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 10"
-alias gln="git log --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n"
-alias glg="git log --graph --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n 20"
-alias glgn="git log --graph --pretty=format:'%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)' -n"
-alias gsync="git sync"
+###################
+# System Operations
+###################
+alias ports="ss -tulanp"          # Modern alternative to netstat
+alias sysd="systemctl"
+alias jctl="journalctl"
+alias mem="free -h"
+alias net="bandwhich"             # Network utilization
+alias hist="atuin"                # Better shell history
+alias psmem="ps auxf | sort -nr -k 4 | head -10"  # Top memory processes
+alias pscpu="ps auxf | sort -nr -k 3 | head -10"  # Top CPU processes
+
+###################
+# Security
+###################
+alias sha256="shasum -a 256"
+alias encrypt="age"               # Modern encryption
+alias hash="b2sum"               # Better than md5/sha1
+alias sshkeygen="ssh-keygen -t ed25519"
+alias scan-ports="sudo nmap -sS"
+alias myip="curl ifconfig.me"
+
+###################
+# Quality of Life
+###################
+alias path='echo -e ${PATH//:/\\n}'  # Print each PATH entry on a new line
+alias timestamp='date "+%Y%m%d_%H%M%S"'
+alias weather="curl wttr.in"
+alias serve="python3 -m http.server"
+alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+alias update="topgrade"           # Universal update tool
+alias ip="ip -color=auto"
+alias diff="diff --color=auto"
+alias grep="grep --color=auto"
+
+# Directory shortcuts with zoxide
+# alias docs="z documents"
+# alias dl="z downloads"
+# alias code="z code"
+
+# Editor
+alias e="$EDITOR"
+alias vim="nvim"
+alias vi="nvim"
+alias svim="sudo -E nvim"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias update='brew update && brew upgrade && mas upgrade && rustup update && pipx upgrade-all && z4h update'
+else
+    alias update='sudo apt update && sudo apt upgrade -y && rustup update && pipx upgrade-all && z4h update'
+fi

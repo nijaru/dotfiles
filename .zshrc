@@ -1,133 +1,75 @@
-# Personal Zsh configuration file. It is strongly recommended to keep all
-# shell customization and configuration (including exported environment
-# variables such as PATH) in this file or in files sourced from it.
-#
+# Personal Zsh configuration file.
 # Documentation: https://github.com/romkatv/zsh4humans/blob/v5/README.md.
 
-# Periodic auto-update on Zsh startup: 'ask' or 'no'.
-# You can manually run `z4h update` to update everything.
+# Z4H Configuration
 zstyle ':z4h:' auto-update      'no'
-# Ask whether to auto-update this often; has no effect if auto-update is 'no'.
-# zstyle ':z4h:' auto-update-days '28'
-
-# Keyboard type: 'mac' or 'pc'.
 zstyle ':z4h:bindkey' keyboard  'pc'
-
-# Start tmux if not already in tmux.
-# zstyle ':z4h:' start-tmux command tmux -u new -A -D -t z4h
-
-# Whether to move prompt to the bottom when zsh starts and on Ctrl+L.
 zstyle ':z4h:' prompt-at-bottom 'no'
-
-# Mark up shell's output with semantic information.
 zstyle ':z4h:' term-shell-integration 'yes'
-
-# Right-arrow key accepts one character ('partial-accept') from
-# command autosuggestions or the whole thing ('accept')?
 zstyle ':z4h:autosuggestions' forward-char 'accept'
-
-# Recursively traverse directories when TAB-completing files.
 zstyle ':z4h:fzf-complete' recurse-dirs 'yes'
-
-# Enable direnv to automatically source .envrc files.
 zstyle ':z4h:direnv'         enable 'yes'
-# Show "loading" and "unloading" notifications from direnv.
 zstyle ':z4h:direnv:success' notify 'yes'
-
-# Enable ('yes') or disable ('no') automatic teleportation of z4h over
-# SSH when connecting to these hosts.
-# zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
-# zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
-# The default value if none of the overrides above match the hostname.
-zstyle ':z4h:ssh:*'                   enable 'no'
-
-# Send these files over to the remote host when connecting over SSH to the
-# enabled hosts.
-zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh' '~/.aliases'  '~/.linux'
-
-zstyle ':z4h:ssh-agent:' start      yes
+zstyle ':z4h:ssh:*'         enable 'no'
+zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh' '~/.aliases' '~/.linux'
+zstyle ':z4h:ssh-agent:' start yes
 zstyle ':z4h:ssh-agent:' extra-args -t 20h
 
-# Clone additional Git repositories from GitHub.
-#
-# This doesn't do anything apart from cloning the repository and keeping it
-# up-to-date. Cloned files can be used after `z4h init`. This is just an
-# example. If you don't plan to use Oh My Zsh, delete this line.
-# z4h install ohmyzsh/ohmyzsh || return
-
-# Install or update core components (fzf, zsh-autosuggestions, etc.) and
-# initialize Zsh. After this point console I/O is unavailable until Zsh
-# is fully initialized. Everything that requires user interaction or can
-# perform network I/O must be done above. Everything else is best done below.
+# Initialize Z4H
 z4h init || return
 
-# Extend PATH.
-path=(~/bin $path)
-
-# Export environment variables.
-export GPG_TTY=$TTY
-export EDITOR=zed
-export CMAKE_GENERATOR=Ninja
-export ZSTD_NBTHREADS=0
-# export ZSTD_CLEVEL=3
-
-# Source additional local files if they exist.
+# Source configurations
 z4h source ~/.env.zsh
 z4h source ~/.cargo/env
 
-# Use additional Git repositories pulled in with `z4h install`.
+# Kitty shell integration
+if test -n "$KITTY_INSTALLATION_DIR"; then
+    export KITTY_SHELL_INTEGRATION="enabled"
+    autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+    kitty-integration
+    unfunction kitty-integration
+fi
 
-# z4h load   ohmyzsh/ohmyzsh/plugins/emoji-clock  # load a plugin
+# Key bindings
+z4h bindkey undo Ctrl+/   Shift+Tab
+z4h bindkey redo Option+/
+z4h bindkey z4h-cd-back    Shift+Left
+z4h bindkey z4h-cd-forward Shift+Right
+z4h bindkey z4h-cd-up      Shift+Up
+z4h bindkey z4h-cd-down    Shift+Down
 
-# Define key bindings.
-z4h bindkey undo Ctrl+/   Shift+Tab  # undo the last command line change
-z4h bindkey redo Option+/            # redo the last undone command line change
-
-z4h bindkey z4h-cd-back    Shift+Left   # cd into the previous directory
-z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
-z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
-z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
-
+# Homebrew completions
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 fi
 
-# Autoload functions.
+# Functions and completions
 autoload -Uz zmv compinit
 compinit
 
-# eval "$(register-python-argcomplete pipx)"
-
-# Define functions and completions.
-function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
-# Define named directories: ~w <=> Windows home directory on WSL.
+# WSL support
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
-# Define aliases.
-# alias tree='tree -a -I .git'
-
+# Source aliases and platform-specific configs
+z4h source ~/.functions
 z4h source ~/.aliases
-
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  z4h source ~/.linux
+  z4h source ~/.linux.zsh
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  eval "$(rbenv init - zsh)"
-  
-  export PATH="$PATH:/Users/nick/.modular/bin"
-  eval "$(magic completion --shell zsh)"
-  
-  z4h source ~/.macos
-
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
+  z4h source ~/.darwin.zsh
 fi
 
-# Add flags to existing aliases.
+# Update alias
 alias up="${aliases[up]:-up}; rustup update; pipx upgrade-all; z4h update"
 
-# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
-setopt glob_dots     # no special treatment for file names with a leading dot
-setopt no_auto_menu  # require an extra TAB press to open the completion menu
+# Shell options
+setopt glob_dots
+setopt no_auto_menu
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_IGNORE_SPACE
+setopt HIST_VERIFY
+setopt INC_APPEND_HISTORY
+setopt EXTENDED_HISTORY

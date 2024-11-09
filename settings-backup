@@ -412,7 +412,7 @@
             // The provider to use.
             "provider": "copilot_chat",
             // The model to use.
-            "model": "gpt-4o"
+            "model": "claude-3-5-sonnet"
         }
     },
     // The settings for slash commands.
@@ -450,7 +450,7 @@
     //     "autosave": "on_focus_change",
     // 4. Save when idle for a certain amount of time:
     //     "autosave": { "after_delay": {"milliseconds": 500} },
-    "autosave": { "after_delay": { "milliseconds": 500 } },
+    "autosave": "on_focus_change",
     // Settings related to the editor's tab bar.
     "tab_bar": {
         // Whether or not to show the tab bar in the editor
@@ -768,11 +768,11 @@
             }
         },
         "C": {
-            "format_on_save": "off",
+            // "format_on_save": "off",
             "use_on_type_format": false
         },
         "C++": {
-            "format_on_save": "off",
+            // "format_on_save": "off",
             "use_on_type_format": false
         },
         "CSS": {
@@ -811,15 +811,38 @@
             }
         },
         "JavaScript": {
-            "language_servers": ["!typescript-language-server", "vtsls", "..."],
-            "prettier": {
-                "allowed": true
-            }
+            "language_servers": ["...", "biome"],
+            "format_on_save": "on",
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.biome": true,
+                        "source.fixAll.biome": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "biome"
+                    }
+                }
+            ]
         },
         "JSON": {
-            "prettier": {
-                "allowed": true
-            }
+            "language_servers": ["...", "biome"],
+            "format_on_save": "on",
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.biome": true,
+                        "source.fixAll.biome": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "biome"
+                    }
+                }
+            ]
         },
         "JSONC": {
             "prettier": {

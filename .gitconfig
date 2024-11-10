@@ -1,31 +1,56 @@
+###################
 # User Information
+###################
 [user]
     name = Nick Russo
     email = nijaru7@gmail.com
-    signingkey = /Users/nick/.ssh/id_ed25519.pub
 
 ###################
 # Core Settings
 ###################
 [core]
+    # Editor and files
     editor = $EDITOR --wait
     excludesFile = ~/.gitignore
+
     # Performance optimizations
     fsmonitor = true                    # Use filesystem monitor for faster status
     preloadIndex = true                 # Load index into memory for faster status
-    untrackedCache = true               # Cache untracked files for faster status
+    untrackedCache = true              # Cache untracked files for faster status
+
     # File handling
     autocrlf = input                    # Convert CRLF to LF on input
     safecrlf = true                     # Prevent mixed line endings
     longpaths = true                    # Support paths > 260 chars
-    # Pager settings
-    pager = delta
+
+    # Display
+    pager = delta                       # Use delta for better diffs
+
     # Large file handling
-    bigFileThreshold = 64m              # Warn on adding large files
+    bigFileThreshold = 128m             # Warning threshold for large files
     compression = 9                     # Maximum compression
 
 ###################
-# Branch and Checkout
+# Security and Signing
+###################
+[gpg]
+    format = ssh                        # Use SSH keys for signing
+[user]
+    signingkey = /Users/nick/.ssh/id_ed25519.pub  # Your SSH public key
+[commit]
+    gpgsign = true                     # Sign all commits
+[tag]
+    forceSignAnnotated = true          # Sign all tags
+    gpgSign = true                     # Sign all tags (not just annotated)
+[log]
+    showSignature = true               # Show signature information in log
+[status]
+    showUntrackedFiles = all           # Show all untracked files
+[transfer]
+    fsckObjects = true                 # Verify object integrity during transfer
+
+###################
+# Branch Management
 ###################
 [init]
     defaultBranch = main
@@ -39,13 +64,15 @@
 # Diff and Merge
 ###################
 [diff]
-    algorithm = histogram              # Better diff algorithm
-    colorMoved = default               # Track moved code blocks
+    algorithm = histogram               # Better diff algorithm
+    colorMoved = zebra                 # Enhanced moved code tracking
     renames = copies                   # Detect copied files
-    wsErrorHighlight = all             # Show all whitespace errors
+    wsErrorHighlight = all            # Show all whitespace errors
+    indentHeuristic = true           # Better indent detection
 [merge]
     conflictstyle = zdiff3            # Better conflict resolution
     ff = only                         # No merge commits when fast-forward possible
+    renameLimit = 999999             # Handle more renames in large repos
 [interactive]
     diffFilter = delta --color-only
 
@@ -55,108 +82,64 @@
 [fetch]
     parallel = 0                      # Use all available CPU cores
     prune = true                      # Remove deleted remote branches
-    pruneTags = true                  # Remove deleted remote tags
-    writeCommitGraph = true           # Optimize commit traversal
+    pruneTags = true                 # Remove deleted remote tags
+    writeCommitGraph = true         # Optimize commit traversal
     recurseSubmodules = on-demand
 [pull]
-    prune = true
-    pruneTags = true
-    rebase = true                     # Use rebase instead of merge
+    rebase = true                    # Use rebase instead of merge
+    ff = only                       # Fast-forward only pulls
 [push]
-    autoSetupRemote = true            # Automatically set upstream
-    default = current                 # Push current branch to same name
-    followTags = true                 # Include tags when pushing
+    autoSetupRemote = true          # Automatically set upstream
+    default = current               # Push current branch to same name
+    followTags = true              # Include tags when pushing
+[url "git@github.com:"]
+    insteadOf = https://github.com/
 
 ###################
 # Rebase and History
 ###################
 [rebase]
-    autoStash = true                  # Automatically stash/unstash
-    autoSquash = true                 # Automatically squash fixup commits
-    updateRefs = true                 # Update dependent branches
-    missingCommitsCheck = error
+    autoStash = true                # Auto stash/unstash changes
+    autoSquash = true              # Auto squash fixup commits
+    updateRefs = true             # Update dependent branches
+    missingCommitsCheck = error   # Error on missing commits
 [rerere]
-    autoupdate = true                 # Auto-resolve known conflicts
-    enabled = true                    # Remember resolution patterns
+    enabled = true                # Remember conflict resolutions
+    autoupdate = true           # Auto-apply remembered resolutions
 
 ###################
-# Submodule Settings
+# Performance Tuning
 ###################
-[submodule]
-    recurse = true                    # Always recurse into submodules
-    fetchJobs = 0                     # Parallel submodule fetches
-
-###################
-# Security and Signing
-###################
-[gpg]
-    format = ssh
-[tag]
-    forceSignAnnotated = true
-[commit]
-    gpgsign = true
-[transfer]
-    fsckobjects = true               # Check object integrity during transfer
-
-###################
-# Display and UI
-###################
-[color]
-    ui = true
-[color "status"]
-    changed = yellow
-[column]
-    ui = auto
-[status]
-    showUntrackedFiles = all
-    showStash = true
-[log]
-    date = iso
+[pack]
+    threads = 0                # Use all available CPU cores
+    deltaCacheSize = 256m      # Cache size for delta compression
+    packSizeLimit = 256m      # Maximum pack file size
+[maintenance]
+    auto = true
+    strategy = incremental    # Regular maintenance
+    gc = true               # Enable garbage collection
+[gc]
+    auto = 256             # Run GC after 256 loose objects
+    autoPackLimit = 64    # Pack after 64 packs
+    pruneExpire = 2.weeks.ago
 
 ###################
 # Delta Configuration
 ###################
 [delta]
-    # Navigation
-    navigate = true                  # Use n/N to move between diff sections
-    light = false                    # Dark mode
-    # Layout
-    side-by-side = true              # Show diffs side by side
-    line-numbers = true              # Show line numbers
-    # Styling
-    syntax-theme = ansi              # Use ANSI colors
-    file-style = bold yellow         # File headers in bold yellow
-    file-decoration-style = none     # No box around file headers
-    hunk-header-style = file line-number syntax  # Better hunk headers
+    navigate = true              # Use n/N to move between diff sections
+    light = false               # Dark mode
+    side-by-side = true        # Show diffs side by side
+    line-numbers = true       # Show line numbers
+    syntax-theme = ansi      # Use ANSI colors
+    file-style = bold yellow # File headers in bold yellow
     plus-style = syntax "#003800"    # Added lines
     minus-style = syntax "#3f0001"   # Removed lines
-    zero-style = syntax              # Context lines
-    whitespace-error-style = reverse # Highlight whitespace errors
+    zero-style = syntax             # Context lines
+    whitespace-error-style = reverse
 
 ###################
-# Performance Settings
-###################
-[pack]
-    threads = 0                     # Use all CPU cores
-    deltaCacheSize = 128m           # Cache size for delta compression
-    packSizeLimit = 128m            # Maximum pack file size
-[maintenance]
-    auto = true
-    strategy = incremental          # Incremental maintenance
-    gc = true                       # Enable garbage collection
-[gc]
-    auto = 256                      # Run GC after 256 loose objects
-    autoPackLimit = 64              # Pack after 64 packs
-    pruneExpire = 2.weeks.ago       # Keep objects younger than 2 weeks
-
-###################
-# URL Handling
-###################
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-
-###################
-# LFS Settings
+# LFS Configuration
 ###################
 [filter "lfs"]
     clean = git-lfs clean -- %f
@@ -170,15 +153,26 @@
 [help]
     autocorrect = immediate         # Auto-correct commands immediately
 
-# Include local config if exists
-[include]
-    path = ~/.gitconfig.local
-
 ###################
-# Alias Definitions
+# Custom Functions
 ###################
 [alias]
-    # Support for custom functions
+    # Branch management
     cleanup = "!git-clean"
     br = "!gbr"
     clone-cd = "!clone"
+
+    # Additional useful aliases
+    s = "status -sb"                # Short status
+    l = "log --oneline -n 10"      # Short log
+    lb = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"  # List branches by date
+    undo = "reset --soft HEAD^"     # Undo last commit
+    amend = "commit --amend --no-edit"  # Amend without editing message
+    staged = "diff --cached"        # Show staged changes
+    unstage = "reset HEAD --"       # Unstage changes
+    wip = "!git add -A && git commit -m 'WIP'"  # Quick work-in-progress commit
+    unwip = "!git log -n 1 | grep -q -c WIP && git reset HEAD~1"  # Undo WIP commit
+
+# Include local overrides
+[include]
+    path = ~/.gitconfig.local

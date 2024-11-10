@@ -3,7 +3,7 @@
 ###################
 # System Management
 ###################
-# Systemd service management
+# Systemd service management (Linux specific)
 alias sc="systemctl"
 alias scs="systemctl status"
 alias scr="systemctl restart"
@@ -12,9 +12,9 @@ alias scp="systemctl stop"
 alias sce="systemctl enable"
 alias scd="systemctl disable"
 alias scl="systemctl list-units"
-alias scf="systemctl --failed"           # Show failed units
-alias scu="systemctl --user"            # User services
-alias scdr="systemctl daemon-reload"    # Reload systemd
+alias scf="systemctl --failed"
+alias scu="systemctl --user"
+alias scdr="systemctl daemon-reload"
 
 # Journald log management
 alias jc="journalctl"
@@ -27,7 +27,7 @@ alias jcc="sudo journalctl --vacuum-time=7d"  # Clean old logs
 ###################
 # Package Management
 ###################
-# Debian/Ubuntu
+# Debian/Ubuntu specific
 if command -v apt >/dev/null; then
     # Basic operations
     alias aptu="sudo apt update"
@@ -47,15 +47,11 @@ if command -v apt >/dev/null; then
     # System maintenance
     alias aptc="sudo apt clean && sudo apt autoclean"
     alias aptfix="sudo apt --fix-broken install"
-    alias aptkey="sudo apt-key"
     alias apthold="sudo apt-mark hold"
     alias aptunhold="sudo apt-mark unhold"
-
-    # Update system
-    alias update="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && rustup update && pipx upgrade-all && z4h update"
 fi
 
-# RHEL/Fedora
+# RHEL/Fedora specific
 if command -v dnf >/dev/null; then
     # Basic operations
     alias dnfu="dnf check-update"
@@ -76,59 +72,97 @@ if command -v dnf >/dev/null; then
     alias dnffix="sudo dnf distro-sync"
     alias dnfgr="sudo dnf grouplist"
     alias dnfgi="sudo dnf groupinstall"
-
-    # Update system
-    alias update="sudo dnf upgrade -y && sudo dnf autoremove -y && rustup update && pipx upgrade-all && z4h update"
 fi
 
 ###################
-# System Operations
+# Linux System Operations
 ###################
-# Basic commands
-alias open="xdg-open"
-alias o="xdg-open"
-alias clip="xclip -selection clipboard"
-alias paste="xclip -selection clipboard -o"
+# File system operations
+alias mount-smb="sudo mount -t cifs"
+alias mount-nfs="sudo mount -t nfs"
+alias lsblk="lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT"
+alias df="df -hT"                       # Show filesystem type
+alias ncdu="ncdu --color dark"          # Disk usage analyzer
 
-# System monitoring
-alias cpu="top -o %CPU"
-alias mem="free -h"
-alias disk="df -h"
-alias io="iostat -x 1"
-alias net="ss -tulanp"
-alias who="w"
-alias top="btop"  # Modern top replacement
+# Process management
+alias pstree="pstree -p"               # Show PIDs
+alias watch="watch -c"                 # Colorized watch
+alias fuser="fuser -v"                # Verbose fuser
 
-# System maintenance
-alias cleancache="sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches"
-alias cleanjournal="sudo journalctl --vacuum-time=7d"
-alias cleantmp="sudo rm -rf /tmp/*"
+# System information
+alias cpu-info="cat /proc/cpuinfo"
+alias mem-info="cat /proc/meminfo"
+alias sys-info="inxi -Fxz"            # If inxi is installed
+alias kernel="uname -r"
+alias dmesg="sudo dmesg -T"           # Human readable timestamps
 
 ###################
 # Network Management
 ###################
 # NetworkManager
-alias wifi="nmcli device wifi"
-alias wific="nmcli device wifi connect"
-alias wifil="nmcli device wifi list"
-alias conn="nmcli connection"
-alias netrestart="sudo systemctl restart NetworkManager"
+alias nmr="sudo systemctl restart NetworkManager"
+alias nm-list="nmcli device wifi list"
+alias nm-connect="nmcli device wifi connect"
+alias nm-show="nmcli connection show"
 
-# Network troubleshooting
-alias ping="ping -c 5"              # Ping with count
-alias ports="ss -tulanp"            # Show listening ports
-alias ips="ip -c a"                 # Show IP addresses
-alias dns="resolvectl status"       # Show DNS settings
-alias tracepath="tracepath -b"      # Better traceroute
-alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -"
+# Firewall management
+if command -v ufw >/dev/null; then
+    alias fw="sudo ufw"
+    alias fw-list="sudo ufw status numbered"
+    alias fw-reload="sudo ufw reload"
+elif command -v firewall-cmd >/dev/null; then
+    alias fw="sudo firewall-cmd"
+    alias fw-list="sudo firewall-cmd --list-all"
+    alias fw-reload="sudo firewall-cmd --reload"
+fi
+
+###################
+# Display Management
+###################
+# X11 specific
+if command -v xrandr >/dev/null; then
+    alias displays="xrandr --query"
+    alias display-reset="xrandr --auto"
+fi
+
+# Wayland specific
+if command -v wlr-randr >/dev/null; then
+    alias wl-displays="wlr-randr"
+fi
+
+###################
+# Audio Management
+###################
+# PulseAudio/Pipewire
+if command -v pactl >/dev/null; then
+    alias audio-restart="systemctl --user restart pulseaudio.service"
+    alias audio-list="pactl list sinks"
+    alias audio-inputs="pactl list sources"
+fi
 
 ###################
 # System Paths
 ###################
+# Quick access to system directories
 alias conf="cd /etc"
 alias logs="cd /var/log"
 alias sysd="cd /etc/systemd/system"
-alias srv="cd /srv"
+alias systemd="cd /etc/systemd"
+alias services="cd /etc/systemd/system"
+alias apache="cd /etc/apache2"
+alias nginx="cd /etc/nginx"
+
+###################
+# Security
+###################
+# AppArmor/SELinux
+if command -v aa-status >/dev/null; then
+    alias aa-reload="sudo systemctl reload apparmor"
+    alias aa-list="sudo aa-status"
+elif command -v setenforce >/dev/null; then
+    alias se-status="sestatus"
+    alias se-list="semanage boolean -l"
+fi
 
 # Ensure PATH is clean
 typeset -U PATH path

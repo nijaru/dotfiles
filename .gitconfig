@@ -4,71 +4,91 @@
     email = nijaru7@gmail.com
     signingkey = /Users/nick/.ssh/id_ed25519.pub
 
+###################
 # Core Settings
+###################
 [core]
     editor = $EDITOR --wait
     excludesFile = ~/.gitignore
-    fsmonitor = true
-    preloadIndex = true
-    untrackedCache = true
+    # Performance optimizations
+    fsmonitor = true                    # Use filesystem monitor for faster status
+    preloadIndex = true                 # Load index into memory for faster status
+    untrackedCache = true               # Cache untracked files for faster status
+    # File handling
+    autocrlf = input                    # Convert CRLF to LF on input
+    safecrlf = true                     # Prevent mixed line endings
+    longpaths = true                    # Support paths > 260 chars
+    # Pager settings
     pager = delta
-    autocrlf = input
-    safecrlf = true
-    longpaths = true
+    # Large file handling
+    bigFileThreshold = 64m              # Warn on adding large files
+    compression = 9                     # Maximum compression
 
-# Branch and Checkout Settings
+###################
+# Branch and Checkout
+###################
 [init]
     defaultBranch = main
 [branch]
-    sort = -committerdate
+    sort = -committerdate               # Sort branches by most recent commit
 [checkout]
     defaultRemote = origin
-    workers = 0
+    workers = 0                         # Use all available CPU cores
 
-# Diff and Merge Settings
+###################
+# Diff and Merge
+###################
 [diff]
-    algorithm = histogram
-    colorMoved = default
-    renames = copies
-    wsErrorHighlight = all
+    algorithm = histogram              # Better diff algorithm
+    colorMoved = default               # Track moved code blocks
+    renames = copies                   # Detect copied files
+    wsErrorHighlight = all             # Show all whitespace errors
 [merge]
-    conflictstyle = zdiff3
-    ff = only
+    conflictstyle = zdiff3            # Better conflict resolution
+    ff = only                         # No merge commits when fast-forward possible
 [interactive]
     diffFilter = delta --color-only
 
-# Remote Operation Settings
+###################
+# Remote Operations
+###################
 [fetch]
-    parallel = 0
-    prune = true
-    pruneTags = true
-    writeCommitGraph = true
+    parallel = 0                      # Use all available CPU cores
+    prune = true                      # Remove deleted remote branches
+    pruneTags = true                  # Remove deleted remote tags
+    writeCommitGraph = true           # Optimize commit traversal
     recurseSubmodules = on-demand
 [pull]
     prune = true
     pruneTags = true
-    rebase = true
+    rebase = true                     # Use rebase instead of merge
 [push]
-    autoSetupRemote = true
-    default = current
-    followTags = true
+    autoSetupRemote = true            # Automatically set upstream
+    default = current                 # Push current branch to same name
+    followTags = true                 # Include tags when pushing
 
-# Rebase and History Settings
+###################
+# Rebase and History
+###################
 [rebase]
-    autoStash = true
-    autoSquash = true
-    updateRefs = true
+    autoStash = true                  # Automatically stash/unstash
+    autoSquash = true                 # Automatically squash fixup commits
+    updateRefs = true                 # Update dependent branches
     missingCommitsCheck = error
 [rerere]
-    autoupdate = true
-    enabled = true
+    autoupdate = true                 # Auto-resolve known conflicts
+    enabled = true                    # Remember resolution patterns
 
+###################
 # Submodule Settings
+###################
 [submodule]
-    recurse = true
-    fetchJobs = 0
+    recurse = true                    # Always recurse into submodules
+    fetchJobs = 0                     # Parallel submodule fetches
 
+###################
 # Security and Signing
+###################
 [gpg]
     format = ssh
 [tag]
@@ -76,9 +96,11 @@
 [commit]
     gpgsign = true
 [transfer]
-    fsckobjects = true
+    fsckobjects = true               # Check object integrity during transfer
 
-# Display and UI Settings
+###################
+# Display and UI
+###################
 [color]
     ui = true
 [color "status"]
@@ -90,43 +112,73 @@
     showStash = true
 [log]
     date = iso
-[help]
-    autocorrect = immediate
 
+###################
 # Delta Configuration
+###################
 [delta]
-    navigate = true
-    light = false
-    side-by-side = true
-    line-numbers = true
+    # Navigation
+    navigate = true                  # Use n/N to move between diff sections
+    light = false                    # Dark mode
+    # Layout
+    side-by-side = true              # Show diffs side by side
+    line-numbers = true              # Show line numbers
+    # Styling
+    syntax-theme = ansi              # Use ANSI colors
+    file-style = bold yellow         # File headers in bold yellow
+    file-decoration-style = none     # No box around file headers
+    hunk-header-style = file line-number syntax  # Better hunk headers
+    plus-style = syntax "#003800"    # Added lines
+    minus-style = syntax "#3f0001"   # Removed lines
+    zero-style = syntax              # Context lines
+    whitespace-error-style = reverse # Highlight whitespace errors
 
+###################
 # Performance Settings
+###################
 [pack]
-    threads = 0
+    threads = 0                     # Use all CPU cores
+    deltaCacheSize = 128m           # Cache size for delta compression
+    packSizeLimit = 128m            # Maximum pack file size
 [maintenance]
     auto = true
-    strategy = incremental
+    strategy = incremental          # Incremental maintenance
+    gc = true                       # Enable garbage collection
+[gc]
+    auto = 256                      # Run GC after 256 loose objects
+    autoPackLimit = 64              # Pack after 64 packs
+    pruneExpire = 2.weeks.ago       # Keep objects younger than 2 weeks
 
+###################
 # URL Handling
+###################
 [url "git@github.com:"]
     insteadOf = https://github.com/
 
+###################
 # LFS Settings
+###################
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
 
-# Aliases
+###################
+# Helper Settings
+###################
+[help]
+    autocorrect = immediate         # Auto-correct commands immediately
+
+# Include local config if exists
+[include]
+    path = ~/.gitconfig.local
+
+###################
+# Alias Definitions
+###################
 [alias]
-    gc = maintenance run --task=gc
-    patch = apply --ignore-space-change --ignore-whitespace
-    scrub = reset --hard @{upstream}
-    rb = rebase
-    rbi = rebase -i
-    rba = rebase --abort
-    rbc = rebase --continue
-    rbs = rebase --skip
-    unpushed = log @{push}..
-    staged = diff --cached
+    # Support for custom functions
+    cleanup = "!git-clean"
+    br = "!gbr"
+    clone-cd = "!clone"

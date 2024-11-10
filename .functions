@@ -1,15 +1,32 @@
+#!/usr/bin/env zsh
+
+###################
+# Directory Operations
+###################
+# Create and enter directory
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 
 function mkcd() {
     mkdir -p "$@" && cd "$_"
 }
 
+# Find directory and cd into it
+function cdf() {
+    local dir
+    dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+###################
+# File Operations
+###################
+# Extract various archives
 function extract() {
     if [ -f $1 ] ; then
         case $1 in
             *.tar.bz2)   tar xjf $1     ;;
             *.tar.gz)    tar xzf $1     ;;
             *.tar.xz)    tar xJf $1     ;;
+            *.tar.zst)   tar --zstd -xf $1   ;;
             *.bz2)       bunzip2 $1     ;;
             *.rar)       unrar x $1     ;;
             *.gz)        gunzip $1      ;;
@@ -23,5 +40,151 @@ function extract() {
         esac
     else
         echo "'$1' is not a valid file"
+    fi
+}
+
+# Create a ZIP archive of a file or folder
+function compress() {
+    local zip_name="${1:t:r}.zip"
+    zip -r "$zip_name" "$1"
+    echo "Created $zip_name"
+}
+
+###################
+# Git Operations
+###################
+# Clone and cd into a repo
+function clone() {
+    git clone "$1" && cd "$(basename "$1" .git)"
+}
+
+# Create branch and switch to it
+function gbr() {
+    git switch -c "$1"
+}
+
+# Clean up local branches that are fully merged
+function git-clean() {
+    git branch --merged | egrep -v "(^\*|main|dev|master)" | xargs git branch -d
+}
+
+###################
+# Docker Operations
+###################
+# Stop all containers
+function dkstop-all() {
+    docker stop $(docker ps -q)
+}
+
+# Remove all containers
+function dkrm-all() {
+    docker rm $(docker ps -a -q)
+}
+
+# Clean up docker system
+function dkclean() {
+    docker system prune -af
+    docker volume prune -f
+    docker network prune -f
+}
+
+###################
+# Development Helpers
+###################
+# Create and activate Python virtual environment
+function venv() {
+    local venv_name="${1:-.venv}"
+    python3 -m venv "$venv_name"
+    source "$venv_name/bin/activate"
+}
+
+# Initialize a new project
+function init-project() {
+    local project_name="$1"
+    if [[ -z "$project_name" ]]; then
+        echo "Please provide a project name"
+        return 1
+    fi
+
+    mkdir -p "$project_name"/{src,tests,docs}
+    cd "$project_name"
+    git init
+    echo "# $project_name" > README.md
+    echo ".DS_Store\n.env\n*.log" > .gitignore
+
+    if [[ -f "$HOME/.gitconfig" ]]; then
+        git config --local include.path "$HOME/.gitconfig"
+    fi
+}
+
+###################
+# System Operations
+###################
+# Check system resources
+function sys-check() {
+    echo "=== CPU Usage ==="
+    top -l 1 -n 0 | grep "CPU usage"
+    echo "\n=== Memory Usage ==="
+    vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf "%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576;'
+    echo "\n=== Disk Usage ==="
+    df -h | grep -E '^/dev/'
+}
+
+# Clean system caches
+function system-clean() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sudo periodic daily weekly monthly
+        sudo rm -rf /Library/Caches/*
+        rm -rf ~/Library/Caches/*
+        sudo dscacheutil -flushcache
+        sudo killall -HUP mDNSResponder
+    else
+        sudo apt-get clean
+        sudo apt-get autoremove -y
+        sudo journalctl --vacuum-time=7d
+    fi
+}
+
+###################
+# Network Operations
+###################
+# Check open ports
+function ports() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    else
+        sudo ss -tulpn
+    fi
+}
+
+# Get external IP
+function myip() {
+    curl -s https://api.ipify.org
+    echo
+}
+
+###################
+# Path Operations
+###################
+# Add to path if directory exists
+function add_to_path() {
+    if [[ -d "$1" ]]; then
+        path=("$1" $path)
+    fi
+}
+
+###################
+# Development Database
+###################
+# Start/Stop PostgreSQL (if installed via Homebrew)
+function pg() {
+    if [[ "$1" == "start" ]]; then
+        brew services start postgresql
+    elif [[ "$1" == "stop" ]]; then
+        brew services stop postgresql
+    elif [[ "$1" == "restart" ]]; then
+        brew services restart postgresql
+    else
+        echo "Usage: pg [start|stop|restart]"
     fi
 }

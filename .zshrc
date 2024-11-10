@@ -4,11 +4,22 @@
 ###################
 # Z4H Core Settings
 ###################
+# Performance optimization: initialize Z4H immediately
+(( ${+Z4H_BOOTSTRAPPING} )) || source ~/.zsh4humans/zsh4humans.zsh || return
+
 # Basic configuration
 zstyle ':z4h:' auto-update 'yes'
+zstyle ':z4h:' auto-update-days 7
 zstyle ':z4h:' prompt-at-bottom 'no'
 zstyle ':z4h:' term-shell-integration 'yes'
 zstyle ':z4h:bindkey' keyboard 'pc'
+
+# Performance tuning
+zstyle ':z4h:' start-tmux 'no'              # Don't auto-start tmux
+zstyle ':z4h:' prompt-height 1              # Minimize prompt height
+zstyle ':z4h:*' term-vresize 'scroll'       # Faster terminal resizing
+zstyle ':z4h:autosuggestions' delay 0.1     # Faster suggestions
+zstyle ':z4h:compinit' arguments -C -i      # Faster compinit
 
 # Feature configuration
 zstyle ':z4h:autosuggestions' forward-char 'accept'
@@ -16,17 +27,11 @@ zstyle ':z4h:fzf-complete' recurse-dirs 'yes'
 zstyle ':z4h:direnv' enable 'yes'
 zstyle ':z4h:direnv:success' notify 'yes'
 
-# Tmux integration
-zstyle ':z4h:' start-tmux 'yes'
-zstyle ':z4h:tmux:' auto-start 'no'
-zstyle ':z4h:tmux:*' default-height '20'
-zstyle ':z4h:tmux:*' mouse 'on'
-
 # SSH configuration
 zstyle ':z4h:ssh:*' enable 'no'
 zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh' '~/.aliases' '~/.linux'
 zstyle ':z4h:ssh-agent:' start yes
-zstyle ':z4h:ssh-agent:' extra-args -t 12h  # Reduced from 20h for better security
+zstyle ':z4h:ssh-agent:' extra-args -t 12h
 
 # Initialize Z4H
 z4h init || return
@@ -48,90 +53,50 @@ setopt EXTENDED_HISTORY         # Record timestamp of command
 ###################
 # Completion System
 ###################
-# Initialize completion
+# Initialize completion system
 autoload -Uz compinit
 
-# Ensure XDG cache directory exists
-: "${XDG_CACHE_HOME:=$HOME/.cache}"
-mkdir -p "$XDG_CACHE_HOME/zsh"
-
-# Completion cache
-local zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
-if [[ -n "$zcompdump"(#qN.mh+24) ]]; then
-    compinit -d "$zcompdump"
-    command rm -f "$zcompdump"(N.mh+24)
+# Load completions efficiently
+if [[ -n ${ZDOTDIR:-${HOME}}/.zcompdump(#qN.mh+24) ]]; then
+    compinit -i
+    { zcompile "${ZDOTDIR:-${HOME}}/.zcompdump" } &!
 else
-    compinit -C -d "$zcompdump"
+    compinit -C -i
 fi
 
-# Enhanced completion styling with fuzzy matching
-zstyle ':completion:*' completer '_expand' '_complete' '_correct' '_approximate'
+# Enhanced completion styling
+zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' matcher-list '' \
   'm:{a-z\-}={A-Z\_}' \
   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
   'r:|?=** m:{a-z\-}={A-Z\_}'
 zstyle ':completion:*' menu select
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "${XDG_CACHE_HOME}/zsh/.zcompcache"
-
-# Better completion groups
-zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
-zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':completion:*' accept-exact '*(N)'   # Optimize path completion
+zstyle ':completion:*' special-dirs true     # Complete special directories
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Use LS_COLORS
 
-###################
-# Tool Integration
-###################
-# Lazy loading function with caching
-function lazy_load() {
-    local load_cmd=$1
-    local lazy_cmd=$2
-    eval "function ${lazy_cmd}() {
-        unfunction ${lazy_cmd}
-        eval \"\$(${load_cmd})\"
-        ${lazy_cmd} \"\$@\"
-    }"
-}
-
-# Initialize tools
-lazy_load 'zoxide init zsh' zoxide
-lazy_load 'atuin init zsh' atuin
-lazy_load 'direnv hook zsh' direnv
-lazy_load 'pyenv init -' pyenv
-lazy_load 'pyenv virtualenv-init -' pyenv-virtualenv
-lazy_load 'rbenv init -' rbenv
+# Completion formatting
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
+zstyle ':completion:*:messages' format ' %F{purple}-- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 
 ###################
 # Core Configuration
 ###################
-# Source configurations in correct order
+# Source core configurations
 z4h source ~/.env.zsh
-z4h source ~/.functions
+z4h source ~/.functions.zsh
 z4h source ~/.cargo/env
 
 # Function completions
-function setup_function_completions() {
-    # Git completions
-    compdef _git gbr=git-checkout
-    compdef _git git-clean=git-branch
-
-    # Docker completions
-    compdef _docker dkstop-all=docker-stop
-    compdef _docker dkrm-all=docker-rm
-    compdef _docker dkclean=docker-system
-
-    # Project completions
-    function _init_project() {
-        local -a templates
-        templates=($(ls ${PROJECT_TEMPLATE_DIR} 2>/dev/null))
-        _describe 'template' templates
-    }
-    compdef _init_project init-project
-}
-
-# Call after compinit
-setup_function_completions
+compdef _git gbr=git-checkout
+compdef _git git-clean=git-branch
+compdef _docker dkstop-all=docker-stop
+compdef _docker dkrm-all=docker-rm
+compdef _docker dkclean=docker-system
 
 ###################
 # Platform Specific
@@ -147,5 +112,13 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     z4h source ~/.darwin.zsh
 fi
 
-# Ensure PATH is clean
-typeset -U PATH path
+###################
+# Path Management
+###################
+# Add development tools to path
+[[ -d $PYENV_ROOT/bin ]] && add_to_path "$PYENV_ROOT/bin"
+[[ -d $CARGO_HOME/bin ]] && add_to_path "$CARGO_HOME/bin"
+[[ -d $GOBIN ]] && add_to_path "$GOBIN"
+
+# Final PATH cleanup
+clean_path

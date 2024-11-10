@@ -6,117 +6,91 @@ source ~/.aliases-git
 ###################
 # Modern CLI Tools
 ###################
-# Use modern alternatives when available
+# File operations and viewing
 command -v bat >/dev/null 2>&1 && alias cat="bat --plain --paging=never"
-command -v eza >/dev/null 2>&1 && alias ls="eza --icons --git" && alias ll="eza -la --icons --git" && alias tree="eza --tree --icons"
+command -v eza >/dev/null 2>&1 && alias ls="eza --icons --git" && \
+    alias ll="eza -la --icons --git" && \
+    alias tree="eza --tree --icons"
+command -v zoxide >/dev/null 2>&1 && alias cd="z"
+
+# Search and find
 command -v rg >/dev/null 2>&1 && alias grep="rg"
 command -v fd >/dev/null 2>&1 && alias find="fd"
+command -v fzf >/dev/null 2>&1 && alias preview="fzf --preview 'bat --color=always {}'"
+
+# System monitoring
 command -v duf >/dev/null 2>&1 && alias df="duf"
 command -v dust >/dev/null 2>&1 && alias du="dust"
 command -v procs >/dev/null 2>&1 && alias ps="procs"
 command -v btop >/dev/null 2>&1 && alias top="btop"
+command -v htop >/dev/null 2>&1 && alias htop="htop --tree"
+
+# File comparison and network
 command -v delta >/dev/null 2>&1 && alias diff="delta"
-command -v fzf >/dev/null 2>&1 && alias preview="fzf --preview 'bat --color=always {}'"
-command -v hyperfine >/dev/null 2>&1 && alias bench="hyperfine"
 command -v doggo >/dev/null 2>&1 && alias dig="doggo"
+command -v gping >/dev/null 2>&1 && alias ping="gping"
+command -v curlie >/dev/null 2>&1 && alias curl="curlie"
+
+# Performance testing
+command -v hyperfine >/dev/null 2>&1 && alias bench="hyperfine"
 
 ###################
 # Enhanced File Operations
 ###################
-# Basic operations with safety
-alias t="touch"
-alias cp="cp -ia"                 # Interactive and archive
-alias mv="mv -i"                  # Interactive move
-alias rm="rm -I"                  # Interactive remove
-alias mkdir="mkdir -pv"           # Create parent directories and verbose
-alias chmod="chmod -v --preserve-root"  # Verbose mode with root protection
-alias chown="chown -v --preserve-root"  # Verbose mode with root protection
+# Safe operations
+alias rm="rm -I"                          # Interactive removal
+alias cp="cp -ia"                         # Interactive and archive
+alias mv="mv -i"                          # Interactive move
+alias ln="ln -v"                          # Verbose linking
+alias chmod="chmod -v --preserve-root"    # Verbose mode
+alias chown="chown -v --preserve-root"    # Verbose mode
+alias mkdir="mkdir -pv"                   # Create parent dirs
 
-# Advanced file operations
-alias cpv="rsync -ah --info=progress2"  # Copy with progress bar
-alias mvv="rsync -ah --info=progress2 --remove-source-files"  # Move with progress
-alias lns="ln -sv"                      # Symbolic link with verbose
-alias trash="mv --force -t ~/.local/share/Trash"  # Safer alternative to rm
-alias shred="shred -u -z"              # Secure file deletion
-alias sizes="du -sh * | sort -hr"      # Sort files by size
-alias recent="find . -type f -mtime -7" # Files modified in last 7 days
+# Advanced operations
+alias cpv="rsync -ah --info=progress2"    # Copy with progress
+alias mvv="rsync -ah --remove-source-files --info=progress2"  # Move with progress
+alias symlink="ln -sf"                    # Force symbolic link
+alias rename="perl-rename"                # Batch rename utility
 
-# Archive operations
-alias tarz="tar --zstd -cf"            # Modern compression with zstd
-alias untar="tar -xf"                  # Quick extract tar
-alias zipr="zip -r"                    # Recursive zip
-
-###################
-# Enhanced Navigation
-###################
 # Directory traversal
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-alias -- -="cd -"                      # Go to previous directory
-alias d='dirs -v'                      # List directory stack
-for index ({1..9}) alias "$index"="cd -${index}"; unset index
+alias -- -="cd -"                         # Go back
+alias d='dirs -v'                         # List directory stack
 
-# Quick access directories
-alias downloads="cd ~/Downloads"
-alias documents="cd ~/Documents"
-alias desktop="cd ~/Desktop"
-alias projects="cd ~/Projects"
-alias github="cd ~/github"
-
-# Directory management
-alias md="mkdir -p"
-alias rd="rmdir"
-alias mkcd='function _mkcd() { mkdir -p "$1" && cd "$1" }; _mkcd'
+# Quick access
+alias dl="cd ~/Downloads"
+alias doc="cd ~/Documents"
+alias dt="cd ~/Desktop"
+alias p="cd ~/Projects"
+alias gh="cd ~/github"
 
 ###################
-# Modern Development
+# Development Tools
 ###################
-# Docker - removed duplicates that are now functions
-alias dk="docker"
-alias dkc="docker compose"
-alias dkp="docker system prune -af --volumes"  # Clean all unused
-alias dkt="docker container top"               # Process list in container
-alias dkps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
-alias dklf="docker logs -f"
-alias dkstats="docker stats --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}'"
-
-# Kubernetes
-alias k="kubectl"
-alias kn="kubens"
-alias kx="kubectx"
-alias stern="stern --tail 50"
-alias kgp="kubectl get pods"
-alias kgn="kubectl get nodes"
-alias kdp="kubectl describe pod"
-alias ktp="kubectl top pods"
-alias ktn="kubectl top nodes"
-
-# Development Environments
+# Python
 alias py="python3"
 alias python="python3"
 alias pip="python3 -m pip"
-alias venv="python3 -m venv .venv && source .venv/bin/activate"
-alias dva="deactivate"
 alias pip-update="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U"
+alias pyenv-update="pyenv update"
 
 # Node.js
-alias pnpm="corepack pnpm"
-alias nx="pnpm nx"
+alias pn="pnpm"
 alias nr="npm run"
 alias nrd="npm run dev"
 alias nrb="npm run build"
 alias nrt="npm run test"
-alias ncu="npx npm-check-updates"
+alias ncu="npx npm-check-updates -i"
 
 # Go
 alias gmt="go mod tidy"
 alias gv="go vet"
 alias gta="go test ./..."
 alias gcv="go mod verify"
-alias gow="gopls watch"
-alias gob="go build -v"
-alias gor="go run -v"
+alias gor="go run"
+alias gob="go build"
 
 # Rust
 alias cb="cargo build"
@@ -127,42 +101,3 @@ alias cc="cargo check"
 alias cl="cargo clippy"
 alias cw="cargo watch -x run"
 alias cu="cargo update"
-alias coc="cargo outdated -R"
-
-###################
-# System Operations
-###################
-# System information
-alias ports="ss -tulanp"
-alias mem="free -h"
-alias df="df -h"
-alias du="du -h"
-alias ps="ps auxf"
-alias psmem="ps auxf | sort -nr -k 4 | head -10"
-alias pscpu="ps auxf | sort -nr -k 3 | head -10"
-alias diskspace="du -S | sort -n -r | more"
-
-# System maintenance
-alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
-alias update="topgrade"
-alias checksec="arch -arm64 checksec"
-alias temperature="sudo powermetrics --samplers smc -i1 -n1"
-
-# Network
-alias myip="curl ifconfig.me"
-alias localip="ipconfig getifaddr en0"
-alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
-alias httpdump="sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
-
-# Editor
-alias e="$EDITOR"
-alias vim="nvim"
-alias vi="nvim"
-alias svim="sudo -E nvim"
-
-# Platform-specific update command
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    alias update='brew update && brew upgrade && mas upgrade && rustup update && pipx upgrade-all && z4h update'
-else
-    alias update='sudo apt update && sudo apt upgrade -y && rustup update && pipx upgrade-all && z4h update'
-fi

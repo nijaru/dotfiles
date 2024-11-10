@@ -1,69 +1,84 @@
 #!/usr/bin/env zsh
 
 ###################
-# macOS Security & Integration
+# Security & Privacy
 ###################
 # SSH/GPG Configuration
 export SSH_AUTH_SOCK="$HOME/.ssh/agent"
 export GPG_TTY=$(tty)
 export APPLE_SSH_ADD_BEHAVIOR="macos"
 
+# Security settings
+export HOMEBREW_NO_INSECURE_REDIRECT=1      # Prevent insecure redirects
+export HOMEBREW_CASK_OPTS="--require-sha"   # Require SHA verification for casks
+
 # Keychain Integration
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
 
 ###################
-# Performance & Optimization
+# Performance Optimizations
 ###################
-# Homebrew
+# CPU/Memory optimizations
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES  # Better fork performance
+export MAKEFLAGS="-j$(sysctl -n hw.ncpu)"      # Parallel compilation
+export ARCHFLAGS="-arch $(uname -m)"           # Native architecture flags
+
+# Homebrew optimizations
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_BAT=1
 export HOMEBREW_FORCE_BREWED_CURL=1
-export HOMEBREW_NO_AUTO_UPDATE=1
-export HOMEBREW_INSTALL_CLEANUP=1     # Auto cleanup old versions
-export HOMEBREW_CURL_RETRIES=3        # More resilient downloads
-export HOMEBREW_PARALLEL_JOBS="$(sysctl -n hw.ncpu)"  # Parallel downloads
+export HOMEBREW_NO_AUTO_UPDATE=1              # Manual updates only
+export HOMEBREW_INSTALL_CLEANUP=1             # Auto cleanup old versions
+export HOMEBREW_CURL_RETRIES=3               # More resilient downloads
+export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1  # Don't fallback to source
+export HOMEBREW_PARALLEL_JOBS="$(sysctl -n hw.ncpu)"  # Parallel operations
 
-# Set keyboard type for z4h
-zstyle ':z4h:bindkey' keyboard 'mac'
+# Cache optimizations
+export ZSH_CACHE_DIR="$HOME/.cache/zsh"
+mkdir -p $ZSH_CACHE_DIR
 
 ###################
-# Path & Environment
+# Development Environment
 ###################
-# Ensure homebrew is in path
+# Architecture and Homebrew setup
 if [[ $(uname -m) == 'arm64' ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
+    # Rosetta 2 support if needed
+    alias ibrew='arch -x86_64 /usr/local/bin/brew'
 else
     eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-# Modular AI - using $HOME for portability
+# Modular AI
 export PATH="$PATH:$HOME/.modular/bin"
 if command -v magic >/dev/null; then
     eval "$(magic completion --shell zsh)"
 fi
 
 ###################
-# OrbStack Configuration
+# Container Configuration
 ###################
+# OrbStack settings
 export DOCKER_HOST="unix://$HOME/.orbstack/run/docker.sock"
 export DOCKER_DEFAULT_PLATFORM="linux/arm64"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
+export DOCKER_CLI_HINTS=false              # Disable CLI hints
 
 [[ -f ~/.orbstack/shell/init.zsh ]] && source ~/.orbstack/shell/init.zsh
 
-# If orbctl exists, add completion
+# OrbStack completion
 if (( $+commands[orbctl] )); then
-  eval "$(orbctl completion zsh)"
-  compdef _orb orbctl
-  compdef _orb orb
+    eval "$(orbctl completion zsh)"
+    compdef _orb orbctl
+    compdef _orb orb
 fi
 
 ###################
 # macOS Utilities
 ###################
-# System commands
+# System commands (unique to macOS)
 alias disk="diskutil"
 alias tar="gtar"
 alias o="open"
@@ -71,45 +86,56 @@ alias oa="open -a"
 alias reveal="open -R"
 alias finder="open -a Finder"
 
-# Clipboard
-alias clip="pbcopy"
-alias paste="pbpaste"
-
-# File operations
+# File operations (macOS specific)
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles YES && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles NO && killall Finder"
 alias ql="qlmanage -p"
 
+# Clipboard operations (macOS specific)
+alias clip="pbcopy"
+alias paste="pbpaste"
+
 ###################
 # System Maintenance
 ###################
-# Clear system caches
-alias cleardns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
-alias clearfonts="sudo atsutil databases -remove"
-alias clearmeta="find . -type f -name '*.DS_Store' -ls -delete"
+# macOS specific maintenance
+alias clear-fontcache="sudo atsutil databases -remove"
+alias clear-quicklook="qlmanage -r cache"
+alias rebuild-spotlight="sudo mdutil -E /"
+alias repair-perms="sudo diskutil resetUserPermissions / $(id -u)"
 
-# System update and maintenance
-alias update="brew update && brew upgrade && brew cleanup && rustup update && pipx upgrade-all && z4h update"
-alias up="brew update && brew upgrade && brew cleanup"
+# App Store management (if mas is installed)
+if command -v mas &> /dev/null; then
+    alias appstore-updates="mas outdated"
+    alias appstore-upgrade="mas upgrade"
+fi
 
-# Homebrew package management
-alias brews="brew search"
-alias brewin="brew info"
-alias brewi="brew install"
-alias brewu="brew update && brew upgrade"
-alias brewx="brew uninstall"
-alias brewl="brew list"
-alias brewc="brew cleanup --prune=all"  # More thorough cleanup
-alias brewd="brew doctor"              # Check system for potential problems
-alias brewdeps="brew deps --tree"      # Show dependency tree
+###################
+# Power Management
+###################
+# Power related commands
+alias battery-health="system_profiler SPPowerDataType"
+alias power-usage="pmset -g stats"
+alias sleep-settings="pmset -g"
+alias prevent-sleep="caffeinate -d"        # Prevent display sleep
+alias allow-sleep="killall caffeinate"     # Allow sleep again
 
-# Cask management
-alias caskin="brew info --cask"
-alias casks="brew search --cask"
-alias caski="brew install --cask"
-alias caskx="brew uninstall --cask"
-alias caskl="brew list --cask"
+###################
+# Network Management
+###################
+# macOS specific network commands
+alias wifi-history="defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences RememberedNetworks | grep SSIDString"
+alias wifi-scan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport scan"
+alias wifi-pass="security find-generic-password -wa"
+alias flush-dns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 
+###################
+# Path Management
+###################
+# Ensure path_helper runs last
 if [ -x /usr/libexec/path_helper ]; then
     eval $(/usr/libexec/path_helper -s)
 fi
+
+# Clean up PATH
+typeset -U PATH path

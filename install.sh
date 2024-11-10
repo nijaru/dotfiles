@@ -41,6 +41,7 @@ mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
 link_file "$DOTFILES_DIR/.ssh/config" "$HOME/.ssh/config"
 chmod 600 "$HOME/.ssh/config"
+mkdir -p "~/.ssh/control"
 
 # Kitty configuration
 if command -v kitty >/dev/null 2>&1; then

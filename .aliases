@@ -21,59 +21,88 @@ command -v hyperfine >/dev/null 2>&1 && alias bench="hyperfine"
 command -v doggo >/dev/null 2>&1 && alias dig="doggo"
 
 ###################
-# File Operations
+# Enhanced File Operations
 ###################
-alias t="touch"                   # Create new file
+# Basic operations with safety
+alias t="touch"
 alias cp="cp -ia"                 # Interactive and archive
 alias mv="mv -i"                  # Interactive move
 alias rm="rm -I"                  # Interactive remove
 alias mkdir="mkdir -pv"           # Create parent directories and verbose
 alias chmod="chmod -v --preserve-root"  # Verbose mode with root protection
 alias chown="chown -v --preserve-root"  # Verbose mode with root protection
-alias tarz="tar --zstd -cf"       # Modern compression with zstd
-alias extract='if [ -f "$1" ] ; then case "$1" in *.tar.bz2|*.tbz2) tar xjf "$1";; *.tar.gz|*.tgz) tar xzf "$1";; *.tar.xz) tar xJf "$1";; *.tar.zst) tar --zstd -xf "$1";; *.bz2) bunzip2 "$1";; *.rar) unrar x "$1";; *.gz) gunzip "$1";; *.tar) tar xf "$1";; *.zip) unzip "$1";; *.Z) uncompress "$1";; *.7z) 7z x "$1";; *) echo "\"$1\" cannot be extracted"; fi else echo "\"$1\" is not a valid file"; fi'
+
+# Advanced file operations
+alias cpv="rsync -ah --info=progress2"  # Copy with progress bar
+alias mvv="rsync -ah --info=progress2 --remove-source-files"  # Move with progress
+alias lns="ln -sv"                      # Symbolic link with verbose
+alias trash="mv --force -t ~/.local/share/Trash"  # Safer alternative to rm
+alias shred="shred -u -z"              # Secure file deletion
+alias sizes="du -sh * | sort -hr"      # Sort files by size
+alias recent="find . -type f -mtime -7" # Files modified in last 7 days
+
+# Archive operations
+alias tarz="tar --zstd -cf"            # Modern compression with zstd
+alias untar="tar -xf"                  # Quick extract tar
+alias zipr="zip -r"                    # Recursive zip
 
 ###################
-# Navigation
+# Enhanced Navigation
 ###################
+# Directory traversal
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-alias -- -="cd -"
-alias d='dirs -v'
+alias -- -="cd -"                      # Go to previous directory
+alias d='dirs -v'                      # List directory stack
 for index ({1..9}) alias "$index"="cd -${index}"; unset index
+
+# Quick access directories
+alias downloads="cd ~/Downloads"
+alias documents="cd ~/Documents"
+alias desktop="cd ~/Desktop"
+alias projects="cd ~/Projects"
+alias github="cd ~/github"
+
+# Directory management
+alias md="mkdir -p"
+alias rd="rmdir"
+alias mkcd='function _mkcd() { mkdir -p "$1" && cd "$1" }; _mkcd'
 
 ###################
 # Modern Development
 ###################
-# Docker
+# Docker - removed duplicates that are now functions
 alias dk="docker"
-alias dkc="docker compose"        # New docker compose command
+alias dkc="docker compose"
 alias dkp="docker system prune -af --volumes"  # Clean all unused
-alias dkt="docker container top"  # Process list in container
+alias dkt="docker container top"               # Process list in container
 alias dkps="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
 alias dklf="docker logs -f"
+alias dkstats="docker stats --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}'"
 
 # Kubernetes
 alias k="kubectl"
-alias kn="kubens"                 # Kubernetes namespace switching
-alias kx="kubectx"               # Kubernetes context switching
-alias stern="stern --tail 50"     # Better kubernetes logs
+alias kn="kubens"
+alias kx="kubectx"
+alias stern="stern --tail 50"
 alias kgp="kubectl get pods"
 alias kgn="kubectl get nodes"
 alias kdp="kubectl describe pod"
+alias ktp="kubectl top pods"
+alias ktn="kubectl top nodes"
 
 # Development Environments
 alias py="python3"
 alias python="python3"
-alias pip="python3 -m pip"        # Always use module form
+alias pip="python3 -m pip"
 alias venv="python3 -m venv .venv && source .venv/bin/activate"
 alias dva="deactivate"
 alias pip-update="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U"
 
-# Node.js - using modern practices
-alias pnpm="corepack pnpm"        # Use corepack for package managers
-alias nx="pnpm nx"                # Modern monorepo tool
+# Node.js
+alias pnpm="corepack pnpm"
+alias nx="pnpm nx"
 alias nr="npm run"
 alias nrd="npm run dev"
 alias nrb="npm run build"
@@ -85,7 +114,7 @@ alias gmt="go mod tidy"
 alias gv="go vet"
 alias gta="go test ./..."
 alias gcv="go mod verify"
-alias gow="gopls watch"           # Language server watch
+alias gow="gopls watch"
 alias gob="go build -v"
 alias gor="go run -v"
 
@@ -96,49 +125,34 @@ alias ct="cargo test"
 alias cf="cargo fmt"
 alias cc="cargo check"
 alias cl="cargo clippy"
-alias cw="cargo watch -x run"     # Watch mode
+alias cw="cargo watch -x run"
 alias cu="cargo update"
 alias coc="cargo outdated -R"
 
 ###################
 # System Operations
 ###################
-alias ports="ss -tulanp"          # Modern alternative to netstat
-alias sysd="systemctl"
-alias jctl="journalctl"
+# System information
+alias ports="ss -tulanp"
 alias mem="free -h"
-alias net="bandwhich"             # Network utilization
-alias hist="atuin"                # Better shell history
-alias psmem="ps auxf | sort -nr -k 4 | head -10"  # Top memory processes
-alias pscpu="ps auxf | sort -nr -k 3 | head -10"  # Top CPU processes
+alias df="df -h"
+alias du="du -h"
+alias ps="ps auxf"
+alias psmem="ps auxf | sort -nr -k 4 | head -10"
+alias pscpu="ps auxf | sort -nr -k 3 | head -10"
+alias diskspace="du -S | sort -n -r | more"
 
-###################
-# Security
-###################
-alias sha256="shasum -a 256"
-alias encrypt="age"               # Modern encryption
-alias hash="b2sum"               # Better than md5/sha1
-alias sshkeygen="ssh-keygen -t ed25519"
-alias scan-ports="sudo nmap -sS"
-alias myip="curl ifconfig.me"
-
-###################
-# Quality of Life
-###################
-alias path='echo -e ${PATH//:/\\n}'  # Print each PATH entry on a new line
-alias timestamp='date "+%Y%m%d_%H%M%S"'
-alias weather="curl wttr.in"
-alias serve="python3 -m http.server"
+# System maintenance
 alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
-alias update="topgrade"           # Universal update tool
-alias ip="ip -color=auto"
-alias diff="diff --color=auto"
-alias grep="grep --color=auto"
+alias update="topgrade"
+alias checksec="arch -arm64 checksec"
+alias temperature="sudo powermetrics --samplers smc -i1 -n1"
 
-# Directory shortcuts with zoxide
-# alias docs="z documents"
-# alias dl="z downloads"
-# alias code="z code"
+# Network
+alias myip="curl ifconfig.me"
+alias localip="ipconfig getifaddr en0"
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+alias httpdump="sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # Editor
 alias e="$EDITOR"
@@ -146,6 +160,7 @@ alias vim="nvim"
 alias vi="nvim"
 alias svim="sudo -E nvim"
 
+# Platform-specific update command
 if [[ "$OSTYPE" == "darwin"* ]]; then
     alias update='brew update && brew upgrade && mas upgrade && rustup update && pipx upgrade-all && z4h update'
 else

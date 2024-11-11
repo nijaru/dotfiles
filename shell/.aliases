@@ -4,6 +4,17 @@
 z4h source ~/.aliases-git
 
 ###############################################################################
+# Editor Aliases
+###############################################################################
+alias e="$EDITOR"
+alias z="zed"
+alias z.="zed ."
+alias c="code"
+alias c.="code ."
+alias v="nvim"
+alias v.="nvim ."
+
+###############################################################################
 # Modern CLI Replacements
 ###############################################################################
 
@@ -50,6 +61,8 @@ command_exists gping && alias ping="gping" # Visual ping tool
 
 # Core Operations
 alias rm="rm -i"        # Safe removal
+alias rmd="rmdir"       # Remove directory
+alias rmrf="rm -rf"     # Force removal
 alias cp="cp -ia"       # Safe copy
 alias mv="mv -i"        # Safe move
 alias mkdir="mkdir -pv" # Recursive mkdir
@@ -127,7 +140,6 @@ fi
 ###############################################################################
 if command_exists go; then
     # Build and Run
-    alias g="go"                    # Go shorthand
     alias gr="go run"               # Run package
     alias grun="go run ."           # Run current package
     alias gb="go build"             # Build package
@@ -156,15 +168,15 @@ if command_exists go; then
     alias gmg="go mod graph"    # Module dependency graph
 
     # Tools and Analysis
-    alias gf="go fmt ./..."        # Format code
-    alias gfi="go fix ./..."       # Fix deprecated syntax
-    alias gl="golangci-lint run"   # Run linter
-    alias gv="go vet ./..."        # Run vet
-    alias ggen="go generate ./..." # Generate code
-    alias gdoc="godoc -http=:6060" # Start godoc server
+    alias gf="go fmt ./..."         # Format code
+    alias gfi="go fix ./..."        # Fix deprecated syntax
+    alias glint="golangci-lint run" # Run linter
+    alias gv="go vet ./..."         # Run vet
+    alias ggen="go generate ./..."  # Generate code
+    alias gdoc="godoc -http=:6060"  # Start godoc server
 
     # Development Tools
-    alias gw="gopls"         # Language server
+    # alias gw="gopls"         # Language server
     alias gwi="go work init" # Initialize workspace
     alias gwa="go work add"  # Add module to workspace
     alias gws="go work sync" # Sync workspace
@@ -215,7 +227,6 @@ if command_exists ruby; then
     alias rbbin="bundle info"    # Show gem info
 
     # Rails commands
-    alias r="rails"                        # Rails shorthand
     alias rs="rails server"                # Start Rails server
     alias rc="rails console"               # Rails console
     alias rg="rails generate"              # Rails generate
@@ -252,7 +263,6 @@ fi
 ###############################################################################
 if command_exists cargo; then
     # Basic Cargo commands
-    alias c="cargo"        # Cargo shorthand
     alias cb="cargo build" # Build project
     alias cr="cargo run"   # Run project
     alias ct="cargo test"  # Run tests
@@ -277,7 +287,7 @@ if command_exists cargo; then
     alias cfc="cargo fmt --check"  # Check formatting
     alias cl="cargo clippy"        # Lint code
     alias cla="cargo clippy --all" # Lint all targets
-    alias cd="cargo doc --open"    # Generate and view docs
+    alias cdo="cargo doc --open"   # Generate and view docs
     alias cexp="cargo expand"      # Expand macros
 
     # Project Maintenance

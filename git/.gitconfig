@@ -43,7 +43,7 @@
     forceSignAnnotated = true                          # Sign all tags
     gpgSign = true                                     # Sign all tags (not just annotated)
 [log]
-    showSignature = true                               # Show signature information in log
+    ; showSignature = true                               # Show signature information in log
 [status]
     showUntrackedFiles = all                           # Show all untracked files
 [transfer]

@@ -9,8 +9,7 @@ alias gi="git init"
 ###################
 # Status and Information
 ###################
-alias gs="git status -sb"                # Short status
-alias gss="git status"                   # Full status
+alias gs="git status"                    # Full status
 alias gd="git diff --color-words"        # Better word diff visualization
 alias gdh="git diff HEAD"                # Diff against HEAD
 alias gds="git diff --staged"            # Diff staged changes

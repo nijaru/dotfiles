@@ -12,7 +12,7 @@ This repository contains configuration files for:
 - GPG
 - Terminal Emulators (Kitty)
 - Development Tools (Zed, htop)
-- Package Management (Homebrew)
+- Package Management (Homebrew, DNF)
 
 ## Directory Structure
 
@@ -28,21 +28,15 @@ dotfiles/
 │   └── htop/
 ├── homebrew/       # Homebrew bundle
 ├── system/         # System-specific configs
-├── install.sh      # Installation script
+├── install.py      # Python installation script
 └── README.md
 ```
 
 ## Prerequisites
 
-1. Install Zsh4Humans:
-
-```bash
-if command -v curl >/dev/null 2>&1; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-else
-    sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-fi
-```
+- Python 3.6+
+- Git
+- Zsh
 
 ## Installation
 
@@ -54,78 +48,83 @@ git clone https://github.com/nijaru/dotfiles.git ~/github/dotfiles
 
 2. Run the installation script:
 
-````bash
-cd ~/github/dotfiles
-./install.sh
-
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/nijaru/dotfiles.git ~/github/dotfiles
-````
-
-2. Run the installation script:
-
 ```bash
 cd ~/github/dotfiles
-./install.sh
+./install.py
 ```
 
-The script will install configurations in this order:
+### Installation Options
 
-1. Install system packages (Homebrew on macOS, DNF config on Linux)
-2. Configure security (SSH and GPG)
-3. Set up Git configuration
-4. Configure shell environment
-5. Install application-specific configurations
+The installer supports several command-line options:
 
-This order ensures that:
+```bash
+./install.py [options]
 
-- Required packages are available for all tools
-- SSH and GPG are ready for Git operations
-- Shell and application configurations have all dependencies met
+Options:
+  --force      Force installation, overwriting existing files
+  --no-backup  Skip creating backups of existing files
+  --dry-run    Show what would be done without making changes
+  --help       Show this help message
+```
 
 ## Features
+
+### Automated Installation
+
+The Python installer provides:
+
+- Automatic backup of existing configurations
+- Rollback capability if installation fails
+- OS-specific configurations for macOS and Linux
+- Colored logging output
+- Dry-run capability
 
 ### Shell Configuration
 
 - Z4H (Zsh for Humans) as the shell framework
 - Custom aliases and functions
 - Environment variables
-- OS-specific configurations for macOS and Linux
+- OS-specific configurations
+
+### Security
+
+- SSH configuration with control master support
+- GPG agent configuration (macOS)
+- Secure file permissions
 
 ### Development Tools
 
 - Git configuration with useful aliases
-- SSH and GPG setup for secure development
 - Kitty terminal emulator configuration
 - Zed editor settings
 - htop system monitor configuration
 
 ### Package Management
 
-- Homebrew bundle for macOS software installation
+- Homebrew bundle for macOS
 - DNF configuration for Fedora/RHEL systems
+
+## Backup System
+
+The installer automatically creates timestamped backups in `~/.dotfiles_backups/`:
+
+- Maintains the last 5 backups
+- Secure backup permissions (700)
+- Automatic cleanup of older backups
 
 ## OS Support
 
 ### macOS
 
 - Full support for all features
-- Homebrew package installation
+- Homebrew package management
 - GPG agent configuration
 
 ### Linux
 
 - Shell and development tools configuration
-- System-specific adjustments for paths and tools
-- DNF configuration for Fedora/RHEL systems
-
-## Backup
-
-The installation script automatically backs up existing configurations to `~/.dotfiles.bak` with timestamps before creating new symlinks.
+- System-specific adjustments
+- DNF configuration (Fedora/RHEL)
 
 ## Customization
 
@@ -134,11 +133,22 @@ To customize these dotfiles:
 1. Fork this repository
 2. Modify configurations as needed
 3. Update the Brewfile for different package selections
-4. Adjust the installation script if adding new configurations
+4. Adjust the installation script for new configurations
+
+## Troubleshooting
+
+If installation fails:
+
+1. Check the error messages in the console output
+2. Verify all prerequisites are installed
+3. Use `--dry-run` to test changes
+4. Check permissions on target directories
+
+All changes are automatically rolled back on failure.
 
 ## License
 
-MIT License
+MIT License - See [LICENSE](LICENSE) file for details
 
 ## Author
 

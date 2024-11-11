@@ -1,106 +1,141 @@
 #!/usr/bin/env zsh
 
-echo "Loading aliases file..."
-
 # Source git aliases
-source ~/.aliases-git
+z4h source ~/.aliases-git
 
-###################
-# Modern CLI Tools
-###################
-# File operations and viewing
-command -v bat >/dev/null 2>&1 && alias cat="bat --plain --paging=never"
-command -v eza >/dev/null 2>&1 && alias ls="eza --icons --git" && \
-    alias ll="eza -la --icons --git" && \
-    alias tree="eza --tree --icons"
-command -v zoxide >/dev/null 2>&1 && alias cd="z"
+###############################################################################
+# Modern CLI Replacements
+###############################################################################
 
-# Search and find
-command -v rg >/dev/null 2>&1 && alias grep="rg"
-command -v fd >/dev/null 2>&1 && alias find="fd"
-command -v fzf >/dev/null 2>&1 && alias preview="fzf --preview 'bat --color=always {}'"
+# File Operations & Viewing
+# ------------------------
+command_exists bat && \
+    alias cat="bat --plain --paging=never"                # Enhanced file viewing
 
-# System monitoring
-command -v duf >/dev/null 2>&1 && alias df="duf"
-command -v dust >/dev/null 2>&1 && alias du="dust"
-command -v procs >/dev/null 2>&1 && alias ps="procs"
-command -v btop >/dev/null 2>&1 && alias top="btop"
-command -v htop >/dev/null 2>&1 && alias htop="htop --tree"
+# Enhanced ls with eza
+if command_exists eza; then
+    alias ls="eza --icons --git"                         # Basic listing
+    alias l="eza -l --icons --git"                       # Long listing
+    alias ll="eza -l --icons --git"                      # Detailed listing
+    alias la="eza -a --icons --git"                      # Show hidden files
+    alias lla="eza -la --icons --git"                    # Long with hidden
+    alias lt="eza -T --icons --git"                      # Tree listing
+    alias tree="eza --tree --icons"                      # Tree view
+fi
 
-# File comparison and network
-command -v delta >/dev/null 2>&1 && alias diff="delta"
-command -v doggo >/dev/null 2>&1 && alias dig="doggo"
-command -v gping >/dev/null 2>&1 && alias ping="gping"
-command -v curlie >/dev/null 2>&1 && alias curl="curlie"
+# Search and Navigation
+# --------------------
+command_exists rg && alias grep="rg"                      # Better text search
+command_exists fd && alias find="fd"                      # Better file search
+command_exists fzf && \
+    alias preview="fzf --preview 'bat --color=always {}'" # Interactive preview
 
-# Performance testing
-command -v hyperfine >/dev/null 2>&1 && alias bench="hyperfine"
+# System Monitoring
+# ----------------
+command_exists duf && alias df="duf"                      # Better disk usage
+command_exists dust && alias du="dust"                    # Better dir usage
+command_exists procs && alias ps="procs"                  # Better process view
+command_exists btop && alias top="btop"                   # Better system monitor
+command_exists htop && alias htop="htop --tree"           # Tree process view
 
-###################
-# Enhanced File Operations
-###################
-# Safe operations
-alias rm="rm -I"                          # Interactive removal
-alias cp="cp -ia"                         # Interactive and archive
-alias mv="mv -i"                          # Interactive move
-alias ln="ln -v"                          # Verbose linking
-alias chmod="chmod -v --preserve-root"    # Verbose mode
-alias chown="chown -v --preserve-root"    # Verbose mode
-alias mkdir="mkdir -pv"                   # Create parent dirs
+# File Comparison & Network
+# ------------------------
+command_exists delta && alias diff="delta"                # Better diff tool
+command_exists doggo && alias dig="doggo"                 # Better DNS lookup
+command_exists gping && alias ping="gping"                # Visual ping tool
 
-# Advanced operations
-alias cpv="rsync -ah --info=progress2"    # Copy with progress
-alias mvv="rsync -ah --remove-source-files --info=progress2"  # Move with progress
-alias symlink="ln -sf"                    # Force symbolic link
-alias rename="perl-rename"                # Batch rename utility
-alias pbc='pbcopy'
+###############################################################################
+# Safe File Operations
+###############################################################################
 
-# Directory traversal
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias -- -="cd -"                         # Go back
-alias d='dirs -v'                         # List directory stack
+# Core Operations
+alias rm="rm -I --preserve-root"                          # Safe removal
+alias cp="cp -ia"                                         # Safe copy
+alias mv="mv -i"                                          # Safe move
+alias mkdir="mkdir -pv"                                   # Recursive mkdir
 
-# Quick access
-alias dl="cd ~/Downloads"
-alias doc="cd ~/Documents"
-alias dt="cd ~/Desktop"
-alias p="cd ~/Projects"
-alias gh="cd ~/github"
+# Advanced Operations
+alias cpv="rsync -ah --info=progress2"                   # Copy with progress
+alias mvv="rsync -ah --remove-source-files --info=progress2" # Move with progress
+alias symlink="ln -sf"                                   # Force symlink
 
-###################
-# Development Tools
-###################
-# Python
-alias py="python3"
-alias python="python3"
-alias pip="python3 -m pip"
-alias pip-update="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U"
-alias pyenv-update="pyenv update"
+###############################################################################
+# Directory Navigation
+###############################################################################
 
-# Node.js
-alias pn="pnpm"
-alias nr="npm run"
-alias nrd="npm run dev"
-alias nrb="npm run build"
-alias nrt="npm run test"
-alias ncu="npx npm-check-updates -i"
+# Quick Traversal
+alias ..="cd .."                                         # Up one level
+alias ...="cd ../.."                                     # Up two levels
+alias ....="cd ../../.."                                 # Up three levels
+alias -- -="cd -"                                        # Previous directory
+alias d='dirs -v'                                        # Directory stack
 
-# Go
-alias gmt="go mod tidy"
-alias gv="go vet"
-alias gta="go test ./..."
-alias gcv="go mod verify"
-alias gor="go run"
-alias gob="go build"
+# Common Directories
+alias dl="cd ~/Downloads"                                # Go to Downloads
+alias doc="cd ~/Documents"                               # Go to Documents
+alias dt="cd ~/Desktop"                                  # Go to Desktop
+alias p="cd ~/Projects"                                  # Go to Projects
+alias ghub="cd ~/github"                                 # Go to GitHub
 
-# Rust
-alias cb="cargo build"
-alias cr="cargo run"
-alias ct="cargo test"
-alias cf="cargo fmt"
-alias cc="cargo check"
-alias cl="cargo clippy"
-alias cw="cargo watch -x run"
-alias cu="cargo update"
+###############################################################################
+# Python Development
+###############################################################################
+if command_exists python3; then
+    alias py="python3"                                   # Python shorthand
+    alias python="python3"                               # Force Python 3
+    alias pip="python3 -m pip"                          # Safe pip usage
+    alias pipu="pip list --outdated --format=freeze | \
+        grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U" # Update all packages
+    alias pipd="pip install -e ."                       # Dev installation
+    alias pytest="python -m pytest"                      # Run tests
+    alias pypath="python -c 'import sys; print(\"\n\".join(sys.path))'" # Show Python path
+fi
+
+###############################################################################
+# Go Development
+###############################################################################
+if command_exists go; then
+    # Build and Run
+    alias gor="go run ."                                # Run package
+    alias gob="go build"                                # Build package
+    alias goi="go install"                              # Install package
+
+    # Testing
+    alias got="go test ./..."                          # Test all packages
+    alias gotv="go test -v ./..."                      # Verbose testing
+    alias gotc="go test -cover ./..."                  # Test coverage
+
+    # Dependencies
+    alias gom="go mod"                                 # Mod shorthand
+    alias gomt="go mod tidy"                           # Tidy modules
+    alias gomv="go mod verify"                         # Verify deps
+    alias gomu="go get -u ./..."                       # Update deps
+
+    # Tools
+    alias gof="go fmt ./..."                          # Format code
+    alias gov="go vet ./..."                          # Vet code
+    alias gol="golangci-lint run"                     # Lint code
+fi
+
+###############################################################################
+# Docker Compose Operations
+###############################################################################
+alias dc="docker compose"                    # Basic compose command
+alias dcu="docker compose up -d"            # Start containers in background
+alias dcd="docker compose down"             # Stop and remove containers
+alias dcl="docker compose logs -f"          # Follow container logs
+alias dcp="docker compose pull"             # Pull latest images
+alias dcr="docker compose restart"          # Restart containers
+alias dcs="docker compose stop"             # Stop containers
+alias dcps="docker compose ps"              # List containers
+alias dcb="docker compose build"            # Build containers
+alias dce="docker compose exec"             # Execute command in container
+alias dccp="docker compose cp"              # Copy files between host and containers
+
+# Development helpers
+alias dcdev="docker compose -f docker-compose.yml -f docker-compose.dev.yml"
+alias dcprod="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
+
+# Cleanup commands
+alias dcrm="docker compose rm -f"           # Remove stopped containers
+alias dcprune="docker compose down --volumes --remove-orphans"  # Full cleanup

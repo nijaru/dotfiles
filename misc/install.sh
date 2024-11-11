@@ -8,7 +8,7 @@ CONFIG_DIR="$HOME/.config"
 BACKUP_DIR="$HOME/.dotfiles.bak"
 
 # Check for Zsh4Humans
-if [[ ! -f "$HOME/.zsh4humans/zsh4humans.zsh" ]]; then
+if ! command -v z4h >/dev/null 2>&1; then
     echo "Installing Zsh4Humans..."
     if command -v curl >/dev/null 2>&1; then
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
@@ -18,6 +18,8 @@ if [[ ! -f "$HOME/.zsh4humans/zsh4humans.zsh" ]]; then
         echo "⚠️  Neither curl nor wget is installed. Please install Zsh4Humans manually."
         exit 1
     fi
+else
+    echo "✓ Zsh4Humans already installed, skipping installation"
 fi
 
 # Create backup directory
@@ -33,9 +35,10 @@ link_file() {
     mkdir -p "$(dirname "$dest")"
 
     # Backup existing file/symlink if it exists
+    # copy contents of files, handle symlinks properly
     if [[ -f "$dest" || -L "$dest" ]]; then
         local backup_path="$BACKUP_DIR/$(basename "$dest").$(date +%Y%m%d_%H%M%S)"
-        mv "$dest" "$backup_path"
+        cp "$dest" "$backup_path"
         echo "Backed up $dest to $backup_path"
     fi
 

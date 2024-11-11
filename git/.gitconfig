@@ -10,169 +10,169 @@
 ###################
 [core]
     # Editor and files
-    editor = $EDITOR --wait
-    excludesFile = ~/.gitignore
+    editor = $EDITOR --wait                            # Use system editor with wait flag
+    excludesFile = ~/.gitignore                        # Global ignore file location
 
     # Performance optimizations
-    fsmonitor = true                    # Use filesystem monitor for faster status
-    preloadIndex = true                 # Load index into memory for faster status
-    untrackedCache = true              # Cache untracked files for faster status
+    fsmonitor = true                                   # Use filesystem monitor for faster status
+    preloadIndex = true                                # Load index into memory for faster status
+    untrackedCache = true                              # Cache untracked files for faster status
 
     # File handling
-    autocrlf = input                    # Convert CRLF to LF on input
-    safecrlf = true                     # Prevent mixed line endings
-    longpaths = true                    # Support paths > 260 chars
+    autocrlf = input                                   # Convert CRLF to LF on input
+    safecrlf = true                                    # Prevent mixed line endings
+    longpaths = true                                   # Support paths > 260 chars
 
     # Display
-    pager = delta                       # Use delta for better diffs
+    pager = delta                                      # Use delta for better diffs
 
     # Large file handling
-    bigFileThreshold = 128m             # Warning threshold for large files
-    compression = 9                     # Maximum compression
+    bigFileThreshold = 128m                            # Warning threshold for large files
+    compression = 9                                    # Maximum compression
 
 ###################
 # Security and Signing
 ###################
 [gpg]
-    format = ssh                        # Use SSH keys for signing
+    format = ssh                                       # Use SSH keys for signing
 [user]
-    signingkey = /Users/nick/.ssh/id_ed25519.pub  # Your SSH public key
+    signingkey = /Users/nick/.ssh/id_ed25519.pub       # Your SSH public key
 [commit]
-    gpgsign = true                     # Sign all commits
+    gpgsign = true                                     # Sign all commits
 [tag]
-    forceSignAnnotated = true          # Sign all tags
-    gpgSign = true                     # Sign all tags (not just annotated)
+    forceSignAnnotated = true                          # Sign all tags
+    gpgSign = true                                     # Sign all tags (not just annotated)
 [log]
-    showSignature = true               # Show signature information in log
+    showSignature = true                               # Show signature information in log
 [status]
-    showUntrackedFiles = all           # Show all untracked files
+    showUntrackedFiles = all                           # Show all untracked files
 [transfer]
-    fsckObjects = true                 # Verify object integrity during transfer
+    fsckObjects = true                                 # Verify object integrity during transfer
 
 ###################
 # Branch Management
 ###################
 [init]
-    defaultBranch = main
+    defaultBranch = main                               # Set default branch name
 [branch]
-    sort = -committerdate               # Sort branches by most recent commit
+    sort = -committerdate                              # Sort branches by most recent commit
 [checkout]
-    defaultRemote = origin
-    workers = 0                         # Use all available CPU cores
+    defaultRemote = origin                             # Default remote for checkout
+    workers = 0                                        # Use all available CPU cores
 
 ###################
 # Diff and Merge
 ###################
 [diff]
-    algorithm = histogram               # Better diff algorithm
-    colorMoved = zebra                 # Enhanced moved code tracking
-    renames = copies                   # Detect copied files
-    wsErrorHighlight = all            # Show all whitespace errors
-    indentHeuristic = true           # Better indent detection
+    algorithm = histogram                              # Better diff algorithm
+    colorMoved = zebra                                 # Enhanced moved code tracking
+    renames = copies                                   # Detect copied files
+    wsErrorHighlight = all                             # Show all whitespace errors
+    indentHeuristic = true                             # Better indent detection
 [merge]
-    conflictstyle = zdiff3            # Better conflict resolution
-    ff = only                         # No merge commits when fast-forward possible
-    renameLimit = 999999             # Handle more renames in large repos
+    conflictstyle = zdiff3                             # Better conflict resolution
+    ff = only                                          # No merge commits when fast-forward possible
+    renameLimit = 999999                               # Handle more renames in large repos
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = delta --color-only                    # Use delta for interactive diffs
 
 ###################
 # Remote Operations
 ###################
 [fetch]
-    parallel = 0                      # Use all available CPU cores
-    prune = true                      # Remove deleted remote branches
-    pruneTags = true                 # Remove deleted remote tags
-    writeCommitGraph = true         # Optimize commit traversal
-    recurseSubmodules = on-demand
+    parallel = 0                                       # Use all available CPU cores
+    prune = true                                       # Remove deleted remote branches
+    pruneTags = true                                   # Remove deleted remote tags
+    writeCommitGraph = true                            # Optimize commit traversal
+    recurseSubmodules = on-demand                      # Handle submodules as needed
 [pull]
-    rebase = true                    # Use rebase instead of merge
-    ff = only                       # Fast-forward only pulls
+    rebase = true                                      # Use rebase instead of merge
+    ff = only                                          # Fast-forward only pulls
 [push]
-    autoSetupRemote = true          # Automatically set upstream
-    default = current               # Push current branch to same name
-    followTags = true              # Include tags when pushing
+    autoSetupRemote = true                             # Automatically set upstream
+    default = current                                  # Push current branch to same name
+    followTags = true                                  # Include tags when pushing
 [url "git@github.com:"]
-    insteadOf = https://github.com/
+    insteadOf = https://github.com/                    # Use SSH instead of HTTPS
 
 ###################
 # Rebase and History
 ###################
 [rebase]
-    autoStash = true                # Auto stash/unstash changes
-    autoSquash = true              # Auto squash fixup commits
-    updateRefs = true             # Update dependent branches
-    missingCommitsCheck = error   # Error on missing commits
+    autoStash = true                                   # Auto stash/unstash changes
+    autoSquash = true                                  # Auto squash fixup commits
+    updateRefs = true                                  # Update dependent branches
+    missingCommitsCheck = error                        # Error on missing commits
 [rerere]
-    enabled = true                # Remember conflict resolutions
-    autoupdate = true           # Auto-apply remembered resolutions
+    enabled = true                                     # Remember conflict resolutions
+    autoupdate = true                                  # Auto-apply remembered resolutions
 
 ###################
 # Performance Tuning
 ###################
 [pack]
-    threads = 0                # Use all available CPU cores
-    deltaCacheSize = 256m      # Cache size for delta compression
-    packSizeLimit = 256m      # Maximum pack file size
+    threads = 0                                        # Use all available CPU cores
+    deltaCacheSize = 256m                              # Cache size for delta compression
+    packSizeLimit = 256m                               # Maximum pack file size
 [maintenance]
-    auto = true
-    strategy = incremental    # Regular maintenance
-    gc = true               # Enable garbage collection
+    auto = true                                        # Enable automatic maintenance
+    strategy = incremental                             # Regular maintenance
+    gc = true                                          # Enable garbage collection
 [gc]
-    auto = 256             # Run GC after 256 loose objects
-    autoPackLimit = 64    # Pack after 64 packs
-    pruneExpire = 2.weeks.ago
+    auto = 256                                         # Run GC after 256 loose objects
+    autoPackLimit = 64                                 # Pack after 64 packs
+    pruneExpire = 2.weeks.ago                          # Remove old objects after 2 weeks
 
 ###################
 # Delta Configuration
 ###################
 [delta]
-    navigate = true              # Use n/N to move between diff sections
-    light = false               # Dark mode
-    side-by-side = true        # Show diffs side by side
-    line-numbers = true       # Show line numbers
-    syntax-theme = ansi      # Use ANSI colors
-    file-style = bold yellow # File headers in bold yellow
-    plus-style = syntax "#003800"    # Added lines
-    minus-style = syntax "#3f0001"   # Removed lines
-    zero-style = syntax             # Context lines
-    whitespace-error-style = reverse
+    navigate = true                                    # Use n/N to move between diff sections
+    light = false                                      # Dark mode
+    side-by-side = false                               # Show diffs in unified view
+    line-numbers = true                                # Show line numbers
+    syntax-theme = ansi                                # Use ANSI colors
+    file-style = bold yellow                           # File headers in bold yellow
+    plus-style = syntax "#003800"                      # Added lines
+    minus-style = syntax "#3f0001"                     # Removed lines
+    zero-style = syntax                                # Context lines
+    whitespace-error-style = reverse                   # Highlight whitespace errors
 
 ###################
 # LFS Configuration
 ###################
 [filter "lfs"]
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
-    required = true
+    clean = git-lfs clean -- %f                        # Clean filter for LFS
+    smudge = git-lfs smudge -- %f                      # Smudge filter for LFS
+    process = git-lfs filter-process                   # Process filter for LFS
+    required = true                                    # Require LFS
 
 ###################
 # Helper Settings
 ###################
 [help]
-    autocorrect = immediate         # Auto-correct commands immediately
+    autocorrect = immediate                            # Auto-correct commands immediately
 
 ###################
 # Custom Functions
 ###################
 [alias]
     # Branch management
-    cleanup = "!git-clean"
-    br = "!gbr"
-    clone-cd = "!clone"
+    cleanup = "!git-clean"                             # Clean up branches
+    br = "!gbr"                                        # Branch management shortcut
+    clone-cd = "!clone"                                # Clone and cd into repository
 
     # Additional useful aliases
-    s = "status -sb"                # Short status
-    l = "log --oneline -n 10"      # Short log
+    s = "status -sb"                                   # Short status
+    l = "log --oneline -n 10"                          # Short log
     lb = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"  # List branches by date
-    undo = "reset --soft HEAD^"     # Undo last commit
-    amend = "commit --amend --no-edit"  # Amend without editing message
-    staged = "diff --cached"        # Show staged changes
-    unstage = "reset HEAD --"       # Unstage changes
-    wip = "!git add -A && git commit -m 'WIP'"  # Quick work-in-progress commit
+    undo = "reset --soft HEAD^"                        # Undo last commit
+    amend = "commit --amend --no-edit"                 # Amend without editing message
+    staged = "diff --cached"                           # Show staged changes
+    unstage = "reset HEAD --"                          # Unstage changes
+    wip = "!git add -A && git commit -m 'WIP'"         # Quick work-in-progress commit
     unwip = "!git log -n 1 | grep -q -c WIP && git reset HEAD~1"  # Undo WIP commit
 
 # Include local overrides
 [include]
-    path = ~/.gitconfig.local
+    path = ~/.gitconfig.local                          # Include local git configuration

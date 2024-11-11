@@ -85,6 +85,7 @@ class DotfilesInstaller:
         dependencies = {
             "git": "Git is required for dotfiles management",
             "zsh": "Zsh shell is required",
+            "z4h": "Z4H (Zsh for Humans) is required - install from https://github.com/romkatv/zsh4humans",
         }
 
         missing = []

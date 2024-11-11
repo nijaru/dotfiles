@@ -4,8 +4,6 @@
 ###################
 # Z4H Core Settings
 ###################
-# Performance optimization: initialize Z4H immediately
-(( ${+Z4H_BOOTSTRAPPING} )) || source ~/.zsh4humans/zsh4humans.zsh || return
 
 # Basic configuration
 zstyle ':z4h:' auto-update 'yes'
@@ -119,6 +117,37 @@ fi
 [[ -d $PYENV_ROOT/bin ]] && add_to_path "$PYENV_ROOT/bin"
 [[ -d $CARGO_HOME/bin ]] && add_to_path "$CARGO_HOME/bin"
 [[ -d $GOBIN ]] && add_to_path "$GOBIN"
+
+###############################################################################
+# Local Overrides
+###############################################################################
+# Allow for local customization in the ~/.local directory
+for file in ~/.local/zsh/*.zsh(N); do
+    z4h source "$file"
+done
+
+# Source machine-specific configuration
+z4h source ~/.zshrc.local
+
+# Source company-specific configuration if it exists (useful for work machines)
+z4h source ~/.zshrc.company
+
+# Source host-specific configuration
+z4h source ~/.zshrc.$(hostname)
+
+# Dev environment overrides (useful for project-specific settings)
+[[ -f .envrc ]] && z4h source .envrc
+
+# Note: The z4h source command will silently skip files that don't exist,
+# so there's no need for explicit existence checks.
+# Files are sourced in the order listed above, allowing for proper override precedence.
+#
+# Recommended structure:
+# ~/.local/zsh/           - Directory for custom zsh scripts
+# ~/.zshrc.local         - Machine-specific settings
+# ~/.zshrc.company       - Company-specific settings
+# ~/.zshrc.hostname      - Host-specific settings
+# .envrc                 - Project-specific settings (commonly used with direnv)
 
 # Final PATH cleanup
 clean_path

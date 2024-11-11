@@ -10,91 +10,27 @@
 #   extract      - Extract various archive formats
 #   compress     - Create ZIP archive of files/folders
 #   findtext     - Search file contents with preview
-#
-# System Utilities:
-#   lazy_load    - Lazy load commands with error handling
-#   safe_source  - Safely source files with error checking
-#   clean_path   - Clean up PATH removing duplicates/invalid
-#
-# Development Operations:
-# - Git:
-#   clone        - Clone repo and cd into it
-#   gbr          - Create and switch to new branch
-#   git-clean    - Clean up merged local branches
-#   gadd         - Interactive git add with fzf
-#   gswitch      - Interactive branch switching
-#
-# - Python:
-#   venv         - Create and activate Python virtual environment
-#
-# - Go:
-#   gotest       - Run Go tests with coverage report
-#   goupdate     - Update Go dependencies
-#
-# Container Operations:
-#   dkstop-all   - Stop all running containers
-#   dkrm-all     - Remove all containers
-#   dkclean      - Clean up docker system
-#   dksh         - Interactive container shell access
-#   dklogs       - View container logs interactively
-#   dkstats      - Show container resource usage
-#
-# Network Operations:
-#   ports        - Check open ports
-#   myip         - Get external IP
-#   curltime     - Test endpoint response times
-#   serve        - Start quick HTTP server
-#   lanscan      - Scan local network
-#
-# System Operations:
-#   sys-check    - Check system resource usage
-#   add_to_path  - Add directory to PATH
-#
-# Database Operations:
-#   pg           - Manage PostgreSQL service
-#
-# Development Tools:
-#   jsonf        - Format JSON data
-#   randstr      - Generate random string
-#   uuid         - Generate UUID
-#
-# Performance Tools:
-#   timecmd      - Profile command execution time
-#   watch-cmd    - Monitor command resource usage
-#
-# Security Tools:
-#   genpass      - Generate secure password
-#   check-ssl    - Check SSL certificate
-#   ssh-fails    - Monitor failed SSH attempts
-#
-# Productivity Tools:
-#   backup       - Create timestamped file backup
-#   note         - Quick note taking
-#   calc         - Calculator with bc
-#
-# Update Operations:
-#   update-all   - Update all package managers and tools
-###################
+#   rmf          - Safe recursive file/directory removal
+#   trash        - Move items to trash with dating
+#   empty-trash  - Safely empty trash with confirmation
+#   pbc          - Enhanced clipboard operations
 
 ###################
 # Core File & Directory Operations
 ###################
 
-# Create and enter directory
-# Usage: mkcd new-directory
+# Create and enter a new directory
 function mkcd() {
     mkdir -p "$@" && cd "$_"
 }
 
-# Find directory and cd into it using fuzzy search
-# Usage: cdf [search_path]
+# Find and cd into directory using fuzzy search
 function cdf() {
     local dir
     dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
-# Create and enter temporary directory
-# Usage: tmpd
+# Create and enter a temporary directory
 function tmpd() {
     local dir
     dir=$(mktemp -d)
@@ -103,40 +39,115 @@ function tmpd() {
 }
 
 # Extract various archive formats
-# Usage: extract archive.tar.gz
 function extract() {
-    if [ -f $1 ] ; then
+    if [ -f $1 ]; then
         case $1 in
-            *.tar.bz2)   tar xjf $1     ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.tar.xz)    tar xJf $1     ;;
-            *.tar.zst)   tar --zstd -xf $1   ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar x $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xf $1      ;;
-            *.tbz2)      tar xjf $1     ;;
-            *.tgz)       tar xzf $1     ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)          echo "'$1' cannot be extracted via extract()" ;;
+            *.tar.bz2)   tar xjf $1     ;;           # Extract tar.bz2
+            *.tar.gz)    tar xzf $1     ;;           # Extract tar.gz
+            *.tar.xz)    tar xJf $1     ;;           # Extract tar.xz
+            *.tar.zst)   tar --zstd -xf $1   ;;      # Extract tar.zst
+            *.bz2)       bunzip2 $1     ;;           # Extract bz2
+            *.rar)       unrar x $1     ;;           # Extract rar
+            *.gz)        gunzip $1      ;;           # Extract gz
+            *.tar)       tar xf $1      ;;           # Extract tar
+            *.tbz2)      tar xjf $1     ;;           # Extract tbz2
+            *.tgz)       tar xzf $1     ;;           # Extract tgz
+            *.zip)       unzip $1       ;;           # Extract zip
+            *.Z)         uncompress $1  ;;           # Extract Z
+            *.7z)        7z x $1        ;;           # Extract 7z
+            *)           echo "'$1' cannot be extracted via extract()" ;;
         esac
     else
         echo "'$1' is not a valid file"
     fi
 }
 
-# Create a ZIP archive of a file or folder
-# Usage: compress directory-or-file
+# Safely remove files and directories with confirmation
+function rmf() {
+    local dirs=()
+    local files=()
+
+    # Sort items into files and directories
+    for item in "$@"; do
+        if [[ -d "$item" ]]; then
+            dirs+=("$item")
+        elif [[ -f "$item" ]]; then
+            files+=("$item")
+        fi
+    done
+
+    # Warn about directory removal
+    if (( ${#dirs[@]} > 0 )); then
+        echo "Warning: About to recursively remove these directories:"
+        printf '%s\n' "${dirs[@]}"
+        read -q "REPLY?Are you sure? [y/N] "
+        echo
+        [[ "$REPLY" != "y" ]] && return 1
+    fi
+
+    rm -rf "$@"
+}
+
+# Move items to dated trash directory
+function trash() {
+    local trash_dir="$HOME/.Trash"
+
+    [[ ! -d "$trash_dir" ]] && mkdir -p "$trash_dir"
+
+    for item in "$@"; do
+        if [[ -e "$item" ]]; then
+            local date_dir="$trash_dir/$(date +%Y%m%d)"
+            mkdir -p "$date_dir"
+
+            local base_name=$(basename "$item")
+            local target="$date_dir/$base_name"
+            if [[ -e "$target" ]]; then
+                target="$date_dir/$base_name-$(date +%H%M%S)"
+            fi
+
+            mv "$item" "$target" && echo "Moved to trash: $item"
+        else
+            echo "File not found: $item"
+        fi
+    done
+}
+
+# Safely empty trash with size check and confirmation
+function empty-trash() {
+    local trash_dir="$HOME/.Trash"
+    if [[ ! -d "$trash_dir" ]]; then
+        echo "Trash directory doesn't exist"
+        return 1
+    fi
+
+    local size=$(du -sh "$trash_dir" 2>/dev/null | cut -f1)
+    echo "Trash size: $size"
+    read -q "REPLY?Empty trash? [y/N] "
+    echo
+    if [[ "$REPLY" == "y" ]]; then
+        rm -rf "${trash_dir:?}/"* && echo "Trash emptied"
+    fi
+}
+
+# Enhanced clipboard operations with multiple input methods
+function pbc() {
+    if [[ -p /dev/stdin ]]; then
+        pbcopy
+    elif [[ -f "$1" ]]; then
+        cat "$1" | pbcopy
+    else
+        echo "$1" | pbcopy
+    fi
+}
+
+# Create a ZIP archive of files or directories
 function compress() {
     local zip_name="${1:t:r}.zip"
     zip -r "$zip_name" "$1"
     echo "Created $zip_name"
 }
 
-# Find files by content using ripgrep and fzf
-# Usage: findtext "search term"
+# Search file contents with preview using ripgrep and fzf
 function findtext() {
     rg --color=always --line-number --no-heading "$@" |
     fzf --ansi \
@@ -146,62 +157,30 @@ function findtext() {
 }
 
 ###################
-# System Utilities
-###################
-# Enhanced lazy loading with error handling
-function lazy_load() {
-    local load_cmd=$1
-    local lazy_cmd=$2
-    eval "function ${lazy_cmd}() {
-        unfunction ${lazy_cmd}
-        if ! eval \"\$(${load_cmd})\"; then
-            echo \"Error loading ${lazy_cmd}\" >&2
-            return 1
-        fi
-        ${lazy_cmd} \"\$@\"
-    }"
-}
-
-# Safe source function
-function safe_source() {
-    local file=$1
-    [[ -f $file ]] && source "$file" || echo "Warning: $file not found" >&2
-}
-
-# Path cleanup and deduplication
-function clean_path() {
-    # Remove non-existent directories from PATH
-    path=("${(@)path:#*/*//./*}")
-    # Remove duplicate entries
-    typeset -U PATH path
-}
-
-###################
-# Development Operations
+# Development Tools
 ###################
 
-# Git Operations
-#-----------------
-# Clone and cd into a repository
-# Usage: clone https://github.com/user/repo.git
-function clone() {
-    git clone "$1" && cd "$(basename "$1" .git)"
+# Unified Cargo command interface with error handling
+function cargo-cmd() {
+    if ! command -v cargo >/dev/null 2>&1; then
+        echo "Error: Rust/Cargo not installed"
+        return 1
+    fi
+
+    case "$1" in
+        b|build)  cargo build "${@:2}"    ;;        # Build project
+        r|run)    cargo run "${@:2}"      ;;        # Run project
+        t|test)   cargo test "${@:2}"     ;;        # Run tests
+        c|check)  cargo check "${@:2}"    ;;        # Check project
+        f|fmt)    cargo fmt "${@:2}"      ;;        # Format code
+        l|lint)   cargo clippy "${@:2}"   ;;        # Lint code
+        w|watch)  cargo watch -x "${2:-run}" ;;     # Watch mode
+        u|update) cargo update "${@:2}"   ;;        # Update deps
+        *)        echo "Unknown cargo command: $1" ;;
+    esac
 }
 
-# Create and switch to a new branch
-# Usage: gbr feature-branch
-function gbr() {
-    git switch -c "$1"
-}
-
-# Clean up merged local branches (excluding main/master/dev)
-# Usage: git-clean
-function git-clean() {
-    git branch --merged | egrep -v "(^\*|main|dev|master)" | xargs git branch -d
-}
-
-# Interactive git add using fzf
-# Usage: gadd
+# Interactive git add with diff preview
 function gadd() {
     git status -s |
     fzf --multi --preview 'git diff --color {2}' |
@@ -209,8 +188,7 @@ function gadd() {
     xargs git add
 }
 
-# Interactive branch switching with preview
-# Usage: gswitch
+# Interactive git branch switching with log preview
 function gswitch() {
     local branch=$(git branch --all |
         grep -v HEAD |
@@ -219,79 +197,7 @@ function gswitch() {
     [[ -n "$branch" ]] && git switch "${branch/#remotes\/origin\//}"
 }
 
-# Python Development
-#------------------
-# Create and activate Python virtual environment
-# Usage: venv [venv_name]
-function venv() {
-    local venv_name="${1:-.venv}"
-    python3 -m venv "$venv_name"
-    source "$venv_name/bin/activate"
-    pip install --upgrade pip
-
-    # Install dependencies if available
-    if [[ -f "requirements-dev.txt" ]]; then
-        pip install -r requirements-dev.txt
-    elif [[ -f "requirements.txt" ]]; then
-        pip install -r requirements.txt
-    fi
-}
-
-# Go Development
-#------------------
-# Run Go tests with coverage and open report
-# Usage: gotest
-function gotest() {
-    go test -v -race -cover ./... && \
-    go test -coverprofile=coverage.out ./... && \
-    go tool cover -html=coverage.out -o coverage.html && \
-    open coverage.html
-}
-
-# Update all Go dependencies
-# Usage: goupdate
-function goupdate() {
-    go get -u ./... && \
-    go mod tidy
-}
-
-###################
-# Container Operations
-###################
-
-# Docker Management
-#------------------
-# Stop all running containers
-# Usage: dkstop-all
-function dkstop-all() {
-    if [[ $(docker ps -q) ]]; then
-        docker stop $(docker ps -q)
-    else
-        echo "No running containers found"
-    fi
-}
-
-# Remove all containers
-# Usage: dkrm-all
-function dkrm-all() {
-    if [[ $(docker ps -a -q) ]]; then
-        docker rm $(docker ps -a -q)
-    else
-        echo "No containers found"
-    fi
-}
-
-# Clean up docker system (containers, volumes, networks)
-# Usage: dkclean
-function dkclean() {
-    echo "Cleaning Docker system..."
-    docker system prune -af
-    docker volume prune -f
-    docker network prune -f
-}
-
-# Interactive container shell access
-# Usage: dksh [container_name_filter]
+# Interactive Docker container shell access
 function dksh() {
     local cid=$(docker ps | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
     if [[ -n "$cid" ]]; then
@@ -301,8 +207,7 @@ function dksh() {
     fi
 }
 
-# View container logs interactively
-# Usage: dklogs [container_name_filter]
+# Interactive Docker container log viewing
 function dklogs() {
     local cid=$(docker ps | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
     if [[ -n "$cid" ]]; then
@@ -312,17 +217,51 @@ function dklogs() {
     fi
 }
 
-# Show container resource usage statistics
-# Usage: dkstats
-function dkstats() {
-    docker stats $(docker ps --format "{{.Names}}")
+# PostgreSQL database management
+function pgdb() {
+    case "$1" in
+        start)   brew services start postgresql  ;;   # Start service
+        stop)    brew services stop postgresql   ;;   # Stop service
+        status)  brew services list | grep postgresql ;; # Check status
+        create)  createdb "$2"                  ;;    # Create database
+        drop)    dropdb "$2"                    ;;    # Drop database
+        list)    psql -l                        ;;    # List databases
+        *)       echo "Unknown command: $1"     ;;
+    esac
+}
+
+# Create and setup Python virtual environment
+function venv() {
+    local venv_name="${1:-.venv}"
+    python3 -m venv "$venv_name"
+    source "$venv_name/bin/activate"
+    pip install --upgrade pip
+
+    if [[ -f "requirements-dev.txt" ]]; then
+        pip install -r requirements-dev.txt
+    elif [[ -f "requirements.txt" ]]; then
+        pip install -r requirements.txt
+    fi
+}
+
+# Run tests with coverage reporting
+function test-coverage() {
+    if [[ -f "pytest.ini" ]]; then
+        pytest --cov --cov-report=html
+        open htmlcov/index.html
+    elif [[ -f "go.mod" ]]; then
+        go test -coverprofile=coverage.out ./...
+        go tool cover -html=coverage.out
+    else
+        echo "No recognized test configuration found"
+    fi
 }
 
 ###################
 # Network Operations
 ###################
+
 # Check open ports on the system
-# Usage: ports
 function ports() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         sudo lsof -iTCP -sTCP:LISTEN -n -P
@@ -332,14 +271,12 @@ function ports() {
 }
 
 # Get external IP address
-# Usage: myip
 function myip() {
     curl -s https://api.ipify.org
     echo
 }
 
 # Test endpoint response times
-# Usage: curltime https://example.com
 function curltime() {
     curl -w "\
     time_namelookup:  %{time_namelookup}s\n\
@@ -353,7 +290,6 @@ function curltime() {
 }
 
 # Start a quick HTTP server in current directory
-# Usage: serve [port]
 function serve() {
     local port="${1:-8000}"
     echo "Starting server on http://localhost:$port"
@@ -361,7 +297,6 @@ function serve() {
 }
 
 # Scan local network for devices
-# Usage: lanscan
 function lanscan() {
     local subnet=$(ipconfig getifaddr en0 | cut -d. -f1-3)
     nmap -sn "$subnet.0/24"
@@ -370,116 +305,73 @@ function lanscan() {
 ###################
 # System Operations
 ###################
+
 # Check system resource usage
-# Usage: sys-check
 function sys-check() {
     echo "=== CPU Usage ==="
     top -l 1 -n 0 | grep "CPU usage"
+
     echo "\n=== Memory Usage ==="
-    vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf "%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576;'
+    vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; \
+        /Pages\s+([^:]+)[^\d]+(\d+)/ and \
+        printf "%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576;'
+
     echo "\n=== Disk Usage ==="
     df -h | grep -E '^/dev/'
 }
 
 # Add directory to PATH if it exists
-# Usage: add_to_path /path/to/dir
 function add_to_path() {
     if [[ -d "$1" ]]; then
         path=("$1" $path)
     fi
 }
 
-###################
-# Database Operations
-###################
-# Manage PostgreSQL service
-# Usage: pg [start|stop|restart]
-function pg() {
-    case "$1" in
-        start)
-            brew services start postgresql
-            ;;
-        stop)
-            brew services stop postgresql
-            ;;
-        restart)
-            brew services restart postgresql
-            ;;
-        *)
-            echo "Usage: pg [start|stop|restart]"
-            ;;
-    esac
+# Clean PATH removing duplicates and invalid entries
+function clean_path() {
+    path=("${(@)path:#*/*//./*}")
+    typeset -U PATH path
 }
 
-###################
-# Development Tools
-###################
-# Format JSON data
-# Usage: jsonf '{"foo": "bar"}'
-function jsonf() {
-    if [ -t 0 ]; then  # If argument provided
-        echo "$1" | python3 -m json.tool
-    else  # If piped input
-        python3 -m json.tool
-    fi
+# Lazy load commands with error handling
+function lazy_load() {
+    local load_cmd=$1
+    local lazy_cmd=$2
+
+    eval "function ${lazy_cmd}() {
+        unfunction ${lazy_cmd}
+        if ! eval \"\$(${load_cmd})\"; then
+            echo \"Error loading ${lazy_cmd}\" >&2
+            return 1
+        fi
+        ${lazy_cmd} \"\$@\"
+    }"
 }
 
-# Generate random string
-# Usage: randstr [length]
-function randstr() {
-    local length=${1:-32}
-    LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c "$length"
-    echo
-}
-
-# Generate UUID
-# Usage: uuid
-function uuid() {
-    python3 -c "import uuid; print(uuid.uuid4())"
-}
-
-###################
-# Performance Tools
-###################
-# Profile command execution time
-# Usage: timecmd "command args"
-function timecmd() {
-    local start=$(($(gdate +%s%N)/1000000))
-    eval "$@"
-    local end=$(($(gdate +%s%N)/1000000))
-    echo "Time elapsed: $(($end-$start)) milliseconds"
-}
-
-# Monitor command resource usage
-# Usage: watch-cmd "command args"
-function watch-cmd() {
-    while true; do
-        ps aux | head -1
-        ps aux | grep "$1" | grep -v grep
-        sleep 1
-        clear
-    done
+# Safely source files with error checking
+function safe_source() {
+    local file=$1
+    [[ -f $file ]] && source "$file" || echo "Warning: $file not found" >&2
 }
 
 ###################
 # Security Tools
 ###################
-# Generate secure password
-# Usage: genpass [length]
+
+# Generate secure password with specified length
 function genpass() {
     local length=${1:-32}
     LC_ALL=C tr -dc 'A-Za-z0-9!@#$%^&*' </dev/urandom | head -c "$length"
     echo
 }
 
-# Check SSL certificate
-# Usage: check-ssl example.com
+# Check SSL certificate for domain
 function check-ssl() {
-    echo | openssl s_client -servername "$1" -connect "$1":443 2>/dev/null | openssl x509 -noout -dates
+    echo | openssl s_client -servername "$1" -connect "$1":443 2>/dev/null | \
+        openssl x509 -noout -dates
 }
 
 # Monitor failed SSH attempts
-# Usage: ssh-fails
 function ssh-fails() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         log show --predicate 'process == "sshd"' --last 1h
@@ -488,26 +380,32 @@ function ssh-fails() {
     fi
 }
 
+# Generate UUID
+function uuid() {
+    python3 -c "import uuid; print(uuid.uuid4())"
+}
+
 ###################
 # Productivity Tools
 ###################
+
 # Create timestamped backup of a file
-# Usage: backup filename
 function backup() {
     local filename=$1
     if [[ -f "$filename" ]]; then
         cp "$filename" "${filename}.$(date +%Y%m%d_%H%M%S).bak"
+        echo "Backup created: ${filename}.$(date +%Y%m%d_%H%M%S).bak"
     else
         echo "File not found: $filename"
     fi
 }
 
-# Quick note taking
-# Usage: note "Note content"
+# Quick note taking with daily files
 function note() {
     local notes_dir="$HOME/Notes"
     local date=$(date +%Y-%m-%d)
     mkdir -p "$notes_dir"
+
     if [ $# -eq 0 ]; then
         $EDITOR "$notes_dir/$date.md"
     else
@@ -515,8 +413,7 @@ function note() {
     fi
 }
 
-# Calculator with bc
-# Usage: calc "1 + 2" or calc to enter interactive mode
+# Calculator with interactive mode support
 function calc() {
     if [ $# -eq 0 ]; then
         bc -l
@@ -525,27 +422,46 @@ function calc() {
     fi
 }
 
+# Format JSON data from string or pipe
+function jsonf() {
+    if [ -t 0 ]; then
+        echo "$1" | python3 -m json.tool
+    else
+        python3 -m json.tool
+    fi
+}
+
 ###################
 # Update Operations
 ###################
+
 # Update all package managers and tools
-# Usage: update-all
 function update-all() {
     echo "Updating Homebrew..."
     brew update && brew upgrade && brew cleanup
 
     echo "\nUpdating Python packages..."
-    pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
+    pip list --outdated --format=freeze | \
+        grep -v '^\-e' | cut -d = -f 1 | \
+        xargs -n1 pip install -U
 
-    echo "\nUpdating npm packages..."
-    npm update -g
+    if command -v rustup >/dev/null 2>&1; then
+        echo "\nUpdating Rust..."
+        rustup update
+    fi
 
-    echo "\nUpdating Rust..."
-    rustup update
-
-    echo "\nUpdating Go packages..."
-    go get -u all
+    if command -v go >/dev/null 2>&1; then
+        echo "\nUpdating Go packages..."
+        go get -u all
+    fi
 
     echo "\nUpdating zsh plugins..."
     z4h update
+}
+
+# Generate random string with specified length
+function randstr() {
+    local length=${1:-32}
+    LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c "$length"
+    echo
 }

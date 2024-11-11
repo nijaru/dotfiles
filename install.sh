@@ -7,6 +7,19 @@ DOTFILES_DIR="$HOME/github/dotfiles"
 CONFIG_DIR="$HOME/.config"
 BACKUP_DIR="$HOME/.dotfiles.bak"
 
+# Check for Zsh4Humans
+if [[ ! -f "$HOME/.zsh4humans/zsh4humans.zsh" ]]; then
+    echo "Installing Zsh4Humans..."
+    if command -v curl >/dev/null 2>&1; then
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+    elif command -v wget >/dev/null 2>&1; then
+        sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+    else
+        echo "⚠️  Neither curl nor wget is installed. Please install Zsh4Humans manually."
+        exit 1
+    fi
+fi
+
 # Create backup directory
 mkdir -p "$BACKUP_DIR"
 echo "Created backup directory at $BACKUP_DIR"

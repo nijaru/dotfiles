@@ -37,6 +37,17 @@ dotfiles/
 - Python 3.6+
 - Git
 - Zsh
+- Z4H (Zsh for Humans)
+
+### Installing Z4H
+
+Before running the dotfiles installer, ensure Z4H is installed:
+
+```bash
+if ! command -v z4h >/dev/null; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+fi
+```
 
 ## Installation
 

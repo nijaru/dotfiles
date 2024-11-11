@@ -9,80 +9,80 @@ alias gi="git init"
 ###################
 # Status and Information
 ###################
-alias gs="git status"                    # Full status
-alias gd="git diff --color-words"        # Better word diff visualization
-alias gdh="git diff HEAD"                # Diff against HEAD
-alias gds="git diff --staged"            # Diff staged changes
-alias gdc="git diff --cached"            # Same as --staged
-alias gwt="git worktree"                 # Manage work trees
+alias gs="git status"             # Full status
+alias gd="git diff --color-words" # Better word diff visualization
+alias gdh="git diff HEAD"         # Diff against HEAD
+alias gds="git diff --staged"     # Diff staged changes
+alias gdc="git diff --cached"     # Same as --staged
+alias gwt="git worktree"          # Manage work trees
 
 ###################
 # Branch Management
 ###################
 # Listing and information
-alias gb="git branch --verbose"          # Show branches with last commit
-alias gba="git branch --all --verbose"   # Show all branches with details
-alias gbl="git branch --verbose --sort=-committerdate"  # Sort by last commit
-alias gbr="git branch --remote"          # Show remote branches
+alias gb="git branch --verbose"                        # Show branches with last commit
+alias gba="git branch --all --verbose"                 # Show all branches with details
+alias gbl="git branch --verbose --sort=-committerdate" # Sort by last commit
+alias gbr="git branch --remote"                        # Show remote branches
 
 # Branch operations
-alias gbd="git branch -d"                # Safe delete (only merged)
-alias gbD="git branch -D"                # Force delete
-alias gbc="git branch --show-current"    # Show current branch name
+alias gbd="git branch -d"             # Safe delete (only merged)
+alias gbD="git branch -D"             # Force delete
+alias gbc="git branch --show-current" # Show current branch name
 
 # Modern branch switching
-alias gsw="git switch"                   # Modern way to change branches
-alias gswc="git switch -c"               # Create and switch
-alias gswm="git switch main"             # Quick switch to main
-alias gswd="git switch dev"              # Quick switch to dev
-alias gswb="git switch -"                # Switch to previous branch
+alias gsw="git switch"       # Modern way to change branches
+alias gswc="git switch -c"   # Create and switch
+alias gswm="git switch main" # Quick switch to main
+alias gswd="git switch dev"  # Quick switch to dev
+alias gswb="git switch -"    # Switch to previous branch
 
 ###################
 # Staging and Commits
 ###################
 # Staging
-alias ga="git add"                       # Add specific files
-alias ga.="git add ."                    # Add current directory
-alias gaa="git add --all"                # Add all changes
-alias gap="git add --patch"              # Interactive staging
-alias gau="git add --update"             # Add modified files only
-alias grm="git rm"                       # Remove files
-alias grmc="git rm --cached"             # Untrack files
+alias ga="git add"           # Add specific files
+alias ga.="git add ."        # Add current directory
+alias gaa="git add --all"    # Add all changes
+alias gap="git add --patch"  # Interactive staging
+alias gau="git add --update" # Add modified files only
+alias grm="git rm"           # Remove files
+alias grmc="git rm --cached" # Untrack files
 
 # Unstaging
-alias grst="git restore"                 # Restore working tree files
-alias grsts="git restore --staged"       # Unstage files
-alias gclean="git clean -df"             # Remove untracked files
-alias gnuke="git clean -dffx"            # Remove all untracked files (including ignored)
+alias grst="git restore"           # Restore working tree files
+alias grsts="git restore --staged" # Unstage files
+alias gclean="git clean -df"       # Remove untracked files
+alias gnuke="git clean -dffx"      # Remove all untracked files (including ignored)
 
 # Commits
-alias gc="git commit --gpg-sign"         # Signed commit
-alias gcm="git commit --gpg-sign -m"     # Commit with message
-alias gca="git commit --gpg-sign --amend"  # Amend last commit
-alias gcf="git commit --gpg-sign --amend --reuse-message HEAD"  # Quick amend keeping message
-alias gfix="git commit --gpg-sign --fixup"  # Create fixup commit for later squashing
+alias gc="git commit --gpg-sign"                               # Signed commit
+alias gcm="git commit --gpg-sign -m"                           # Commit with message
+alias gca="git commit --gpg-sign --amend"                      # Amend last commit
+alias gcf="git commit --gpg-sign --amend --reuse-message HEAD" # Quick amend keeping message
+alias gfix="git commit --gpg-sign --fixup"                     # Create fixup commit for later squashing
 
 ###################
 # Stash Operations
 ###################
-alias gst="git stash"                    # Quick stash
-alias gstp="git stash pop"               # Pop latest stash
-alias gstl="git stash list"              # List stashes
-alias gsta="git stash apply"             # Apply stash without removing it
+alias gst="git stash"                      # Quick stash
+alias gstp="git stash pop"                 # Pop latest stash
+alias gstl="git stash list"                # List stashes
+alias gsta="git stash apply"               # Apply stash without removing it
 alias gstu="git stash --include-untracked" # Stash including untracked files
-alias gstd="git stash drop"              # Drop latest stash
-alias gstc="git stash clear"             # Clear all stashes
+alias gstd="git stash drop"                # Drop latest stash
+alias gstc="git stash clear"               # Clear all stashes
 
 ###################
 # Remote Operations
 ###################
-alias gf="git fetch --all --prune"       # Fetch and clean up
-alias gpl="git pull --rebase"            # Pull with rebase
-alias gp="git push"                      # Normal push
-alias gpf="git push --force-with-lease"  # Safer force push
-alias gpu="git push --set-upstream"      # Set upstream while pushing
+alias gf="git fetch --all --prune"      # Fetch and clean up
+alias gpl="git pull --rebase"           # Pull with rebase
+alias gp="git push"                     # Normal push
+alias gpf="git push --force-with-lease" # Safer force push
+alias gpu="git push --set-upstream"     # Set upstream while pushing
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
-alias gtrack="git branch --set-upstream-to"  # Set tracking branch
+alias gtrack="git branch --set-upstream-to" # Set tracking branch
 
 ###################
 # Logging and History
@@ -103,21 +103,20 @@ alias gwho="git shortlog -s --no-merges" # Show commit counts by author
 ###################
 # Rebase Operations
 ###################
-alias grb="git rebase"                   # Basic rebase
-alias grbi="git rebase -i"               # Interactive rebase
-alias grbc="git rebase --continue"       # Continue rebase
-alias grba="git rebase --abort"          # Abort rebase
-alias grbs="git rebase --skip"           # Skip rebase step
-alias grbm="git rebase main"             # Rebase on main
+alias grb="git rebase"             # Basic rebase
+alias grbi="git rebase -i"         # Interactive rebase
+alias grbc="git rebase --continue" # Continue rebase
+alias grba="git rebase --abort"    # Abort rebase
+alias grbs="git rebase --skip"     # Skip rebase step
+alias grbm="git rebase main"       # Rebase on main
 
 ###################
 # Maintenance
 ###################
-alias gprune="git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D"
-alias greflog="git reflog"               # Show reference logs
-alias gverify="git verify-commit HEAD"   # Verify last commit signature
-alias gcleanup="git clean -xfd"          # Remove untracked and ignored files
-alias ggarbage="git gc --aggressive --prune=now"  # Clean repository
+alias greflog="git reflog"                       # Show reference logs
+alias gverify="git verify-commit HEAD"           # Verify last commit signature
+alias gcleanup="git clean -xfd"                  # Remove untracked and ignored files
+alias ggarbage="git gc --aggressive --prune=now" # Clean repository
 
 # Helper functions
 git_current_branch() {

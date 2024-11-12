@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
+# Git operations and utilities
+# Provides git aliases, functions and workflow tools
 
 ###################
 # Core Commands
@@ -50,10 +52,10 @@ alias grm="git rm"           # Remove files
 alias grmc="git rm --cached" # Untrack files
 
 # Unstaging
-alias grst="git restore"           # Restore working tree files
-alias grsts="git restore --staged" # Unstage files
-alias gclean="git clean -df"       # Remove untracked files
-alias gnuke="git clean -dffx"      # Remove all untracked files (including ignored)
+alias grs="git restore"           # Restore working tree files
+alias grss="git restore --staged" # Unstage files
+alias gclean="git clean -df"      # Remove untracked files
+alias gnuke="git clean -dffx"     # Remove all untracked files (including ignored)
 
 # Commits
 alias gc="git commit --gpg-sign"                               # Signed commit
@@ -118,7 +120,90 @@ alias gverify="git verify-commit HEAD"           # Verify last commit signature
 alias gcleanup="git clean -xfd"                  # Remove untracked and ignored files
 alias ggarbage="git gc --aggressive --prune=now" # Clean repository
 
-# Helper functions
+###################
+# Git Functions
+###################
+
+# Get current branch name
 git_current_branch() {
     git branch --show-current 2>/dev/null
+}
+
+# Interactive branch switching with log preview
+gswitch() {
+    if ! command_exists fzf; then
+        echo "fzf is required for this function" >&2
+        return 1
+    fi
+
+    local branch
+    branch=$(git branch --all |
+        grep -v HEAD |
+        fzf --preview 'git log --color --graph --date=short --pretty=format:"%C(auto)%cd %h%d %s" {1}' \
+            --preview-window right:70% \
+            --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+            --header 'Press CTRL-/ to toggle preview window' |
+        sed 's/.* //')
+
+    if [[ -n "$branch" ]]; then
+        git switch "${branch/#remotes\/origin\//}"
+    fi
+}
+
+# Clean up merged branches
+git-clean() {
+    local branches
+    branches=$(git branch --merged | grep -v '^\*' | grep -vE '^(\+|\s*master\s*|\s*main\s*|\s*dev\s*)$')
+
+    if [[ -z "$branches" ]]; then
+        echo "No merged branches to clean up"
+        return 0
+    fi
+
+    echo "The following branches will be deleted:"
+    echo "$branches"
+    read -q "REPLY?Proceed with deletion? [y/N] "
+    echo
+
+    if [[ "$REPLY" == "y" ]]; then
+        echo "$branches" | xargs git branch -d
+        echo "Branches cleaned up"
+    fi
+}
+
+# Prune remote branches and tags
+git-prune() {
+    echo "Fetching remote changes..."
+    git fetch --prune
+
+    echo "Pruning remote branches..."
+    git remote prune origin
+
+    echo "Pruning local references..."
+    git gc --prune=now
+
+    echo "Cleanup complete"
+}
+
+# Interactive git add with diff preview
+gadd() {
+    if ! command_exists fzf; then
+        echo "fzf is required for this function" >&2
+        return 1
+    fi
+
+    local files
+    files=$(git status -s |
+        fzf --multi \
+            --preview 'git diff --color {2}' \
+            --preview-window right:70% \
+            --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+            --header 'Press CTRL-/ to toggle preview window' \
+            --height '80%')
+
+    if [[ -n "$files" ]]; then
+        echo "$files" | awk '{print $2}' | xargs git add
+        echo "Added files:"
+        echo "$files" | awk '{print "  "$2}'
+    fi
 }

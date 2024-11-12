@@ -89,34 +89,24 @@ z4h source ~/.env.zsh
 z4h source ~/.functions.zsh
 z4h source ~/.cargo/env
 
-# Function completions
-compdef _git gbr=git-checkout
-compdef _git git-clean=git-branch
-compdef _docker dkstop-all=docker-stop
-compdef _docker dkrm-all=docker-rm
-compdef _docker dkclean=docker-system
-
-###################
-# Platform Specific
-###################
-# WSL support
-[[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
-
-# Load platform configurations
+# Source tool configurations
+z4h source ~/.docker.zsh
 z4h source ~/.aliases
+z4h source ~/.aliases-git
+
+# Platform specific configurations
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     z4h source ~/.linux.zsh
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     z4h source ~/.darwin.zsh
 fi
 
-###################
-# Path Management
-###################
-# Add development tools to path
-[[ -d $PYENV_ROOT/bin ]] && add_to_path "$PYENV_ROOT/bin"
-[[ -d $CARGO_HOME/bin ]] && add_to_path "$CARGO_HOME/bin"
-[[ -d $GOBIN ]] && add_to_path "$GOBIN"
+# Function completions
+compdef _git gbr=git-checkout
+compdef _git git-clean=git-branch
+
+# WSL support
+[[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
 ###############################################################################
 # Local Overrides
@@ -149,5 +139,13 @@ z4h source ~/.zshrc.$(hostname)
 # ~/.zshrc.hostname      - Host-specific settings
 # .envrc                 - Project-specific settings (commonly used with direnv)
 
-# Final PATH cleanup
+###################
+# Path Management
+###################
+# Add development tools to path
+[[ -d $PYENV_ROOT/bin ]] && add_to_path "$PYENV_ROOT/bin"
+[[ -d $CARGO_HOME/bin ]] && add_to_path "$CARGO_HOME/bin"
+[[ -d $GOBIN ]] && add_to_path "$GOBIN"
+
+# PATH cleanup
 clean_path

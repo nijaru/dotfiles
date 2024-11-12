@@ -38,16 +38,16 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # Development Environment
 ###################
 # Python
-export PYTHONDONTWRITEBYTECODE=1    # No .pyc files
-export PYTHONUNBUFFERED=1           # Real-time output
-export PYTHONFAULTHANDLER=1         # Better tracebacks
-export PYTHONHASHSEED=random        # Security
+export PYTHONDONTWRITEBYTECODE=1 # No .pyc files
+export PYTHONUNBUFFERED=1        # Real-time output
+export PYTHONFAULTHANDLER=1      # Better tracebacks
+export PYTHONHASHSEED=random     # Security
 export PYENV_ROOT="$HOME/.pyenv"
 
 # Node.js
 export NODE_ENV="development"
-export NPM_CONFIG_FUND=false        # Disable funding messages
-export NPM_CONFIG_AUDIT=false       # Disable audit messages
+export NPM_CONFIG_FUND=false  # Disable funding messages
+export NPM_CONFIG_AUDIT=false # Disable audit messages
 export NPM_CONFIG_UPDATE_NOTIFIER=false
 [[ "$(uname -m)" == "arm64" ]] && export npm_config_arch="arm64"
 

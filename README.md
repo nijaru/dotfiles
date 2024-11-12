@@ -1,161 +1,131 @@
 # dotfiles
 
-Personal dotfiles for configuring development environments on macOS and Linux.
+Personal dotfiles for configuring development environments on macOS and Linux, optimized for speed and productivity.
 
 ## Overview
 
-This repository contains configuration files for:
+This repository contains a comprehensive set of configuration files for:
 
-- Shell (Zsh + Z4H)
-- Git
-- SSH
-- GPG
-- Terminal Emulators (Kitty)
-- Development Tools (Zed, htop)
-- Package Management (Homebrew, DNF)
+- Shell (Zsh with Z4H)
+- Development Tools & Languages
+- Security & Authentication
+- Terminal Emulators & Editors
+- Container & Cloud Tools
+
+## Key Features
+
+- Asynchronous ZSH configuration with Z4H
+- Extensive language-specific development environments
+- Security-focused SSH and GPG configuration
+- Modern CLI replacements for standard tools
+- Customized development environments for:
+  - Python, Go, Rust, Node.js, Ruby
+  - Docker and Kubernetes
+  - Git with advanced workflows
+  - Cloud tools (AWS, GCP, Azure)
+
+## Prerequisites
+
+- Zsh 5.8+
+- Python 3.6+
+- Git 2.25+
+- [Z4H (Zsh for Humans)](https://github.com/romkatv/zsh4humans)
+
+### Quick Start
+
+```bash
+# Install Z4H if not present
+if ! command -v z4h >/dev/null; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+fi
+
+# Clone and install dotfiles
+git clone https://github.com/nijaru/dotfiles.git ~/github/dotfiles
+cd ~/github/dotfiles
+./install.py
+```
 
 ## Directory Structure
 
 ```
 dotfiles/
-├── shell/           # Zsh and shell-related configs
-├── git/            # Git configuration
-├── ssh/            # SSH configuration
-├── gnupg/          # GPG configuration
-├── config/         # Application configurations
-│   ├── kitty/
-│   ├── zed/
-│   └── htop/
-├── homebrew/       # Homebrew bundle
-├── system/         # System-specific configs
-├── install.py      # Python installation script
+├── shell/           # Shell configuration
+│   ├── .zshenv      # Environment setup
+│   ├── .zshrc       # Main shell configuration
+│   ├── .env.zsh     # Environment variables
+│   ├── .aliases.zsh # General aliases
+│   ├── .git.zsh     # Git aliases and functions
+│   ├── .dev.zsh     # Development tools
+│   ├── .docker.zsh  # Container operations
+│   ├── .darwin.zsh  # macOS specific
+│   └── .linux.zsh   # Linux specific
+├── git/             # Git configuration
+│   ├── .gitconfig   # Git settings
+│   └── .gitignore   # Global ignores
+├── ssh/             # SSH configuration
+│   └── config       # SSH settings
+├── gnupg/           # GPG configuration
+│   └── gpg-agent.conf
+├── config/          # Application configs
+│   ├── kitty/       # Terminal emulator
+│   ├── zed/         # Code editor
+│   └── htop/        # System monitor
+├── homebrew/        # Package management
+│   └── Brewfile     # macOS packages
+├── misc/            # Additional files
+├── install.py       # Installation script
 └── README.md
-```
-
-## Prerequisites
-
-- Python 3.6+
-- Git
-- Zsh
-- Z4H (Zsh for Humans)
-
-### Installing Z4H
-
-Before running the dotfiles installer, ensure Z4H is installed:
-
-```bash
-if ! command -v z4h >/dev/null; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-fi
 ```
 
 ## Installation
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/nijaru/dotfiles.git ~/github/dotfiles
-```
-
-2. Run the installation script:
-
-```bash
-cd ~/github/dotfiles
-./install.py
-```
-
-### Installation Options
-
-The installer supports several command-line options:
+The installation script provides several options:
 
 ```bash
 ./install.py [options]
 
 Options:
-  --force      Force installation, overwriting existing files
-  --no-backup  Skip creating backups of existing files
-  --dry-run    Show what would be done without making changes
-  --help       Show this help message
+  --force      Force overwrite existing files
+  --no-backup  Skip backup creation
+  --dry-run    Show changes without applying
+  --help       Show help message
 ```
 
-## Features
-
-### Automated Installation
-
-The Python installer provides:
+### Features
 
 - Automatic backup of existing configurations
-- Rollback capability if installation fails
-- OS-specific configurations for macOS and Linux
-- Colored logging output
-- Dry-run capability
+- OS-specific installations (macOS/Linux)
+- XDG Base Directory support
+- Secure file permissions
 
-### Shell Configuration
+## Configuration
 
-- Z4H (Zsh for Humans) as the shell framework
-- Custom aliases and functions
-- Environment variables
-- OS-specific configurations
+### Shell
+
+- Optimized Zsh configuration with Z4H
+- Extensive aliases and functions
+- Platform-specific customizations
+- Development environment integration
+
+### Development
+
+- Language-specific configurations
+- Container and cloud tool integration
+- Modern CLI replacements
+- Comprehensive Git workflow
 
 ### Security
 
-- SSH configuration with control master support
-- GPG agent configuration (macOS)
-- Secure file permissions
-
-### Development Tools
-
-- Git configuration with useful aliases
-- Kitty terminal emulator configuration
-- Zed editor settings
-- htop system monitor configuration
-
-### Package Management
-
-- Homebrew bundle for macOS
-- DNF configuration for Fedora/RHEL systems
-
-## Backup System
-
-The installer automatically creates timestamped backups in `~/.dotfiles_backups/`:
-
-- Maintains the last 5 backups
-- Secure backup permissions (700)
-- Automatic cleanup of older backups
-
-## OS Support
-
-### macOS
-
-- Full support for all features
-- Homebrew package management
-- GPG agent configuration
-
-### Linux
-
-- Shell and development tools configuration
-- System-specific adjustments
-- DNF configuration (Fedora/RHEL)
+- SSH configuration with connection sharing
+- GPG agent setup (macOS)
+- Secure default permissions
 
 ## Customization
 
-To customize these dotfiles:
-
 1. Fork this repository
 2. Modify configurations as needed
-3. Update the Brewfile for different package selections
-4. Adjust the installation script for new configurations
-
-## Troubleshooting
-
-If installation fails:
-
-1. Check the error messages in the console output
-2. Verify all prerequisites are installed
-3. Use `--dry-run` to test changes
-4. Check permissions on target directories
-
-All changes are automatically rolled back on failure.
+3. Update Brewfile for different packages
+4. Adjust installation script
 
 ## License
 

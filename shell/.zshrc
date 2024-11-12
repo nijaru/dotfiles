@@ -166,7 +166,8 @@ function safe_source() {
 
 # Define the order of loading explicitly
 local -a config_files=(
-    "$HOME/.functions.zsh"  # Load first for command_exists function
+    "$HOME/.env.zsh"        # Load environment variables first
+    "$HOME/.functions.zsh"  # Then load functions
     "$HOME/.aliases.zsh"
     "$HOME/.git.zsh"
     "$HOME/.dev.zsh"

@@ -5,16 +5,19 @@
 # Security & Privacy
 ###################
 # SSH/GPG Configuration
-export SSH_AUTH_SOCK="$HOME/.ssh/agent"
+if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; then
+    # Start SSH agent if not running
+    eval "$(ssh-agent -s)" >/dev/null
+fi
 export GPG_TTY=$(tty)
 export APPLE_SSH_ADD_BEHAVIOR="macos"
+
+# Add SSH key to agent with keychain integration
+ssh-add -l | grep -q "id_ed25519" || ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
 
 # Security settings
 export HOMEBREW_NO_INSECURE_REDIRECT=1    # Prevent insecure redirects
 export HOMEBREW_CASK_OPTS="--require-sha" # Require SHA verification for casks
-
-# Keychain Integration
-ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
 
 ###################
 # Performance Optimizations

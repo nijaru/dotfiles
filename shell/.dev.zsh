@@ -14,7 +14,7 @@ if command_exists mise; then
     alias miu="mise use"    # Use specific version
     alias mil="mise list"   # List installed versions
     alias mig="mise global" # Set global version
-    alias mil="mise local"  # Set local version
+    alias milc="mise local" # Set local version
     alias mir="mise run"    # Run command with tool
     alias mie="mise exec"   # Execute with tool version
 
@@ -137,69 +137,98 @@ fi
 # Ruby Development
 ###############################################################################
 if command_exists ruby; then
+    # Helper function for gem checking
+    function gem_installed() {
+        gem list "^$1$" -i >/dev/null 2>&1
+    }
+
     # Basic Ruby commands
     alias rb="ruby"     # Ruby shorthand
     alias rbi="irb"     # Interactive Ruby
     alias rbv="ruby -v" # Ruby version
 
-    # Gem commands
-    alias gemi="gem install"     # Install a gem
-    alias gemu="gem uninstall"   # Uninstall a gem
-    alias geml="gem list"        # List installed gems
-    alias gemr="gem rdoc"        # Generate RDoc
-    alias gemt="gem test"        # Run tests for gem
-    alias gemo="gem outdated"    # Show outdated gems
-    alias gemup="gem update"     # Update all gems
-    alias gems="gem search -r"   # Search for gems
-    alias gemp="gem pristine"    # Reset gems to pristine condition
-    alias gemb="gem build"       # Build gem from gemspec
-    alias gemc="gem cleanup"     # Clean old gem versions
-    alias gemv="gem env version" # Show gem version
-    alias gemh="gem help"        # Show gem help
+    # Gem commands - only if gem command exists
+    if command_exists gem; then
+        alias gemi="gem install"     # Install a gem
+        alias gemu="gem uninstall"   # Uninstall a gem
+        alias geml="gem list"        # List installed gems
+        alias gemr="gem rdoc"        # Generate RDoc
+        alias gemt="gem test"        # Run tests for gem
+        alias gemo="gem outdated"    # Show outdated gems
+        alias gemup="gem update"     # Update all gems
+        alias gems="gem search -r"   # Search for gems
+        alias gemp="gem pristine"    # Reset gems to pristine condition
+        alias gemb="gem build"       # Build gem from gemspec
+        alias gemc="gem cleanup"     # Clean old gem versions
+        alias gemv="gem env version" # Show gem version
+        alias gemh="gem help"        # Show gem help
+    fi
 
-    # Bundle commands
-    alias rbb="bundle"           # Bundle shorthand
-    alias rbbe="bundle exec"     # Bundle exec
-    alias rbbi="bundle install"  # Install dependencies
-    alias rbbu="bundle update"   # Update dependencies
-    alias rbbo="bundle outdated" # Show outdated gems
-    alias rbbc="bundle clean"    # Clean old gems
-    alias rbbp="bundle package"  # Package gems
-    alias rbbck="bundle check"   # Verify dependencies
-    alias rbbl="bundle list"     # List gems
-    alias rbbop="bundle open"    # Open gem source
-    alias rbbin="bundle info"    # Show gem info
+    # Bundle commands - only if bundler is installed
+    if gem_installed bundler; then
+        alias rbb="bundle"           # Bundle shorthand
+        alias rbbe="bundle exec"     # Bundle exec
+        alias rbbi="bundle install"  # Install dependencies
+        alias rbbu="bundle update"   # Update dependencies
+        alias rbbo="bundle outdated" # Show outdated gems
+        alias rbbc="bundle clean"    # Clean old gems
+        alias rbbp="bundle package"  # Package gems
+        alias rbbck="bundle check"   # Verify dependencies
+        alias rbbl="bundle list"     # List gems
+        alias rbbop="bundle open"    # Open gem source
+        alias rbbin="bundle info"    # Show gem info
+    fi
 
-    # Rails commands
-    alias rs="rails server"                # Start Rails server
-    alias rc="rails console"               # Rails console
-    alias rg="rails generate"              # Rails generate
-    alias rgm="rails generate migration"   # Generate migration
-    alias rr="rails routes"                # Show routes
-    alias rdb="rails db"                   # Database tasks
-    alias rdbm="rails db:migrate"          # Run migrations
-    alias rdbs="rails db:seed"             # Seed database
-    alias rdbc="rails db:create"           # Create database
-    alias rdbd="rails db:drop"             # Drop database
-    alias rdbr="rails db:rollback"         # Rollback migration
-    alias rdbrb="rails db:rollback STEP=1" # Rollback one step
+    # Rails commands - only if rails is installed
+    if gem_installed rails; then
+        alias rs="rails server"                # Start Rails server
+        alias rc="rails console"               # Rails console
+        alias rg="rails generate"              # Rails generate
+        alias rgm="rails generate migration"   # Generate migration
+        alias rr="rails routes"                # Show routes
+        alias rdb="rails db"                   # Database tasks
+        alias rdbm="rails db:migrate"          # Run migrations
+        alias rdbs="rails db:seed"             # Seed database
+        alias rdbc="rails db:create"           # Create database
+        alias rdbd="rails db:drop"             # Drop database
+        alias rdbr="rails db:rollback"         # Rollback migration
+        alias rdbrb="rails db:rollback STEP=1" # Rollback one step
 
-    # Testing
-    alias rt="rails test"                    # Run tests
-    alias rts="rails test:system"            # Run system tests
-    alias spec="rspec"                       # Run RSpec tests
-    alias rsf="rspec --format documentation" # Formatted RSpec output
-    alias rsp="rspec --profile"              # Show slow examples
-    alias rsw="rspec --profile --warnings"   # Show warnings
+        # Testing
+        alias rt="rails test"         # Run tests
+        alias rts="rails test:system" # Run system tests
+    fi
 
-    # Development Tools
-    alias rubocop="bundle exec rubocop"       # Ruby linter
-    alias rubo="bundle exec rubocop -a"       # Auto-correct Ruby style
-    alias ruboa="bundle exec rubocop -A"      # Auto-correct aggressive
-    alias solargraph="bundle exec solargraph" # Ruby language server
-    alias fasterer="bundle exec fasterer"     # Speed suggestions
-    alias brakeman="bundle exec brakeman"     # Security scanner
-    alias rbpry="pry -r ./config/environment" # Rails console with Pry
+    # RSpec commands - only if rspec is installed
+    if gem_installed rspec; then
+        alias spec="rspec"                       # Run RSpec tests
+        alias rsf="rspec --format documentation" # Formatted RSpec output
+        alias rsp="rspec --profile"              # Show slow examples
+        alias rsw="rspec --profile --warnings"   # Show warnings
+    fi
+
+    # Development Tools - only if the respective tools are installed
+    if gem_installed rubocop; then
+        alias rubocop="bundle exec rubocop"  # Ruby linter
+        alias rubo="bundle exec rubocop -a"  # Auto-correct Ruby style
+        alias ruboa="bundle exec rubocop -A" # Auto-correct aggressive
+    fi
+
+    if gem_installed solargraph; then
+        alias solargraph="bundle exec solargraph" # Ruby language server
+    fi
+
+    if gem_installed fasterer; then
+        alias fasterer="bundle exec fasterer" # Speed suggestions
+    fi
+
+    if gem_installed brakeman; then
+        alias brakeman="bundle exec brakeman" # Security scanner
+    fi
+
+    if command_exists pry; then
+        alias rbpry="pry -r ./config/environment" # Rails console with Pry
+    fi
 fi
 
 ###############################################################################

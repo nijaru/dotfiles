@@ -8,7 +8,27 @@
 # Check if a command exists
 # Usage: command_exists git
 function command_exists() {
-    command -v "$1" >/dev/null 2>&1
+    local cmd=$1
+
+    # Check if it's a function
+    whence -w "$cmd" | grep -q "^$cmd: function$" && return 0
+
+    # Check if it's an alias
+    whence -w "$cmd" | grep -q "^$cmd: alias$" && return 0
+
+    # Check if it's a regular command
+    if command -v "$cmd" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    # Special handling for Ruby gems
+    if command -v gem >/dev/null 2>&1; then
+        if gem list "^$cmd$" -i >/dev/null 2>&1; then
+            return 0
+        fi
+    fi
+
+    return 1
 }
 
 # Lazy load commands with error handling

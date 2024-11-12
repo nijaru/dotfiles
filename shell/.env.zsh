@@ -21,6 +21,8 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$UID}"
         "$XDG_STATE_HOME"
         "${XDG_CACHE_HOME}/zsh"
         "${XDG_STATE_HOME}/less"
+        "${XDG_DATA_HOME}/gem"
+        "${XDG_CONFIG_HOME}/bundle"
     )
     for dir in $xdg_dirs; do
         [[ -d "$dir" ]] || mkdir -p "$dir"
@@ -77,6 +79,11 @@ export PYTHONUNBUFFERED=1               # Disable output buffering
 export PYTHONFAULTHANDLER=1             # Better tracebacks
 export PYTHONHASHSEED=random            # Secure hash seeds
 
+# Ruby Configuration
+export GEM_HOME="${XDG_DATA_HOME}/gem"
+export GEM_PATH="${GEM_HOME}:${XDG_DATA_HOME}/gem"
+export BUNDLE_USER_HOME="${XDG_CONFIG_HOME}/bundle"
+
 ###################
 # Path Configuration
 ###################
@@ -87,6 +94,7 @@ export PYTHONHASHSEED=random            # Secure hash seeds
         "$GOBIN"
         "$CARGO_HOME/bin"
         "$HOME/.mise/bin"
+        "${GEM_HOME}/bin"
     )
 
     for p in $paths; do

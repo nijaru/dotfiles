@@ -1,33 +1,85 @@
 #!/usr/bin/env zsh
-# Personal Zsh configuration file
+# ~/.zshrc
+# Core zsh configuration file optimized for zsh4humans framework
+# Last Modified: 2024-01-24
 
 ###################
-# Z4H Core Settings
+# Initialization Check
 ###################
+# Ensure we're running in zsh
+if [[ ! -o interactive ]]; then
+   return  # Exit if not running interactively
+fi
 
-# Basic configuration
+# Ensure critical directories exist
+() {
+    local -a required_dirs=(
+        "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+        "${XDG_DATA_HOME:-$HOME/.local/share}/zsh"
+        "${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+    )
+    for dir in $required_dirs; do
+        [[ -d "$dir" ]] || mkdir -p "$dir"
+    done
+}
+
+###################
+# Configuration Files
+###################
+# Core configuration files that should always exist
+typeset -ga CORE_CONFIG_FILES=(
+    '.env.zsh'          # Environment variables
+    '.functions.zsh'    # Utility functions
+    '.aliases.zsh'      # General aliases
+    '.git.zsh'         # Git-specific aliases
+    '.dev.zsh'         # Development tools
+    '.docker.zsh'       # Docker configuration
+    '.p10k.zsh'        # Prompt configuration
+)
+
+# Platform-specific configurations
+typeset -ga PLATFORM_CONFIG_FILES=(
+    '.darwin.zsh'       # macOS specific
+    '.linux.zsh'        # Linux specific
+)
+
+# Optional local configurations
+typeset -ga LOCAL_CONFIG_FILES
+LOCAL_CONFIG_FILES=(
+    '.zshrc.local'              # Machine-specific
+    '.zshrc.company'            # Company-specific
+    ".zshrc.${HOST}"           # Host-specific
+    '.envrc'                   # Project-specific
+)
+
+###################
+# Z4H Configuration
+###################
+# Performance settings
 zstyle ':z4h:' auto-update 'yes'
 zstyle ':z4h:' auto-update-days 7
-zstyle ':z4h:' prompt-at-bottom 'no'
-zstyle ':z4h:' term-shell-integration 'yes'
-zstyle ':z4h:bindkey' keyboard 'pc'
-
-# Performance tuning
-zstyle ':z4h:' start-tmux 'no'              # Don't auto-start tmux
 zstyle ':z4h:' prompt-height 1              # Minimize prompt height
 zstyle ':z4h:*' term-vresize 'scroll'       # Faster terminal resizing
 zstyle ':z4h:autosuggestions' delay 0.1     # Faster suggestions
 zstyle ':z4h:compinit' arguments -C -i      # Faster compinit
 
-# Feature configuration
+# Feature settings
+zstyle ':z4h:' prompt-at-bottom 'no'
+zstyle ':z4h:' term-shell-integration 'yes'
+zstyle ':z4h:bindkey' keyboard 'pc'
 zstyle ':z4h:autosuggestions' forward-char 'accept'
 zstyle ':z4h:fzf-complete' recurse-dirs 'yes'
+
+# Development tools integration
 zstyle ':z4h:direnv' enable 'yes'
 zstyle ':z4h:direnv:success' notify 'yes'
 
 # SSH configuration
 zstyle ':z4h:ssh:*' enable 'no'
-zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh' '~/.aliases' '~/.linux'
+# Core shell configuration for remote sessions
+zstyle ':z4h:ssh:*' send-extra-files ${^CORE_CONFIG_FILES} ${^PLATFORM_CONFIG_FILES}
+
+# SSH agent configuration
 zstyle ':z4h:ssh-agent:' start yes
 zstyle ':z4h:ssh-agent:' extra-args -t 12h
 
@@ -35,72 +87,140 @@ zstyle ':z4h:ssh-agent:' extra-args -t 12h
 z4h init || return
 
 ###################
-# History Settings
+# History Configuration
 ###################
-HISTSIZE=1000000
-SAVEHIST=1000000
+() {
+    local HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+    local HISTSIZE=1000000
+    local SAVEHIST=1000000
 
-setopt HIST_IGNORE_ALL_DUPS     # No duplicate entries
-setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicates first
-setopt HIST_REDUCE_BLANKS       # Remove superfluous blanks
-setopt HIST_IGNORE_SPACE        # Ignore space-prefixed commands
-setopt HIST_VERIFY              # Show before executing history commands
-setopt SHARE_HISTORY            # Share history between shells
-setopt EXTENDED_HISTORY         # Record timestamp of command
+    # Ensure history directory exists
+    [[ -d "${XDG_STATE_HOME:-$HOME/.local/state}/zsh" ]] || mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
+
+    setopt HIST_IGNORE_ALL_DUPS     # No duplicate entries
+    setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicates first
+    setopt HIST_REDUCE_BLANKS       # Remove superfluous blanks
+    setopt HIST_IGNORE_SPACE        # Ignore space-prefixed commands
+    setopt HIST_VERIFY              # Show before executing history commands
+    setopt SHARE_HISTORY            # Share history between shells
+    setopt EXTENDED_HISTORY         # Record timestamp of command
+}
 
 ###################
 # Completion System
 ###################
-# Initialize completion system
-autoload -Uz compinit
+() {
+    # Initialize completion system efficiently
+    local zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 
-# Load completions efficiently
-if [[ -n ${ZDOTDIR:-${HOME}}/.zcompdump(#qN.mh+24) ]]; then
-    compinit -i
-    { zcompile "${ZDOTDIR:-${HOME}}/.zcompdump" } &!
-else
-    compinit -C -i
-fi
+    # Only regenerate zcompdump if it's older than 24 hours
+    if [[ -n "$zcompdump"(#qN.mh+24) ]]; then
+        compinit -i -d "$zcompdump"
+        { zcompile "$zcompdump" } &!
+    else
+        compinit -C -d "$zcompdump"
+    fi
 
-# Enhanced completion styling
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' matcher-list '' \
-  'm:{a-z\-}={A-Z\_}' \
-  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-  'r:|?=** m:{a-z\-}={A-Z\_}'
-zstyle ':completion:*' menu select
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' accept-exact '*(N)'   # Optimize path completion
-zstyle ':completion:*' special-dirs true     # Complete special directories
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Use LS_COLORS
+    # Completion styling
+    zstyle ':completion:*' completer _expand _complete _correct _approximate
+    zstyle ':completion:*' matcher-list '' \
+        'm:{a-z\-}={A-Z\_}' \
+        'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+        'r:|?=** m:{a-z\-}={A-Z\_}'
 
-# Completion formatting
-zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
-zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
-zstyle ':completion:*:messages' format ' %F{purple}-- %d --%f'
-zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+    # Completion behavior
+    zstyle ':completion:*' menu select
+    zstyle ':completion:*' use-cache on
+    zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completion"
+    zstyle ':completion:*' group-name ''
+    zstyle ':completion:*' accept-exact '*(N)'
+    zstyle ':completion:*' special-dirs true
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+    # Completion formatting
+    zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+    zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
+    zstyle ':completion:*:messages' format ' %F{purple}-- %d --%f'
+    zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+}
 
 ###################
-# Core Configuration
+# Source Configuration Files
 ###################
-# Source core configurations
-z4h source ~/.env.zsh
-z4h source ~/.functions.zsh
-z4h source ~/.cargo/env
+# Safely source files with error checking
+function safe_source() {
+    local file=$1
+    if [[ -f "$file" ]]; then
+        source "$file"
+    else
+        # Get basename of file for comparison
+        local basename=${file:t}
 
-# Source tool configurations
-z4h source ~/.docker.zsh
-z4h source ~/.aliases
-z4h source ~/.aliases-git
+        # Show warning only for core and platform configs
+        if (( ${CORE_CONFIG_FILES[(I)$basename]} + ${PLATFORM_CONFIG_FILES[(I)$basename]} )); then
+            print -P "%F{yellow}Warning:%f Could not source ${file}" >&2
+        fi
+        return 1
+    fi
+}
 
-# Platform specific configurations
+# Define the order of loading explicitly
+local -a config_files=(
+    "$HOME/.functions.zsh"  # Load first for command_exists function
+    "$HOME/.aliases.zsh"
+    "$HOME/.git.zsh"
+    "$HOME/.dev.zsh"
+    "$HOME/.docker.zsh"
+)
+
+# Add platform-specific configuration
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    z4h source ~/.linux.zsh
+    config_files+=("$HOME/.linux.zsh")
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    z4h source ~/.darwin.zsh
+    config_files+=("$HOME/.darwin.zsh")
 fi
 
+# Source configurations in order
+for config in $config_files; do
+    safe_source "$config"
+done
+
+# Then source local configurations if they exist
+local -a local_configs=(
+    ~/.local/zsh/*.zsh(N)  # Custom local configurations
+)
+
+# Add optional local configs
+for config in $LOCAL_CONFIG_FILES; do
+    # Expand any command substitutions in the filename
+    local expanded_config=$(eval echo "$HOME/$config")
+    local_configs+=("$expanded_config")
+done
+
+# Source local configurations
+for config in $local_configs; do
+    safe_source "$config"
+done
+
+###################
+# Development Environment
+###################
+# Add development tools to path if they exist
+() {
+    local -a dev_paths=(
+        "$PYENV_ROOT/bin"
+        "$CARGO_HOME/bin"
+        "$GOBIN"
+    )
+
+    for path_entry in $dev_paths; do
+        [[ -d "$path_entry" ]] && path+=("$path_entry")
+    done
+}
+
+###################
+# Completion Setup
+###################
 # Function completions
 compdef _git gbr=git-checkout
 compdef _git git-clean=git-branch
@@ -108,44 +228,25 @@ compdef _git git-clean=git-branch
 # WSL support
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
-###############################################################################
-# Local Overrides
-###############################################################################
-# Allow for local customization in the ~/.local directory
-for file in ~/.local/zsh/*.zsh(N); do
-    z4h source "$file"
-done
-
-# Source machine-specific configuration
-z4h source ~/.zshrc.local
-
-# Source company-specific configuration if it exists (useful for work machines)
-z4h source ~/.zshrc.company
-
-# Source host-specific configuration
-z4h source ~/.zshrc.$(hostname)
-
-# Dev environment overrides (useful for project-specific settings)
-[[ -f .envrc ]] && z4h source .envrc
-
-# Note: The z4h source command will silently skip files that don't exist,
-# so there's no need for explicit existence checks.
-# Files are sourced in the order listed above, allowing for proper override precedence.
-#
-# Recommended structure:
-# ~/.local/zsh/           - Directory for custom zsh scripts
-# ~/.zshrc.local         - Machine-specific settings
-# ~/.zshrc.company       - Company-specific settings
-# ~/.zshrc.hostname      - Host-specific settings
-# .envrc                 - Project-specific settings (commonly used with direnv)
-
 ###################
-# Path Management
+# Performance Optimizations
 ###################
-# Add development tools to path
-[[ -d $PYENV_ROOT/bin ]] && add_to_path "$PYENV_ROOT/bin"
-[[ -d $CARGO_HOME/bin ]] && add_to_path "$CARGO_HOME/bin"
-[[ -d $GOBIN ]] && add_to_path "$GOBIN"
+# Try to load zrecompile module, continue if not available
+if zmodload zsh/zrecompile 2>/dev/null; then
+    # Compile zsh files in background
+    {
+        local -a zsh_files=(
+            ${ZDOTDIR:-$HOME}/.zshrc
+            ${ZDOTDIR:-$HOME}/.zshenv
+            ${ZDOTDIR:-$HOME}/.zprofile
+            ~/.local/zsh/*.zsh(N-.)
+        )
 
-# PATH cleanup
+        for file in $zsh_files; do
+            [[ -f "$file" ]] && zrecompile -pq "$file"
+        done
+    } &!
+fi
+
+# Final PATH cleanup using function from .functions.zsh
 clean_path

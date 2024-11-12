@@ -1,509 +1,366 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
+import argparse
+import asyncio
 import logging
 import platform
 import shutil
-import stat
-import subprocess
 import sys
-import urllib.request
-from contextlib import contextmanager
+from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
-from typing import Dict, Optional, Set
+
+
+class DotfilesError(Exception):
+    """Base exception for dotfiles installer"""
+
+
+class DependencyError(DotfilesError):
+    """Missing dependency error"""
+
+
+class InstallationError(DotfilesError):
+    """Installation failure error"""
+
+
+@dataclass(frozen=True)
+class Config:
+    """Configuration file definition"""
+
+    source: Path
+    target: Path
+    mode: int
+    required: bool = False
+
+
+class ConfigType(Enum):
+    """Types of configuration files"""
+
+    SHELL = "shell"
+    GIT = "git"
+    SECURITY = "security"
+    APP = "app"
 
 
 class DotfilesInstaller:
-    def __init__(self):
-        self.home = Path.home()
-        self.dotfiles_dir = self.home / "github" / "dotfiles"
-        self.config_dir = self.home / ".config"
-
-        # New backup structure
-        self.backups_parent = self.home / ".dotfiles_backups"
-        self.current_backup_dir = (
-            self.backups_parent / f"backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    def __init__(self, *, dry_run: bool = False, force: bool = False) -> None:
+        self.home: Path = Path.home()
+        self.dotfiles: Path = self.home / "github" / "dotfiles"
+        self.config: Path = self.home / ".config"
+        self.backup_dir: Path = (
+            self.home / ".dotfiles_backups" / f"backup_{datetime.now():%Y%m%d_%H%M%S}"
         )
+        self.system: str = platform.system()
+        self.dry_run: bool = dry_run
+        self.force: bool = force
+        self.log = self._setup_logger()
 
-        self.system = platform.system()
-
-        # Track operations for rollback
-        self.created_symlinks: Set[Path] = set()
-        self.created_dirs: Set[Path] = set()
-        self.modified_permissions: Dict[Path, int] = {}
-
-        # Add installation flags
-        self.force_install = "--force" in sys.argv
-        self.skip_backups = "--no-backup" in sys.argv
-        self.dry_run = "--dry-run" in sys.argv
-
-        # Setup logging
-        self.setup_logging()
-
-    def setup_logging(self):
-        """Configure logging with colored output"""
+    def _setup_logger(self) -> logging.Logger:
+        """Configure colored logging"""
 
         class ColorFormatter(logging.Formatter):
             COLORS = {
                 "INFO": "\033[92m",  # Green
                 "WARNING": "\033[93m",  # Yellow
                 "ERROR": "\033[91m",  # Red
-                "CRITICAL": "\033[91m",  # Red
                 "RESET": "\033[0m",
             }
 
-            def format(self, record):
+            def format(self, record: logging.LogRecord) -> str:
                 color = self.COLORS.get(record.levelname, self.COLORS["RESET"])
                 record.msg = f"{color}{record.msg}{self.COLORS['RESET']}"
                 return super().format(record)
 
+        logger = logging.getLogger("dotfiles")
         handler = logging.StreamHandler()
         handler.setFormatter(ColorFormatter("%(message)s"))
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        return logger
 
-        self.log = logging.getLogger("dotfiles")
-        self.log.addHandler(handler)
-        self.log.setLevel(logging.INFO)
+    async def __aenter__(self) -> DotfilesInstaller:
+        """Async context manager entry"""
+        await self.setup_directories()
+        return self
 
-    def print_help(self):
-        """Display usage information"""
-        help_text = """
-        Dotfiles Installer
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Async context manager exit"""
+        if exc_type is not None:
+            self.log.error(f"Installation failed: {exc_val}")
 
-        Usage: ./install.py [options]
-
-        Options:
-          --force      Force installation, overwriting existing files
-          --no-backup  Skip creating backups of existing files
-          --dry-run    Show what would be done without making changes
-          --help      Show this help message
-        """
-        print(help_text)
-        sys.exit(0)
-
-    def verify_dependencies(self) -> bool:
-        """Check if required dependencies are installed"""
-        dependencies = {
-            "git": "Git is required for dotfiles management",
-            "zsh": "Zsh shell is required",
-            "z4h": "Z4H (Zsh for Humans) is required - install from https://github.com/romkatv/zsh4humans",
+    def get_configs(self) -> dict[ConfigType, list[Config]]:
+        """Get all configuration files organized by type"""
+        configs: dict[ConfigType, list[Config]] = {
+            ConfigType.SHELL: [
+                Config(self.dotfiles / "shell/.zshenv", self.home / ".zshenv", 0o644),
+                Config(self.dotfiles / "shell/.zshrc", self.home / ".zshrc", 0o644),
+                Config(self.dotfiles / "shell/.env.zsh", self.home / ".env.zsh", 0o644),
+                Config(
+                    self.dotfiles / "shell/.aliases.zsh",
+                    self.home / ".aliases.zsh",
+                    0o644,
+                ),
+                Config(
+                    self.dotfiles / "shell/.functions.zsh",
+                    self.home / ".functions.zsh",
+                    0o644,
+                ),
+                Config(self.dotfiles / "shell/.git.zsh", self.home / ".git.zsh", 0o644),
+                Config(self.dotfiles / "shell/.dev.zsh", self.home / ".dev.zsh", 0o644),
+                Config(
+                    self.dotfiles / "shell/.docker.zsh",
+                    self.home / ".docker.zsh",
+                    0o644,
+                ),
+                Config(
+                    self.dotfiles / "shell/.p10k.zsh", self.home / ".p10k.zsh", 0o644
+                ),
+            ],
+            ConfigType.GIT: [
+                Config(
+                    self.dotfiles / "git/.gitconfig", self.home / ".gitconfig", 0o644
+                ),
+                Config(
+                    self.dotfiles / "git/.gitignore", self.home / ".gitignore", 0o644
+                ),
+            ],
+            ConfigType.SECURITY: [
+                Config(self.dotfiles / "ssh/config", self.home / ".ssh/config", 0o600),
+            ],
+            ConfigType.APP: [],
         }
 
-        missing = []
-        for cmd, msg in dependencies.items():
-            if not shutil.which(cmd):
-                missing.append(f"{cmd}: {msg}")
-
-        if missing:
-            self.log.error("Missing required dependencies:")
-            for msg in missing:
-                self.log.error(f"  - {msg}")
-            return False
-        return True
-
-    def check_git_repo(self) -> bool:
-        """Verify dotfiles directory is a git repository"""
-        try:
-            if not (self.dotfiles_dir / ".git").exists():
-                self.log.error(f"Not a git repository: {self.dotfiles_dir}")
-                return False
-            return True
-        except Exception as e:
-            self.log.error(f"Failed to check git repository: {e}")
-            return False
-
-    @contextmanager
-    def rollback_context(self):
-        """Context manager for handling installation with rollback capability"""
-        try:
-            yield
-        except Exception as e:
-            self.log.error(f"Installation failed: {str(e)}")
-            self.rollback()
-            raise
-        else:
-            self.log.info("✓ Installation completed successfully")
-
-    def rollback(self):
-        """Rollback changes in case of failure"""
-        self.log.warning("Rolling back changes...")
-
-        # Remove created symlinks
-        for link in self.created_symlinks:
-            try:
-                if link.is_symlink():
-                    link.unlink()
-                    self.log.info(f"Removed symlink: {link}")
-            except Exception as e:
-                self.log.error(f"Failed to remove symlink {link}: {e}")
-
-        # Restore original permissions
-        for path, mode in self.modified_permissions.items():
-            try:
-                path.chmod(mode)
-                self.log.info(f"Restored permissions for: {path}")
-            except Exception as e:
-                self.log.error(f"Failed to restore permissions for {path}: {e}")
-
-        # Remove created directories (in reverse order)
-        for dir_path in sorted(self.created_dirs, reverse=True):
-            try:
-                if dir_path.exists() and dir_path.is_dir():
-                    shutil.rmtree(dir_path)
-                    self.log.info(f"Removed directory: {dir_path}")
-            except Exception as e:
-                self.log.error(f"Failed to remove directory {dir_path}: {e}")
-
-    def setup_backup_directory(self):
-        """Initialize backup directory structure"""
-        try:
-            # Create parent backup directory if it doesn't exist
-            self.backups_parent.mkdir(mode=0o700, exist_ok=True)
-
-            # Create new backup directory for this run
-            self.current_backup_dir.mkdir(mode=0o700)
-
-            # Track created directory for potential rollback
-            self.created_dirs.add(self.current_backup_dir)
-
-            self.log.info(f"Created backup directory: {self.current_backup_dir}")
-
-            # Clean old backups (keep last 5)
-            self.cleanup_old_backups()
-
-            return True
-        except Exception as e:
-            self.log.error(f"Failed to setup backup directory: {e}")
-            return False
-
-    def cleanup_old_backups(self, keep_last: int = 5):
-        """Remove old backup directories, keeping the specified number of most recent ones"""
-        try:
-            # Get all backup directories sorted by name (which includes timestamp)
-            backup_dirs = sorted(
-                [
-                    d
-                    for d in self.backups_parent.iterdir()
-                    if d.is_dir() and d.name.startswith("backup_")
-                ],
-                reverse=True,
-            )
-
-            # Remove old backups
-            for old_backup in backup_dirs[keep_last:]:
-                shutil.rmtree(old_backup)
-                self.log.info(f"Removed old backup: {old_backup}")
-        except Exception as e:
-            self.log.warning(f"Failed to cleanup old backups: {e}")
-
-    def link_file(self, src: Path, dest: Path, mode: Optional[int] = None) -> bool:
-        """Create a symbolic link with backup of existing files"""
-        try:
-            if self.dry_run:
-                self.log.info(f"Would link: {dest} -> {src}")
-                return True
-
-            # Ensure parent directory exists
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            self.created_dirs.add(dest.parent)
-
-            # Handle existing file/symlink
-            if dest.exists() or dest.is_symlink():
-                if not self.force_install:
-                    self.log.warning(f"File exists: {dest} (use --force to overwrite)")
-                    return False
-
-                # Backup existing file if backups aren't disabled
-                if not self.skip_backups:
-                    if dest.exists():
-                        self.modified_permissions[dest] = stat.S_IMODE(
-                            dest.stat().st_mode
-                        )
-
-                    backup_path = self.current_backup_dir / dest.name
-                    if backup_path.exists():
-                        count = 1
-                        while backup_path.exists():
-                            backup_path = (
-                                self.current_backup_dir / f"{dest.name}.{count}"
-                            )
-                            count += 1
-
-                    if dest.exists():
-                        shutil.copy2(dest, backup_path)
-
-                dest.unlink()
-
-            # Create new symlink
-            dest.symlink_to(src)
-            self.created_symlinks.add(dest)
-
-            # Set file permissions if specified
-            if mode is not None:
-                dest.chmod(mode)
-                self.modified_permissions[dest] = mode
-
-            self.log.info(f"✓ Linked {dest} -> {src}")
-            return True
-
-        except Exception as e:
-            self.log.error(f"⚠️  Failed to link {dest}: {str(e)}")
-            return False
-
-    def install_zsh4humans(self) -> bool:
-        """Install Zsh4Humans if not already installed"""
-        try:
-            # Check if z4h is already installed
-            result = subprocess.run(
-                ["command", "-v", "z4h"], capture_output=True, text=True
-            )
-
-            if result.returncode == 0:
-                self.log.info("✓ Zsh4Humans already installed, skipping installation")
-                return True
-
-            self.log.info("Installing Zsh4Humans...")
-
-            # Fetch the installation script
-            z4h_url = "https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install"
-
-            try:
-                response = urllib.request.urlopen(z4h_url)
-                install_script = response.read().decode()
-            except Exception as e:
-                self.log.error(f"Failed to download Zsh4Humans: {e}")
-                return False
-
-            # Execute installation script with TTY allocation
-            result = subprocess.run(
-                ["sh", "-c", install_script],
-                stdin=sys.stdin,
-                stdout=sys.stdout,
-                stderr=sys.stderr,
-            )
-
-            if result.returncode != 0:
-                self.log.error("Zsh4Humans installation failed")
-                return False
-
-            return True
-
-        except Exception as e:
-            self.log.error(f"Failed to install Zsh4Humans: {e}")
-            return False
-
-    def install_package_manager(self) -> bool:
-        """Install and configure package manager based on OS"""
-        try:
-            if self.system == "Darwin":
-                if not shutil.which("brew"):
-                    self.log.info("Installing Homebrew...")
-                    install_cmd = '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-                    subprocess.run(install_cmd, shell=True, check=True)
-
-                # Install packages from Brewfile
-                brewfile = self.dotfiles_dir / "homebrew" / "Brewfile"
-                if brewfile.exists():
-                    self.log.info("Installing Homebrew packages...")
-                    result = subprocess.run(["brew", "bundle", "--file", str(brewfile)])
-                    if result.returncode != 0:
-                        self.log.warning("Some Homebrew packages failed to install")
-
-            elif self.system == "Linux":
-                # Configure DNF if on Fedora/RHEL
-                if shutil.which("dnf"):
-                    dnf_conf = self.dotfiles_dir / "system" / "dnf.conf"
-                    if dnf_conf.exists():
-                        try:
-                            subprocess.run(
-                                ["sudo", "mkdir", "-p", "/etc/dnf"], check=True
-                            )
-                            subprocess.run(
-                                ["sudo", "cp", str(dnf_conf), "/etc/dnf/dnf.conf"],
-                                check=True,
-                            )
-                            self.log.info("✓ DNF configuration updated")
-                        except subprocess.CalledProcessError as e:
-                            self.log.error(f"Failed to configure DNF: {e}")
-                            return False
-
-            return True
-
-        except Exception as e:
-            self.log.error(f"Failed to configure package manager: {e}")
-            return False
-
-    def install_security_components(self) -> bool:
-        """Install SSH and GPG configurations"""
-        try:
-            # SSH setup
-            ssh_dir = self.home / ".ssh"
-            ssh_dir.mkdir(mode=0o700, exist_ok=True)
-            self.created_dirs.add(ssh_dir)
-
-            ssh_control_dir = ssh_dir / "control"
-            ssh_control_dir.mkdir(mode=0o700, exist_ok=True)
-            self.created_dirs.add(ssh_control_dir)
-
-            if not self.link_file(
-                self.dotfiles_dir / "ssh" / "config", ssh_dir / "config", mode=0o600
-            ):
-                return False
-
-            # GPG setup (primarily for macOS)
-            if self.system == "Darwin":
-                gpg_dir = self.home / ".gnupg"
-                gpg_dir.mkdir(mode=0o700, exist_ok=True)
-                self.created_dirs.add(gpg_dir)
-
-                if not self.link_file(
-                    self.dotfiles_dir / "gnupg" / "gpg-agent.conf",
-                    gpg_dir / "gpg-agent.conf",
-                    mode=0o600,
-                ):
-                    return False
-
-            return True
-
-        except Exception as e:
-            self.log.error(f"Failed to install security components: {e}")
-            return False
-
-    def install_git_config(self) -> bool:
-        """Install Git configuration files"""
-        try:
-            git_files = [
-                ("git/.gitconfig", ".gitconfig"),
-                ("git/.gitignore", ".gitignore"),
-            ]
-
-            for src_path, dest_name in git_files:
-                if not self.link_file(
-                    self.dotfiles_dir / src_path, self.home / dest_name
-                ):
-                    return False
-
-            return True
-
-        except Exception as e:
-            self.log.error(f"Failed to install Git configuration: {e}")
-            return False
-
-    def install_shell_config(self) -> bool:
-        """Install shell configuration files"""
-        try:
-            shell_files = [
-                ("shell/.zshrc", ".zshrc"),  # Direct link to our .zshrc
-                ("shell/.zshenv", ".zshenv"),
-                ("shell/.aliases", ".aliases"),
-                ("shell/.aliases-git", ".aliases-git"),
-                ("shell/.env.zsh", ".env.zsh"),
-                ("shell/.functions.zsh", ".functions.zsh"),
-                ("shell/.p10k.zsh", ".p10k.zsh"),
-            ]
-
-            # OS-specific shell configuration
-            if self.system == "Darwin":
-                shell_files.append(("shell/.darwin.zsh", ".darwin.zsh"))
-            elif self.system == "Linux":
-                shell_files.append(("shell/.linux.zsh", ".linux.zsh"))
-
-            for src_path, dest_name in shell_files:
-                if not self.link_file(
-                    self.dotfiles_dir / src_path, self.home / dest_name
-                ):
-                    return False
-
-            return True
-
-        except Exception as e:
-            self.log.error(f"Failed to install shell configuration: {e}")
-            return False
-
-    def install_app_configs(self) -> bool:
-        """Install application-specific configurations"""
-        try:
-            # Kitty terminal configuration
-            kitty_dir = self.config_dir / "kitty"
-            kitty_dir.mkdir(parents=True, exist_ok=True)
-            self.created_dirs.add(kitty_dir)
-
-            if not self.link_file(
-                self.dotfiles_dir / "config/kitty/kitty.conf", kitty_dir / "kitty.conf"
-            ):
-                return False
-
-            # Htop configuration
-            htop_dir = self.config_dir / "htop"
-            htop_dir.mkdir(parents=True, exist_ok=True)
-            self.created_dirs.add(htop_dir)
-
-            if not self.link_file(
-                self.dotfiles_dir / "config/htop/htoprc", htop_dir / "htoprc"
-            ):
-                return False
-
-            # Zed configuration (OS-specific paths)
-            zed_config_src = self.dotfiles_dir / "config/zed/settings.json"
-            if self.system == "Darwin":
-                zed_dir = self.config_dir / "zed"
-            else:
-                zed_dir = self.config_dir / "zed.dev"
-
-            zed_dir.mkdir(parents=True, exist_ok=True)
-            self.created_dirs.add(zed_dir)
-
-            if not self.link_file(zed_config_src, zed_dir / "settings.json"):
-                return False
-
-            return True
-
-        except Exception as e:
-            self.log.error(f"Failed to install application configs: {e}")
-            return False
-
-    def run(self):
-        """Main installation process"""
-        # Show help if requested
-        if "--help" in sys.argv:
-            self.print_help()
-
-        with self.rollback_context():
-            # Verify environment
-            if not self.verify_dependencies():
-                raise Exception("Missing required dependencies")
-
-            if not self.check_git_repo():
-                raise Exception("Invalid git repository")
-
-            # Setup backup directory if not skipped
-            if not self.skip_backups and not self.dry_run:
-                if not self.setup_backup_directory():
-                    raise Exception("Failed to setup backup directory")
-
-            # Installation steps
-            steps = [
-                ("Installing security components", self.install_security_components),
-                ("Installing Git configuration", self.install_git_config),
-                ("Installing shell configuration", self.install_shell_config),
-                ("Installing application configs", self.install_app_configs),
-            ]
-
-            for step_name, step_func in steps:
-                self.log.info(f"\n=== {step_name} ===")
-                if not step_func():
-                    raise Exception(f"Failed during: {step_name}")
-
-            if self.dry_run:
-                self.log.info("\n✨ Dry run completed - no changes were made")
-            else:
-                self.log.info("\n✨ Dotfiles installation complete!")
-                if not self.skip_backups:
-                    self.log.info(
-                        f"Your old configs have been backed up to {self.current_backup_dir}"
+        # Add OS-specific configs
+        match self.system:
+            case "Darwin":
+                configs[ConfigType.SHELL].append(
+                    Config(
+                        source=self.dotfiles / "shell/.darwin.zsh",
+                        target=self.home / ".darwin.zsh",
+                        mode=0o644,
                     )
-                self.log.info("Please restart your shell for changes to take effect.")
+                )
+                configs[ConfigType.SECURITY].append(
+                    Config(
+                        source=self.dotfiles / "gnupg/gpg-agent.conf",
+                        target=self.home / ".gnupg/gpg-agent.conf",
+                        mode=0o600,
+                    )
+                )
+            case "Linux":
+                configs[ConfigType.SHELL].append(
+                    Config(
+                        source=self.dotfiles / "shell/.linux.zsh",
+                        target=self.home / ".linux.zsh",
+                        mode=0o644,
+                    )
+                )
+
+        # Add app-specific configs if available
+        self._add_app_configs(configs)
+        return configs
+
+    def _add_app_configs(self, configs: dict[ConfigType, list[Config]]) -> None:
+        """Add application-specific configurations"""
+        if shutil.which("kitty"):
+            configs[ConfigType.APP].append(
+                Config(
+                    source=self.dotfiles / "config/kitty/kitty.conf",
+                    target=self.config / "kitty/kitty.conf",
+                    mode=0o644,
+                )
+            )
+
+        if shutil.which("htop"):
+            configs[ConfigType.APP].append(
+                Config(
+                    source=self.dotfiles / "config/htop/htoprc",
+                    target=self.config / "htop/htoprc",
+                    mode=0o644,
+                )
+            )
+
+        zed_config = self.dotfiles / "config/zed/settings.json"
+        if zed_config.exists():
+            configs[ConfigType.APP].append(
+                Config(
+                    source=zed_config,
+                    target=self.config
+                    / ("zed" if self.system == "Darwin" else "zed.dev")
+                    / "settings.json",
+                    mode=0o644,
+                )
+            )
+
+    async def verify_dependencies(self) -> bool:
+        """Check if required dependencies are installed"""
+        # Check basic dependencies
+        for cmd in ("git", "zsh"):
+            if not shutil.which(cmd):
+                self.log.error(f"Missing required dependency: {cmd}")
+                return False
+
+        # Verify Z4H installation - check both the command and the initialization file
+        try:
+            # Check if z4h is initialized in the current shell
+            z4h_init = self.home / ".cache/zsh4humans/v5/z4h.zsh"
+            if z4h_init.exists():
+                return True
+
+            # Check if z4h command is available
+            proc = await asyncio.create_subprocess_exec(
+                "zsh",
+                "-c",
+                "source ~/.zshenv && (( $+functions[z4h] ))",
+                stdout=asyncio.subprocess.DEVNULL,
+                stderr=asyncio.subprocess.DEVNULL,
+            )
+            if (await proc.wait()) == 0:
+                return True
+
+            self.log.warning("Zsh4Humans not detected - installation required")
+            return False
+
+        except Exception as e:
+            self.log.error(f"Error checking Z4H installation: {e}")
+            return False
+
+    async def setup_directories(self) -> None:
+        """Create necessary directories with appropriate permissions"""
+        directories = {
+            self.home / ".cache" / "zsh": 0o755,
+            self.home / ".local" / "state" / "zsh": 0o755,
+            self.home / ".local" / "share" / "zsh": 0o755,
+            self.home / ".ssh" / "control": 0o700,
+            self.config: 0o755,
+        }
+
+        for path, mode in directories.items():
+            try:
+                path.mkdir(parents=True, exist_ok=True)
+                path.chmod(mode)
+            except Exception as e:
+                raise InstallationError(f"Failed to create directory {path}: {e}")
+
+    async def backup_file(self, path: Path) -> None:
+        """Create backup of existing file"""
+        if not path.exists():
+            return
+
+        try:
+            self.backup_dir.mkdir(parents=True, exist_ok=True)
+            backup_path = self.backup_dir / path.name
+
+            # Handle duplicate backup names
+            if backup_path.exists():
+                for i in range(1, 100):
+                    new_path = self.backup_dir / f"{path.name}.{i}"
+                    if not new_path.exists():
+                        backup_path = new_path
+                        break
+
+            shutil.copy2(path, backup_path)
+            self.log.info(f"Backed up: {path} → {backup_path}")
+        except Exception as e:
+            raise InstallationError(f"Failed to backup {path}: {e}")
+
+    async def create_symlink(self, config: Config) -> bool:
+        """Create symbolic link with proper permissions"""
+        if self.dry_run:
+            self.log.info(f"Would link: {config.target} → {config.source}")
+            return True
+
+        try:
+            if config.target.exists() or config.target.is_symlink():
+                if not self.force and config.target.exists():
+                    self.log.warning(f"Skipping existing file: {config.target}")
+                    return False
+                await self.backup_file(config.target)
+                config.target.unlink()
+
+            config.target.parent.mkdir(parents=True, exist_ok=True)
+            config.target.symlink_to(config.source)
+            config.target.chmod(config.mode)
+            self.log.info(f"Linked: {config.target} → {config.source}")
+            return True
+        except Exception as e:
+            if config.required:
+                raise InstallationError(
+                    f"Failed to link required file {config.target}: {e}"
+                )
+            self.log.error(f"Failed to link {config.target}: {e}")
+            return False
+
+    async def create_local_customization(self) -> None:
+        """Create local customization file"""
+        if self.dry_run:
+            self.log.info("Would create local customization file")
+            return
+
+        try:
+            local_zshrc = self.home / ".zshrc.local"
+            if not local_zshrc.exists():
+                local_zshrc.write_text(
+                    "# Local ZSH customizations\n"
+                    "# This file is sourced at the end of .zshrc\n"
+                )
+                local_zshrc.chmod(0o644)
+                self.log.info("Created local customization file")
+        except Exception as e:
+            self.log.error(f"Failed to create local customization file: {e}")
+
+    async def install(self) -> bool:
+        """Install all configuration files"""
+        try:
+            await self.verify_dependencies()
+            configs = self.get_configs()
+            success = True
+
+            for config_type, config_list in configs.items():
+                self.log.info(f"\nInstalling {config_type.value} configurations...")
+                for config in config_list:
+                    if not await self.create_symlink(config):
+                        success = False
+
+            await self.create_local_customization()
+            return success
+
+        except DotfilesError as e:
+            self.log.error(str(e))
+            return False
+
+    @classmethod
+    async def run_install(cls, args: argparse.Namespace) -> int:
+        """Run the installation process"""
+        try:
+            async with cls(dry_run=args.dry_run, force=args.force) as installer:
+                if await installer.install():
+                    installer.log.info("\n✨ Dotfiles installation complete!")
+                    installer.log.info(f"Backups stored in: {installer.backup_dir}")
+                    installer.log.info(
+                        "Please restart your shell for changes to take effect."
+                    )
+                    return 0
+                return 1
+        except Exception as e:
+            print(f"Fatal error: {e}", file=sys.stderr)
+            return 1
+
+
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(description="Install dotfiles")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be done"
+    )
+    parser.add_argument(
+        "--force", action="store_true", help="Force overwrite existing files"
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    installer = DotfilesInstaller()
-    installer.run()
+    sys.exit(asyncio.run(DotfilesInstaller.run_install(parse_args())))

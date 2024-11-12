@@ -1,13 +1,6 @@
 #!/usr/bin/env zsh
-
-# Check if required commands exist
-if ! command -v docker >/dev/null 2>&1; then
-    echo "Warning: docker is not installed. Docker functions will not be available." >&2
-fi
-
-if ! command -v kubectl >/dev/null 2>&1; then
-    echo "Warning: kubectl is not installed. Kubernetes functions will not be available." >&2
-fi
+# Docker operations and utilities
+# Provides container and Kubernetes management functions
 
 ###################
 # Docker Operations

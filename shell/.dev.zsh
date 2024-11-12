@@ -1,94 +1,92 @@
 #!/usr/bin/env zsh
-
-# Source git aliases
-z4h source ~/.aliases-git
-
-###############################################################################
-# Editor Aliases
-###############################################################################
-alias e="$EDITOR"
-alias z="zed"
-alias z.="zed ."
-alias c="code"
-alias c.="code ."
-alias v="nvim"
-alias v.="nvim ."
+# Development environment configuration
+# Language-specific settings and tools
 
 ###############################################################################
-# Modern CLI Replacements
+# mise (formerly rtx) Package Manager
 ###############################################################################
+if command_exists mise; then
+    # Initialize mise
+    eval "$(mise activate zsh)"
 
-# File Operations & Viewing
-# ------------------------
-command_exists bat &&
-    alias cat="bat --plain --paging=never" # Enhanced file viewing
+    # Core operations
+    alias mi="mise install" # Install tool version
+    alias miu="mise use"    # Use specific version
+    alias mil="mise list"   # List installed versions
+    alias mig="mise global" # Set global version
+    alias mil="mise local"  # Set local version
+    alias mir="mise run"    # Run command with tool
+    alias mie="mise exec"   # Execute with tool version
 
-# Enhanced ls with eza
-if command_exists eza; then
-    alias ls="eza --icons --git"      # Basic listing
-    alias l="eza -l --icons --git"    # Long listing
-    alias ll="eza -l --icons --git"   # Detailed listing
-    alias la="eza -a --icons --git"   # Show hidden files
-    alias lla="eza -la --icons --git" # Long with hidden
-    alias lt="eza -T --icons --git"   # Tree listing
-    alias tree="eza --tree --icons"   # Tree view
+    function mise-setup() {
+        local tools=(
+            python@latest
+            go@latest
+            rust@latest
+            node@lts
+            ruby@latest
+        )
+
+        for tool in "${tools[@]}"; do
+            mise install "$tool"
+        done
+
+        # Set global versions
+        mise global python@latest go@latest rust@latest
+    }
 fi
 
-# Search and Navigation
-# --------------------
-command_exists rg && alias grep="rg" # Better text search
-command_exists fd && alias find="fd" # Better file search
-command_exists fzf &&
-    alias preview="fzf --preview 'bat --color=always {}'" # Interactive preview
-
-# System Monitoring
-# ----------------
-command_exists duf && alias df="duf"            # Better disk usage
-command_exists dust && alias du="dust"          # Better dir usage
-command_exists procs && alias ps="procs"        # Better process view
-command_exists btop && alias top="btop"         # Better system monitor
-command_exists htop && alias htop="htop --tree" # Tree process view
-
-# File Comparison & Network
-# ------------------------
-command_exists delta && alias diff="delta" # Better diff tool
-command_exists doggo && alias dig="doggo"  # Better DNS lookup
-command_exists gping && alias ping="gping" # Visual ping tool
-
 ###############################################################################
-# Safe File Operations
+# Go Development
 ###############################################################################
+if command_exists go; then
+    # Build and Run
+    alias gr="go run"               # Run package
+    alias grun="go run ."           # Run current package
+    alias gb="go build"             # Build package
+    alias gbd="go build -race"      # Build with race detector
+    alias gi="go install"           # Install package
+    alias gct="go clean -testcache" # Clean test cache
 
-# Core Operations
-alias rm="rm -i"        # Safe removal
-alias rmd="rmdir"       # Remove directory
-alias rmrf="rm -rf"     # Force removal
-alias cp="cp -ia"       # Safe copy
-alias mv="mv -i"        # Safe move
-alias mkdir="mkdir -pv" # Recursive mkdir
+    # Testing
+    alias gt="go test"                                    # Run tests
+    alias gta="go test ./..."                             # Test all packages
+    alias gtv="go test -v ./..."                          # Verbose testing
+    alias gtc="go test -cover ./..."                      # Test coverage
+    alias gtb="go test -bench=."                          # Run benchmarks
+    alias gtr="go test -race ./..."                       # Test with race detector
+    alias gtcf="go test -coverprofile=coverage.out ./..." # Coverage file
+    alias gtw="gotestsum --watch"                         # Watch tests (requires gotestsum)
 
-# Advanced Operations
-alias cpv="rsync -ah --info=progress2"                       # Copy with progress
-alias mvv="rsync -ah --remove-source-files --info=progress2" # Move with progress
-alias symlink="ln -sf"                                       # Force symlink
+    # Dependencies
+    alias gm="go mod"           # Mod shorthand
+    alias gmt="go mod tidy"     # Tidy modules
+    alias gmv="go mod verify"   # Verify dependencies
+    alias gmd="go mod download" # Download dependencies
+    alias gmu="go get -u ./..." # Update dependencies
+    alias gmw="go mod why"      # Why is module needed
+    alias gme="go mod edit"     # Edit go.mod
+    alias gmg="go mod graph"    # Module dependency graph
 
-###############################################################################
-# Directory Navigation
-###############################################################################
+    # Tools and Analysis
+    alias gf="go fmt ./..."         # Format code
+    alias gfi="go fix ./..."        # Fix deprecated syntax
+    alias glint="golangci-lint run" # Run linter
+    alias gv="go vet ./..."         # Run vet
+    alias ggen="go generate ./..."  # Generate code
 
-# Quick Traversal
-alias ..="cd .."         # Up one level
-alias ...="cd ../.."     # Up two levels
-alias ....="cd ../../.." # Up three levels
-alias -- -="cd -"        # Previous directory
-alias d='dirs -v'        # Directory stack
+    # Development Tools
+    alias gwi="go work init" # Initialize workspace
+    alias gwa="go work add"  # Add module to workspace
+    alias gws="go work sync" # Sync workspace
+    alias gwe="go work edit" # Edit workspace
 
-# Common Directories
-alias dl="cd ~/Downloads"  # Go to Downloads
-alias doc="cd ~/Documents" # Go to Documents
-alias dt="cd ~/Desktop"    # Go to Desktop
-alias p="cd ~/Projects"    # Go to Projects
-alias ghub="cd ~/github"   # Go to GitHub
+    # Version and Environment
+    alias gver="go version"     # Show Go version
+    alias genv="go env"         # Show Go environment
+    alias gpath="go env GOPATH" # Show GOPATH
+    alias groot="go env GOROOT" # Show GOROOT
+fi
 
 ###############################################################################
 # Python Development
@@ -133,60 +131,6 @@ if command_exists python3; then
     alias pyrepl="python -m IPython"                # Enhanced Python REPL
     alias jupyter="python -m jupyter notebook"      # Start Jupyter notebook
     alias jupyterlab="python -m jupyter lab"        # Start JupyterLab
-fi
-
-###############################################################################
-# Go Development
-###############################################################################
-if command_exists go; then
-    # Build and Run
-    alias gr="go run"               # Run package
-    alias grun="go run ."           # Run current package
-    alias gb="go build"             # Build package
-    alias gbd="go build -race"      # Build with race detector
-    alias gi="go install"           # Install package
-    alias gct="go clean -testcache" # Clean test cache
-
-    # Testing
-    alias gt="go test"                                    # Run tests
-    alias gta="go test ./..."                             # Test all packages
-    alias gtv="go test -v ./..."                          # Verbose testing
-    alias gtc="go test -cover ./..."                      # Test coverage
-    alias gtb="go test -bench=."                          # Run benchmarks
-    alias gtr="go test -race ./..."                       # Test with race detector
-    alias gtcf="go test -coverprofile=coverage.out ./..." # Coverage file
-    alias gtw="gotestsum --watch"                         # Watch tests (requires gotestsum)
-
-    # Dependencies
-    alias gm="go mod"           # Mod shorthand
-    alias gmt="go mod tidy"     # Tidy modules
-    alias gmv="go mod verify"   # Verify dependencies
-    alias gmd="go mod download" # Download dependencies
-    alias gmu="go get -u ./..." # Update dependencies
-    alias gmw="go mod why"      # Why is module needed
-    alias gme="go mod edit"     # Edit go.mod
-    alias gmg="go mod graph"    # Module dependency graph
-
-    # Tools and Analysis
-    alias gf="go fmt ./..."         # Format code
-    alias gfi="go fix ./..."        # Fix deprecated syntax
-    alias glint="golangci-lint run" # Run linter
-    alias gv="go vet ./..."         # Run vet
-    alias ggen="go generate ./..."  # Generate code
-    alias gdoc="godoc -http=:6060"  # Start godoc server
-
-    # Development Tools
-    # alias gw="gopls"         # Language server
-    alias gwi="go work init" # Initialize workspace
-    alias gwa="go work add"  # Add module to workspace
-    alias gws="go work sync" # Sync workspace
-    alias gwe="go work edit" # Edit workspace
-
-    # Version and Environment
-    alias gv="go version"       # Show Go version
-    alias genv="go env"         # Show Go environment
-    alias gpath="go env GOPATH" # Show GOPATH
-    alias groot="go env GOROOT" # Show GOROOT
 fi
 
 ###############################################################################
@@ -298,7 +242,7 @@ if command_exists cargo; then
 fi
 
 ###############################################################################
-# JavaScript Development
+# Node.js Development
 ###############################################################################
 if command_exists node; then
     # Node and NPM basics
@@ -326,20 +270,7 @@ if command_exists node; then
     alias nrf="npm run format" # Run formatter
 fi
 
-# Yarn commands (if available)
-if command_exists yarn; then
-    alias y="yarn"             # Yarn shorthand
-    alias ya="yarn add"        # Add dependency
-    alias yad="yarn add --dev" # Add dev dependency
-    alias yr="yarn remove"     # Remove package
-    alias yu="yarn upgrade"    # Upgrade packages
-    alias yd="yarn dev"        # Run dev server
-    alias yb="yarn build"      # Build project
-    alias yt="yarn test"       # Run tests
-    alias yl="yarn lint"       # Run linter
-fi
-
-# PNPM commands (if available)
+# pnpm commands (if available)
 if command_exists pnpm; then
     alias p="pnpm"          # PNPM shorthand
     alias pi="pnpm install" # Install dependencies

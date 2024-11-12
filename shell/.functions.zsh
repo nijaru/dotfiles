@@ -30,13 +30,6 @@
 #   git-clean         - Clean up merged branches
 #   git-prune         - Prune remote branches and tags
 
-# Container Operations:
-#   dksh              - Interactive container shell access
-#   dklogs            - View container logs interactively
-#   dkclean           - Clean up docker system
-#   dkstats           - Show container resource usage
-#   dkprune           - Remove unused containers, images, and volumes
-
 # Development Tools:
 #   venv              - Create and activate Python virtual environment
 #   gotest            - Run Go tests with coverage report
@@ -97,8 +90,11 @@ function lazy_load() {
 # Safely source files with error checking
 # Usage: safe_source ~/.local/env
 function safe_source() {
-    local file=$1
-    [[ -f $file ]] && source "$file" || echo "Warning: $file not found" >&2
+    if [[ -f "$1" ]]; then
+        source "$1"
+    else
+        print -P "%F{yellow}Warning:%f Could not source $1" >&2
+    fi
 }
 
 # Add directory to PATH if it exists
@@ -417,170 +413,6 @@ function git-prune() {
     git gc --prune=now
 
     echo "Cleanup complete"
-}
-
-###################
-# Container Operations
-###################
-
-# Interactive container shell access
-# Usage: dksh [container_name_filter] [shell]
-function dksh() {
-    if ! command_exists docker; then
-        echo "Docker is not installed" >&2
-        return 1
-    fi
-
-    local containers
-    if [[ -z "$(docker ps -q)" ]]; then
-        echo "No running containers found" >&2
-        return 1
-    fi
-
-    local cid
-    cid=$(docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" |
-        sed '1d' |
-        fzf --header "Select container" \
-            --preview 'docker inspect {1}' \
-            --preview-window right:70% \
-            --query "$1" |
-        awk '{print $1}')
-
-    if [[ -n "$cid" ]]; then
-        local shell=${2:-sh}
-        echo "Connecting to container $cid using $shell..."
-        docker exec -it "$cid" "$shell"
-    fi
-}
-
-# View container logs interactively
-# Usage: dklogs [container_name_filter]
-function dklogs() {
-    if ! command_exists docker; then
-        echo "Docker is not installed" >&2
-        return 1
-    fi
-
-    local cid
-    cid=$(docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" |
-        sed '1d' |
-        fzf --header "Select container to view logs" \
-            --preview 'docker logs --tail 50 {1}' \
-            --preview-window right:70% \
-            --query "$1" |
-        awk '{print $1}')
-
-    if [[ -n "$cid" ]]; then
-        echo "Streaming logs for container $cid..."
-        docker logs -f "$cid"
-    fi
-}
-
-# Clean up docker system
-# Usage: dkclean
-function dkclean() {
-    if ! command_exists docker; then
-        echo "Docker is not installed" >&2
-        return 1
-    fi
-
-    echo "=== Docker Cleanup ==="
-    echo "This will remove:"
-    echo "- All stopped containers"
-    echo "- All networks not used by at least one container"
-    echo "- All dangling images"
-    echo "- All dangling build cache"
-
-    read -q "REPLY?Are you sure you want to proceed? [y/N] "
-    echo
-
-    if [[ "$REPLY" == "y" ]]; then
-        echo
-        echo "Cleaning up containers..."
-        docker container prune -f
-
-        echo
-        echo "Cleaning up networks..."
-        docker network prune -f
-
-        echo
-        echo "Cleaning up images..."
-        docker image prune -f
-
-        echo
-        echo "Cleaning up build cache..."
-        docker builder prune -f
-
-        echo
-        echo "Cleanup complete"
-    fi
-}
-
-# Show container resource usage
-# Usage: dkstats
-function dkstats() {
-    if ! command_exists docker; then
-        echo "Docker is not installed" >&2
-        return 1
-    fi
-
-    local running_containers
-    running_containers=$(docker ps -q)
-
-    if [[ -z "$running_containers" ]]; then
-        echo "No running containers found" >&2
-        return 1
-    fi
-
-    docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
-}
-
-# Remove unused containers, images, and volumes
-# Usage: dkprune
-function dkprune() {
-    if ! command_exists docker; then
-        echo "Docker is not installed" >&2
-        return 1
-    fi
-
-    echo "=== Docker Deep Cleanup ==="
-    echo "This will remove:"
-    echo "- All stopped containers"
-    echo "- All networks not used by at least one container"
-    echo "- All volumes not used by at least one container"
-    echo "- All unused images"
-    echo "- All build cache"
-
-    read -q "REPLY?Are you sure you want to proceed? [y/N] "
-    echo
-
-    if [[ "$REPLY" == "y" ]]; then
-        echo
-        echo "Pruning containers..."
-        docker container prune -f
-
-        echo
-        echo "Pruning networks..."
-        docker network prune -f
-
-        echo
-        echo "Pruning volumes..."
-        docker volume prune -f
-
-        echo
-        echo "Pruning images..."
-        docker image prune -a -f
-
-        echo
-        echo "Pruning build cache..."
-        docker builder prune -a -f
-
-        echo
-        echo "Deep cleanup complete"
-
-        # Show remaining disk usage
-        docker system df
-    fi
 }
 
 ###################

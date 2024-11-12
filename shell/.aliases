@@ -352,26 +352,3 @@ if command_exists pnpm; then
     alias pt="pnpm test"    # Run tests
     alias pl="pnpm lint"    # Run linter
 fi
-
-###############################################################################
-# Docker Compose Operations
-###############################################################################
-alias dc="docker compose"          # Basic compose command
-alias dcu="docker compose up -d"   # Start containers in background
-alias dcd="docker compose down"    # Stop and remove containers
-alias dcl="docker compose logs -f" # Follow container logs
-alias dcp="docker compose pull"    # Pull latest images
-alias dcr="docker compose restart" # Restart containers
-alias dcs="docker compose stop"    # Stop containers
-alias dcps="docker compose ps"     # List containers
-alias dcb="docker compose build"   # Build containers
-alias dce="docker compose exec"    # Execute command in container
-alias dccp="docker compose cp"     # Copy files between host and containers
-
-# Development helpers
-alias dcdev="docker compose -f docker-compose.yml -f docker-compose.dev.yml"
-alias dcprod="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
-
-# Cleanup commands
-alias dcrm="docker compose rm -f"                              # Remove stopped containers
-alias dcprune="docker compose down --volumes --remove-orphans" # Full cleanup

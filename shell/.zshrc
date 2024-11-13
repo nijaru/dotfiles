@@ -1,7 +1,6 @@
 #!/usr/bin/env zsh
 # ~/.zshrc
 # Core zsh configuration file optimized for zsh4humans framework
-# Last Modified: 2024-01-24
 
 ###################
 # Initialization Check

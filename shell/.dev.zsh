@@ -43,8 +43,8 @@ if command_exists go; then
     # Build and Run
     alias gr="go run"               # Run package
     alias grun="go run ."           # Run current package
-    alias gb="go build"             # Build package
-    alias gbd="go build -race"      # Build with race detector
+    alias gbd="go build"            # Build package
+    alias gbdr="go build -race"     # Build with race detector
     alias gi="go install"           # Install package
     alias gct="go clean -testcache" # Clean test cache
 
@@ -69,7 +69,7 @@ if command_exists go; then
     alias gmg="go mod graph"    # Module dependency graph
 
     # Tools and Analysis
-    alias gf="go fmt ./..."         # Format code
+    # alias gf="go fmt ./..."         # Format code
     alias gfi="go fix ./..."        # Fix deprecated syntax
     alias glint="golangci-lint run" # Run linter
     alias gv="go vet ./..."         # Run vet

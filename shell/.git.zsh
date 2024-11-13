@@ -81,6 +81,7 @@ alias gstc="git stash clear"               # Clear all stashes
 alias gf="git fetch --all --prune"      # Fetch and clean up
 alias gpl="git pull --rebase"           # Pull with rebase
 alias gp="git push"                     # Normal push
+alias gpa="git push --all"              # Push all branches
 alias gpf="git push --force-with-lease" # Safer force push
 alias gpu="git push --set-upstream"     # Set upstream while pushing
 alias gpsup='git push --set-upstream origin $(git_current_branch)'

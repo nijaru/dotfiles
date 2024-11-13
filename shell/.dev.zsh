@@ -43,8 +43,8 @@ if command_exists go; then
     # Build and Run
     alias gr="go run"               # Run package
     alias grun="go run ."           # Run current package
-    alias gbd="go build"            # Build package
-    alias gbdr="go build -race"     # Build with race detector
+    alias gbld="go build"           # Build package
+    alias gbldr="go build -race"    # Build with race detector
     alias gi="go install"           # Install package
     alias gct="go clean -testcache" # Clean test cache
 

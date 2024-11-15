@@ -43,9 +43,11 @@ export VISUAL="zed"
 export ALTERNATE_EDITOR="nvim"
 
 # Pager settings
-export PAGER="less"
-export LESS="-R --mouse --wheel-lines=3"
-export LESSHISTFILE="${XDG_STATE_HOME}/less/history"
+export PAGER="moar"
+export MOAR="--style=catppuccin-mocha --quit-if-one-screen --no-statusbar --wrap"
+
+# Bat configuration
+export BAT_THEME="gruvbox-dark"
 
 ###################
 # Tool Configuration

@@ -224,6 +224,7 @@ done
 # Function completions
 compdef _git gbr=git-checkout
 compdef _git git-clean=git-branch
+compdef uv=python3
 
 # WSL support
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home

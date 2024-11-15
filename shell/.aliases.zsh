@@ -22,8 +22,8 @@ alias v.="nvim ."
 
 # File Operations & Viewing
 # ------------------------
-command_exists bat &&
-    alias cat="bat --plain --paging=never" # Enhanced file viewing
+command_exists bat && alias cat="bat --plain --paging=never" # Enhanced file viewing
+command_exists moar && alias less="moar"                     # Better pager
 
 # Enhanced ls with eza
 if command_exists eza; then

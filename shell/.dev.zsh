@@ -59,7 +59,7 @@ if command_exists go; then
     alias gtw="gotestsum --watch"                         # Watch tests (requires gotestsum)
 
     # Dependencies
-    alias gm="go mod"           # Mod shorthand
+    alias gmod="go mod"         # Mod shorthand
     alias gmt="go mod tidy"     # Tidy modules
     alias gmv="go mod verify"   # Verify dependencies
     alias gmd="go mod download" # Download dependencies
@@ -280,7 +280,7 @@ if command_exists node; then
     alias nr="npm run"                 # Run npm script
     alias ni="npm install"             # Install dependencies
     alias nid="npm install --save-dev" # Install dev dependency
-    alias nu="npm update"              # Update dependencies
+    alias nup="npm update"             # Update dependencies
     alias nout="npm outdated"          # Show outdated packages
     alias nrm="npm remove"             # Remove package
 

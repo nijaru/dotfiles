@@ -180,3 +180,11 @@ alias services="cd /etc/systemd/system"
 # Web server configs
 alias apache="cd /etc/apache2"
 alias nginx="cd /etc/nginx"
+
+###################
+# File Operations
+###################
+# XDG open command
+if command_exists xdg-open; then
+    alias o="xdg-open"
+fi

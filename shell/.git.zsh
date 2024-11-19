@@ -54,6 +54,7 @@ alias grmc="git rm --cached" # Untrack files
 # Unstaging
 alias grs="git restore"           # Restore working tree files
 alias grss="git restore --staged" # Unstage files
+alias grh1="git reset HEAD~1"     # Reset to previous commit
 alias gclean="git clean -df"      # Remove untracked files
 alias gnuke="git clean -dffx"     # Remove all untracked files (including ignored)
 

@@ -62,6 +62,46 @@ function clean_path() {
 }
 
 ###############################################################################
+# Editor Functions
+###############################################################################
+# Open editor with automatic directory creation
+# Usage: edit_with_mkdir <editor_command> [path]
+function edit_with_mkdir() {
+    local editor=$1
+    shift || return 1  # Remove editor from args and error if no editor specified
+
+    # Validate editor exists
+    if ! command_exists "$editor"; then
+        echo "Error: Editor '$editor' not found" >&2
+        return 1
+    fi
+
+    if [[ $# -eq 0 ]]; then
+        # No arguments, just launch editor
+        "$editor"
+        return
+    fi
+
+    for arg in "$@"; do
+        local dir
+        if [[ -d "$arg" ]]; then
+            "$editor" "$arg"
+        else
+            dir=$(dirname "$arg")
+            if [[ ! -d "$dir" ]]; then
+                mkdir -p "$dir" && echo "Created directory: $dir"
+            fi
+            "$editor" "$arg"
+        fi
+    done
+}
+
+# Wrapper functions for specific editors
+function z() { edit_with_mkdir zed "$@"; }
+function c() { edit_with_mkdir code "$@"; }
+function v() { edit_with_mkdir nvim "$@"; }
+
+###############################################################################
 # File & Directory Operations
 ###############################################################################
 # Create and enter directory with error handling

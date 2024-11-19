@@ -9,12 +9,9 @@ z4h source ~/.git.zsh
 # Editor Aliases
 ###############################################################################
 alias e="$EDITOR"
-alias z="zed"
-alias z.="zed ."
-alias c="code"
-alias c.="code ."
-alias v="nvim"
-alias v.="nvim ."
+alias z.="z ."
+alias c.="c ."
+alias v.="v ."
 
 ###############################################################################
 # Modern CLI Replacements

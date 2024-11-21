@@ -4,6 +4,7 @@
 ###################
 # System Management
 ###################
+
 # Systemd service management
 if command_exists systemctl; then
     # Service control
@@ -31,6 +32,7 @@ fi
 ###################
 # Package Management
 ###################
+
 # Debian/Ubuntu specific
 if command_exists apt; then
     # Basic operations
@@ -81,6 +83,7 @@ fi
 ###################
 # File System Operations
 ###################
+
 # Mount operations
 alias mount-smb="sudo mount -t cifs"
 alias mount-nfs="sudo mount -t nfs"
@@ -95,6 +98,7 @@ fi
 ###################
 # Process Management
 ###################
+
 # Process viewing
 alias pstree="pstree -p" # Show PIDs
 alias watch="watch -c"   # Colorized watch
@@ -112,6 +116,7 @@ alias dmesg="sudo dmesg -T" # Human readable timestamps
 ###################
 # Network Management
 ###################
+
 # NetworkManager
 if command_exists nmcli; then
     alias nmr="sudo systemctl restart NetworkManager"
@@ -134,6 +139,7 @@ fi
 ###################
 # Display Management
 ###################
+
 # X11 specific
 if command_exists xrandr; then
     alias displays="xrandr --query"
@@ -148,6 +154,7 @@ fi
 ###################
 # Audio Management
 ###################
+
 # PulseAudio/Pipewire
 if command_exists pactl; then
     alias audio-restart="systemctl --user restart pulseaudio.service"
@@ -158,6 +165,7 @@ fi
 ###################
 # Security
 ###################
+
 # AppArmor/SELinux
 if command_exists aa-status; then
     alias aa-reload="sudo systemctl reload apparmor"
@@ -170,6 +178,7 @@ fi
 ###################
 # Quick Directory Access
 ###################
+
 # System directories
 alias conf="cd /etc"
 alias logs="cd /var/log"
@@ -184,6 +193,7 @@ alias nginx="cd /etc/nginx"
 ###################
 # File Operations
 ###################
+
 # XDG open command
 if command_exists xdg-open; then
     alias o="xdg-open"

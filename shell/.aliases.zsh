@@ -1,9 +1,12 @@
 #!/usr/bin/env zsh
-# Core aliases and shell utilities
-# Source additional alias files as needed
+# ~/.aliases.zsh
 
-# Source git aliases
-z4h source ~/.git.zsh
+# Ensure `command_exists` function is available
+if ! type command_exists >/dev/null 2>&1; then
+    function command_exists() {
+        command -v "$1" >/dev/null 2>&1
+    }
+fi
 
 ###############################################################################
 # Editor Aliases
@@ -19,40 +22,46 @@ alias v.="v ."
 
 # File Operations & Viewing
 # ------------------------
-command_exists bat && alias cat="bat --plain --paging=never" # Enhanced file viewing
-command_exists moar && alias less="moar"                     # Better pager
+if command_exists bat; then
+    # Replace 'cat' with 'bat' and set default arguments
+    alias cat='bat --plain --paging=never'
+fi
 
-# Enhanced ls with eza
+if command_exists moar; then
+    # Replace 'less' with 'moar'
+    alias less='moar'
+fi
+
 if command_exists eza; then
-    alias ls="eza --icons --git"      # Basic listing
-    alias l="eza -l --icons --git"    # Long listing
-    alias ll="eza -l --icons --git"   # Detailed listing
-    alias la="eza -a --icons --git"   # Show hidden files
-    alias lla="eza -la --icons --git" # Long with hidden
-    alias lt="eza -T --icons --git"   # Tree listing
-    alias tree="eza --tree --icons"   # Tree view
+    # Replace 'ls' with 'eza' and set default arguments
+    alias ls='eza --icons --git'
+    # Aliases for common 'ls' options
+    alias l='ls -l'                # Long listing
+    alias ll='ls -l'               # Detailed listing
+    alias la='ls -a'               # Show hidden files
+    alias lla='ls -la'             # Long with hidden
+    alias lt='ls -T'               # Tree listing
+    alias tree='ls --tree --icons' # Tree view with icons
 fi
 
 # Search and Navigation
 # --------------------
-command_exists rg && alias grep="rg" # Better text search
-command_exists fd && alias find="fd" # Better file search
-command_exists fzf &&
-    alias preview="fzf --preview 'bat --color=always {}'" # Interactive preview
+command_exists rg && alias grep='rg'
+command_exists fd && alias find='fd'
+command_exists fzf && command_exists bat && alias preview="fzf --preview 'bat --color=always {}'"
 
 # System Monitoring
 # ----------------
-command_exists duf && alias df="duf"            # Better disk usage
-command_exists dust && alias du="dust"          # Better dir usage
-command_exists procs && alias ps="procs"        # Better process view
-command_exists btop && alias top="btop"         # Better system monitor
-command_exists htop && alias htop="htop --tree" # Tree process view
+command_exists duf && alias df='duf'
+command_exists dust && alias du='dust'
+command_exists procs && alias ps='procs'
+command_exists btop && alias top='btop'
 
 # File Comparison & Network
 # ------------------------
-command_exists delta && alias diff="delta" # Better diff tool
-command_exists doggo && alias dig="doggo"  # Better DNS lookup
-command_exists gping && alias ping="gping" # Visual ping tool
+command_exists delta && alias diff='delta'
+command_exists doggo && alias dig='doggo'
+command_exists gping && alias ping='gping'
 
 ###############################################################################
 # Safe File Operations
@@ -60,11 +69,8 @@ command_exists gping && alias ping="gping" # Visual ping tool
 
 # Core Operations
 alias t="touch"         # Create file
-alias rm="rm -i"        # Safe removal
 alias rmd="rmdir"       # Remove directory
 alias rmrf="rm -rf"     # Force removal
-alias cp="cp -ia"       # Safe copy
-alias mv="mv -i"        # Safe move
 alias mkdir="mkdir -pv" # Recursive mkdir
 alias ez="exec zsh"     # Restart shell
 

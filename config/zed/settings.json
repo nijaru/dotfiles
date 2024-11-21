@@ -9,7 +9,7 @@
   "buffer_font_size": 14,
   "wrap_guides": [80],
 
-  "active_pane_modifiers": { "inactive_opacity": 0.8 },
+  // "active_pane_modifiers": { "inactive_opacity": 0.8 },
 
   "format_on_save": "on",
   "ensure_final_newline_on_save": true,

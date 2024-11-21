@@ -266,3 +266,19 @@ compdef _kubectl kns=kubectl
 compdef _kubectl kctx=kubectl
 compdef _kubectl kpods=kubectl
 compdef _kubectl klogs=kubectl
+
+###################
+# OrbStack Initialization and Completion
+###################
+
+# Initialize OrbStack if available
+if [[ -r "$HOME/.orbstack/shell/init.zsh" ]]; then
+    z4h source "$HOME/.orbstack/shell/init.zsh"
+fi
+
+# Orbctl Command Completion
+if command -v orbctl >/dev/null 2>&1; then
+    z4h source <(orbctl completion zsh)
+    compdef _orb orbctl
+    compdef _orb orb
+fi

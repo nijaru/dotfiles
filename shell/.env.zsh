@@ -3,8 +3,19 @@
 # Defines base environment variables and paths used across the system
 
 ###################
+# Environment Variables
+###################
+# Export essential environment variables directly
+export EDITOR="zed"
+export VISUAL="zed"
+export ALTERNATE_EDITOR="nvim"
+export MOAR="--style=catppuccin-mocha --quit-if-one-screen --no-statusbar --wrap"
+export BAT_THEME="gruvbox-dark"
+
+###################
 # XDG Base Directories
 ###################
+
 # Core XDG paths - used by many applications
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
@@ -13,73 +24,52 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$UID}"
 
 # Ensure critical directories exist
-() {
-    local -a xdg_dirs=(
-        "$XDG_CONFIG_HOME"
-        "$XDG_CACHE_HOME"
-        "$XDG_DATA_HOME"
-        "$XDG_STATE_HOME"
-        "${XDG_CACHE_HOME}/zsh"
-        "${XDG_STATE_HOME}/less"
-        "${XDG_DATA_HOME}/gem"
-        "${XDG_CONFIG_HOME}/bundle"
-    )
-    for dir in $xdg_dirs; do
-        [[ -d "$dir" ]] || mkdir -p "$dir"
-    done
-}
-
-###################
-# Shell Configuration
-###################
-# History configuration
-export HISTSIZE=1000000
-export SAVEHIST=1000000
-export HISTFILE="${XDG_STATE_HOME}/zsh/history"
-
-# Default editors
-export EDITOR="zed"
-export VISUAL="zed"
-export ALTERNATE_EDITOR="nvim"
-
-# Pager settings
-export PAGER="moar"
-export MOAR="--style=catppuccin-mocha --quit-if-one-screen --no-statusbar --wrap"
-
-# Bat configuration
-export BAT_THEME="gruvbox-dark"
+for dir in \
+    "$XDG_CONFIG_HOME" \
+    "$XDG_CACHE_HOME" \
+    "$XDG_DATA_HOME" \
+    "$XDG_STATE_HOME" \
+    "${XDG_CACHE_HOME}/zsh" \
+    "${XDG_STATE_HOME}/less" \
+    "${XDG_DATA_HOME}/gem" \
+    "${XDG_CONFIG_HOME}/bundle"; do
+    mkdir -p "$dir"
+done
 
 ###################
 # Tool Configuration
 ###################
-# Development tools
+
+# Development Tools Paths
 export MISE_CONFIG_DIR="${XDG_CONFIG_HOME}/mise"
 export MISE_DATA_DIR="${XDG_DATA_HOME}/mise"
 export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
 
-# Container configuration
+# Container Configuration
 export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-# Language-specific settings
+# Go Language Settings
 export GOPATH="$HOME/go"
 export GOBIN="$GOPATH/bin"
 export GOTOOLCHAIN="local"
 export GOFLAGS="-buildvcs=false -trimpath"
 
+# Rust Language Settings
 export CARGO_HOME="$HOME/.cargo"
 export RUSTUP_HOME="$HOME/.rustup"
 export RUST_BACKTRACE=1
 
+# Node.js Settings
 export NODE_ENV="development"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
 
-# Python settings
-export PYTHONDONTWRITEBYTECODE=1        # Prevent .pyc files
-export PYTHONUNBUFFERED=1               # Disable output buffering
-export PYTHONFAULTHANDLER=1             # Better tracebacks
-export PYTHONHASHSEED=random            # Secure hash seeds
+# Python Settings
+export PYTHONDONTWRITEBYTECODE=1 # Prevent .pyc files
+export PYTHONUNBUFFERED=1        # Disable output buffering
+export PYTHONFAULTHANDLER=1      # Better tracebacks
+export PYTHONHASHSEED=random     # Secure hash seeds
 
 # Ruby Configuration
 export GEM_HOME="${XDG_DATA_HOME}/gem"
@@ -87,24 +77,19 @@ export GEM_PATH="${GEM_HOME}:${XDG_DATA_HOME}/gem"
 export BUNDLE_USER_HOME="${XDG_CONFIG_HOME}/bundle"
 
 ###################
-# Path Configuration
+# Environment Setup (Previously in .darwin.zsh, .linux.zsh, .env.zsh, etc.)
 ###################
-# Add local bins to path if they exist
-() {
-    local -a paths=(
-        "$HOME/.local/bin"
-        "$GOBIN"
-        "$CARGO_HOME/bin"
-        "$HOME/.mise/bin"
-        "${GEM_HOME}/bin"
-    )
 
-    for p in $paths; do
-        if [[ -d "$p" ]]; then
-            path=("$p" $path)
-        fi
-    done
-}
-
-# Clean up PATH
-typeset -U PATH path
+# Development Environment Setup
+case "$(uname -s)" in
+Darwin)
+    case "$(uname -m)" in
+    arm64 | aarch64)
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+        ;;
+    *)
+        eval "$(/usr/local/bin/brew shellenv)"
+        ;;
+    esac
+    ;;
+esac

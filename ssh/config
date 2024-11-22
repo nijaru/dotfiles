@@ -2,29 +2,21 @@ Host *
     # Common settings for all systems
     AddKeysToAgent yes
     IdentityFile ~/.ssh/id_ed25519
-
-    # macOS-specific settings only
-    Match exec "[ $(uname) = 'Darwin' ]"
-    UseKeychain yes
-
-    # Connection settings
     ServerAliveInterval 60
     ServerAliveCountMax 3
     ConnectTimeout 10
-
-    # Security
     HashKnownHosts yes
     PubkeyAuthentication yes
     PasswordAuthentication no
-
-    # Performance
     Compression yes
     TCPKeepAlive yes
-
-    # Control settings (if you want connection sharing)
     ControlMaster auto
     ControlPersist 1h
     ControlPath ~/.ssh/control/%C
+
+# macOS-specific settings
+Match exec "[ $(uname) = 'Darwin' ]"
+    UseKeychain yes
 
 # Include OrbStack config only on macOS
 Match exec "[ $(uname) = 'Darwin' ]"

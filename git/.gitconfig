@@ -23,9 +23,6 @@
     safecrlf = true                                    # Prevent mixed line endings
     longpaths = true                                   # Support paths > 260 chars
 
-    # Display
-    pager = delta                                      # Use delta for better diffs
-
     # Large file handling
     bigFileThreshold = 128m                            # Warning threshold for large files
     compression = 9                                    # Maximum compression
@@ -69,12 +66,19 @@
     renames = copies                                   # Detect copied files
     wsErrorHighlight = all                             # Show all whitespace errors
     indentHeuristic = true                             # Better indent detection
+    tool = difftastic                                  # Use difftastic for diffs
 [merge]
     conflictstyle = zdiff3                             # Better conflict resolution
     ff = only                                          # No merge commits when fast-forward possible
     renameLimit = 999999                               # Handle more renames in large repos
 [interactive]
     diffFilter = delta --color-only                    # Use delta for interactive diffs
+[difftool]
+    prompt = false
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+    difftool = true
 
 ###################
 # Remote Operations
@@ -172,6 +176,7 @@
     unstage = "reset HEAD --"                          # Unstage changes
     wip = "!git add -A && git commit -m 'WIP'"         # Quick work-in-progress commit
     unwip = "!git log -n 1 | grep -q -c WIP && git reset HEAD~1"  # Undo WIP commit
+    dft = "difftool"                                   # Open difftool
 
 # Include local overrides
 [include]

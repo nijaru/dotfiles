@@ -41,6 +41,7 @@ function edit_with_mkdir() {
 function z() { edit_with_mkdir zed "$@"; }
 function c() { edit_with_mkdir code "$@"; }
 function v() { edit_with_mkdir nvim "$@"; }
+function t() { edit_with_mkdir touch "$@"; }
 
 ###############################################################################
 # File & Directory Operations

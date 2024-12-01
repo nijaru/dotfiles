@@ -74,6 +74,7 @@ typeset -ga Z4H_CORE_FILES=(
     $HOME/.dev.zsh
     $HOME/.docker.zsh
     $HOME/.p10k.zsh
+    # $HOME/.tmux.zsh
 )
 
 # Platform-specific configuration
@@ -101,7 +102,6 @@ esac
 # Auto-update and core settings
 zstyle ':z4h:' auto-update yes
 zstyle ':z4h:' auto-update-days 7
-zstyle ':z4h:' cache-dir "$HOME/.cache/zsh"
 
 # Terminal and UI
 zstyle ':z4h:' prompt-height 1
@@ -110,14 +110,24 @@ zstyle ':z4h:' term-shell-integration yes
 zstyle ':z4h:*' term-vresize scroll
 zstyle ':z4h:*' use-path-helper yes
 zstyle ':z4h:*' pager 'moar'
+zstyle ':z4h:term:*' underline-urls yes
+zstyle ':z4h:term:*' mouse yes
+
+# Clipboard Integration
+zstyle ':z4h:*' propagate-clipboard yes
+
+# FZF Configuration
+zstyle ':z4h:fzf' command 'fd --type f --hidden --follow --exclude .git'
+zstyle ':z4h:fzf' flags \
+    '--preview="bat \
+        --style=numbers \
+        --color=always \
+        --line-range :500 {}"'
 
 # Performance settings
 zstyle ':z4h:autosuggestions' delay 0.1
 zstyle ':z4h:autosuggestions' forward-char accept
 zstyle ':z4h:compinit' arguments -C -i
-zstyle ':z4h:fzf-complete' recurse-dirs yes
-zstyle ':z4h:make' jobs "$(sysctl -n hw.ncpu)"
-zstyle ':z4h:arch' flags "$(uname -m)"
 
 # Development tools integration
 zstyle ':z4h:direnv' enable yes
@@ -137,11 +147,6 @@ zstyle ':z4h:ssh:*' forward-files $HOME/.zshrc $Z4H_CORE_FILES
 
 # GPG
 zstyle ':z4h:gpg-agent' start 'yes'
-
-# History Configuration
-zstyle ':z4h:*' history-file "${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
-zstyle ':z4h:*' history-size 1000000
-zstyle ':z4h:*' savehist 1000000
 
 # Tmux Configuration
 zstyle ':z4h:' start-tmux 'no'

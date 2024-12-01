@@ -87,9 +87,9 @@ if command_exists go; then
     alias gpath="go env GOPATH" # Show GOPATH
     alias groot="go env GOROOT" # Show GOROOT
 
-    # Go Format Pipeline
+    # Go format with gofumpt and golines
     function goformat() {
-        gofumpt | golines | gci write
+        gofumpt | golines
     }
 fi
 

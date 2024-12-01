@@ -61,6 +61,7 @@ alias gnuke="git clean -dffx"     # Remove all untracked files (including ignore
 # Commits
 alias gc="git commit --gpg-sign"                               # Signed commit
 alias gcm="git commit --gpg-sign -m"                           # Commit with message
+alias gcic="git commit --gpg-sign -m 'Initial commit'"         # Initial commit
 alias gca="git commit --gpg-sign --amend"                      # Amend last commit
 alias gcf="git commit --gpg-sign --amend --reuse-message HEAD" # Quick amend keeping message
 alias gfix="git commit --gpg-sign --fixup"                     # Create fixup commit for later squashing
@@ -105,8 +106,19 @@ alias glast="git log -1 HEAD --stat"     # Show last commit
 alias gwho="git shortlog -s --no-merges" # Show commit counts by author
 
 ###################
+# Merge Operations
+###################
+alias gm="git merge"               # Basic merge
+alias gmnff="git merge --no-ff"    # Merge with no fast-forward
+alias gmnc="git merge --no-commit" # Merge without committing
+alias gmc="git merge --continue"   # Continue merge
+alias gms="git merge --skip"       # Skip merge step
+alias gma="git merge --abort"      # Abort merge
+
+###################
 # Rebase Operations
 ###################
+alias gr="git rebase"              # Basic rebase
 alias grb="git rebase"             # Basic rebase
 alias grbi="git rebase -i"         # Interactive rebase
 alias grbc="git rebase --continue" # Continue rebase

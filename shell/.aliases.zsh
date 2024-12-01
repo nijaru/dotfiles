@@ -71,6 +71,7 @@ command_exists gping && alias ping='gping'
 alias t="touch"         # Create file
 alias rmd="rmdir"       # Remove directory
 alias rmrf="rm -rf"     # Force removal
+alias mkd="mkdir -pv"   # Recursive mkdir
 alias mkdir="mkdir -pv" # Recursive mkdir
 alias ez="exec zsh"     # Restart shell
 

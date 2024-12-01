@@ -2,34 +2,16 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    // "dark": "One Dark"
     "dark": "Catppuccin Macchiato - No Italics"
   },
-  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   "buffer_font_size": 14,
   "wrap_guides": [80],
-
-  // "active_pane_modifiers": { "inactive_opacity": 0.8 },
-
-  "format_on_save": "on",
-  "ensure_final_newline_on_save": true,
-  "remove_trailing_whitespace_on_save": true,
   "autosave": "on_focus_change",
+  "active_pane_modifiers": { "inactive_opacity": 0.9 },
 
   "terminal": {
-    "shell": {
-      "with_arguments": {
-        "program": "/bin/zsh",
-        "args": ["--login"]
-      }
-    },
-    "font_family": "JetBrainsMono Nerd Font",
-    "font_size": 14,
-    "detect_venv": {
-      "on": {
-        "directories": [".venv", "venv", ".env", "env"]
-      }
-    }
+    "enabled": false
   },
 
   "assistant": {
@@ -41,15 +23,32 @@
     }
   },
 
-  "git": {
-    "git_gutter": "tracked_files",
-    "inline_blame": {
-      "enabled": true,
-      "delay_ms": 500
+  "lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          // "lineLength": 88,
+          "lint": {
+            "ignore": ["E501"]
+          }
+        }
+      }
     }
   },
 
   "languages": {
+    "Go": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "sh",
+          "arguments": [
+            "-c",
+            "$(which gofumpt) | $(which golines) | $(which gci) print"
+          ]
+        }
+      }
+    },
     "JavaScript": {
       "language_servers": ["...", "biome"],
       "format_on_save": "on",

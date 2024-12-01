@@ -41,51 +41,56 @@ fi
 ###############################################################################
 if command_exists go; then
     # Build and Run
-    alias gr="go run"               # Run package
-    alias grun="go run ."           # Run current package
-    alias gbld="go build"           # Build package
-    alias gbldr="go build -race"    # Build with race detector
-    alias gi="go install"           # Install package
-    alias gct="go clean -testcache" # Clean test cache
+    alias gor="go run"               # Run package
+    alias gr.="go run ./..."         # Run package
+    alias gor.="go run ./..."        # Run package
+    alias gobld="go build"           # Build package
+    alias gobldr="go build -race"    # Build with race detector
+    alias goi="go install"           # Install package
+    alias goct="go clean -testcache" # Clean test cache
 
     # Testing
-    alias gt="go test"                                    # Run tests
-    alias gta="go test ./..."                             # Test all packages
-    alias gtv="go test -v ./..."                          # Verbose testing
-    alias gtc="go test -cover ./..."                      # Test coverage
-    alias gtb="go test -bench=."                          # Run benchmarks
-    alias gtr="go test -race ./..."                       # Test with race detector
-    alias gtcf="go test -coverprofile=coverage.out ./..." # Coverage file
-    alias gtw="gotestsum --watch"                         # Watch tests (requires gotestsum)
+    alias got="go test"                                    # Run tests
+    alias gota="go test ./..."                             # Test all packages
+    alias gotv="go test -v ./..."                          # Verbose testing
+    alias gotc="go test -cover ./..."                      # Test coverage
+    alias gotb="go test -bench=."                          # Run benchmarks
+    alias gotr="go test -race ./..."                       # Test with race detector
+    alias gotcf="go test -coverprofile=coverage.out ./..." # Coverage file
+    alias gotw="gotestsum --watch"                         # Watch tests (requires gotestsum)
 
     # Dependencies
-    alias gmod="go mod"         # Mod shorthand
-    alias gmt="go mod tidy"     # Tidy modules
-    alias gmv="go mod verify"   # Verify dependencies
-    alias gmd="go mod download" # Download dependencies
-    alias gmu="go get -u ./..." # Update dependencies
-    alias gmw="go mod why"      # Why is module needed
-    alias gme="go mod edit"     # Edit go.mod
-    alias gmg="go mod graph"    # Module dependency graph
+    alias gomod="go mod"         # Mod shorthand
+    alias gmt="go mod tidy"      # Tidy modules
+    alias gomt="go mod tidy"     # Tidy modules
+    alias gomv="go mod verify"   # Verify dependencies
+    alias gomd="go mod download" # Download dependencies
+    alias gomu="go get -u ./..." # Update dependencies
+    alias gomw="go mod why"      # Why is module needed
+    alias gome="go mod edit"     # Edit go.mod
+    alias gomg="go mod graph"    # Module dependency graph
 
     # Tools and Analysis
-    # alias gf="go fmt ./..."         # Format code
-    alias gfi="go fix ./..."        # Fix deprecated syntax
-    alias glint="golangci-lint run" # Run linter
-    alias gv="go vet ./..."         # Run vet
-    alias ggen="go generate ./..."  # Generate code
+    alias gof="go fmt ./..."         # Format code
+    alias gofi="go fix ./..."        # Fix deprecated syntax
+    alias golint="golangci-lint run" # Run linter
+    alias gov="go vet ./..."         # Run vet
+    alias gogen="go generate ./..."  # Generate code
 
     # Development Tools
-    alias gwi="go work init" # Initialize workspace
-    alias gwa="go work add"  # Add module to workspace
-    alias gws="go work sync" # Sync workspace
-    alias gwe="go work edit" # Edit workspace
+    alias gowi="go work init" # Initialize workspace
+    alias gowa="go work add"  # Add module to workspace
+    alias gows="go work sync" # Sync workspace
+    alias gowe="go work edit" # Edit workspace
 
     # Version and Environment
-    alias gver="go version"     # Show Go version
-    alias genv="go env"         # Show Go environment
     alias gpath="go env GOPATH" # Show GOPATH
     alias groot="go env GOROOT" # Show GOROOT
+
+    # Go Format Pipeline
+    function goformat() {
+        gofumpt | golines | gci write
+    }
 fi
 
 ###############################################################################

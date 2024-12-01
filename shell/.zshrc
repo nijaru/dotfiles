@@ -63,6 +63,39 @@ path=(
 )
 
 ###################
+# Configuration Files
+###################
+# Core configuration files
+typeset -ga Z4H_CORE_FILES=(
+    $HOME/.env.zsh
+    $HOME/.functions.zsh
+    $HOME/.aliases.zsh
+    $HOME/.git.zsh
+    $HOME/.dev.zsh
+    $HOME/.docker.zsh
+    $HOME/.p10k.zsh
+)
+
+# Platform-specific configuration
+case "$(uname -s)" in
+Darwin)
+    Z4H_CORE_FILES+=($HOME/.darwin.zsh)
+    ;;
+Linux)
+    Z4H_CORE_FILES+=($HOME/.linux.zsh)
+    ;;
+esac
+
+# Optional local configurations
+# typeset -ga Z4H_LOCAL_FILES=(
+#     $HOME/.local/zsh/*.zsh(N)
+#     $HOME/.zshrc.local(N)
+#     $HOME/.zshrc.company(N)
+#     $HOME/.zshrc.$HOST(N)
+#     $PWD/.envrc(N)
+# )
+
+###################
 # Z4H Core Configuration
 ###################
 # Auto-update and core settings
@@ -97,6 +130,11 @@ zstyle ':z4h:ssh-agent:' lifetime '7d'
 zstyle ':z4h:ssh-agent:' identities '~/.ssh/id_ed25519'
 zstyle ':z4h:ssh-agent:' extra-args --apple-use-keychain
 
+# SSH Forwarding
+zstyle ':z4h:ssh:*' send-extra-files yes
+zstyle ':z4h:ssh:*' copy-identity yes
+zstyle ':z4h:ssh:*' forward-files $HOME/.zshrc $Z4H_CORE_FILES
+
 # GPG
 zstyle ':z4h:gpg-agent' start 'yes'
 
@@ -105,38 +143,8 @@ zstyle ':z4h:*' history-file "${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 zstyle ':z4h:*' history-size 1000000
 zstyle ':z4h:*' savehist 1000000
 
-###################
-# Configuration Files
-###################
-# Core configuration files
-typeset -ga Z4H_CORE_FILES=(
-    $HOME/.functions.zsh
-    $HOME/.aliases.zsh
-    $HOME/.git.zsh
-    $HOME/.dev.zsh
-    $HOME/.docker.zsh
-    $HOME/.p10k.zsh
-    $HOME/.tmux.zsh
-)
-
-# Platform-specific configuration
-case "$(uname -s)" in
-Darwin)
-    Z4H_CORE_FILES+=($HOME/.darwin.zsh)
-    ;;
-Linux)
-    Z4H_CORE_FILES+=($HOME/.linux.zsh)
-    ;;
-esac
-
-# Optional local configurations
-# typeset -ga Z4H_LOCAL_FILES=(
-#     $HOME/.local/zsh/*.zsh(N)
-#     $HOME/.zshrc.local(N)
-#     $HOME/.zshrc.company(N)
-#     $HOME/.zshrc.$HOST(N)
-#     $PWD/.envrc(N)
-# )
+# Tmux Configuration
+zstyle ':z4h:' start-tmux 'no'
 
 ###################
 # Initialize Z4H

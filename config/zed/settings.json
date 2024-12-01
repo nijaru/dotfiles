@@ -10,6 +10,11 @@
   "autosave": "on_focus_change",
   "active_pane_modifiers": { "inactive_opacity": 0.9 },
 
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+
   "terminal": {
     "enabled": false
   },
@@ -27,7 +32,6 @@
     "ruff": {
       "initialization_options": {
         "settings": {
-          // "lineLength": 88,
           "lint": {
             "ignore": ["E501"]
           }
@@ -45,6 +49,41 @@
         }
       }
     },
+
+    "Python": {
+      "language_servers": ["...", "ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    },
+
+    "Rust": {
+      "language_servers": ["rust-analyzer", "..."],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports": true,
+            "source.fixAll": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "rust-analyzer"
+          }
+        }
+      ]
+    },
+
     "JavaScript": {
       "language_servers": ["...", "biome"],
       "formatter": [
@@ -105,38 +144,6 @@
         {
           "language_server": {
             "name": "biome"
-          }
-        }
-      ]
-    },
-    "Python": {
-      "language_servers": ["...", "ruff"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.ruff": true,
-            "source.fixAll.ruff": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "ruff"
-          }
-        }
-      ]
-    },
-    "Rust": {
-      "language_servers": ["rust-analyzer", "..."],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports": true,
-            "source.fixAll": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "rust-analyzer"
           }
         }
       ]

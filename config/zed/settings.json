@@ -38,20 +38,15 @@
 
   "languages": {
     "Go": {
-      "format_on_save": "on",
       "formatter": {
         "external": {
           "command": "sh",
-          "arguments": [
-            "-c",
-            "$(which gofumpt) | $(which golines) | $(which gci) print"
-          ]
+          "arguments": ["-c", "$(which gofumpt) | $(which golines)"]
         }
       }
     },
     "JavaScript": {
       "language_servers": ["...", "biome"],
-      "format_on_save": "on",
       "formatter": [
         {
           "code_actions": {
@@ -68,7 +63,6 @@
     },
     "TypeScript": {
       "language_servers": ["...", "biome"],
-      "format_on_save": "on",
       "formatter": [
         {
           "code_actions": {
@@ -85,7 +79,6 @@
     },
     "TSX": {
       "language_servers": ["...", "biome"],
-      "format_on_save": "on",
       "formatter": [
         {
           "code_actions": {
@@ -102,7 +95,6 @@
     },
     "JSON": {
       "language_servers": ["...", "biome"],
-      "format_on_save": "on",
       "formatter": [
         {
           "code_actions": {

@@ -44,6 +44,7 @@ if command_exists go; then
     alias gor="go run"               # Run package
     alias gr.="go run ./..."         # Run package
     alias gor.="go run ./..."        # Run package
+    alias gorm="go run ./main.go"    #
     alias gobld="go build"           # Build package
     alias gobldr="go build -race"    # Build with race detector
     alias goi="go install"           # Install package
@@ -186,18 +187,18 @@ if command_exists ruby; then
 
     # Rails commands - only if rails is installed
     if gem_installed rails; then
-        alias rs="rails server"                # Start Rails server
-        alias rc="rails console"               # Rails console
-        alias rg="rails generate"              # Rails generate
-        alias rgm="rails generate migration"   # Generate migration
-        alias rr="rails routes"                # Show routes
-        alias rdb="rails db"                   # Database tasks
-        alias rdbm="rails db:migrate"          # Run migrations
-        alias rdbs="rails db:seed"             # Seed database
-        alias rdbc="rails db:create"           # Create database
-        alias rdbd="rails db:drop"             # Drop database
-        alias rdbr="rails db:rollback"         # Rollback migration
-        alias rdbrb="rails db:rollback STEP=1" # Rollback one step
+        alias rbs="rails server"                # Start Rails server
+        alias rbc="rails console"               # Rails console
+        alias rbg="rails generate"              # Rails generate
+        alias rbgm="rails generate migration"   # Generate migration
+        alias rbr="rails routes"                # Show routes
+        alias rbdb="rails db"                   # Database tasks
+        alias rbdbm="rails db:migrate"          # Run migrations
+        alias rbdbs="rails db:seed"             # Seed database
+        alias rbdbc="rails db:create"           # Create database
+        alias rbdbd="rails db:drop"             # Drop database
+        alias rbdbr="rails db:rollback"         # Rollback migration
+        alias rbdbrb="rails db:rollback STEP=1" # Rollback one step
 
         # Testing
         alias rt="rails test"         # Run tests

@@ -26,8 +26,10 @@
     # Large file handling
     bigFileThreshold = 128m                            # Warning threshold for large files
     compression = 9                                    # Maximum compression
+[column]
+    ui = auto
 
-###################
+    ###################
 # Security and Signing
 ###################
 [gpg]
@@ -97,7 +99,9 @@
     default = current                                  # Push current branch to same name
     followTags = true                                  # Include tags when pushing
 [url "git@github.com:"]
-    insteadOf = https://github.com/                    # Use SSH instead of HTTPS
+    insteadOf = https://github.com/ 				  # Use SSH for GitHub
+[url "https://github.com/"]
+    insteadOf = https://github.com/mise-en/ 		  # Use SSH for Mise-en-place
 
 ###################
 # Rebase and History

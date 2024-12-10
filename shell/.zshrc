@@ -134,9 +134,6 @@ zstyle ':z4h:direnv' enable yes
 zstyle ':z4h:direnv:success' notify yes
 
 # SSH Configuration
-zstyle ':z4h:ssh:*' enable yes
-zstyle ':z4h:ssh-agent:' start yes
-zstyle ':z4h:ssh-agent:' lifetime '7d'
 zstyle ':z4h:ssh-agent:' identities '~/.ssh/id_ed25519'
 zstyle ':z4h:ssh-agent:' extra-args --apple-use-keychain
 

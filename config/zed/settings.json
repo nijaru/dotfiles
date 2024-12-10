@@ -63,11 +63,6 @@
             "source.organizeImports.ruff": true,
             "source.fixAll.ruff": true
           }
-        },
-        {
-          "language_server": {
-            "name": "ruff"
-          }
         }
       ]
     },
@@ -79,11 +74,6 @@
           "code_actions": {
             "source.organizeImports": true,
             "source.fixAll": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "rust-analyzer"
           }
         }
       ]
@@ -103,15 +93,20 @@
             "--suggest-missing-includes",
             "--std=c++23",
             "--query-driver=/usr/bin/clang++",
-            "-j=0"
-            // "-Wno-unused-includes",
-            // "-Wno-unused-parameters",
-            // "-Wno-unused-variables",
-            // "-Wno-c++11-extensions",
-            // "-Wno-c++17-extensions"
+            "-j=0",
+            "-Wno-c++11-extensions",
+            "-Wno-c++17-extensions"
           ]
         }
-      }
+      },
+      "formatter": [
+        {
+          "code_actions": {
+            "source.fixAll": true,
+            "source.organizeImports": true
+          }
+        }
+      ]
     },
 
     "JavaScript": {
@@ -121,11 +116,6 @@
           "code_actions": {
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "biome"
           }
         }
       ]
@@ -138,11 +128,6 @@
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
           }
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
         }
       ]
     },
@@ -154,11 +139,6 @@
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
           }
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
         }
       ]
     },
@@ -169,11 +149,6 @@
           "code_actions": {
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "biome"
           }
         }
       ]

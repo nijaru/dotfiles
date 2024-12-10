@@ -138,9 +138,9 @@ zstyle ':z4h:ssh-agent:' identities '~/.ssh/id_ed25519'
 zstyle ':z4h:ssh-agent:' extra-args --apple-use-keychain
 
 # SSH Forwarding
-zstyle ':z4h:ssh:*' send-extra-files yes
-zstyle ':z4h:ssh:*' copy-identity yes
-zstyle ':z4h:ssh:*' forward-files $HOME/.zshrc $Z4H_CORE_FILES
+# zstyle ':z4h:ssh:*' send-extra-files yes
+# zstyle ':z4h:ssh:*' copy-identity yes
+# zstyle ':z4h:ssh:*' forward-files $HOME/.zshrc $Z4H_CORE_FILES
 
 # GPG
 zstyle ':z4h:gpg-agent' start 'yes'

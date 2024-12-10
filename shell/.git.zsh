@@ -64,6 +64,7 @@ alias gcm="git commit --gpg-sign -m"                           # Commit with mes
 alias gcic="git commit --gpg-sign -m 'Initial commit'"         # Initial commit
 alias gca="git commit --gpg-sign --amend"                      # Amend last commit
 alias gcf="git commit --gpg-sign --amend --reuse-message HEAD" # Quick amend keeping message
+alias gcF="git commit --gpg-sign --amend"                      # Amend last commit
 alias gfix="git commit --gpg-sign --fixup"                     # Create fixup commit for later squashing
 
 ###################
@@ -118,13 +119,12 @@ alias gma="git merge --abort"      # Abort merge
 ###################
 # Rebase Operations
 ###################
-alias gr="git rebase"              # Basic rebase
-alias grb="git rebase"             # Basic rebase
-alias grbi="git rebase -i"         # Interactive rebase
-alias grbc="git rebase --continue" # Continue rebase
-alias grba="git rebase --abort"    # Abort rebase
-alias grbs="git rebase --skip"     # Skip rebase step
-alias grbm="git rebase main"       # Rebase on main
+alias gr="git rebase"             # Basic rebase
+alias gri="git rebase -i"         # Interactive rebase
+alias grc="git rebase --continue" # Continue rebase
+alias gra="git rebase --abort"    # Abort rebase
+alias grm="git rebase main"       # Rebase on main
+# alias grs="git rebase --skip"     # Skip rebase step
 
 ###################
 # Maintenance

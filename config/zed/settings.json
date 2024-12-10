@@ -6,7 +6,8 @@
   },
   "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   "buffer_font_size": 14,
-  "wrap_guides": [80],
+  "preferred_line_length": 88,
+  "wrap_guides": [88],
   "autosave": "on_focus_change",
   "active_pane_modifiers": { "inactive_opacity": 0.9 },
 
@@ -42,15 +43,19 @@
 
   "languages": {
     "Go": {
+      "tab_size": 4,
+      "hard_tabs": true,
       "formatter": {
         "external": {
           "command": "sh",
-          "arguments": ["-c", "$(which gofumpt) | $(which golines)"]
+          "arguments": ["-c", "$(which gofumpt) | $(which golines) || exit 1"]
         }
       }
     },
 
     "Python": {
+      "tab_size": 4,
+      "hard_tabs": false,
       "language_servers": ["...", "ruff"],
       "formatter": [
         {
@@ -82,6 +87,31 @@
           }
         }
       ]
+    },
+
+    "C++": {
+      "preferred_line_length": 88,
+      "tab_size": 4,
+      "enable_language_server": true,
+      "language_server": {
+        "clangd": {
+          "args": [
+            "--background-index",
+            "--clang-tidy",
+            "--completion-style=detailed",
+            "--header-insertion=iwyu",
+            "--suggest-missing-includes",
+            "--std=c++23",
+            "--query-driver=/usr/bin/clang++",
+            "-j=0"
+            // "-Wno-unused-includes",
+            // "-Wno-unused-parameters",
+            // "-Wno-unused-variables",
+            // "-Wno-c++11-extensions",
+            // "-Wno-c++17-extensions"
+          ]
+        }
+      }
     },
 
     "JavaScript": {

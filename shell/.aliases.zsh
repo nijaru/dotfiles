@@ -56,6 +56,7 @@ command_exists duf && alias df='duf'
 command_exists dust && alias du='dust'
 command_exists procs && alias ps='procs'
 command_exists btop && alias top='btop'
+command_exists hyperfine && alias hypf='hyperfine -N --warmup 5'
 
 # File Comparison & Network
 # ------------------------

@@ -9,8 +9,8 @@
 export EDITOR="zed"
 export VISUAL="zed"
 export ALTERNATE_EDITOR="nvim"
-export MOAR="--style=catppuccin-mocha --quit-if-one-screen --no-statusbar --wrap"
-export BAT_THEME="gruvbox-dark"
+export MOAR="--style=catppuccin-macchiato --quit-if-one-screen --no-statusbar --wrap"
+export BAT_THEME="Catppuccin Macchiato"
 
 ###################
 # XDG Base Directories

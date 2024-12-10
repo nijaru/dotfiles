@@ -3,6 +3,17 @@
 # Core utility functions for the shell environment
 
 ###############################################################################
+# General Utilities
+###############################################################################
+
+function aoc-input() {
+    local session_cookie=${1:-$AOC_SESSION}
+    day=$(basename $(pwd) | tr -dc '0-9')
+    curl --cookie "session=$session_cookie" \
+        "https://adventofcode.com/2024/day/$day/input" >input.txt
+}
+
+###############################################################################
 # Editor Functions
 ###############################################################################
 

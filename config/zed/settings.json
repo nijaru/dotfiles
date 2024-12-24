@@ -7,7 +7,7 @@
   "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   "buffer_font_size": 14,
   "preferred_line_length": 88,
-  "wrap_guides": [88],
+  "wrap_guides": [80],
   "autosave": "on_focus_change",
   "active_pane_modifiers": { "inactive_opacity": 0.9 },
 

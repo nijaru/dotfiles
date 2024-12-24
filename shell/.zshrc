@@ -181,7 +181,7 @@ done
 z4h compile ${Z4H_COMPDUMP:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/compdump}
 
 # Setup 'magic' command completion if available
-if command -v magic >/dev/null 2>&1; then
+if command_exists magic; then
     z4h source <(magic completion --shell zsh)
 fi
 

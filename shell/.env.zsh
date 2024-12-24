@@ -76,6 +76,9 @@ export GEM_HOME="${XDG_DATA_HOME}/gem"
 export GEM_PATH="${GEM_HOME}:${XDG_DATA_HOME}/gem"
 export BUNDLE_USER_HOME="${XDG_CONFIG_HOME}/bundle"
 
+# Modular
+export PATH="$PATH:/Users/nick/.modular/bin"
+
 ###################
 # Environment Setup (Previously in .darwin.zsh, .linux.zsh, .env.zsh, etc.)
 ###################

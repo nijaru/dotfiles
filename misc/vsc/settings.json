@@ -2,16 +2,17 @@
 	"[html]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
+	"[mojo]": {
+		"editor.insertSpaces": true
+	},
 	"[python]": {
 		"editor.codeActionsOnSave": {
-			"source.organizeImports": "explicit",
-			"source.fixAll": "explicit"
+			"source.organizeImports": "explicit"
 		},
 		"editor.defaultFormatter": "charliermarsh.ruff",
 		"editor.insertSpaces": true,
 		"editor.tabSize": 4,
-		"editor.useTabStops": true,
-		"editor.formatOnType": true
+		"editor.useTabStops": true
 	},
 	"editor.cursorSmoothCaretAnimation": "on",
 	"editor.fontFamily": "JetBrainsMono NF, Menlo, Monaco, 'Courier New', monospace",
@@ -19,31 +20,12 @@
 	"editor.fontSize": 13,
 	"editor.formatOnSave": true,
 	"editor.inlineSuggest.enabled": true,
-	"editor.insertSpaces": false,
 	"editor.minimap.enabled": false,
 	"editor.smoothScrolling": true,
-	"editor.wordWrap": "on",
-	"editor.bracketPairColorization.enabled": true,
-	"editor.guides.bracketPairs": true,
-	"editor.stickyScroll.enabled": true,
-	"editor.linkedEditing": true,
-	"editor.largeFileOptimizations": true,
 	"files.autoSave": "afterDelay",
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
 	"files.trimTrailingWhitespace": true,
-	"files.watcherExclude": {
-		"**/.git/objects/**": true,
-		"**/.git/subtree-cache/**": true,
-		"**/node_modules/**": true
-	},
-	"github.copilot.enable": {
-		"*": true,
-		"markdown": true,
-		"plaintext": true,
-		"scminput": false,
-		"yaml": false
-	},
 	"go.toolsManagement.autoUpdate": true,
 	"julia.completionmode": "import",
 	"julia.enableTelemetry": false,
@@ -53,14 +35,28 @@
 	"python.formatting.provider": "none",
 	"redhat.telemetry.enabled": false,
 	"security.workspace.trust.untrustedFiles": "open",
-	"security.workspace.trust.enabled": true,
-	"security.workspace.trust.startupPrompt": "never",
 	"telemetry.telemetryLevel": "off",
 	"terminal.integrated.commandsToSkipShell": ["language-julia.interrupt"],
-	"terminal.integrated.gpuAcceleration": "auto",
-	"terminal.integrated.persistentSessionReviveProcess": "never",
 	"window.titleBarStyle": "custom",
-	"workbench.colorTheme": "Atom One Dark",
+	"workbench.colorTheme": "Catppuccin Macchiato",
 	"workbench.iconTheme": "file-icons",
-	"workbench.list.smoothScrolling": true
+	"workbench.list.smoothScrolling": true,
+	"licenser.author": "Nick Russo",
+	"licenser.license": "MIT",
+	"zig.path": "",
+	"zig.zls.path": "/Users/nick/Library/Application Support/Code/User/globalStorage/ziglang.vscode-zig/zls_install/zls",
+	"zig.initialSetupDone": true,
+	"editor.rulers": [80],
+	"[markdown]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"continue.telemetryEnabled": false,
+	"diffEditor.codeLens": true,
+	"ruff.lineLength": 100,
+	"git.openRepositoryInParentFolders": "never",
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"catppuccin.italicComments": false,
+	"catppuccin.italicKeywords": false
 }

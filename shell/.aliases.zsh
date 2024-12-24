@@ -11,10 +11,11 @@ fi
 ###############################################################################
 # Editor Aliases
 ###############################################################################
-alias e="$EDITOR"
+alias e.="e ."
 alias z.="z ."
 alias c.="c ."
 alias v.="v ."
+alias hx.="hx ."
 
 ###############################################################################
 # Modern CLI Replacements
@@ -36,7 +37,7 @@ if command_exists eza; then
     # Replace 'ls' with 'eza' and set default arguments
     alias ls='eza --icons --git'
     # Aliases for common 'ls' options
-    alias l='ls -l'                # Long listing
+    alias l='ls -1'                # Long listing
     alias ll='ls -l'               # Detailed listing
     alias la='ls -a'               # Show hidden files
     alias lla='ls -la'             # Long with hidden

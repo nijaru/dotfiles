@@ -101,7 +101,7 @@
 [url "git@github.com:"]
     insteadOf = https://github.com/ 				  # Use SSH for GitHub
 [url "https://github.com/"]
-    insteadOf = https://github.com/mise-en/ 		  # Use SSH for Mise-en-place
+    insteadOf = git@github.com:mise-en/                # Use HTTPS for Mise-en-place
 
 ###################
 # Rebase and History

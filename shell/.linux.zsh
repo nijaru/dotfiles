@@ -197,4 +197,5 @@ alias nginx="cd /etc/nginx"
 # XDG open command
 if command_exists xdg-open; then
     alias o="xdg-open"
+    alias o.="xdg-open ."
 fi

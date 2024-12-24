@@ -49,10 +49,14 @@ function edit_with_mkdir() {
 }
 
 # Wrapper functions for specific editors
+function t() { edit_with_mkdir touch "$@"; }
+function e() { edit_with_mkdir $EDITOR "$@"; }
+
 function z() { edit_with_mkdir zed "$@"; }
 function c() { edit_with_mkdir code "$@"; }
+
 function v() { edit_with_mkdir nvim "$@"; }
-function t() { edit_with_mkdir touch "$@"; }
+function hx() { edit_with_mkdir hx "$@"; }
 
 ###############################################################################
 # File & Directory Operations

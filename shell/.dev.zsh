@@ -3,7 +3,15 @@
 # Language-specific settings and tools
 
 ###############################################################################
-# mise (formerly rtx) Package Manager
+# General Development
+###############################################################################
+# modular / mojo / magic
+if command_exists magic; then
+    alias m="magic"
+fi
+
+###############################################################################
+# mise
 ###############################################################################
 if command_exists mise; then
     # Initialize mise

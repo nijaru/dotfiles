@@ -60,6 +60,7 @@ function t() { edit_with_mkdir touch "$@"; }
 function e() { edit_with_mkdir "$EDITOR" "$@"; }
 # GUI editors
 function z() { edit_with_mkdir zed "$@"; }
+function zp() { edit_with_mkdir zed-preview "$@"; }
 function c() { edit_with_mkdir code "$@"; }
 # Command line editors
 function v() { edit_with_mkdir nvim "$@"; }

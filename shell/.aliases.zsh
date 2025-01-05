@@ -37,12 +37,14 @@ if command_exists eza; then
     # Replace 'ls' with 'eza' and set default arguments
     alias ls='eza --icons --git'
     # Aliases for common 'ls' options
-    alias l='ls -1'                # Long listing
-    alias ll='ls -l'               # Detailed listing
-    alias la='ls -a'               # Show hidden files
-    alias lla='ls -la'             # Long with hidden
-    alias lt='ls -T'               # Tree listing
-    alias tree='ls --tree --icons' # Tree view with icons
+    alias l='ls -1'      # Long listing
+    alias ll='ls -l'     # Detailed listing
+    alias la='ls -a'     # Show hidden files
+    alias lsa='ls -a'    # Show hidden files
+    alias lla='ls -la'   # Long with hidden
+    alias tree='ls -T'   # Tree view
+    alias lt='ls -T'     # Tree view
+    alias ltd='ls -T -L' # Tree view with depth
 fi
 
 # Search and Navigation

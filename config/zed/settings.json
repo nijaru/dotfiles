@@ -4,8 +4,9 @@
     "light": "One Light",
     "dark": "Catppuccin Macchiato - No Italics"
   },
-  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
-  "buffer_font_size": 14,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_fallbacks": ["JetBrains Mono", "Zed Plex Mono"],
+  // "buffer_font_size": 14,
   "preferred_line_length": 88,
   "wrap_guides": [80],
   "autosave": "on_focus_change",
@@ -45,6 +46,7 @@
     "Go": {
       "tab_size": 4,
       "hard_tabs": true,
+      "language_servers": ["gopls"],
       "formatter": {
         "external": {
           "command": "sh",
@@ -56,33 +58,56 @@
     "Python": {
       "tab_size": 4,
       "hard_tabs": false,
-      "language_servers": ["...", "ruff"],
+      "language_servers": ["ruff"],
       "formatter": [
         {
           "code_actions": {
             "source.organizeImports.ruff": true,
             "source.fixAll.ruff": true
           }
-        }
-      ]
-    },
-
-    "Rust": {
-      "language_servers": ["rust-analyzer", "..."],
-      "formatter": [
+        },
         {
-          "code_actions": {
-            "source.organizeImports": true,
-            "source.fixAll": true
+          "language_server": {
+            "name": "ruff"
           }
         }
       ]
     },
 
+    // "Rust": {
+    //   "language_servers": ["rust-analyzer", "..."],
+    //   "formatter": [
+    //     {
+    //       "code_actions": {
+    //         "source.organizeImports": true,
+    //         "source.fixAll": true
+    //       }
+    //     },
+    //     {
+    //       "language_server": {
+    //         "name": "rust-analyzer"
+    //       }
+    //     }
+    //   ]
+    // },
+
     "C++": {
       "preferred_line_length": 88,
       "tab_size": 4,
-      "enable_language_server": true,
+      "language_servers": ["clangd"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.clangd": true,
+            "source.fixAll.clangd": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "clangd"
+          }
+        }
+      ],
       "language_server": {
         "clangd": {
           "args": [
@@ -98,15 +123,7 @@
             "-Wno-c++17-extensions"
           ]
         }
-      },
-      "formatter": [
-        {
-          "code_actions": {
-            "source.fixAll": true,
-            "source.organizeImports": true
-          }
-        }
-      ]
+      }
     },
 
     "JavaScript": {
@@ -117,9 +134,15 @@
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
           }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
         }
       ]
     },
+
     "TypeScript": {
       "language_servers": ["...", "biome"],
       "formatter": [
@@ -128,9 +151,15 @@
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
           }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
         }
       ]
     },
+
     "TSX": {
       "language_servers": ["...", "biome"],
       "formatter": [
@@ -139,9 +168,15 @@
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
           }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
         }
       ]
     },
+
     "JSON": {
       "language_servers": ["...", "biome"],
       "formatter": [
@@ -149,6 +184,11 @@
           "code_actions": {
             "source.organizeImports.biome": true,
             "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
           }
         }
       ]

@@ -8,9 +8,10 @@
 
 function aoc-input() {
     local session_cookie=${1:-$AOC_SESSION}
-    day=$(basename $(pwd) | tr -dc '0-9')
+    local year=$(echo "$PWD" | grep -oE '[0-9]{4}' | head -1)
+    local day=$(basename "$PWD" | tr -dc '0-9')
     curl --cookie "session=$session_cookie" \
-        "https://adventofcode.com/2024/day/$day/input" >input.txt
+        "https://adventofcode.com/$year/day/$day/input" >input.txt
 }
 
 ###############################################################################
@@ -19,42 +20,48 @@ function aoc-input() {
 
 # Open editor with automatic directory creation
 function edit_with_mkdir() {
-    local editor=$1
-    shift || return 1 # Error if no editor specified
+    local editor_name=$1
+    shift || return 1
 
-    # Validate editor exists
-    if ! command -v "$editor" >/dev/null 2>&1; then
-        echo "Error: Editor '$editor' not found" >&2
+    # Use 'whence -p' in Zsh to locate the executable, ignoring functions and aliases
+    local editor_path
+    editor_path=$(whence -p "$editor_name")
+
+    # Check if the editor executable was found
+    if [[ -z "$editor_path" ]]; then
+        echo "Error: Editor '$editor_name' not found in PATH." >&2
         return 1
     fi
 
+    # If no arguments, launch the editor without opening any files
     if [[ $# -eq 0 ]]; then
-        # No arguments, just launch editor
-        "$editor"
+        "$editor_path"
         return
     fi
 
+    # Iterate through each argument to handle files or directories
     for arg in "$@"; do
-        local dir
         if [[ -d "$arg" ]]; then
-            "$editor" "$arg"
+            "$editor_path" "$arg"
         else
+            local dir
             dir=$(dirname "$arg")
             if [[ ! -d "$dir" ]]; then
                 mkdir -p "$dir" && echo "Created directory: $dir"
             fi
-            "$editor" "$arg"
+            "$editor_path" "$arg"
         fi
     done
 }
 
 # Wrapper functions for specific editors
+# Basic editors
 function t() { edit_with_mkdir touch "$@"; }
-function e() { edit_with_mkdir $EDITOR "$@"; }
-
+function e() { edit_with_mkdir "$EDITOR" "$@"; }
+# GUI editors
 function z() { edit_with_mkdir zed "$@"; }
 function c() { edit_with_mkdir code "$@"; }
-
+# Command line editors
 function v() { edit_with_mkdir nvim "$@"; }
 function hx() { edit_with_mkdir hx "$@"; }
 

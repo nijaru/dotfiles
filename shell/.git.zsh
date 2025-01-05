@@ -22,7 +22,8 @@ alias gwt="git worktree"          # Manage work trees
 # Branch Management
 ###################
 # Listing and information
-alias gb="git branch --verbose"                        # Show branches with last commit
+alias gb="git branch -v"                               # Show branches with last commit
+alias gbv="git branch -vv"                             # Show branches with tracking info
 alias gba="git branch --all --verbose"                 # Show all branches with details
 alias gbl="git branch --verbose --sort=-committerdate" # Sort by last commit
 alias gbr="git branch --remote"                        # Show remote branches
@@ -81,13 +82,13 @@ alias gstc="git stash clear"               # Clear all stashes
 ###################
 # Remote Operations
 ###################
-alias gf="git fetch --all --prune"      # Fetch and clean up
-alias gpl="git pull --rebase"           # Pull with rebase
-alias gp="git push"                     # Normal push
-alias gpa="git push --all"              # Push all branches
-alias gpf="git push --force-with-lease" # Safer force push
-alias gpu="git push --set-upstream"     # Set upstream while pushing
-alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gf="git fetch --all --prune"          # Fetch and clean up
+alias gpl="git pull --rebase"               # Pull with rebase
+alias gp="git push"                         # Normal push
+alias gpa="git push --all"                  # Push all branches
+alias gpf="git push --force-with-lease"     # Safer force push
+alias gpu="git push -u"                     # Set upstream while pushing
+alias gpuo="git push -u origin"             # Set upstream while pushing
 alias gtrack="git branch --set-upstream-to" # Set tracking branch
 
 ###################
@@ -141,6 +142,12 @@ alias ggarbage="git gc --aggressive --prune=now" # Clean repository
 # Get current branch name
 git_current_branch() {
     git branch --show-current 2>/dev/null
+}
+
+# Push current or specified branch and set upstream to origin/<branch>
+gpsuob() {
+    local branch=${1:-$(git_current_branch)}
+    git push --set-upstream origin "$branch"
 }
 
 # Interactive branch switching with log preview

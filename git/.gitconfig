@@ -181,6 +181,7 @@
     wip = "!git add -A && git commit -m 'WIP'"         # Quick work-in-progress commit
     unwip = "!git log -n 1 | grep -q -c WIP && git reset HEAD~1"  # Undo WIP commit
     dft = "difftool"                                   # Open difftool
+	; gpsuob = "!f() { git push --set-upstream origin ${1:-$(git symbolic-ref --short HEAD)}; }; f"
 
 # Include local overrides
 [include]

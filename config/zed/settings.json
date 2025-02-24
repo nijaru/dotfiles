@@ -1,12 +1,15 @@
 {
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
   "theme": {
     "mode": "dark",
-    "light": "One Light",
+    "light": "Catppuccin Frappé",
     "dark": "Catppuccin Macchiato - No Italics"
   },
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_fallbacks": ["JetBrains Mono", "Zed Plex Mono"],
-  // "buffer_font_size": 14,
+  "buffer_font_size": 14,
   "preferred_line_length": 88,
   "wrap_guides": [80],
   "autosave": "on_focus_change",
@@ -23,10 +26,9 @@
 
   "assistant": {
     "version": "2",
-    "enabled": true,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "model": "o3-mini"
     }
   },
 
@@ -39,6 +41,12 @@
           }
         }
       }
+    },
+    "mojo-lsp": {
+      "binary": {
+        "path": "magic",
+        "arguments": ["run", "mojo-lsp-server"]
+      }
     }
   },
 
@@ -49,8 +57,9 @@
       "language_servers": ["gopls"],
       "formatter": {
         "external": {
-          "command": "sh",
-          "arguments": ["-c", "$(which gofumpt) | $(which golines) || exit 1"]
+          "command": "gofumpt"
+          // "command": "sh",
+          // "arguments": ["-c", "$(which gofumpt) | $(which golines) || exit 1"]
         }
       }
     },
@@ -72,6 +81,10 @@
           }
         }
       ]
+    },
+
+    "Mojo": {
+      "language_servers": ["mojo-lsp"]
     },
 
     // "Rust": {

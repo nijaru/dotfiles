@@ -5,7 +5,7 @@
   "theme": {
     "mode": "dark",
     "light": "Catppuccin Frappé",
-    "dark": "Catppuccin Macchiato - No Italics"
+    "dark": "Catppuccin Frappé"
   },
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_fallbacks": ["JetBrains Mono", "Zed Plex Mono"],
@@ -28,7 +28,7 @@
     "version": "2",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "o3-mini"
+      "model": "claude-3-5-sonnet"
     }
   },
 

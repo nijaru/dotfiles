@@ -12,6 +12,7 @@
   "buffer_font_size": 14,
   "preferred_line_length": 88,
   "wrap_guides": [80],
+  "soft_wrap": "editor_width",
   "autosave": "on_focus_change",
   "active_pane_modifiers": { "inactive_opacity": 0.9 },
 

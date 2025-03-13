@@ -167,6 +167,22 @@ function backup() {
     done
 }
 
+# Convert FLAC files to WAV
+function flac2wav() {
+    for file in *.flac; do
+        # Skip if no flac files are found
+        [ -e "$file" ] || continue
+
+        wav_file="${file%.flac}.wav"
+        if [ ! -f "$wav_file" ]; then
+            echo "Converting $file to $wav_file"
+            ffmpeg -i "$file" "$wav_file"
+        else
+            echo "Skipping $file, $wav_file already exists"
+        fi
+    done
+}
+
 ###############################################################################
 # System Operations
 ###############################################################################

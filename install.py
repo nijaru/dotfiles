@@ -36,8 +36,6 @@ CORE_CONFIGS: List[Tuple[str, str, int]] = [
     # Fish shell configs
     ("config/fish/config.fish", ".config/fish/config.fish", 0o644),
     ("config/fish/env.fish", ".config/fish/env.fish", 0o644),
-    ("config/fish/aliases.fish", ".config/fish/aliases.fish", 0o644),
-    ("config/fish/functions.fish", ".config/fish/functions.fish", 0o644),
     ("config/fish/git.fish", ".config/fish/git.fish", 0o644),
     ("config/fish/dev.fish", ".config/fish/dev.fish", 0o644),
     ("config/fish/docker.fish", ".config/fish/docker.fish", 0o644),
@@ -124,17 +122,36 @@ class DotfilesInstaller:
 
         try:
             self.backup_dir.mkdir(parents=True, exist_ok=True)
-            backup_path = self.backup_dir / path.name
+            
+            # Create relative path structure for backup
+            rel_path = path.relative_to(self.home)
+            backup_path = self.backup_dir / rel_path
+            
+            # Ensure parent directory exists in backup location
+            backup_path.parent.mkdir(parents=True, exist_ok=True)
 
             if backup_path.exists():
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                backup_path = self.backup_dir / f"{path.name}.{timestamp}"
+                backup_path = backup_path.parent / f"{backup_path.name}.{timestamp}"
 
-            shutil.copy2(path, backup_path)
-            self.log.info(f"Backed up: {path} → {backup_path}")
+            # For symlinks, we want to copy the link itself, not its target
+            if path.is_symlink():
+                # Get the target of the symlink
+                target = path.readlink()
+                # Create a new symlink in the backup location pointing to the same target
+                if backup_path.exists():
+                    backup_path.unlink()
+                backup_path.symlink_to(target)
+                self.log.info(f"Backed up symlink: {path} → {backup_path}")
+            else:
+                # For regular files, copy the file content
+                shutil.copy2(path, backup_path)
+                self.log.info(f"Backed up: {path} → {backup_path}")
         except Exception as e:
             self.log.error(f"Failed to backup {path}: {e}")
-            raise
+            # Log the error but continue instead of raising an exception
+            # This allows the installation to continue even if a backup fails
+            # raise
 
     def create_symlink(self, config: Config) -> bool:
         """Create symbolic link with proper permissions"""
@@ -177,6 +194,13 @@ class DotfilesInstaller:
             self.home / ".config" / "fish",
         ]
         
+        # Also check all subdirectories of fish/functions
+        fish_functions_dir = self.home / ".config" / "fish" / "functions"
+        if fish_functions_dir.exists() and fish_functions_dir.is_dir():
+            for subdir in fish_functions_dir.iterdir():
+                if subdir.is_dir():
+                    directories_to_check.append(subdir)
+        
         success = True
         removed_count = 0
         
@@ -188,6 +212,10 @@ class DotfilesInstaller:
                 # Skip if not a symlink or if it's in our installed paths
                 if not file_path.is_symlink() or file_path in self.installed_paths:
                     continue
+                
+                # Skip if we're trying to backup but the file doesn't exist
+                if not file_path.exists() and not file_path.is_symlink():
+                    continue
                     
                 # Get the target of the symlink
                 try:
@@ -197,10 +225,21 @@ class DotfilesInstaller:
                         if self.dry_run:
                             self.log.info(f"[Dry Run] Would remove stale symlink: {file_path} → {target}")
                         else:
-                            self.backup_file(file_path)
-                            file_path.unlink()
-                            self.log.info(f"Removed stale symlink: {file_path} → {target}")
-                            removed_count += 1
+                            # Only attempt backup if the file actually exists
+                            if file_path.exists() or file_path.is_symlink():
+                                try:
+                                    self.backup_file(file_path)
+                                except Exception as e:
+                                    self.log.warning(f"Could not backup {file_path}: {e}")
+                            
+                            # Try to remove the symlink
+                            try:
+                                file_path.unlink()
+                                self.log.info(f"Removed stale symlink: {file_path} → {target}")
+                                removed_count += 1
+                            except Exception as e:
+                                self.log.error(f"Failed to remove symlink {file_path}: {e}")
+                                success = False
                 except Exception as e:
                     self.log.error(f"Failed to check symlink {file_path}: {e}")
                     success = False
@@ -232,17 +271,35 @@ class DotfilesInstaller:
                 mode=mode
             ) for src, target, mode in OS_CONFIGS[self.system])
             
-        # Add all Fish function files dynamically
+        # Add all Fish function files dynamically, including subdirectories
         fish_functions_dir = self.dotfiles / "config" / "fish" / "functions"
         if fish_functions_dir.exists() and fish_functions_dir.is_dir():
+            # First, add top-level function files
             function_files = list(fish_functions_dir.glob("*.fish"))
             if function_files:
-                self.log.info(f"Adding {len(function_files)} Fish functions from {fish_functions_dir}")
+                self.log.info(f"Adding {len(function_files)} top-level Fish functions from {fish_functions_dir}")
                 configs.extend(Config(
                     source=func_file,
                     target=self.home / ".config" / "fish" / "functions" / func_file.name,
                     mode=0o644
                 ) for func_file in function_files)
+                
+            # Then add files from subdirectories
+            for subdir in fish_functions_dir.iterdir():
+                if subdir.is_dir() and not subdir.name.startswith('.'):
+                    sub_function_files = list(subdir.glob("*.fish"))
+                    if sub_function_files:
+                        # Create the corresponding subdirectory in the target
+                        target_subdir = self.home / ".config" / "fish" / "functions" / subdir.name
+                        if not self.dry_run:
+                            target_subdir.mkdir(parents=True, exist_ok=True)
+                            
+                        self.log.info(f"Adding {len(sub_function_files)} Fish functions from {subdir}")
+                        configs.extend(Config(
+                            source=func_file,
+                            target=self.home / ".config" / "fish" / "functions" / subdir.name / func_file.name,
+                            mode=0o644
+                        ) for func_file in sub_function_files)
                 
         # Add all Fish conf.d files dynamically
         fish_confd_dir = self.dotfiles / "config" / "fish" / "conf.d"

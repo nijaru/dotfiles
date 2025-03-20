@@ -10,11 +10,6 @@ if status is-interactive
         fzf_key_bindings
     end
     
-    # Ctrl+R for history search via fzf (if available)
-    if command -v fzf >/dev/null 2>&1
-        # This is already handled by fzf_key_bindings if it's available
-    end
-    
     # Alt+E to open the current command line in the editor
     bind \ee edit_command_buffer
     

@@ -1,0 +1,67 @@
+# Starship configuration
+# https://starship.rs/config/
+
+# Don't add a newline before prompt
+add_newline = false
+
+# Make the prompt more compact
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
+
+# Display docker context
+[docker_context]
+format = "via [🐳 $context](blue) "
+only_with_files = true
+
+# Git configuration
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = "🌱 "
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold yellow"
+
+# Languages and tooling
+[golang]
+format = "[$symbol($version )]($style)"
+symbol = "🏎️ "
+
+[python]
+format = "[$symbol$version]($style) "
+symbol = "🐍 "
+
+[rust]
+format = "[$symbol($version )]($style)"
+symbol = "🦀 "
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+symbol = "⬢ "
+
+# Package version
+[package]
+format = "[$symbol$version]($style) "
+symbol = "📦 "
+
+# Command execution time
+[cmd_duration]
+min_time = 500
+format = "took [$duration]($style) "
+
+# Container information
+[container]
+format = "[$symbol \\[$name\\]]($style) "
+
+# AWS Configuration
+[aws]
+format = "[$symbol$profile(\\($region\\))]($style) "
+symbol = "☁️ "
+
+# Directory display
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "blue"

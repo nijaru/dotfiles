@@ -32,6 +32,17 @@ CORE_CONFIGS: List[Tuple[str, str, int]] = [
     ("shell/.dev.zsh", ".dev.zsh", 0o644),
     ("shell/.docker.zsh", ".docker.zsh", 0o644),
     ("shell/.p10k.zsh", ".p10k.zsh", 0o644),
+    
+    # Fish shell configs
+    ("config/fish/config.fish", ".config/fish/config.fish", 0o644),
+    ("config/fish/env.fish", ".config/fish/env.fish", 0o644),
+    ("config/fish/aliases.fish", ".config/fish/aliases.fish", 0o644),
+    ("config/fish/functions.fish", ".config/fish/functions.fish", 0o644),
+    ("config/fish/git.fish", ".config/fish/git.fish", 0o644),
+    ("config/fish/dev.fish", ".config/fish/dev.fish", 0o644),
+    ("config/fish/docker.fish", ".config/fish/docker.fish", 0o644),
+    ("config/fish/linux.fish", ".config/fish/linux.fish", 0o644),
+    ("config/fish/darwin.fish", ".config/fish/darwin.fish", 0o644),
 
     # Git configs
     ("git/.gitconfig", ".gitconfig", 0o644),
@@ -43,6 +54,7 @@ CORE_CONFIGS: List[Tuple[str, str, int]] = [
     # App configs
     ("config/ghostty/config", ".config/ghostty/config", 0o644),
     ("config/zed/settings.json", ".config/zed/settings.json", 0o644),
+    ("config/starship.toml", ".config/starship.toml", 0o644),
 ]
 
 # OS-specific configurations
@@ -57,14 +69,16 @@ OS_CONFIGS: Dict[str, List[Tuple[str, str, int]]] = {
 }
 
 class DotfilesInstaller:
-    def __init__(self, *, dry_run: bool = False, force: bool = False):
+    def __init__(self, *, dry_run: bool = False, force: bool = False, clean: bool = False):
         self.home = Path.home()
         self.dotfiles = self.home / "github" / "dotfiles"
         self.backup_dir = self.home / f".dotfiles_backups/backup_{datetime.now():%Y%m%d_%H%M%S}"
         self.dry_run = dry_run
         self.force = force
+        self.clean = clean
         self.system = platform.system()
         self.log = self._setup_logger()
+        self.installed_paths = set()
 
     def _setup_logger(self) -> logging.Logger:
         """Configure logging with colors"""
@@ -91,16 +105,16 @@ class DotfilesInstaller:
         """Verify required dependencies are installed"""
         # Check for zsh
         if not shutil.which("zsh"):
-            self.log.error("Zsh is not installed")
-            return False
-
-        # Check for zsh4humans
-        z4h_path = self.home / ".cache/zsh4humans/v5/z4h.zsh"
-        if not z4h_path.exists():
-            self.log.error("Zsh4humans is not installed")
-            self.log.info("Install with: sh -c \"$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)\"")
-            return False
-
+            self.log.warning("Zsh is not installed (needed for ZSH configs)")
+        
+        # Check for fish
+        if not shutil.which("fish"):
+            self.log.warning("Fish is not installed (needed for Fish configs)")
+        
+        # Check for Starship
+        if not shutil.which("starship"):
+            self.log.warning("Starship is not installed. For terminal prompt, install with: brew install starship")
+        
         return True
 
     def backup_file(self, path: Path) -> None:
@@ -126,24 +140,75 @@ class DotfilesInstaller:
         """Create symbolic link with proper permissions"""
         if self.dry_run:
             self.log.info(f"[Dry Run] Would link: {config.target} → {config.source}")
+            # Track this path for cleanup
+            self.installed_paths.add(config.target)
             return True
 
         try:
+            # Ensure parent directory exists
+            config.target.parent.mkdir(parents=True, exist_ok=True)
+            
             if config.target.exists() or config.target.is_symlink():
                 if not self.force:
                     self.log.warning(f"Skipping existing file: {config.target}")
+                    # Still track this path for cleanup purposes
+                    self.installed_paths.add(config.target)
                     return False
                 self.backup_file(config.target)
                 config.target.unlink()
 
-            config.target.parent.mkdir(parents=True, exist_ok=True)
             config.target.symlink_to(config.source)
             config.target.chmod(config.mode)
             self.log.info(f"Linked: {config.target} → {config.source}")
+            
+            # Track this path for cleanup
+            self.installed_paths.add(config.target)
             return True
         except Exception as e:
             self.log.error(f"Failed to link {config.target}: {e}")
             return False
+
+    def clean_stale_symlinks(self) -> bool:
+        """Remove stale symlinks that point to non-existent files"""
+        # Check common directories for stale symlinks
+        directories_to_check = [
+            self.home / ".config" / "fish" / "functions",
+            self.home / ".config" / "fish" / "conf.d",
+            self.home / ".config" / "fish",
+        ]
+        
+        success = True
+        removed_count = 0
+        
+        for directory in directories_to_check:
+            if not directory.exists() or not directory.is_dir():
+                continue
+                
+            for file_path in directory.iterdir():
+                # Skip if not a symlink or if it's in our installed paths
+                if not file_path.is_symlink() or file_path in self.installed_paths:
+                    continue
+                    
+                # Get the target of the symlink
+                try:
+                    target = file_path.resolve(strict=False)
+                    # Check if the target exists and is within our dotfiles dir
+                    if not target.exists() and str(self.dotfiles) in str(target):
+                        if self.dry_run:
+                            self.log.info(f"[Dry Run] Would remove stale symlink: {file_path} → {target}")
+                        else:
+                            self.backup_file(file_path)
+                            file_path.unlink()
+                            self.log.info(f"Removed stale symlink: {file_path} → {target}")
+                            removed_count += 1
+                except Exception as e:
+                    self.log.error(f"Failed to check symlink {file_path}: {e}")
+                    success = False
+        
+        if removed_count > 0 or self.dry_run:
+            self.log.info(f"{'Would remove' if self.dry_run else 'Removed'} {removed_count} stale symlinks")
+            
+        return success
 
     def install(self) -> bool:
         """Install all configuration files"""
@@ -166,10 +231,39 @@ class DotfilesInstaller:
                 target=self.home / target,
                 mode=mode
             ) for src, target, mode in OS_CONFIGS[self.system])
+            
+        # Add all Fish function files dynamically
+        fish_functions_dir = self.dotfiles / "config" / "fish" / "functions"
+        if fish_functions_dir.exists() and fish_functions_dir.is_dir():
+            function_files = list(fish_functions_dir.glob("*.fish"))
+            if function_files:
+                self.log.info(f"Adding {len(function_files)} Fish functions from {fish_functions_dir}")
+                configs.extend(Config(
+                    source=func_file,
+                    target=self.home / ".config" / "fish" / "functions" / func_file.name,
+                    mode=0o644
+                ) for func_file in function_files)
+                
+        # Add all Fish conf.d files dynamically
+        fish_confd_dir = self.dotfiles / "config" / "fish" / "conf.d"
+        if fish_confd_dir.exists() and fish_confd_dir.is_dir():
+            confd_files = list(fish_confd_dir.glob("*.fish"))
+            if confd_files:
+                self.log.info(f"Adding {len(confd_files)} Fish conf.d files from {fish_confd_dir}")
+                configs.extend(Config(
+                    source=conf_file,
+                    target=self.home / ".config" / "fish" / "conf.d" / conf_file.name,
+                    mode=0o644
+                ) for conf_file in confd_files)
 
         success = True
         for config in configs:
             if not self.create_symlink(config):
+                success = False
+                
+        # Clean up stale symlinks if requested
+        if self.clean:
+            if not self.clean_stale_symlinks():
                 success = False
 
         return success
@@ -178,13 +272,14 @@ def main():
     parser = argparse.ArgumentParser(description="Install dotfiles")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be done")
     parser.add_argument("--force", action="store_true", help="Force overwrite existing files")
+    parser.add_argument("--clean", action="store_true", help="Remove stale symlinks without source files")
     args = parser.parse_args()
 
     try:
-        installer = DotfilesInstaller(dry_run=args.dry_run, force=args.force)
+        installer = DotfilesInstaller(dry_run=args.dry_run, force=args.force, clean=args.clean)
         if installer.install():
             installer.log.info("\n✨ Dotfiles installation complete!")
-            if not args.dry_run:
+            if not args.dry_run and installer.backup_dir.exists():
                 installer.log.info(f"Backups stored in: {installer.backup_dir}")
             installer.log.info("Please restart your shell for changes to take effect.")
             return 0

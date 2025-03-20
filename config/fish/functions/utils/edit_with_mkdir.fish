@@ -14,16 +14,21 @@ function edit_with_mkdir --description 'Open editor with automatic directory cre
         return
     end
     
-    # Iterate through each argument to handle files or directories
+    set -l files_to_edit
+
+    # Process arguments and create directories as needed
     for arg in $argv
         if test -d "$arg"
-            command $editor_name "$arg"
+            set -a files_to_edit "$arg"
         else
             set -l dir (dirname "$arg")
             if test ! -d "$dir"
                 mkdir -p "$dir"; and echo "Created directory: $dir"
             end
-            command $editor_name "$arg"
+            set -a files_to_edit "$arg"
         end
     end
+    
+    # Open all files in a single editor instance
+    command $editor_name $files_to_edit
 end

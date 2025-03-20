@@ -137,11 +137,4 @@ alias ggarbage="git gc --aggressive --prune=now" # Clean repository
 ###################
 # Git Functions
 ###################
-
-# Git functions are now in functions/ directory
-# - git_current_branch.fish - Get current branch name
-# - gpsuob.fish - Push current branch and set upstream
-# - gswitch.fish - Interactive branch switching with log preview
-# - git-clean.fish - Clean up merged branches
-# - git-prune.fish - Prune remote branches and tags
-# - gadd.fish - Interactive git add with diff preview
+# See functions/git/ directory for additional git functions

@@ -4,12 +4,14 @@ function mkcd --description 'Create and enter directory'
         return 1
     end
     
+    set -l target $argv[-1]
+    
     for dir in $argv
-        if mkdir -p "$dir"
-            cd "$dir"; or return 1
-        else
+        if not mkdir -p "$dir"
             echo "Failed to create directory: $dir" >&2
             return 1
         end
     end
+    
+    cd "$target"; or return 1
 end

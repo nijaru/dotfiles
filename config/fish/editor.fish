@@ -4,7 +4,6 @@
 if status is-interactive
     # Editor abbreviations
     abbr --add e $EDITOR
-    abbr --add ez "$EDITOR ~/.config/fish/config.fish"
     abbr --add z 'zed'
     abbr --add z. 'zed .'
     abbr --add zp 'zed --preview'

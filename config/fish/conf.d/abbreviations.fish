@@ -7,7 +7,7 @@ if status is-interactive
     abbr --add ga 'git add'
     abbr --add gaa 'git add --all'
     abbr --add gc 'git commit --gpg-sign'
-    abbr --add gcm 'git commit --gpg-sign -m'
+    abbr --add gcm --set-cursor 'git commit --gpg-sign -m "%"'
     abbr --add gs 'git status'
     abbr --add gd 'git diff'
     abbr --add gp 'git push'
@@ -22,16 +22,16 @@ if status is-interactive
     abbr --add .... 'cd ../../..'
     abbr --add ..... 'cd ../../../..'
     abbr --add -- - 'cd -'
-    
+
     # Common directories
     abbr --add dl 'cd ~/Downloads'
     abbr --add dt 'cd ~/Desktop'
     abbr --add doc 'cd ~/Documents'
     abbr --add gh 'cd ~/github'
     abbr --add p 'cd ~/Projects'
-    
+
     # Editor abbreviations - moved to a separate file to ensure $EDITOR is set
-    
+
     # Command improvements
     abbr --add l 'ls -1'
     abbr --add ll 'ls -l'
@@ -54,7 +54,7 @@ if status is-interactive
     abbr --add dig 'doggo'
     abbr --add ping 'gping'
     abbr --add hypf 'hyperfine -N --warmup 5'
-    
+
     # File operations
     abbr --add t 'touch'
     abbr --add rmd 'rmdir'
@@ -64,7 +64,7 @@ if status is-interactive
     abbr --add mvv 'rsync -ah --remove-source-files --info=progress2'
     abbr --add symlink 'ln -sf'
     abbr --add ef 'exec fish'
-    
+
     # Package management
     if type -q brew
         abbr --add bi 'brew install'
@@ -72,13 +72,13 @@ if status is-interactive
         abbr --add bug 'brew upgrade'
         abbr --add bs 'brew search'
     end
-    
+
     # Docker abbreviations
     abbr --add d docker
     abbr --add dkc 'docker compose'
     abbr --add dcu 'docker compose up -d'
     abbr --add dcd 'docker compose down'
-    
+
     # Python abbreviations
     abbr --add py python3
     abbr --add pip 'python3 -m pip'

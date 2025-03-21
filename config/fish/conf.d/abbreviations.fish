@@ -30,16 +30,7 @@ if status is-interactive
     abbr --add gh 'cd ~/github'
     abbr --add p 'cd ~/Projects'
     
-    # Editor abbreviations
-    abbr --add e $EDITOR
-    abbr --add ez "$EDITOR ~/.config/fish/config.fish"
-    abbr --add z 'zed'
-    abbr --add z. 'zed .'
-    abbr --add zp 'zed --preview'
-    abbr --add zp. 'zed --preview .'
-    abbr --add c. 'code .'
-    abbr --add v. 'nvim .'
-    abbr --add hx. 'helix .'
+    # Editor abbreviations - moved to a separate file to ensure $EDITOR is set
     
     # Command improvements
     abbr --add l 'ls -1'

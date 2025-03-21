@@ -17,7 +17,8 @@ end
 set -l config_files \
     $HOME/.config/fish/git.fish \
     $HOME/.config/fish/dev.fish \
-    $HOME/.config/fish/docker.fish
+    $HOME/.config/fish/docker.fish \
+    $HOME/.config/fish/editor.fish
 
 # Platform-specific configuration
 switch (uname -s)

@@ -4,6 +4,8 @@
 # Exit if not running interactively
 status is-interactive || exit
 
+# Fish shell main configuration
+
 # Source environment variables and other configs
 if test -r $HOME/.config/fish/env.fish
     source $HOME/.config/fish/env.fish

@@ -5,25 +5,25 @@
 # Docker Operations
 ###################
 # Basic operations
-alias dc="docker compose"          # Basic compose command
-alias dcu="docker compose up -d"   # Start containers in background
-alias dcd="docker compose down"    # Stop and remove containers
-alias dcl="docker compose logs -f" # Follow container logs
-alias dcp="docker compose pull"    # Pull latest images
-alias dcr="docker compose restart" # Restart containers
-alias dcs="docker compose stop"    # Stop containers
-alias dcps="docker compose ps"     # List containers
-alias dcb="docker compose build"   # Build containers
-alias dce="docker compose exec"    # Execute command in container
-alias dccp="docker compose cp"     # Copy files between host and containers
+abbr --add dc "docker compose"          # Basic compose command
+abbr --add dcu "docker compose up -d"   # Start containers in background
+abbr --add dcd "docker compose down"    # Stop and remove containers
+abbr --add dcl "docker compose logs -f" # Follow container logs
+abbr --add dcp "docker compose pull"    # Pull latest images
+abbr --add dcr "docker compose restart" # Restart containers
+abbr --add dcs "docker compose stop"    # Stop containers
+abbr --add dcps "docker compose ps"     # List containers
+abbr --add dcb "docker compose build"   # Build containers
+abbr --add dce "docker compose exec"    # Execute command in container
+abbr --add dccp "docker compose cp"     # Copy files between host and containers
 
 # Development helpers
-alias dcdev="docker compose -f docker-compose.yml -f docker-compose.dev.yml"
-alias dcprod="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
+abbr --add dcdev "docker compose -f docker-compose.yml -f docker-compose.dev.yml"
+abbr --add dcprod "docker compose -f docker-compose.yml -f docker-compose.prod.yml"
 
 # Cleanup commands
-alias dcrm="docker compose rm -f"                              # Remove stopped containers
-alias dcprune="docker compose down --volumes --remove-orphans" # Full cleanup
+abbr --add dcrm "docker compose rm -f"                              # Remove stopped containers
+abbr --add dcprune "docker compose down --volumes --remove-orphans" # Full cleanup
 
 ###################
 # Container Operations
@@ -40,45 +40,45 @@ alias dcprune="docker compose down --volumes --remove-orphans" # Full cleanup
 # Kubernetes Operations
 ###################
 # Basic operations
-alias k="kubectl"
-alias kg="kubectl get"
-alias kgp="kubectl get pods"
-alias kgs="kubectl get services"
-alias kgn="kubectl get nodes"
-alias kd="kubectl describe"
-alias kdp="kubectl describe pod"
-alias kds="kubectl describe service"
-alias kdn="kubectl describe node"
+abbr --add k "kubectl"
+abbr --add kg "kubectl get"
+abbr --add kgp "kubectl get pods"
+abbr --add kgs "kubectl get services"
+abbr --add kgn "kubectl get nodes"
+abbr --add kd "kubectl describe"
+abbr --add kdp "kubectl describe pod"
+abbr --add kds "kubectl describe service"
+abbr --add kdn "kubectl describe node"
 
 # Namespace operations
-alias kn="kubectl config set-context --current --namespace"
-alias kgns="kubectl get namespaces"
-alias kcn="kubectl config view --minify | grep namespace:"
+abbr --add kn "kubectl config set-context --current --namespace"
+abbr --add kgns "kubectl get namespaces"
+abbr --add kcn "kubectl config view --minify | grep namespace:"
 
 # Context operations
-alias kc="kubectl config use-context"
-alias kgc="kubectl config get-contexts"
+abbr --add kc "kubectl config use-context"
+abbr --add kgc "kubectl config get-contexts"
 
 # Logging and debugging
-alias kl="kubectl logs"
-alias klf="kubectl logs -f"
-alias kex="kubectl exec -it"
-alias kpf="kubectl port-forward"
+abbr --add kl "kubectl logs"
+abbr --add klf "kubectl logs -f"
+abbr --add kex "kubectl exec -it"
+abbr --add kpf "kubectl port-forward"
 
 # Resource management
-alias ka="kubectl apply -f"
-# alias kd="kubectl delete -f" # Conflicts with describe
-alias krm="kubectl delete"
+abbr --add ka "kubectl apply -f"
+# Was alias kd="kubectl delete -f" # Conflicts with describe
+abbr --add krm "kubectl delete"
 
 # Cluster information
-alias kgi="kubectl cluster-info"
-alias kgv="kubectl version"
-alias kga="kubectl get all"
+abbr --add kgi "kubectl cluster-info"
+abbr --add kgv "kubectl version"
+abbr --add kga "kubectl get all"
 
 # Development helpers
-alias kdev="kubectl --context=dev"
-alias kprod="kubectl --context=prod"
-alias kstg="kubectl --context=staging"
+abbr --add kdev "kubectl --context=dev"
+abbr --add kprod "kubectl --context=prod"
+abbr --add kstg "kubectl --context=staging"
 
 # Kubernetes functions are now in functions/ directory
 # - kns.fish - Kubernetes namespace operations

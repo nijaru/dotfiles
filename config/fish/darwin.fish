@@ -28,24 +28,24 @@
 
 # System commands
 if type -q diskutil
-    abbr -a disk "diskutil"
+    abbr --add disk diskutil
 end
 if type -q gtar
-    abbr -a tar "gtar"
+    abbr --add tar gtar
 end
-abbr -a o "open"
-abbr -a o. "open ."
-abbr -a oa "open -a"
-abbr -a reveal "open -R"
-abbr -a finder "open -a Finder"
+abbr --add o open
+abbr --add o. 'open .'
+abbr --add oa 'open -a'
+abbr --add reveal 'open -R'
+abbr --add finder 'open -a Finder'
 
 # File operations
-abbr -a showfiles "defaults write com.apple.finder AppleShowAllFiles YES && killall Finder"
-abbr -a hidefiles "defaults write com.apple.finder AppleShowAllFiles NO && killall Finder"
+abbr --add showfiles 'defaults write com.apple.finder AppleShowAllFiles YES && killall Finder'
+abbr --add hidefiles 'defaults write com.apple.finder AppleShowAllFiles NO && killall Finder'
 if type -q qlmanage
-    abbr -a ql "qlmanage -p"
+    abbr --add ql 'qlmanage -p'
 end
 
 # Clipboard operations
-abbr -a clip "pbcopy"
-abbr -a paste "pbpaste"
+abbr --add clip pbcopy
+abbr --add paste pbpaste

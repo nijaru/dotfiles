@@ -41,6 +41,9 @@ CORE_CONFIGS: List[Tuple[str, str, int]] = [
     ("config/fish/docker.fish", ".config/fish/docker.fish", 0o644),
     ("config/fish/linux.fish", ".config/fish/linux.fish", 0o644),
     ("config/fish/darwin.fish", ".config/fish/darwin.fish", 0o644),
+    ("config/fish/fish_plugins", ".config/fish/fish_plugins", 0o644),
+    ("config/fish/fish_variables", ".config/fish/fish_variables", 0o644),
+    ("config/fish/completions/tide.fish", ".config/fish/completions/tide.fish", 0o644),
 
     # Git configs
     ("git/.gitconfig", ".gitconfig", 0o644),

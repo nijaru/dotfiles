@@ -72,6 +72,7 @@ if status is-interactive
     abbr --add cpv 'rsync -ah --info=progress2'
     abbr --add mvv 'rsync -ah --remove-source-files --info=progress2'
     abbr --add symlink 'ln -sf'
+    abbr --add ef 'exec fish'
     
     # Package management
     if type -q brew

@@ -43,8 +43,6 @@ if status is-interactive
     abbr --add ltd 'ls -T -L'
     abbr --add lltd 'ls -T -l -L'
     abbr --add tree 'ls -T'
-    abbr --add grep 'rg'
-    abbr --add find 'fd'
     abbr --add diff 'delta'
     abbr --add preview "fzf --preview 'bat --color=always {}'"
     abbr --add top 'btop'

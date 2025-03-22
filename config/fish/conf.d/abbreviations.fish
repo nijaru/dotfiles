@@ -67,10 +67,22 @@ if status is-interactive
 
     # Package management
     if type -q brew
-        abbr --add bi 'brew install'
-        abbr --add bu 'brew update'
-        abbr --add bug 'brew upgrade'
-        abbr --add bs 'brew search'
+        # Homebrew abbreviations
+        abbr --add up 'brew update && brew upgrade'
+        abbr --add brews 'brew search'
+        abbr --add brewin 'brew info'
+        abbr --add brewi 'brew install'
+        abbr --add brewu 'brew update && brew upgrade'
+        abbr --add brewx 'brew uninstall'
+        abbr --add brewl 'brew list'
+        abbr --add brewc 'brew cleanup'
+        
+        # Homebrew Cask abbreviations
+        abbr --add caskin 'brew info --cask'
+        abbr --add casks 'brew search --cask'
+        abbr --add caski 'brew install --cask'
+        abbr --add caskx 'brew uninstall --cask'
+        abbr --add caskl 'brew list --cask'
     end
 
     # Docker abbreviations

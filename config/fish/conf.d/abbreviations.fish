@@ -27,7 +27,7 @@ if status is-interactive
     abbr --add dl 'cd ~/Downloads'
     abbr --add dt 'cd ~/Desktop'
     abbr --add doc 'cd ~/Documents'
-    abbr --add gh 'cd ~/github'
+    abbr --add ghub 'cd ~/github'
     abbr --add p 'cd ~/Projects'
 
     # Editor abbreviations - moved to a separate file to ensure $EDITOR is set

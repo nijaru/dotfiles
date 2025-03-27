@@ -2,21 +2,6 @@
 # Fish abbreviations - these expand as you type
 
 if status is-interactive
-    # Git abbreviations (more powerful than aliases)
-    abbr --add g git
-    abbr --add ga 'git add'
-    abbr --add gaa 'git add --all'
-    abbr --add gc 'git commit --gpg-sign'
-    abbr --add gcm --set-cursor 'git commit --gpg-sign -m "%"'
-    abbr --add gs 'git status'
-    abbr --add gd 'git diff'
-    abbr --add gp 'git push'
-    abbr --add gpl 'git pull --rebase'
-    abbr --add gl 'git log --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 10'
-    abbr --add gf 'git fetch --all --prune'
-    abbr --add gsw 'git switch'
-    abbr --add gb 'git branch'
-
     # Navigation abbreviations
     abbr --add ... 'cd ../..'
     abbr --add .... 'cd ../../..'

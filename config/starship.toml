@@ -1,5 +1,5 @@
 # Global settings
-command_timeout = 1000 # milliseconds
+command_timeout = 2000 # milliseconds
 
 #############################
 # Git-related configuration
@@ -13,7 +13,6 @@ tag_symbol = '  '
 [git_status]
 format = "[$ahead_behind$modified$staged$stashed]($style)"
 untracked = ""
-show_sync_count = false
 
 #############################
 # System information

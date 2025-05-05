@@ -43,6 +43,8 @@ if status is-interactive
     abbr --add rmd 'rmdir'
     abbr --add rmrf 'rm -rf'
     abbr --add mkd 'mkdir -pv'
+    abbr --add cp 'cp -a'
+    abbr --add cpa 'cp -a'
     abbr --add cpv 'rsync -ah --info=progress2'
     abbr --add mvv 'rsync -ah --remove-source-files --info=progress2'
     abbr --add symlink 'ln -sf'
@@ -59,7 +61,7 @@ if status is-interactive
         abbr --add brewx 'brew uninstall'
         abbr --add brewl 'brew list'
         abbr --add brewc 'brew cleanup'
-        
+
         # Homebrew Cask abbreviations
         abbr --add caskin 'brew info --cask'
         abbr --add casks 'brew search --cask'

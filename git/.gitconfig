@@ -27,9 +27,9 @@
     autocrlf       = input                        # Convert CRLF to LF on input
     safecrlf       = true                         # Prevent dangerous line-ending mix-ups
     longpaths      = true                         # Support for paths longer than 260 characters
-    fsmonitor      = true                         # Enable filesystem monitoring for faster status
+	fsmonitor = true
     preloadIndex   = true                         # Preload index into memory for better performance
-    untrackedCache = true                         # Cache untracked files for speed
+	untrackedCache = true
 
 ##############################
 # Branch, Init & Checkout Settings
@@ -121,14 +121,15 @@
     packSizeLimit   = 256m                       # Limit pack file size
 
 [maintenance]
-    auto            = true                       # Enable automatic maintenance
-    strategy        = incremental                # Use incremental maintenance strategy
+	auto = false
+	strategy = incremental
     gc              = true                       # Enable garbage collection
 
 [gc]
-    auto            = 256                        # Trigger GC after 256 loose objects
+	auto = true
     autoPackLimit   = 64                         # Pack objects after reaching 64 packs
     pruneExpire     = 2.weeks.ago                # Expire objects older than two weeks
+	autoDetach = true
 
 ##############################
 # Delta & Git LFS Settings
@@ -192,3 +193,5 @@
 
 [include]
     path         = ~/.gitconfig.local            # Include additional local configuration overrides
+[feature]
+	manyFiles = true

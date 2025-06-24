@@ -10,9 +10,9 @@
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_fallbacks": ["JetBrains Mono", "Zed Plex Mono"],
   "buffer_font_size": 14,
+  "agent_font_size": 17,
   "preferred_line_length": 88,
   "wrap_guides": [80],
-  // "soft_wrap": "editor_width",
   "autosave": "on_focus_change",
   "active_pane_modifiers": { "inactive_opacity": 0.9 },
 
@@ -25,12 +25,15 @@
     "enabled": false
   },
 
-  "assistant": {
+  "agent": {
+    "play_sound_when_agent_done": true,
+    "always_allow_tool_actions": true,
     "version": "2",
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3.7-sonnet-thought"
-    }
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-thinking-latest"
+    },
+    "stream_edits": true
   },
 
   "lsp": {
@@ -58,9 +61,8 @@
       "language_servers": ["gopls"],
       "formatter": {
         "external": {
-          "command": "gofumpt"
-          // "command": "sh",
-          // "arguments": ["-c", "$(which gofumpt) | $(which golines) || exit 1"]
+          "command": "golines",
+          "arguments": ["-m", "gofumpt"]
         }
       }
     },
@@ -121,23 +123,7 @@
             "name": "clangd"
           }
         }
-      ],
-      "language_server": {
-        "clangd": {
-          "args": [
-            "--background-index",
-            "--clang-tidy",
-            "--completion-style=detailed",
-            "--header-insertion=iwyu",
-            "--suggest-missing-includes",
-            "--std=c++23",
-            "--query-driver=/usr/bin/clang++",
-            "-j=0",
-            "-Wno-c++11-extensions",
-            "-Wno-c++17-extensions"
-          ]
-        }
-      }
+      ]
     },
 
     "JavaScript": {

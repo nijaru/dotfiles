@@ -6,9 +6,9 @@
   // - "light": Use the theme indicated by the "light" field
   // - "dark": Use the theme indicated by the "dark" field
   "theme": {
-    "mode": "dark",
-    "light": "Catppuccin Frappé",
-    "dark": "Catppuccin Frappé"
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
   },
   "icon_theme": "Zed (Default)",
   // The name of a base set of key bindings to use.
@@ -28,17 +28,17 @@
     "edit_prediction_provider": "zed"
   },
   // The name of a font to use for rendering text in the editor
-  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_family": "Zed Plex Mono",
   // Set the buffer text's font fallbacks, this will be merged with
   // the platform's default fallbacks.
-  "buffer_font_fallbacks": ["JetBrains Mono", "Zed Plex Mono"],
+  "buffer_font_fallbacks": null,
   // The OpenType features to enable for text in the editor.
   "buffer_font_features": {
     // Disable ligatures:
     // "calt": false
   },
   // The default font size for text in the editor
-  "buffer_font_size": 14,
+  "buffer_font_size": 15,
   // The weight of the editor font in standard CSS units from 100 to 900.
   "buffer_font_weight": 400,
   // Set the buffer's line height.
@@ -68,19 +68,16 @@
   // The default font size for text in the UI
   "ui_font_size": 16,
   // The default font size for text in the agent panel
-  "agent_font_size": 17,
+  "agent_font_size": 16,
   // How much to fade out unused code.
   "unnecessary_code_fade": 0.3,
   // Active pane styling settings.
   "active_pane_modifiers": {
-    // The factor to grow the active pane by. Defaults to 1.0
-    // which gives the same size as all other panes.
-    "magnification": 1.0,
     // Inset border size of the active pane, in pixels.
     "border_size": 0.0,
     // Opacity of the inactive panes. 0 means transparent, 1 means opaque.
     // Values are clamped to the [0.0, 1.0] range.
-    "inactive_opacity": 0.9
+    "inactive_opacity": 1.0
   },
   // Layout mode of the bottom dock. Defaults to "contained"
   "bottom_dock_layout": "contained",
@@ -104,17 +101,20 @@
     // The second option is decimal.
     "unit": "binary"
   },
-  // The key to use for adding multiple cursors
-  // Currently "alt" or "cmd_or_ctrl"  (also aliased as
-  // "cmd" and "ctrl") are supported.
+  // Determines the modifier to be used to add multiple cursors with the mouse. The open hover link mouse gestures will adapt such that it do not conflict with the multicursor modifier.
+  //
+  // 1. Maps to `Alt` on Linux and Windows and to `Option` on MacOS:
+  //    "alt"
+  // 2. Maps `Control` on Linux and Windows and to `Command` on MacOS:
+  //    "cmd_or_ctrl" (alias: "cmd", "ctrl")
   "multi_cursor_modifier": "alt",
   // Whether to enable vim modes and key bindings.
   "vim_mode": false,
   // Whether to show the informational hover box when moving the mouse
   // over symbols in the editor.
   "hover_popover_enabled": true,
-  // Time to wait before showing the informational hover box
-  "hover_popover_delay": 350,
+  // Time to wait in milliseconds before showing the informational hover box.
+  "hover_popover_delay": 300,
   // Whether to confirm before quitting Zed.
   "confirm_quit": false,
   // Whether to restore last closed project when fresh Zed instance is opened.
@@ -128,6 +128,8 @@
   //
   // Default: true
   "restore_on_file_reopen": true,
+  // Whether to automatically close files that have been deleted on disk.
+  "close_on_file_delete": false,
   // Size of the drop target in the editor.
   "drop_target_size": 0.2,
   // Whether the window should be closed when using 'close active item' on a window with no tabs.
@@ -213,18 +215,39 @@
   // Whether to show the signature help after completion or a bracket pair inserted.
   // If `auto_signature_help` is enabled, this setting will be treated as enabled also.
   "show_signature_help_after_edits": false,
+  // Whether to show code action button at start of buffer line.
+  "inline_code_actions": true,
+  // Whether to allow drag and drop text selection in buffer.
+  "drag_and_drop_selection": true,
   // What to do when go to definition yields no results.
   //
   // 1. Do nothing: `none`
   // 2. Find references for the same symbol: `find_all_references` (default)
   "go_to_definition_fallback": "find_all_references",
+  // Which level to use to filter out diagnostics displayed in the editor.
+  //
+  // Affects the editor rendering only, and does not interrupt
+  // the functionality of diagnostics fetching and project diagnostics editor.
+  // Which files containing diagnostic errors/warnings to mark in the tabs.
+  // Diagnostics are only shown when file icons are also active.
+  // This setting only works when can take the following three values:
+  //
+  // Which diagnostic indicators to show in the scrollbar, their level should be more or equal to the specified severity level.
+  // Possible values:
+  //  - "off" — no diagnostics are allowed
+  //  - "error"
+  //  - "warning"
+  //  - "info"
+  //  - "hint"
+  //  - null — allow all diagnostics (default)
+  "diagnostics_max_severity": null,
   // Whether to show wrap guides (vertical rulers) in the editor.
   // Setting this to true will show a guide at the 'preferred_line_length' value
   // if 'soft_wrap' is set to 'preferred_line_length', and will show any
   // additional guides as specified by the 'wrap_guides' setting.
   "show_wrap_guides": true,
   // Character counts at which to show wrap guides in the editor.
-  "wrap_guides": [80],
+  "wrap_guides": [],
   // Hide the values of in variables from visual display in private files
   "redact_private_values": false,
   // The default number of lines to expand excerpts in the multibuffer by.
@@ -305,7 +328,24 @@
     // Whether to show the Selections menu in the editor toolbar.
     "selections_menu": true,
     // Whether to show agent review buttons in the editor toolbar.
-    "agent_review": true
+    "agent_review": true,
+    // Whether to show code action buttons in the editor toolbar.
+    "code_actions": false
+  },
+  // Titlebar related settings
+  "title_bar": {
+    // Whether to show the branch icon beside branch switcher in the titlebar.
+    "show_branch_icon": false,
+    // Whether to show the branch name button in the titlebar.
+    "show_branch_name": true,
+    // Whether to show the project host and name in the titlebar.
+    "show_project_items": true,
+    // Whether to show onboarding banners in the titlebar.
+    "show_onboarding_banner": true,
+    // Whether to show user picture in the titlebar.
+    "show_user_picture": true,
+    // Whether to show the sign in button in the titlebar.
+    "show_sign_in": true
   },
   // Scrollbar related settings
   "scrollbar": {
@@ -347,6 +387,45 @@
       "vertical": true
     }
   },
+  // Minimap related settings
+  "minimap": {
+    // When to show the minimap in the editor.
+    // This setting can take three values:
+    // 1. Show the minimap if the editor's scrollbar is visible:
+    //    "auto"
+    // 2. Always show the minimap:
+    //    "always"
+    // 3. Never show the minimap:
+    //    "never" (default)
+    "show": "never",
+    // When to show the minimap thumb.
+    // This setting can take two values:
+    // 1. Show the minimap thumb if the mouse is over the minimap:
+    //    "hover"
+    // 2. Always show the minimap thumb:
+    //    "always" (default)
+    "thumb": "always",
+    // How the minimap thumb border should look.
+    // This setting can take five values:
+    // 1. Display a border on all sides of the thumb:
+    //    "thumb_border": "full"
+    // 2. Display a border on all sides except the left side of the thumb:
+    //    "thumb_border": "left_open" (default)
+    // 3. Display a border on all sides except the right side of the thumb:
+    //    "thumb_border": "right_open"
+    // 4. Display a border only on the left side of the thumb:
+    //    "thumb_border": "left_only"
+    // 5. Display the thumb without any border:
+    //    "thumb_border": "none"
+    "thumb_border": "left_open",
+    // How to highlight the current line in the minimap.
+    // This setting can take the following values:
+    //
+    // 1. `null` to inherit the editor `current_line_highlight` setting (default)
+    // 2. "line" or "all" to highlight the current line in the minimap.
+    // 3. "gutter" or "none" to not highlight the current line in the minimap.
+    "current_line_highlight": null
+  },
   // Enable middle-click paste on Linux.
   "middle_click_paste": true,
   // What to do when multibuffer is double clicked in some of its excerpts
@@ -361,14 +440,14 @@
   "gutter": {
     // Whether to show line numbers in the gutter.
     "line_numbers": true,
-    // Whether to show code action buttons in the gutter.
-    "code_actions": true,
     // Whether to show runnables buttons in the gutter.
     "runnables": true,
     // Whether to show breakpoints in the gutter.
     "breakpoints": true,
     // Whether to show fold buttons in the gutter.
-    "folds": true
+    "folds": true,
+    // Minimum number of characters to reserve space for in the gutter.
+    "min_line_number_digits": 4
   },
   "indent_guides": {
     // Whether to show indent guides in the editor.
@@ -402,11 +481,17 @@
   // Scroll sensitivity multiplier. This multiplier is applied
   // to both the horizontal and vertical delta values while scrolling.
   "scroll_sensitivity": 1.0,
+  // Scroll sensitivity multiplier for fast scrolling. This multiplier is applied
+  // to both the horizontal and vertical delta values while scrolling. Fast scrolling
+  // happens when a user holds the alt or option key while scrolling.
+  "fast_scroll_sensitivity": 4.0,
   "relative_line_numbers": false,
   // If 'search_wrap' is disabled, search result do not wrap around the end of the file.
   "search_wrap": true,
   // Search options to enable by default when opening new project and buffer searches.
   "search": {
+    // Whether to show the project search button in the status bar.
+    "button": true,
     "whole_word": false,
     "case_sensitive": false,
     "include_ignored": false,
@@ -455,6 +540,9 @@
       "function": false
     }
   },
+  // Whether to resize all the panels in a dock when resizing the dock.
+  // Can be a combination of "left", "right" and "bottom".
+  "resize_all_panels_in_dock": ["left"],
   "project_panel": {
     // Whether to show the project panel button in the status bar
     "button": true,
@@ -518,7 +606,9 @@
       // 2. Never show indent guides:
       //    "never"
       "show": "always"
-    }
+    },
+    // Whether to hide the root entry when only one folder is open in the window.
+    "hide_root": false
   },
   "outline_panel": {
     // Whether to show the outline panel button in the status bar
@@ -613,7 +703,7 @@
     "scrollbar": {
       // When to show the scrollbar in the git panel.
       //
-      // Default: inherits editor settings
+      // Default: inherits editor scrollbar settings
       "show": null
     }
   },
@@ -635,7 +725,7 @@
     "version": "2",
     // Whether the agent is enabled.
     "enabled": true,
-    /// What completion mode to start new threads in, if available. Can be 'normal' or 'max'.
+    /// What completion mode to start new threads in, if available. Can be 'normal' or 'burn'.
     "preferred_completion_mode": "normal",
     // Whether to show the agent panel button in the status bar.
     "button": true,
@@ -648,15 +738,9 @@
     // The default model to use when creating new threads.
     "default_model": {
       // The provider to use.
-      "provider": "anthropic",
-      "model": "claude-3-7-sonnet-thinking-latest"
-    },
-    // The model to use when applying edits from the agent.
-    "editor_model": {
-      // The provider to use.
       "provider": "zed.dev",
       // The model to use.
-      "model": "claude-3-7-sonnet-latest"
+      "model": "claude-sonnet-4"
     },
     // Additional parameters for language model requests. When making a request to a model, parameters will be taken
     // from the last entry in this list that matches the model's provider and name. In each entry, both provider
@@ -676,16 +760,18 @@
       // To set parameters for a specific provider and model:
       // {
       //   "provider": "zed.dev",
-      //   "model": "claude-3-7-sonnet-latest",
+      //   "model": "claude-sonnet-4",
       //   "temperature": 1.0
       // }
     ],
     // When enabled, the agent can run potentially destructive actions without asking for your confirmation.
     "always_allow_tool_actions": false,
     // When enabled, the agent will stream edits.
-    "stream_edits": true,
+    "stream_edits": false,
     // When enabled, agent edits will be displayed in single-file editors for review
     "single_file_review": true,
+    // When enabled, show voting thumbs for feedback on agent edits.
+    "enable_feedback": true,
     "default_profile": "write",
     "profiles": {
       "write": {
@@ -694,7 +780,6 @@
         "tools": {
           "copy_path": true,
           "create_directory": true,
-          "create_file": true,
           "delete_path": true,
           "diagnostics": true,
           "edit_file": true,
@@ -740,7 +825,12 @@
     // "primary_screen" - Show the notification only on your primary screen (default)
     // "all_screens" - Show these notifications on all screens
     // "never" - Never show these notifications
-    "notify_when_agent_waiting": "primary_screen"
+    "notify_when_agent_waiting": "primary_screen",
+    // Whether to play a sound when the agent has either completed
+    // its response, or needs user input.
+
+    // Default: false
+    "play_sound_when_agent_done": false
   },
   // The settings for slash commands.
   "slash_commands": {
@@ -777,7 +867,7 @@
   //     "autosave": "on_focus_change",
   // 4. Save when idle for a certain amount of time:
   //     "autosave": { "after_delay": {"milliseconds": 500} },
-  "autosave": "on_focus_change",
+  "autosave": "off",
   // Maximum number of tabs per pane. Unset for unlimited.
   "max_tabs": null,
   // Settings related to the editor's tab bar.
@@ -859,7 +949,30 @@
     //    "modal_max_width": "full"
     //
     // Default: small
-    "modal_max_width": "small"
+    "modal_max_width": "small",
+    // Determines whether the file finder should skip focus for the active file in search results.
+    // There are 2 possible values:
+    //
+    // 1. true: When searching for files, if the currently active file appears as the first result,
+    //    auto-focus will skip it and focus the second result instead.
+    //    "skip_focus_for_active_in_search": true
+    //
+    // 2. false: When searching for files, the first result will always receive focus,
+    //    even if it's the currently active file.
+    //    "skip_focus_for_active_in_search": false
+    //
+    // Default: true
+    "skip_focus_for_active_in_search": true,
+    // Whether to show the git status in the file finder.
+    "git_status": true,
+    // Whether to use gitignored files when searching.
+    // Only the file Zed had indexed will be used, not necessary all the gitignored files.
+    //
+    // Can accept 3 values:
+    //   * `true`: Use all gitignored files
+    //   * `false`: Use only the files Zed had indexed
+    //   * `null`: Be smart and search for ignored when called from a gitignored worktree
+    "include_ignored": null
   },
   // Whether or not to remove any trailing whitespace from lines of a buffer
   // before saving it.
@@ -905,26 +1018,38 @@
   "soft_wrap": "none",
   // The column at which to soft-wrap lines, for buffers where soft-wrap
   // is enabled.
-  "preferred_line_length": 88,
+  "preferred_line_length": 80,
   // Whether to indent lines using tab characters, as opposed to multiple
   // spaces.
   "hard_tabs": false,
   // How many columns a tab should occupy.
   "tab_size": 4,
+  // What debuggers are preferred by default for all languages.
+  "debuggers": [],
   // Control what info is collected by Zed.
   "telemetry": {
     // Send debug info like crash reports.
-    "diagnostics": false,
+    "diagnostics": true,
     // Send anonymized usage data like what languages you're using Zed with.
-    "metrics": false
+    "metrics": true
   },
   // Automatically update Zed. This setting may be ignored on Linux if
   // installed through a package manager.
   "auto_update": true,
   // Diagnostics configuration.
   "diagnostics": {
+    // Whether to show the project diagnostics button in the status bar.
+    "button": true,
     // Whether to show warnings or not by default.
     "include_warnings": true,
+    // Settings for using LSP pull diagnostics mechanism in Zed.
+    "lsp_pull_diagnostics": {
+      // Whether to pull for diagnostics or not.
+      "enabled": true,
+      // Minimum time to wait before pulling diagnostics from the language server(s).
+      // 0 turns the debounce off.
+      "debounce_ms": 50
+    },
     // Settings for inline diagnostics
     "inline": {
       // Whether to show diagnostics inline or not
@@ -940,8 +1065,13 @@
       // longer than this value will still push diagnostics further to the right.
       "min_column": 0,
       // The minimum severity of the diagnostics to show inline.
-      // Shows all diagnostics when not specified.
+      // Inherits editor's diagnostics' max severity settings when `null`.
       "max_severity": null
+    },
+    "cargo": {
+      // When enabled, Zed disables rust-analyzer's check on save and starts to query
+      // Cargo diagnostics separately.
+      "fetch_cargo_diagnostics": false
     }
   },
   // Files or globs of files that will be excluded by Zed entirely. They will be skipped during file
@@ -1037,7 +1167,6 @@
   },
   // Settings specific to the terminal
   "terminal": {
-    "enabled": false,
     // What shell to use when opening a terminal. May take 3 values:
     // 1. Use the system's default terminal configuration in /etc/passwd
     //      "shell": "system"
@@ -1196,7 +1325,17 @@
   // Settings related to running tasks.
   "tasks": {
     "variables": {},
-    "enabled": true
+    "enabled": true,
+    // Use LSP tasks over Zed language extension ones.
+    // If no LSP tasks are returned due to error/timeout or regular execution,
+    // Zed language extension tasks will be used instead.
+    //
+    // Other Zed tasks will still be shown:
+    // * Zed task from either of the task config file
+    // * Zed task from history (e.g. one-off task was spawned before)
+    //
+    // Default: true
+    "prefer_lsp": true
   },
   // An object whose keys are language names, and whose values
   // are arrays of filenames or extensions of files that should
@@ -1214,21 +1353,22 @@
     "JSONC": ["**/.zed/**/*.json", "**/zed/**/*.json", "**/Zed/**/*.json", "**/.vscode/**/*.json"],
     "Shell Script": [".env.*"]
   },
-  // By default use a recent system version of node, or install our own.
-  // You can override this to use a version of node that is not in $PATH with:
-  // {
-  //   "node": {
-  //     "path": "/path/to/node"
-  //     "npm_path": "/path/to/npm" (defaults to node_path/../npm)
-  //   }
-  // }
-  // or to ensure Zed always downloads and installs an isolated version of node:
-  // {
-  //   "node": {
-  //     "ignore_system_version": true,
-  //   }
-  // NOTE: changing this setting currently requires restarting Zed.
-  "node": {},
+  // Settings for which version of Node.js and NPM to use when installing
+  // language servers and Copilot.
+  //
+  // Note: changing this setting currently requires restarting Zed.
+  "node": {
+    // By default, Zed will look for `node` and `npm` on your `$PATH`, and use the
+    // existing executables if their version is recent enough. Set this to `true`
+    // to prevent this, and force Zed to always download and install its own
+    // version of Node.
+    "ignore_system_version": false,
+    // You can also specify alternative paths to Node and NPM. If you specify
+    // `path`, but not `npm_path`, Zed will assume that `npm` is located at
+    // `${path}/../npm`.
+    "path": null,
+    "npm_path": null
+  },
   // The extensions that Zed should automatically install on startup.
   //
   // If you don't want any of these extensions, add this field to your settings
@@ -1282,26 +1422,6 @@
     //   `"insert"` otherwise.
     "lsp_insert_mode": "replace_suffix"
   },
-
-  // LSP Specific settings
-  "lsp": {
-    "ruff": {
-      "initialization_options": {
-        "settings": {
-          "lint": {
-            "ignore": ["E501"]
-          }
-        }
-      }
-    },
-    "mojo-lsp": {
-      "binary": {
-        "path": "magic",
-        "arguments": ["run", "mojo-lsp-server"]
-      }
-    }
-  },
-
   // Different settings for specific languages.
   "languages": {
     "Astro": {
@@ -1328,38 +1448,6 @@
       "use_on_type_format": false,
       "prettier": {
         "allowed": false
-      },
-      "preferred_line_length": 88,
-      "tab_size": 4,
-      "language_servers": ["clangd"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.clangd": true,
-            "source.fixAll.clangd": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "clangd"
-          }
-        }
-      ],
-      "language_server": {
-        "clangd": {
-          "args": [
-            "--background-index",
-            "--clang-tidy",
-            "--completion-style=detailed",
-            "--header-insertion=iwyu",
-            "--suggest-missing-includes",
-            "--std=c++23",
-            "--query-driver=/usr/bin/clang++",
-            "-j=0",
-            "-Wno-c++11-extensions",
-            "-Wno-c++17-extensions"
-          ]
-        }
       }
     },
     "CSS": {
@@ -1378,24 +1466,22 @@
     "Elixir": {
       "language_servers": ["elixir-ls", "!next-ls", "!lexical", "..."]
     },
+    "Elm": {
+      "tab_size": 4
+    },
     "Erlang": {
       "language_servers": ["erlang-ls", "!elp", "..."]
     },
     "Git Commit": {
-      "allow_rewrap": "anywhere"
+      "allow_rewrap": "anywhere",
+      "soft_wrap": "editor_width",
+      "preferred_line_length": 72
     },
     "Go": {
       "code_actions_on_format": {
         "source.organizeImports": true
       },
-      "tab_size": 4,
-      "hard_tabs": true,
-      "language_servers": ["gopls"],
-      "formatter": {
-        "external": {
-          "command": "gofumpt"
-        }
-      }
+      "debuggers": ["Delve"]
     },
     "GraphQL": {
       "prettier": {
@@ -1417,36 +1503,15 @@
       }
     },
     "JavaScript": {
-      "language_servers": ["...", "biome"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
-        }
-      ]
+      "language_servers": ["!typescript-language-server", "vtsls", "..."],
+      "prettier": {
+        "allowed": true
+      }
     },
     "JSON": {
-      "language_servers": ["...", "biome"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
-        }
-      ]
+      "prettier": {
+        "allowed": true
+      }
     },
     "JSONC": {
       "prettier": {
@@ -1454,11 +1519,11 @@
       }
     },
     "LaTeX": {
-      "format_on_save": "on",
       "formatter": "language_server",
       "language_servers": ["texlab", "..."],
       "prettier": {
-        "allowed": false
+        "allowed": true,
+        "plugins": ["prettier-plugin-latex"]
       }
     },
     "Markdown": {
@@ -1469,9 +1534,6 @@
       "prettier": {
         "allowed": true
       }
-    },
-    "Mojo": {
-      "language_servers": ["mojo-lsp"]
     },
     "PHP": {
       "language_servers": ["phpactor", "!intelephense", "..."],
@@ -1485,35 +1547,17 @@
       "allow_rewrap": "anywhere"
     },
     "Python": {
-      "tab_size": 4,
-      "hard_tabs": false,
-      "language_servers": ["ruff"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.ruff": true,
-            "source.fixAll.ruff": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "ruff"
-          }
-        }
-      ]
+      "debuggers": ["Debugpy"]
     },
     "Ruby": {
-      "language_servers": ["solargraph", "!ruby-lsp", "!rubocop", "..."]
+      "language_servers": ["solargraph", "!ruby-lsp", "!rubocop", "!sorbet", "!steep", "..."]
+    },
+    "Rust": {
+      "debuggers": ["CodeLLDB"]
     },
     "SCSS": {
       "prettier": {
         "allowed": true
-      }
-    },
-    "SQL": {
-      "prettier": {
-        "allowed": true,
-        "plugins": ["prettier-plugin-sql"]
       }
     },
     "Starlark": {
@@ -1527,20 +1571,10 @@
       }
     },
     "TSX": {
-      "language_servers": ["...", "biome"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
-        }
-      ]
+      "language_servers": ["!typescript-language-server", "vtsls", "..."],
+      "prettier": {
+        "allowed": true
+      }
     },
     "Twig": {
       "prettier": {
@@ -1548,20 +1582,10 @@
       }
     },
     "TypeScript": {
-      "language_servers": ["...", "biome"],
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
-        }
-      ]
+      "language_servers": ["!typescript-language-server", "vtsls", "..."],
+      "prettier": {
+        "allowed": true
+      }
     },
     "Vue.js": {
       "language_servers": ["vue-language-server", "..."],
@@ -1600,6 +1624,9 @@
       "version": "1",
       "api_url": "https://api.openai.com/v1"
     },
+    "open_router": {
+      "api_url": "https://openrouter.ai/api/v1"
+    },
     "lmstudio": {
       "api_url": "http://localhost:1234/api/v0"
     },
@@ -1633,6 +1660,20 @@
   // Settings for auto-closing of JSX tags.
   "jsx_tag_auto_close": {
     "enabled": true
+  },
+  // LSP Specific settings.
+  "lsp": {
+    // Specify the LSP name as a key here.
+    // "rust-analyzer": {
+    //     // A special flag for rust-analyzer integration, to use server-provided tasks
+    //     enable_lsp_tasks": true,
+    //     // These initialization options are merged into Zed's defaults
+    //     "initialization_options": {
+    //         "check": {
+    //             "command": "clippy" // rust-analyzer.check.command (default: "check")
+    //         }
+    //     }
+    // }
   },
   // Jupyter settings
   "jupyter": {
@@ -1708,8 +1749,6 @@
   //   "W": "workspace::Save"
   // }
   "command_aliases": {},
-  // Whether to show user picture in titlebar.
-  "show_user_picture": true,
   // ssh_connections is an array of ssh connections.
   // You can configure these from `project: Open Remote` in the command palette.
   // Zed's ssh support will pull configuration from your ~/.ssh too.
@@ -1726,6 +1765,8 @@
   //   }
   // ]
   "ssh_connections": [],
+  // Whether to read ~/.ssh/config for ssh connection sources.
+  "read_ssh_config": true,
   // Configures context servers for use by the agent.
   "context_servers": {},
   "debugger": {

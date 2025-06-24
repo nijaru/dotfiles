@@ -24,7 +24,7 @@
 [core]
     editor         = $EDITOR --wait                # Use your system editor (with --wait)
     excludesFile   = ~/.gitignore                  # Global ignore file
-    autocrlf       = input                         # Convert CRLF to LF on input
+	autocrlf = input
     safecrlf       = true                          # Prevent dangerous line-ending mix-ups
     longpaths      = true                          # Support for paths longer than 260 characters
     fsmonitor      = true                          # Enable filesystem monitoring for faster status

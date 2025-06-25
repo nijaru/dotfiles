@@ -326,3 +326,4 @@ if command -v pnpm >/dev/null 2>&1
     abbr --add pt "pnpm test"    # Run tests
     abbr --add pl "pnpm lint"    # Run linter
 end
+

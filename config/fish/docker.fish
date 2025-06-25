@@ -5,7 +5,9 @@
 # Docker Operations
 ###################
 # Basic operations
+abbr --add d "docker"                   # Basic docker command
 abbr --add dc "docker compose"          # Basic compose command
+abbr --add dkc "docker compose"         # Alternative compose command
 abbr --add dcu "docker compose up -d"   # Start containers in background
 abbr --add dcd "docker compose down"    # Stop and remove containers
 abbr --add dcl "docker compose logs -f" # Follow container logs

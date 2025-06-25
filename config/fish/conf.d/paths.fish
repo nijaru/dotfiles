@@ -8,7 +8,7 @@ fish_add_path $HOME/go/bin
 fish_add_path $HOME/.cargo/bin  
 fish_add_path $HOME/.mise/bin
 fish_add_path $HOME/.modular/bin
-fish_add_path $HOME/.gem/bin
+fish_add_path $HOME/.local/share/gem/bin
 
 # Homebrew paths for macOS
 if test (uname -s) = "Darwin"

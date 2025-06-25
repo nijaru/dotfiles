@@ -62,8 +62,8 @@ set -g fish_color_cancel -r
 # Enable modern features
 set -g fish_key_bindings fish_default_key_bindings  # Default key bindings
 
-# Initialize Starship prompt if available
-if status is-interactive; and type -q starship
+# Initialize Starship prompt if available (only if Tide is not active)
+if status is-interactive; and type -q starship; and not functions -q fish_prompt
     starship init fish | source
 end
 # Added by OrbStack: command-line tools and integration

@@ -87,10 +87,4 @@ switch (uname -s)
         end
 end
 
-# Path Configuration (Fish handles path deduplication automatically)
-fish_add_path $HOME/.local/bin
-fish_add_path $GOBIN
-fish_add_path $CARGO_HOME/bin
-fish_add_path $HOME/.mise/bin
-fish_add_path $GEM_HOME/bin
-fish_add_path $HOME/.modular/bin
+# Path configuration is handled in conf.d/paths.fish

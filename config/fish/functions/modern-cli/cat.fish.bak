@@ -1,7 +1,0 @@
-function cat --description 'Improved cat with syntax highlighting'
-    if command -v bat >/dev/null 2>&1
-        command bat --plain --paging=never $argv
-    else
-        command cat $argv
-    end
-end

@@ -50,35 +50,5 @@ if status is-interactive
     abbr --add symlink 'ln -sf'
     abbr --add ef 'exec fish'
 
-    # Package management
-    if type -q brew
-        # Homebrew abbreviations
-        abbr --add up 'brew update && brew upgrade'
-        abbr --add brews 'brew search'
-        abbr --add brewin 'brew info'
-        abbr --add brewi 'brew install'
-        abbr --add brewu 'brew update && brew upgrade'
-        abbr --add brewx 'brew uninstall'
-        abbr --add brewl 'brew list'
-        abbr --add brewc 'brew cleanup'
-
-        # Homebrew Cask abbreviations
-        abbr --add caskin 'brew info --cask'
-        abbr --add casks 'brew search --cask'
-        abbr --add caski 'brew install --cask'
-        abbr --add caskx 'brew uninstall --cask'
-        abbr --add caskl 'brew list --cask'
-    end
-
-    # Docker abbreviations
-    abbr --add d docker
-    abbr --add dkc 'docker compose'
-    abbr --add dcu 'docker compose up -d'
-    abbr --add dcd 'docker compose down'
-
-    # Python abbreviations
-    abbr --add py python3
-    abbr --add pip 'python3 -m pip'
-    abbr --add ve 'python3 -m venv .venv'
-    abbr --add va 'source .venv/bin/activate.fish'
+    # Package management, Docker, and Python abbreviations are in their respective dev files
 end

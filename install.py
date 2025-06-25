@@ -50,6 +50,9 @@ CORE_CONFIGS: List[Tuple[str, str, int]] = [
     ("git/.gitconfig", ".gitconfig", 0o644),
     ("git/.gitignore", ".gitignore", 0o644),
 
+    # Claude AI global config
+    ("claude/CLAUDE.md", ".claude/CLAUDE.md", 0o644),
+
     # SSH config
     ("ssh/config", ".ssh/config", 0o600),
 

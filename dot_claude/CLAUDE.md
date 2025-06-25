@@ -20,3 +20,6 @@ Universal preferences for all Claude Code projects.
 ## Documentation
 - Create necessary documentation when completing tasks
 - Avoid excessive documentation - focus on essential information
+
+## Code Formatting
+- Always add newlines to the end of files

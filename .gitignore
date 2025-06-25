@@ -15,3 +15,6 @@ homebrew/Brewfile.lock.json
 *~
 .swp
 .swo
+
+# Claude configuration
+.claude

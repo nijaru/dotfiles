@@ -5,22 +5,24 @@
 # Homebrew Management
 ###################
 
-# Brew commands are now in individual function files in the functions/ directory:
-# - brews.fish (brew search)
-# - brewin.fish (brew info)
-# - brewi.fish (brew install)
-# - brewu.fish (brew update && brew upgrade)
-# - brewx.fish (brew uninstall)
-# - brewl.fish (brew list)
-# - brewc.fish (brew cleanup)
-# - up.fish (alias for brewu)
-# 
-# Cask commands are also in individual function files:
-# - caskin.fish (brew info --cask)
-# - casks.fish (brew search --cask)
-# - caski.fish (brew install --cask)
-# - caskx.fish (brew uninstall --cask)
-# - caskl.fish (brew list --cask)
+# Homebrew abbreviations
+if command -v brew >/dev/null 2>&1
+    abbr --add up "brew update && brew upgrade"     # Update and upgrade all
+    abbr --add brews "brew search"                  # Search packages
+    abbr --add brewin "brew info"                   # Package info
+    abbr --add brewi "brew install"                 # Install package
+    abbr --add brewu "brew update && brew upgrade"  # Update and upgrade
+    abbr --add brewx "brew uninstall"               # Uninstall package
+    abbr --add brewl "brew list"                    # List installed packages
+    abbr --add brewc "brew cleanup"                 # Clean up old versions
+
+    # Homebrew Cask abbreviations
+    abbr --add caskin "brew info --cask"            # Cask info
+    abbr --add casks "brew search --cask"           # Search casks
+    abbr --add caski "brew install --cask"          # Install cask
+    abbr --add caskx "brew uninstall --cask"        # Uninstall cask
+    abbr --add caskl "brew list --cask"             # List installed casks
+end
 
 ###################
 # macOS Utilities

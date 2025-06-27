@@ -1,136 +1,197 @@
-# dotfiles
+# Personal Dotfiles
 
-Personal dotfiles for configuring development environments on macOS and Linux, optimized for speed and productivity.
+A comprehensive, security-focused dotfiles repository for macOS and Linux development environments. Managed with [chezmoi](https://chezmoi.io/) for reliable configuration management and optimized for speed, security, and productivity with Fish shell.
 
-## Overview
+## 🚀 Quick Start
 
-This repository contains a comprehensive set of configuration files for:
+```bash
+# Install chezmoi and apply dotfiles
+sh -c "$(curl -fsLS git.io/chezmoi)" -- init --apply https://github.com/YOUR_USERNAME/dotfiles.git
+```
 
-- Shell (Zsh with Z4H)
-- Development Tools & Languages
-- Security & Authentication
-- Terminal Emulators & Editors
-- Container & Cloud Tools
+## ✨ Features
 
-## Key Features
+- **🐠 Fish Shell**: Modern shell with intelligent autocompletion and syntax highlighting
+- **⚡ Performance**: Optimized for speed with lazy loading and efficient configurations
+- **🔒 Security**: SSH key management, GPG signing, and secure file permissions
+- **🛠️ Development**: Multi-language support with modern tooling
+- **📦 Package Management**: Automated setup with Homebrew (macOS)
+- **🔄 Sync**: Cross-platform compatibility with OS-specific configurations
 
-- Asynchronous ZSH configuration with Z4H
-- Extensive language-specific development environments
-- Security-focused SSH and GPG configuration
-- Modern CLI replacements for standard tools
-- Customized development environments for:
-  - Python, Go, Rust, Node.js, Ruby
-  - Docker and Kubernetes
-  - Git with advanced workflows
-  - Cloud tools (AWS, GCP, Azure)
+## 🏗️ Architecture
 
-## Prerequisites
+### Core Technologies
+- **Shell**: Fish 3.3+ with [Tide](https://github.com/IlanCosman/tide) prompt
+- **Config Management**: [chezmoi](https://chezmoi.io/) for dotfile management
+- **Runtime Management**: [mise](https://mise.jdx.dev/) for language versions
+- **Package Manager**: Homebrew (macOS), system package managers (Linux)
 
-- Zsh 5.8+
-- Python 3.6+
+### Directory Structure
+```
+~/.local/share/chezmoi/
+├── config/                    # Application configurations
+│   ├── fish/                  # Fish shell configuration
+│   │   ├── conf.d/           # Fish configuration modules
+│   │   │   ├── abbr.fish     # General abbreviations
+│   │   │   ├── git_abbr.fish # Git abbreviations  
+│   │   │   ├── paths.fish    # PATH configuration
+│   │   │   └── ...
+│   │   ├── functions/        # Organized fish functions
+│   │   │   ├── docker/       # Container operations
+│   │   │   ├── editor/       # Editor shortcuts
+│   │   │   ├── fs/           # File system utilities
+│   │   │   ├── git/          # Git operations
+│   │   │   ├── kubernetes/   # K8s management
+│   │   │   ├── modern-cli/   # Modern CLI wrappers
+│   │   │   ├── navigation/   # Directory navigation
+│   │   │   └── utils/        # Utility functions
+│   │   ├── config.fish       # Main Fish configuration
+│   │   ├── env.fish          # Environment variables
+│   │   ├── dev.fish          # Development tools
+│   │   ├── docker.fish       # Container abbreviations
+│   │   ├── darwin.fish       # macOS specific config
+│   │   └── linux.fish        # Linux specific config
+│   ├── ghostty/              # Terminal emulator
+│   ├── zed/                  # Code editor
+│   └── starship.toml         # Alternative shell prompt
+├── git/                      # Git configuration
+├── ssh/                      # SSH configuration  
+├── gnupg/                    # GPG configuration
+├── homebrew/                 # Package management
+│   └── Brewfile             # macOS packages
+├── system/                   # System configurations
+├── bin/                      # Custom scripts
+└── archive/                  # Archived configurations
+```
+
+## 🛠️ Development Environment
+
+### Languages & Runtimes
+- **Go**: Complete toolchain with testing, benchmarking, and module management
+- **Python**: Virtual environments, pip, testing frameworks, and linting
+- **Rust**: Cargo operations, clippy, formatting, and watch mode
+- **Node.js**: npm, pnpm, yarn support with version management
+- **Ruby**: Gem, bundle, Rails, and RSpec integration
+
+### Tools & CLI
+- **Containers**: Docker, Kubernetes with extensive shortcuts
+- **Cloud**: AWS, GCP, Azure CLI tools and configurations  
+- **Modern CLI**: `eza` (ls), `bat` (cat), `fd` (find), `ripgrep` (grep), `btop` (top)
+- **Git**: Advanced workflows, signing, and productivity shortcuts
+- **Editors**: Zed, Neovim, VS Code integration
+
+### Fish Functions (Examples)
+```fish
+# Container operations
+dksh container_name          # Shell into container
+dklogs container_name        # View container logs
+dkclean                      # Clean Docker system
+
+# Git operations  
+gadd                         # Interactive git add
+gswitch branch_name          # Switch/create branch
+git-clean                    # Clean merged branches
+
+# Kubernetes
+kctx context_name            # Switch context
+kns namespace_name           # Switch namespace
+kpods                        # List pods
+
+# File operations
+mkcd directory_name          # Create and enter directory
+extract archive.tar.gz       # Extract any archive
+uuid                         # Generate UUID
+```
+
+## 🔧 Installation
+
+### Prerequisites
+- Fish shell 3.3+
 - Git 2.25+
-- [Z4H (Zsh for Humans)](https://github.com/romkatv/zsh4humans)
+- curl or wget
 
-### Quick Start
-
+### Full Installation
 ```bash
-# Install Z4H if not present
-if ! command -v z4h >/dev/null; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-fi
+# 1. Install chezmoi
+curl -sfL https://git.io/chezmoi | sh
 
-# Clone and install dotfiles
-git clone https://github.com/nijaru/dotfiles.git ~/github/dotfiles
-cd ~/github/dotfiles
-./install.py
+# 2. Initialize and apply dotfiles
+chezmoi init https://github.com/YOUR_USERNAME/dotfiles.git
+chezmoi apply
+
+# 3. Install packages (macOS)
+brew bundle --file ~/.config/homebrew/Brewfile
+
+# 4. Set Fish as default shell
+echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/fish
 ```
 
-## Directory Structure
-
-```
-dotfiles/
-├── shell/           # Shell configuration
-│   ├── .zshenv      # Environment setup
-│   ├── .zshrc       # Main shell configuration
-│   ├── .env.zsh     # Environment variables
-│   ├── .aliases.zsh # General aliases
-│   ├── .git.zsh     # Git aliases and functions
-│   ├── .dev.zsh     # Development tools
-│   ├── .docker.zsh  # Container operations
-│   ├── .darwin.zsh  # macOS specific
-│   └── .linux.zsh   # Linux specific
-├── git/             # Git configuration
-│   ├── .gitconfig   # Git settings
-│   └── .gitignore   # Global ignores
-├── ssh/             # SSH configuration
-│   └── config       # SSH settings
-├── gnupg/           # GPG configuration
-│   └── gpg-agent.conf
-├── config/          # Application configs
-│   ├── kitty/       # Terminal emulator
-│   ├── zed/         # Code editor
-│   └── htop/        # System monitor
-├── homebrew/        # Package management
-│   └── Brewfile     # macOS packages
-├── misc/            # Additional files
-├── install.py       # Installation script
-└── README.md
-```
-
-## Installation
-
-The installation script provides several options:
-
+### Key Commands
 ```bash
-./install.py [options]
-
-Options:
-  --force      Force overwrite existing files
-  --no-backup  Skip backup creation
-  --dry-run    Show changes without applying
-  --help       Show help message
+chezmoi init                 # Initialize chezmoi
+chezmoi apply               # Apply configuration changes  
+chezmoi add <file>          # Add file to management
+chezmoi edit <file>         # Edit managed file
+chezmoi diff                # Show differences
+chezmoi status              # Show status
 ```
 
-### Features
+## 🔒 Security Features
 
-- Automatic backup of existing configurations
-- OS-specific installations (macOS/Linux)
-- XDG Base Directory support
-- Secure file permissions
+- **SSH**: Connection sharing, agent forwarding, and secure defaults
+- **GPG**: Automatic agent setup for commit signing
+- **File Permissions**: Secure defaults for sensitive configurations
+- **XDG Compliance**: Follows XDG Base Directory specification
+- **Secrets Management**: Secure handling of sensitive data with chezmoi
 
-## Configuration
+## 🎨 Customization
 
-### Shell
+### Adding New Configurations
+```bash
+# Add application config
+chezmoi add ~/.config/app/config.yml
 
-- Optimized Zsh configuration with Z4H
-- Extensive aliases and functions
-- Platform-specific customizations
-- Development environment integration
+# Edit existing config
+chezmoi edit ~/.config/fish/config.fish
 
-### Development
+# Add new Fish function
+chezmoi add ~/.config/fish/functions/category/new_function.fish
+```
 
-- Language-specific configurations
-- Container and cloud tool integration
-- Modern CLI replacements
-- Comprehensive Git workflow
+### Platform-Specific Config
+- **macOS**: Add to `darwin.fish` or create `*.darwin.fish` files
+- **Linux**: Add to `linux.fish` or create `*.linux.fish` files
+- **Conditional**: Use chezmoi templates for complex conditions
 
-### Security
+## 📋 Requirements
 
-- SSH configuration with connection sharing
-- GPG agent setup (macOS)
-- Secure default permissions
+### System Dependencies
+- **macOS**: Homebrew, Xcode Command Line Tools
+- **Linux**: Package manager (apt, yum, pacman), build tools
+- **All**: Git, curl, Fish shell
 
-## Customization
+### Optional Enhancements
+- [Tide](https://github.com/IlanCosman/tide) - Fish shell prompt
+- [mise](https://mise.jdx.dev/) - Runtime version management
+- [Ghostty](https://ghostty.org/) - Terminal emulator
+- [Zed](https://zed.dev/) - Code editor
 
-1. Fork this repository
-2. Modify configurations as needed
-3. Update Brewfile for different packages
-4. Adjust installation script
+## 🤝 Contributing
 
-## License
+1. Fork the repository
+2. Create a feature branch
+3. Test changes thoroughly
+4. Submit a pull request
 
-MIT License - See [LICENSE](LICENSE) file for details
+## 📄 License
 
-## Author
+MIT License - see [LICENSE](LICENSE) for details.
 
-[nijaru](https://github.com/nijaru)
+## 🙋‍♂️ Author
+
+Created and maintained by [Your Name](https://github.com/YOUR_USERNAME)
+
+---
+
+*Optimized for developer productivity and modern workflows. Continuously updated with the latest tools and best practices.*

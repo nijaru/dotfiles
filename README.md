@@ -68,4 +68,4 @@ This configuration assumes you have the following tools installed:
 
 ## License
 
-This is free and unencumbered software released into the public domain.
+Licensed under the [Apache License, Version 2.0](LICENSE).

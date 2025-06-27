@@ -16,5 +16,4 @@ homebrew/Brewfile.lock.json
 .swp
 .swo
 
-# Claude configuration
-.claude
+# Claude configuration files are now properly managed

@@ -3,7 +3,7 @@
 Universal preferences for all Claude Code projects.
 
 ## Git & Security
-- NEVER add Claude attribution lines, signatures, or any "Generated with Claude" text to git commit messages
+- **NEVER** add Claude attribution lines, signatures, or any "Generated with Claude" text to git commit messages
 - Commit working changes before cleanup/refactoring
 - Never commit secrets, API keys, or sensitive data
 - Respect .gitignore and don't force-add ignored files
@@ -16,6 +16,14 @@ Universal preferences for all Claude Code projects.
 ## Tool Efficiency
 - Batch multiple tool calls in single responses for performance
 - Use search tools (Task, Grep, Glob) efficiently for code exploration
+
+## Modern CLI Tools
+Prefer faster, modern alternatives when available:
+- **rg** over grep (faster search, respects .gitignore, better regex)
+- **fd** over find (simpler syntax, faster, respects .gitignore)
+- **bat** over cat (syntax highlighting aids code analysis)
+- **eza** over ls (better formatting, git status integration)
+- **delta** for git diffs (improved readability for code review)
 
 ## Documentation
 - Create necessary documentation when completing tasks

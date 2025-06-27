@@ -1,0 +1,20 @@
+# System files
+.DS_Store
+.DS_Store?
+._*
+
+# Fish shell runtime files
+config/fish/fish_variables
+
+# Homebrew lock files
+homebrew/Brewfile.lock.json
+
+# Cache and temporary files
+*.log
+*.cache
+*~
+.swp
+.swo
+
+# Claude configuration
+.claude

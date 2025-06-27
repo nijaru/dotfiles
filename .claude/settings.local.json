@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(find:*)",
+      "Bash(fish:*)",
+      "Bash(grep:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "WebFetch(domain:www.chezmoi.io)",
+      "Bash(ls:*)",
+      "Bash(chezmoi init:*)",
+      "Bash(chezmoi add:*)",
+      "Bash(chezmoi edit:*)",
+      "Bash(chezmoi diff:*)",
+      "Bash(chezmoi apply:*)",
+      "Bash(chezmoi status:*)",
+      "Bash(chezmoi:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}

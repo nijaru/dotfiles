@@ -50,5 +50,8 @@ if status is-interactive
     abbr --add symlink 'ln -sf'
     abbr --add ef 'exec fish'
 
+    # Claude Code installation
+    abbr --add install-claude 'npm i -g @anthropic-ai/claude-code'
+
     # Package management, Docker, and Python abbreviations are in their respective dev files
 end

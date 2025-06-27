@@ -1,25 +1,19 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)",
-      "Bash(chmod:*)",
-      "Bash(find:*)",
-      "Bash(fish:*)",
-      "Bash(grep:*)",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(rm:*)",
-      "WebFetch(domain:www.chezmoi.io)",
-      "Bash(ls:*)",
-      "Bash(chezmoi init:*)",
-      "Bash(chezmoi add:*)",
-      "Bash(chezmoi edit:*)",
-      "Bash(chezmoi diff:*)",
       "Bash(chezmoi apply:*)",
-      "Bash(chezmoi status:*)",
-      "Bash(chezmoi:*)",
+      "Bash(ls:*)",
+      "Bash(test:*)",
+      "Bash(cp:*)",
       "Bash(git add:*)",
-      "Bash(#!/bin/bash\nconvert_symlinks() {\n  local converted=0\n  local failed=0\n  \n  find /Users/nick/.local/share/chezmoi -name \"symlink_*\" -type f | while read -r symlink_file; do\n    # Read the target path from the symlink file\n    target_path=$(cat \"$symlink_file\")\n    \n    # Skip if target doesn't exist\n    if [[ ! -f \"$target_path\" ]]; then\n      echo \"SKIP: Target not found: $target_path\"\n      ((failed++))\n      continue\n    fi\n    \n    # Create new filename by removing 'symlink_' prefix\n    new_file=\"${symlink_file/symlink_/}\"\n    \n    # Copy content from target to new file\n    if cp \"$target_path\" \"$new_file\"; then\n      # Remove the old symlink file\n      rm \"$symlink_file\"\n      echo \"✓ Converted: $(basename \"$symlink_file\") → $(basename \"$new_file\")\"\n      ((converted++))\n    else\n      echo \"✗ Failed to convert: $symlink_file\"\n      ((failed++))\n    fi\n  done\n  \n  echo \"Summary: $converted converted, $failed failed\"\n}\n\nconvert_symlinks)"
+      "Bash(chezmoi status:*)",
+      "Bash(chezmoi diff:*)",
+      "Bash(rm:*)",
+      "Bash(chezmoi:*)",
+      "Bash(find:*)",
+      "Bash(mv:*)",
+      "Bash(git config:*)",
+      "Bash(git init:*)"
     ],
     "deny": []
   }

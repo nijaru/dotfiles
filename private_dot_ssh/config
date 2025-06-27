@@ -1,0 +1,8 @@
+# Include OrbStack config only on macOS
+Match exec "[ $(uname) = 'Darwin' ]"
+    Include ~/.orbstack/ssh/config
+
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519

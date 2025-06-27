@@ -1,0 +1,204 @@
+{
+  "language_models": {
+    "copilot_chat": {
+      "api_url": "https://api.githubcopilot.com/chat/completions",
+      "auth_url": "https://api.github.com/copilot_internal/v2/token",
+      "models_url": "https://api.githubcopilot.com/models"
+    }
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
+  "theme": {
+    "mode": "dark",
+    "light": "Catppuccin Frappé",
+    "dark": "Catppuccin Frappé"
+  },
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_fallbacks": ["JetBrains Mono", "Zed Plex Mono"],
+  "buffer_font_size": 14,
+  "agent_font_size": 17,
+  "preferred_line_length": 88,
+  "wrap_guides": [80],
+  "autosave": "on_focus_change",
+  "active_pane_modifiers": { "inactive_opacity": 0.9 },
+
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+
+  "terminal": {
+    "enabled": false
+  },
+
+  "agent": {
+    "play_sound_when_agent_done": true,
+    "always_allow_tool_actions": true,
+    "version": "2",
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-thinking-latest"
+    },
+    "stream_edits": true
+  },
+
+  "lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "lint": {
+            "ignore": ["E501"]
+          }
+        }
+      }
+    },
+    "mojo-lsp": {
+      "binary": {
+        "path": "magic",
+        "arguments": ["run", "mojo-lsp-server"]
+      }
+    }
+  },
+
+  "languages": {
+    "Go": {
+      "tab_size": 4,
+      "hard_tabs": true,
+      "language_servers": ["gopls"],
+      "formatter": {
+        "external": {
+          "command": "golines",
+          "arguments": ["-m", "gofumpt"]
+        }
+      }
+    },
+
+    "Python": {
+      "tab_size": 4,
+      "hard_tabs": false,
+      "language_servers": ["ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    },
+
+    "Mojo": {
+      "language_servers": ["mojo-lsp"]
+    },
+
+    // "Rust": {
+    //   "language_servers": ["rust-analyzer", "..."],
+    //   "formatter": [
+    //     {
+    //       "code_actions": {
+    //         "source.organizeImports": true,
+    //         "source.fixAll": true
+    //       }
+    //     },
+    //     {
+    //       "language_server": {
+    //         "name": "rust-analyzer"
+    //       }
+    //     }
+    //   ]
+    // },
+
+    "C++": {
+      "preferred_line_length": 88,
+      "tab_size": 4,
+      "language_servers": ["clangd"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.clangd": true,
+            "source.fixAll.clangd": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "clangd"
+          }
+        }
+      ]
+    },
+
+    "JavaScript": {
+      "language_servers": ["...", "biome"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+
+    "TypeScript": {
+      "language_servers": ["...", "biome"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+
+    "TSX": {
+      "language_servers": ["...", "biome"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    },
+
+    "JSON": {
+      "language_servers": ["...", "biome"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.biome": true,
+            "source.fixAll.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ]
+    }
+  }
+}

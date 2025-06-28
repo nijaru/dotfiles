@@ -69,11 +69,13 @@ end
 
 # SSH-aware transient prompt configuration
 if status is-interactive
-    # Disable transient prompt over SSH to prevent double prompts
+    # Clear any existing universal variable to prevent conflicts
+    set -e tide_prompt_transient_enabled 2>/dev/null
+    # Set session-specific transient prompt behavior
     if set -q SSH_CLIENT; or set -q SSH_TTY
-        set -U tide_prompt_transient_enabled false
+        set -g tide_prompt_transient_enabled false
     else
-        set -U tide_prompt_transient_enabled true
+        set -g tide_prompt_transient_enabled true
     end
 end
 

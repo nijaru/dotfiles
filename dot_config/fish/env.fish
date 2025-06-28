@@ -13,7 +13,7 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_STATE_HOME "$HOME/.local/state"
-test -z "$XDG_RUNTIME_DIR"; and set -gx XDG_RUNTIME_DIR "/run/user/$UID"
+set -gx XDG_RUNTIME_DIR "/run/user/$UID"
 
 # Ensure critical directories exist
 for dir in \
@@ -79,7 +79,6 @@ switch (uname -s)
         set -gx DOCKER_DEFAULT_PLATFORM "linux/arm64"
         
         # Homebrew setup
-        set -gx HOMEBREW_NO_AUTO_UPDATE 1
         switch (uname -m)
             case arm64 aarch64
                 eval (/opt/homebrew/bin/brew shellenv)

@@ -29,10 +29,10 @@ end
 ###################
 
 # System commands
-if type -q diskutil
+if command -v diskutil >/dev/null 2>&1
     abbr --add disk diskutil
 end
-if type -q gtar
+if command -v gtar >/dev/null 2>&1
     abbr --add tar gtar
 end
 abbr --add o open
@@ -44,7 +44,7 @@ abbr --add finder 'open -a Finder'
 # File operations
 abbr --add showfiles 'defaults write com.apple.finder AppleShowAllFiles YES && killall Finder'
 abbr --add hidefiles 'defaults write com.apple.finder AppleShowAllFiles NO && killall Finder'
-if type -q qlmanage
+if command -v qlmanage >/dev/null 2>&1
     abbr --add ql 'qlmanage -p'
 end
 

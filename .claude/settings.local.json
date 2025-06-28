@@ -13,7 +13,12 @@
       "Bash(find:*)",
       "Bash(mv:*)",
       "Bash(git config:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(grep:*)",
+      "Bash(fish:*)",
+      "Bash(echo $SHELL)",
+      "Bash(rg:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

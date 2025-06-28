@@ -67,12 +67,15 @@ if status is-interactive; and type -q starship; and not functions -q fish_prompt
     starship init fish | source
 end
 
-# SSH-aware transient prompt configuration
+# SSH-aware configuration
 if status is-interactive
     # Clear any existing universal variable to prevent conflicts
     set -e tide_prompt_transient_enabled 2>/dev/null
-    # Set session-specific transient prompt behavior
+    # SSH-specific settings
     if set -q SSH_CLIENT; or set -q SSH_TTY
+        # Fix terminal type for SSH sessions (enables clear/Ctrl-L)
+        set -gx TERM xterm-256color
+        # Disable transient prompts over SSH
         set -g tide_prompt_transient_enabled false
     else
         set -g tide_prompt_transient_enabled true

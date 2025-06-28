@@ -79,6 +79,7 @@ switch (uname -s)
         set -gx DOCKER_DEFAULT_PLATFORM "linux/arm64"
         
         # Homebrew setup
+        set -gx HOMEBREW_NO_AUTO_UPDATE 1
         switch (uname -m)
             case arm64 aarch64
                 eval (/opt/homebrew/bin/brew shellenv)

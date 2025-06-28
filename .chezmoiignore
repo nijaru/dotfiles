@@ -1,0 +1,4 @@
+# Repository documentation files - should not be installed to home directory
+LICENSE
+README.md
+DEBUG_SUMMARY.md

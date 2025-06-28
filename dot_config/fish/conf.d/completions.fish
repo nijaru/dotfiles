@@ -24,9 +24,11 @@ if command -v kubectl >/dev/null 2>&1
     end
 end
 
-# mise completions
+# mise completions and activation
 if command -v mise >/dev/null 2>&1
-    # Many tools have built-in commands to generate completions
+    # Activate mise for runtime version management
+    mise activate fish | source
+    # Load completions
     mise completion fish | source
 end
 

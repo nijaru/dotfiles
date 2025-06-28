@@ -18,7 +18,15 @@
       "Bash(fish:*)",
       "Bash(echo $SHELL)",
       "Bash(rg:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(ssh-add:*)",
+      "Bash(sudo dnf install:*)",
+      "Bash(mkdir:*)",
+      "Bash(systemctl:*)",
+      "Bash(systemd-creds:*)",
+      "Bash(journalctl:*)",
+      "Bash(pkill:*)",
+      "Bash(ssh-keygen:*)"
     ],
     "deny": []
   }

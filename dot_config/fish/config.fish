@@ -66,6 +66,17 @@ set -g fish_key_bindings fish_default_key_bindings  # Default key bindings
 if status is-interactive; and type -q starship; and not functions -q fish_prompt
     starship init fish | source
 end
+
+# SSH-aware transient prompt configuration
+if status is-interactive
+    # Disable transient prompt over SSH to prevent double prompts
+    if set -q SSH_CLIENT; or set -q SSH_TTY
+        set -U tide_prompt_transient_enabled false
+    else
+        set -U tide_prompt_transient_enabled true
+    end
+end
+
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :

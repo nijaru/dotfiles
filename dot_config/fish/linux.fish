@@ -8,25 +8,25 @@
 # Systemd service management
 if command -v systemctl >/dev/null 2>&1
     # Service control
-    alias sc="systemctl"
-    alias scs="systemctl status"
-    alias scr="systemctl restart"
-    alias sct="systemctl start"
-    alias scp="systemctl stop"
-    alias sce="systemctl enable"
-    alias scd="systemctl disable"
-    alias scl="systemctl list-units"
-    alias scf="systemctl --failed"
-    alias scu="systemctl --user"
-    alias scdr="systemctl daemon-reload"
+    abbr --add sc "systemctl"
+    abbr --add scs "systemctl status"
+    abbr --add scr "systemctl restart"
+    abbr --add sct "systemctl start"
+    abbr --add scp "systemctl stop"
+    abbr --add sce "systemctl enable"
+    abbr --add scd "systemctl disable"
+    abbr --add scl "systemctl list-units"
+    abbr --add scf "systemctl --failed"
+    abbr --add scu "systemctl --user"
+    abbr --add scdr "systemctl daemon-reload"
 
     # Journal management
-    alias jc="journalctl"
-    alias jcf="journalctl -f"                    # Follow logs
-    alias jce="journalctl -e"                    # Jump to end
-    alias jct="journalctl --since today"         # Today's logs
-    alias jcb="journalctl -b"                    # Current boot
-    alias jcc="sudo journalctl --vacuum-time=7d" # Clean old logs
+    abbr --add jc "journalctl"
+    abbr --add jcf "journalctl -f"                    # Follow logs
+    abbr --add jce "journalctl -e"                    # Jump to end
+    abbr --add jct "journalctl --since today"         # Today's logs
+    abbr --add jcb "journalctl -b"                    # Current boot
+    abbr --add jcc "sudo journalctl --vacuum-time=7d" # Clean old logs
 end
 
 ###################
@@ -36,48 +36,48 @@ end
 # RHEL/Fedora specific
 if command -v dnf >/dev/null 2>&1
     # Basic operations
-    alias dnfu="sudo dnf check-update"
-    alias dnfup="sudo dnf upgrade"
-    alias dnfi="sudo dnf install"
-    alias dnfx="sudo dnf remove"
-    alias dnfax="sudo dnf autoremove"
+    abbr --add dnfu "sudo dnf check-update"
+    abbr --add dnfup "sudo dnf upgrade"
+    abbr --add dnfi "sudo dnf install"
+    abbr --add dnfx "sudo dnf remove"
+    abbr --add dnfax "sudo dnf autoremove"
 
     # Search and information
-    alias dnfs="dnf search"
-    alias dnfin="dnf info"
-    alias dnfl="dnf list installed"
-    alias dnfd="dnf deplist"
-    alias dnfh="dnf history"
+    abbr --add dnfs "dnf search"
+    abbr --add dnfin "dnf info"
+    abbr --add dnfl "dnf list installed"
+    abbr --add dnfd "dnf deplist"
+    abbr --add dnfh "dnf history"
 
     # System maintenance
-    alias dnfc="sudo dnf clean all"
-    alias dnffix="sudo dnf distro-sync"
-    alias dnfgr="sudo dnf grouplist"
-    alias dnfgi="sudo dnf groupinstall"
+    abbr --add dnfc "sudo dnf clean all"
+    abbr --add dnffix "sudo dnf distro-sync"
+    abbr --add dnfgr "sudo dnf grouplist"
+    abbr --add dnfgi "sudo dnf groupinstall"
 end
 
 # Debian/Ubuntu specific
 if command -v apt >/dev/null 2>&1
     # Basic operations
-    alias aptu="sudo apt update"
-    alias aptup="sudo apt upgrade"
-    alias apti="sudo apt install"
-    alias aptx="sudo apt remove"
-    alias aptxx="sudo apt purge"
-    alias aptax="sudo apt autoremove"
+    abbr --add aptu "sudo apt update"
+    abbr --add aptup "sudo apt upgrade"
+    abbr --add apti "sudo apt install"
+    abbr --add aptx "sudo apt remove"
+    abbr --add aptxx "sudo apt purge"
+    abbr --add aptax "sudo apt autoremove"
 
     # Search and information
-    alias apts="apt search"
-    alias aptin="apt show"
-    alias aptl="apt list --installed"
-    alias aptd="apt depends"
-    alias aptrd="apt rdepends"
+    abbr --add apts "apt search"
+    abbr --add aptin "apt show"
+    abbr --add aptl "apt list --installed"
+    abbr --add aptd "apt depends"
+    abbr --add aptrd "apt rdepends"
 
     # System maintenance
-    alias aptc="sudo apt clean && sudo apt autoclean"
-    alias aptfix="sudo apt --fix-broken install"
-    alias apthold="sudo apt-mark hold"
-    alias aptunhold="sudo apt-mark unhold"
+    abbr --add aptc "sudo apt clean && sudo apt autoclean"
+    abbr --add aptfix "sudo apt --fix-broken install"
+    abbr --add apthold "sudo apt-mark hold"
+    abbr --add aptunhold "sudo apt-mark unhold"
 end
 
 ###################
@@ -86,6 +86,6 @@ end
 
 # XDG open command
 if command -v xdg-open >/dev/null 2>&1
-    alias o="xdg-open"
-    alias o.="xdg-open ."
+    abbr --add o "xdg-open"
+    abbr --add o. "xdg-open ."
 end

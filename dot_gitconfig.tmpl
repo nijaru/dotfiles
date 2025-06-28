@@ -188,11 +188,19 @@
 ##############################
 # Credential Helpers & Local Overrides
 ##############################
+{{- if eq .chezmoi.os "darwin" }}
 [credential "https://github.com"]
     helper       = !/opt/homebrew/bin/gh auth git-credential   # GitHub credential via gh
 
 [credential "https://gist.github.com"]
     helper       = !/opt/homebrew/bin/gh auth git-credential   # Gist credential via gh
+{{- else }}
+[credential "https://github.com"]
+    helper       = !gh auth git-credential   # GitHub credential via gh
+
+[credential "https://gist.github.com"]
+    helper       = !gh auth git-credential   # Gist credential via gh
+{{- end }}
 
 [include]
     path         = ~/.gitconfig.local              # Include additional local configuration overrides

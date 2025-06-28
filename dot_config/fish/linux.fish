@@ -89,3 +89,16 @@ if command -v xdg-open >/dev/null 2>&1
     abbr --add o "xdg-open"
     abbr --add o. "xdg-open ."
 end
+
+###################
+# SSH Agent Setup
+###################
+
+# Ensure SSH agent is working with keys loaded
+if status is-interactive
+    # Check if ssh-add can list keys (agent working + keys loaded)
+    if not ssh-add -l >/dev/null 2>&1
+        eval (ssh-agent -c)
+        ssh-add ~/.ssh/id_ed25519 2>/dev/null
+    end
+end

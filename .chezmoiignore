@@ -1,3 +1,6 @@
 # Repository documentation files - should not be installed to home directory
 LICENSE
 README.md
+
+# Fish shell runtime files that change frequently
+.config/fish/fish_variables

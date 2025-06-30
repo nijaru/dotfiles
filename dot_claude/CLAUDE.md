@@ -31,6 +31,12 @@ Prefer faster, modern alternatives when available:
 - Create necessary documentation when completing tasks
 - Avoid excessive documentation - focus on essential information
 
+### Documentation File Placement
+- **Extensive user documentation** → `/docs` folder
+- **GitHub-specific templates** → `/.github` folder  
+- **Architecture/design docs** → `/docs` or `/design`
+- **API documentation** → `/docs/api`
+
 ## Date and Time
 - Use CLI tools like `date` to get current date/time when writing dates instead of hardcoding
 - Examples: `date +"%Y-%m-%d"` for ISO format, `date +"%Y-%m-%d %H:%M:%S"` for timestamp

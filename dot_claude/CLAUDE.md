@@ -29,5 +29,9 @@ Prefer faster, modern alternatives when available:
 - Create necessary documentation when completing tasks
 - Avoid excessive documentation - focus on essential information
 
+## Date and Time
+- Use CLI tools like `date` to get current date/time when writing dates instead of hardcoding
+- Examples: `date +"%Y-%m-%d"` for ISO format, `date +"%Y-%m-%d %H:%M:%S"` for timestamp
+
 ## Code Formatting
 - Always add newlines to the end of files

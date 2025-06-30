@@ -1,4 +1,18 @@
 {
+  "context_servers": {
+    "mcp-server-context7": {
+      "source": "extension",
+      "settings": {
+        "default_minimum_tokens": "10000"
+      }
+    },
+    "mcp-server-github": {
+      "source": "extension",
+      "settings": {
+        "github_personal_access_token": "{{ .github_token }}"
+      }
+    }
+  },
   "ssh_connections": [
     {
       "host": "100.93.39.25",
@@ -6,7 +20,7 @@
       "projects": [
         {
           "paths": [
-            "/home/nick/github/modular-hackathon"
+            "/home/nick/github/max-whisper"
           ]
         }
       ]

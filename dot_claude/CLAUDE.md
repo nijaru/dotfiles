@@ -4,6 +4,8 @@ Universal preferences for all Claude Code projects.
 
 ## Git & Security
 - **NEVER** add Claude attribution lines, signatures, or any "Generated with Claude" text to git commit messages
+- **ALWAYS** sign commits with `Signed-off-by: User Name <user.email@example.com>` when contributing to projects with CLAs
+- Use `git commit -s` for automatic sign-off or manually add to commit messages
 - Commit working changes before cleanup/refactoring
 - Never commit secrets, API keys, or sensitive data
 - Respect .gitignore and don't force-add ignored files

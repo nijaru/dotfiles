@@ -1,0 +1,187 @@
+{
+    "theme": {
+        "mode": "dark",
+        "light": "Catppuccin Frappé",
+        "dark": "Catppuccin Frappé"
+    },
+    "icon_theme": "Colored Zed Icons Theme Dark",
+    "buffer_font_family": "JetBrains Mono",
+    "buffer_font_fallbacks": ["JetBrainsMono Nerd Font", "Zed Plex Mono"],
+    "buffer_font_size": 14,
+    "agent_font_size": 17,
+    "active_pane_modifiers": {
+        "inactive_opacity": 0.9
+    },
+    "cursor_blink": false,
+    "auto_signature_help": true,
+    "wrap_guides": [80],
+    "inlay_hints": {
+        "enabled": true
+    },
+    "tabs": {
+        "git_status": true,
+        "file_icons": true
+    },
+    "file_finder": {
+        "modal_max_width": "medium"
+    },
+    "preferred_line_length": 88,
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    },
+    "autosave": "on_focus_change",
+    "agent": {
+        "play_sound_when_agent_done": true
+    },
+    "languages": {
+        "C++": {
+            "language_servers": ["clangd"],
+            "formatter": "language_server",
+            "code_actions_on_format": {
+                "source.organizeImports.clangd": true,
+                "source.fixAll.clangd": true
+            },
+            "format_on_save": "on",
+            "use_on_type_format": false,
+            "prettier": {
+                "allowed": false
+            }
+        },
+        "Go": {
+            "hard_tabs": true,
+            "language_servers": ["gopls"],
+            "formatter": {
+                "external": {
+                    "command": "golines",
+                    "arguments": ["-m", "gofumpt"]
+                }
+            },
+            "code_actions_on_format": {
+                "source.organizeImports": true
+            }
+        },
+        "JavaScript": {
+            "language_servers": ["biome"],
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.biome": true,
+                        "source.fixAll.biome": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "biome"
+                    }
+                }
+            ]
+        },
+        "JSON": {
+            "language_servers": ["...", "!biome"],
+            "formatter": {
+                "language_server": {
+                    "name": "biome"
+                }
+            }
+        },
+        "JSONC": {
+            "language_servers": ["...", "!biome"],
+            "formatter": {
+                "language_server": {
+                    "name": "biome"
+                }
+            }
+        },
+        "Mojo": {
+            "language_servers": ["mojo-lsp"]
+        },
+        "Python": {
+            "language_servers": ["ruff"],
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.ruff": true,
+                        "source.fixAll.ruff": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "ruff"
+                    }
+                }
+            ]
+        },
+        "Rust": {
+            "hard_tabs": false
+        },
+        "TSX": {
+            "language_servers": ["biome"],
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.biome": true,
+                        "source.fixAll.biome": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "biome"
+                    }
+                }
+            ]
+        },
+        "TypeScript": {
+            "language_servers": ["biome"],
+            "formatter": [
+                {
+                    "code_actions": {
+                        "source.organizeImports.biome": true,
+                        "source.fixAll.biome": true
+                    }
+                },
+                {
+                    "language_server": {
+                        "name": "biome"
+                    }
+                }
+            ]
+        }
+    },
+    "lsp": {
+        "ruff": {
+            "initialization_options": {
+                "settings": {
+                    "lint": {
+                        "ignore": ["E501"]
+                    }
+                }
+            }
+        },
+        "mojo-lsp": {
+            "binary": {
+                "path": "pixi",
+                "arguments": ["run", "mojo-lsp-server"]
+            }
+        }
+    },
+    "ssh_connections": [
+        {
+            "host": "100.93.39.25",
+            "username": "nick",
+            "projects": [
+                {
+                    "paths": ["/home/nick/github/max-whisper"]
+                }
+            ]
+        }
+    ],
+    "context_servers": {
+        "mcp-server-context7": {
+            "source": "extension",
+            "settings": {
+                "default_minimum_tokens": "10000"
+            }
+        }
+    }
+}

@@ -32,8 +32,14 @@
     },
     "autosave": "on_focus_change",
     "agent": {
-        "play_sound_when_agent_done": true
-    },
+        "version": "2",
+        "always_allow_tool_actions": true,
+        "play_sound_when_agent_done": true,
+        "default_model": {
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-thinking-latest"
+        }
+      },
     "languages": {
         "C++": {
             "language_servers": ["clangd"],

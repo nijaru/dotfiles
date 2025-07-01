@@ -33,9 +33,12 @@ Prefer faster, modern alternatives when available:
 
 ### Documentation File Placement
 - **Extensive user documentation** → `/docs` folder
-- **GitHub-specific templates** → `/.github` folder  
+- **GitHub-specific templates** → `/.github` folder
 - **Architecture/design docs** → `/docs` or `/design`
 - **API documentation** → `/docs/api`
+- **Internal docs** → `/docs/internal`
+- **Developer docs** → `/docs/dev`
+- **Agent docs** → `/docs/agent`
 
 ## Date and Time
 - Use CLI tools like `date` to get current date/time when writing dates instead of hardcoding

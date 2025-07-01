@@ -8,7 +8,7 @@
     "buffer_font_family": "JetBrains Mono",
     "buffer_font_fallbacks": ["JetBrainsMono Nerd Font", "Zed Plex Mono"],
     "buffer_font_size": 14,
-    "agent_font_size": 17,
+    "agent_font_size": 16,
     "active_pane_modifiers": {
         "inactive_opacity": 0.9
     },

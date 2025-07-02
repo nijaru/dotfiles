@@ -14,7 +14,17 @@ Core principles and preferences for all Claude Code sessions.
 ### Task Management
 - Use TodoWrite/TodoRead tools proactively for multi-step tasks
 - Update task status: pending → in_progress → completed
+- Mark tasks complete immediately after finishing them
+- Update relevant documentation after tasks are complete
 - Clean up temporary/experimental files after committing working changes
+
+### Communication
+- Be concise and direct - minimize unnecessary explanations
+- Focus on what was asked, avoid tangential information
+- Add code comments only when they provide value (explain why, not what)
+  - Comment complex logic, algorithms, or non-obvious solutions
+  - Comment business logic reasoning or important trade-offs
+  - Avoid comments that simply restate what the code does
 
 ## Development Practices
 
@@ -31,6 +41,8 @@ Core principles and preferences for all Claude Code sessions.
 - Use CLI tools like `date` to get current date/time instead of hardcoding
   - `date +"%Y-%m-%d"` for ISO format
   - `date +"%Y-%m-%d %H:%M:%S"` for timestamp
+- Follow existing codebase patterns and conventions
+- Check for existing libraries/dependencies before assuming availability
 
 ### Documentation
 - Create necessary documentation when completing tasks

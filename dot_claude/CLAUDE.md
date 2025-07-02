@@ -12,7 +12,7 @@ Core principles and preferences for all Claude Code sessions.
 - Be transparent about limitations, assumptions, or potential problems
 
 ### Task Management
-- Use TodoWrite/TodoRead tools proactively for multi-step tasks
+- Use TodoWrite/TodoRead tools for tasks with 3+ steps or multiple components
 - Update task status: pending → in_progress → completed
 - Mark tasks complete immediately after finishing them
 - Update relevant documentation after tasks are complete
@@ -37,12 +37,19 @@ Core principles and preferences for all Claude Code sessions.
 - Respect .gitignore and don't force-add ignored files
 
 ### Code Standards
+- **Always prefer editing existing files over creating new ones**
+- Follow existing codebase patterns and conventions first
+- Check for existing libraries/dependencies before assuming availability
 - Always add newlines to the end of files
 - Use CLI tools like `date` to get current date/time instead of hardcoding
   - `date +"%Y-%m-%d"` for ISO format
   - `date +"%Y-%m-%d %H:%M:%S"` for timestamp
-- Follow existing codebase patterns and conventions
-- Check for existing libraries/dependencies before assuming availability
+
+### Error Handling
+- When blocked by errors, create specific todos describing what needs resolution
+- Never mark tasks complete if tests fail or implementation is partial
+- Ask for clarification when requirements are ambiguous
+- Document workarounds and limitations clearly
 
 ### Documentation
 - Create necessary documentation when completing tasks
@@ -58,11 +65,16 @@ Core principles and preferences for all Claude Code sessions.
 ### Performance & Efficiency
 - Batch multiple tool calls in single responses for performance
 - Use search tools (Task, Grep, Glob) efficiently for code exploration
+- For large codebases, use targeted searches rather than reading entire files
+- Use Task tool for open-ended searches that may require multiple rounds
 
-### Modern CLI Tools
-Prefer faster, modern alternatives when available:
+### Testing & Verification
+- Run lint/typecheck commands after code changes when available
+- Test solutions when possible before marking complete
+- Check README or search codebase to determine testing approach
+- Never assume specific test frameworks or scripts exist
+
+### CLI Tools for Bash
+When using Bash tool, prefer modern alternatives:
 - **rg** over grep (faster search, respects .gitignore, better regex)
-- **fd** over find (simpler syntax, faster, respects .gitignore)
-- **bat** over cat (syntax highlighting aids code analysis)
-- **eza** over ls (better formatting, git status integration)
 - **delta** for git diffs (improved readability for code review)

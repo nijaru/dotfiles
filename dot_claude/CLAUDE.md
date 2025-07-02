@@ -1,43 +1,45 @@
 # Claude Code Agent Guidelines
 
-Nick's specific preferences and workflow overrides.
+Nick's workflow preferences and behavioral overrides.
 
 ## Critical Overrides
 
-### File Creation Policy
+### File Creation
 - **Always prefer editing existing files over creating new ones**
 - Only create files when explicitly requested or functionally required
 - Never proactively create documentation files (*.md) or README files
 
-### Git Workflow
+### Communication
+- Keep responses under 4 lines of text (excluding tool use/code)
+- Answer directly without "Here's what I'll do" or "Based on the code"
+- Don't add code comments unless they explain complex logic or business reasoning
+
+### Git Commits
 - **NEVER** add Claude attribution to commit messages  
 - **ALWAYS** sign commits: `Signed-off-by: Nick Russo <nijaru7@gmail.com>` for CLA projects
 - Use `git commit -s` for automatic sign-off
 
-### Communication Style
-- Keep responses under 4 lines of text (excluding tool use/code)
-- Answer directly without "Here's what I'll do" or "Based on the code"
-- Provide brief summaries after completing tasks to track progress
-- Don't add code comments unless they explain complex logic or business reasoning
+## Task Workflow
 
-## Tool Preferences
-
-### Search Strategy
-- Use `rg --no-ignore` over grep to include private docs and local references
+### Planning & Exploration
+- Use TodoWrite/TodoRead for tasks with 3+ distinct steps or touching multiple files
+- Use `rg --no-ignore` to include private docs and local references
 - Use `rg --hidden` when searching hidden files
 - Use Task tool for open-ended searches that may require multiple rounds
 
-### Todo Management
-- Use TodoWrite/TodoRead for tasks with 3+ distinct steps or touching multiple files
-- Update status immediately after completing each task (don't batch completions)
+### During Implementation
+- Update todo status immediately after completing each task (don't batch)
 - Create specific todos when blocked by errors or missing requirements
+- Run lint/typecheck commands after changes (check package.json/README for commands)
+- Mark tasks incomplete if tests fail or implementation is partial
 
-### Task Completion Workflow
-- Update relevant documentation after completing tasks
+### Task Completion
+- Update relevant documentation when changes affect existing docs
 - Commit changes after documentation updates
 - Provide brief summary of what was completed
+- If no tests exist, acknowledge this when marking tasks complete
 
-## Documentation Guidelines
+## Documentation Standards
 
 ### When Documentation IS Required
 - User explicitly requests documentation
@@ -52,13 +54,7 @@ Nick's specific preferences and workflow overrides.
 - API docs → `/docs/api`
 - Internal/dev docs → `/docs/internal` or `/docs/dev`
 
-### Documentation Updates
-- Update existing docs when making related changes
-- Follow existing documentation patterns and style in the project
-
-## Quality Standards
-- Mark tasks incomplete if tests fail or implementation is partial
-- Run lint/typecheck commands after changes (check package.json/README for commands)
-- If no tests exist, acknowledge this when marking tasks complete
-- Use CLI tools for dates: `date +"%Y-%m-%d"` instead of hardcoding
+## Code Standards
 - Always add newlines to end of files
+- Use CLI tools for dates: `date +"%Y-%m-%d"` instead of hardcoding
+- Follow existing documentation patterns and style in projects

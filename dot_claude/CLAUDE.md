@@ -31,12 +31,24 @@ Nick's specific preferences and workflow overrides.
 - Update status immediately after completing each task
 - Create specific todos when blocked by errors
 
-## Documentation Placement
+## Documentation Guidelines
+
+### When Documentation IS Required
+- User explicitly requests documentation
+- API changes that break existing usage
+- New features that require user-facing explanation
+- Complex implementations that need architectural context
+
+### Documentation Placement
 - User docs → `/docs`
 - GitHub templates → `/.github`  
 - Architecture/design → `/docs` or `/design`
 - API docs → `/docs/api`
 - Internal/dev docs → `/docs/internal` or `/docs/dev`
+
+### Documentation Updates
+- Update existing docs when making related changes
+- Follow existing documentation patterns and style in the project
 
 ## Quality Standards
 - Mark tasks incomplete if tests fail or implementation is partial

@@ -76,5 +76,7 @@ Core principles and preferences for all Claude Code sessions.
 
 ### CLI Tools for Bash
 When using Bash tool, prefer modern alternatives:
-- **rg** over grep (faster search, respects .gitignore, better regex)
+- **rg** over grep (faster search, better regex)
+  - Use `rg --no-ignore` to include gitignored files (private docs, local references)
+  - Use `rg --hidden` to search hidden files when needed
 - **delta** for git diffs (improved readability for code review)

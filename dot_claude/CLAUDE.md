@@ -57,13 +57,13 @@ Nick's workflow preferences and behavioral overrides.
 - New architecture patterns or design decisions
 
 ### File Placement
-- User docs → `/docs/`
-- GitHub templates → `/.github/`
-- Architecture/design → `/docs/architecture/` or `/design/`
-- API docs → `/docs/api/`
-- Internal/dev docs → `/docs/internal/` or `/docs/dev/`
-- Guides/tutorials → `/docs/guides/`
-- Examples → `/docs/examples/` or `/examples/`
+- **Public docs** → `docs/public/` (user guides, API, tutorials)
+- **Internal docs** → `docs/internal/` (architecture, business, performance) 
+- **Dev docs** → `docs/dev/` (setup, troubleshooting, development)
+- **AI workflow** → `docs/agent/` (session tracking, references)
+- **GitHub templates** → `.github/`
+- **Runnable code** → `examples/`
+- **Project status** → `docs/STATUS.md`
 
 ## Code Standards
 - Always add newlines to end of files

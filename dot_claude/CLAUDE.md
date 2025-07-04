@@ -13,6 +13,7 @@ Nick's workflow preferences and behavioral overrides.
 - Keep responses under 4 lines of text (excluding tool use/code)
 - Answer directly without "Here's what I'll do" or "Based on the code"
 - Don't add code comments unless they explain complex logic or business reasoning
+- When compacting conversations, always include specific file paths and references needed for context
 
 ### Git Commits
 - **NEVER** add Claude attribution to commit messages  

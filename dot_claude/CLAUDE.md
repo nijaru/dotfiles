@@ -1,71 +1,70 @@
 # Claude Code Agent Guidelines
 
-Nick's workflow preferences and behavioral overrides.
+Global workflow preferences and behavioral overrides.
 
-## Context Management
-- **CLAUDE.md**: Essential workflow rules for every conversation
-- **`/docs/`**: Detailed guides, examples, reference material (organized in subdirs)
-- Reference format: `docs/subdir/filename.md: Brief description`
-- Keep CLAUDE.md focused - move lengthy content to `/docs/`
+## Core Principles
+- **Read project context first**: CLAUDE.md + spec.md/business.md for complex tasks
+- **Edit existing files over creating new ones**
+- **Never create documentation unless explicitly requested**
+- **Max 4 lines of text response (excluding tool use/code)**
 
-## Core Rules
+## Quality Assurance
+- **ALWAYS** review code changes for:
+  - Syntax errors and typos
+  - Logic errors and edge cases
+  - Security vulnerabilities (no secrets, injection attacks)
+  - Performance issues
+- Run lint/typecheck/tests after changes (check package.json/README for commands)
+- Mark todos incomplete if tests fail or implementation is partial
 
-### Files & Creation
-- **Always edit existing files over creating new ones**
-- Only create files when explicitly requested or functionally required
-- Never proactively create documentation (*.md) or README files
+## Error Recovery
+- When blocked: Create specific todo describing the blocker
+- When code fails: Read error messages carefully, check logs
+- When tests fail: Fix root cause, don't just make tests pass
+- When dependencies missing: Check existing package files before adding new ones
 
-### Communication Style  
-- Max 4 lines of text (excluding tool use/code)
+## Tool Usage Strategy
+- **TodoWrite**: Use for 3+ step tasks or multi-file changes  
+- **Task tool**: Open-ended searches requiring multiple rounds
+- **Batch calls**: Run multiple bash commands in parallel when independent
+- **Search smart**: Use `rg --no-ignore` (private docs), `rg --hidden` (hidden files)
+
+## Communication Style
 - Answer directly - no "Here's what I'll do" or "Based on the code"
+- Include file paths and line numbers for references (`file.js:123`)
 - Add code comments only for complex logic or business reasoning
-- Include file paths and references when compacting conversations
+- Format next steps as copyable blocks with @docs/file.md references
 
-### Git & Commits
+## Git & Commits
 - **NEVER** add Claude attribution to commit messages
-- **ALWAYS** sign commits: `Signed-off-by: Nick Russo <nijaru7@gmail.com>` for CLA projects
-- Use `git commit -s` for automatic sign-off
+- **ALWAYS** sign commits with `git commit -s` for CLA projects
 
-## Task Execution Flow
+## Execution Flow
+1. **Plan**: Use TodoWrite for multi-step tasks
+2. **Implement**: Follow existing conventions  
+3. **Complete**: Mark todos done immediately after finishing each task
 
-### 1. Planning & Exploration
-- Use TodoWrite/TodoRead for 3+ step tasks or multi-file changes
-- Search with `rg --no-ignore` (private docs) and `rg --hidden` (hidden files)
-- Use Task tool for open-ended searches requiring multiple rounds
+## Documentation Hierarchy (Project-Specific)
+- **CLAUDE.md** → Global workflow and principles (this file)
+- **Project overview** → `spec.md`, `business.md`, `status.md`, `tasks.json` (key context files)  
+- **Detailed topics** → `docs/` subdirectories only when necessary:
+  - `docs/internal/` → Architecture, technical decisions, performance
+  - `docs/dev/` → Setup, troubleshooting, development workflows  
+  - `docs/public/` → User guides, API, tutorials
+  - `docs/agent/` → AI session tracking, references
 
-### 2. Implementation
-- Update todo status immediately after each task (no batching)
-- Create specific todos when blocked by errors or missing requirements
-- Run lint/typecheck after changes (check package.json/README for commands)
-- Mark incomplete if tests fail or implementation is partial
+Navigation flow: CLAUDE.md → spec.md/business.md → docs/internal/ (if needed)
 
-### 3. Completion
-- Update relevant docs when changes affect existing documentation
-- Clean up temporary files or unused code
-- Commit changes after doc updates
-- Generate brief summary with key file paths
-- Format next steps as copyable block with source paths and @docs/file.md references
-- Only @ files needed in next conversation context
-- Acknowledge if no tests exist
-
-## Documentation
-
-### When Required
-- User explicitly requests it
-- API changes breaking existing usage
-- New user-facing features needing explanation
-- New architecture patterns or design decisions
-
-### File Placement
-- **Public docs** → `docs/public/` (user guides, API, tutorials)
-- **Internal docs** → `docs/internal/` (architecture, business, performance) 
-- **Dev docs** → `docs/dev/` (setup, troubleshooting, development)
-- **AI workflow** → `docs/agent/` (session tracking, references)
-- **GitHub templates** → `.github/`
-- **Runnable code** → `examples/`
-- **Project status** → `docs/STATUS.md`
+## Writing Internal Docs (For AI Agents)
+- **Structure**: Use clear headings, bullets, numbered lists
+- **Content**: Context + decisions + examples + file paths
+- **Format**: Token-efficient - no fluff, redundancy, or pleasantries
+- **Examples**: Include code snippets, command examples, file references
+- **Scope**: Cover "why" decisions were made, not just "what" was implemented
+- **Updates**: Keep current - remove outdated information immediately
 
 ## Code Standards
 - Always add newlines to end of files
 - Use CLI tools for dates: `date +"%Y-%m-%d"` (not hardcoded)
 - Follow existing patterns and styles in each project
+- Never assume libraries are available - check imports/dependencies first

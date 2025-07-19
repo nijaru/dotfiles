@@ -36,7 +36,7 @@ Global workflow preferences and behavioral overrides.
 - Format next steps as copyable blocks with @docs/file.md references
 
 ## Git & Commits
-- **NEVER** add Claude attribution to commit messages
+- **NEVER** add Claude attribution to commit messages (no "🤖 Generated with Claude" etc.)
 - **ALWAYS** sign commits with `git commit -s` for CLA projects
 
 ## Execution Flow

@@ -38,7 +38,7 @@ Global workflow preferences and behavioral overrides.
 ## Git & Commits
 - **NEVER** add Claude attribution to commit messages (no "🤖 Generated with Claude" etc.)
 - **ALWAYS** sign commits with `git commit -s` for CLA projects
-- **Use jj (Jujutsu) for version control when available** - modern Git-compatible VCS
+- **Prefer jj over git for version control** - faster, safer Git-compatible VCS
 
 ## Execution Flow
 1. **Plan**: Use TodoWrite for multi-step tasks

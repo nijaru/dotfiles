@@ -38,6 +38,7 @@ Global workflow preferences and behavioral overrides.
 ## Git & Commits
 - **NEVER** add Claude attribution to commit messages (no "🤖 Generated with Claude" etc.)
 - **ALWAYS** sign commits with `git commit -s` for CLA projects
+- **Use jj (Jujutsu) for version control when available** - modern Git-compatible VCS
 
 ## Execution Flow
 1. **Plan**: Use TodoWrite for multi-step tasks
@@ -68,3 +69,10 @@ Navigation flow: CLAUDE.md → spec.md/business.md → docs/internal/ (if needed
 - Use CLI tools for dates: `date +"%Y-%m-%d"` (not hardcoded)
 - Follow existing patterns and styles in each project
 - Never assume libraries are available - check imports/dependencies first
+
+## Logging Standards
+- **Concise messages**: Clear, actionable, avoid verbose explanations
+- **Appropriate levels**: Debug for development, info for user events, warn for recoverable issues, error for failures
+- **Context over detail**: "Using bundled model" vs "Using embedded SweRankEmbed-Small model (bundled, fast startup)"
+- **No redundant info**: Avoid stating obvious or repeating function/method names
+- **Include error context**: Always log the actual error when available

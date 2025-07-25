@@ -49,6 +49,7 @@ if status is-interactive
     abbr --add mvv 'rsync -ah --remove-source-files --info=progress2'
     abbr --add symlink 'ln -sf'
     abbr --add ef 'exec fish'
+    abbr --add ez 'exec fish'
 
     # Claude Code installation
     abbr --add install-claude 'npm i -g @anthropic-ai/claude-code'

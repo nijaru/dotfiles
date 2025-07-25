@@ -13,7 +13,12 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_STATE_HOME "$HOME/.local/state"
-set -gx XDG_RUNTIME_DIR "/run/user/$UID"
+switch (uname -s)
+    case Darwin
+        set -gx XDG_RUNTIME_DIR "$HOME/Library/Application Support/Ladybird"
+    case '*'
+        set -gx XDG_RUNTIME_DIR "/run/user/$UID"
+end
 
 # Ensure critical directories exist
 for dir in \

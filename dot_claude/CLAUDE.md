@@ -16,7 +16,7 @@ Global workflow preferences and behavioral overrides.
   - Performance issues
 - Run lint/typecheck/tests after changes (check package.json/README for commands)
 - Mark todos incomplete if tests fail or implementation is partial
-- **Build real implementations** - no placeholder code, TODO comments, or temporary workarounds
+- **Complete what you start** - no placeholder code or marking tasks done with partial implementations
 
 ## Error Recovery
 - When blocked: Create specific todo describing the blocker

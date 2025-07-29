@@ -16,7 +16,7 @@ Global workflow preferences and behavioral overrides.
   - Performance issues
 - Run lint/typecheck/tests after changes (check package.json/README for commands)
 - Mark todos incomplete if tests fail or implementation is partial
-- **Deliver working code** - if it's not functional, keep the task in_progress
+- **Deliver working code** - no stubs or workarounds; TODO comments fine but functionality must work
 
 ## Error Recovery
 - When blocked: Create specific todo describing the blocker

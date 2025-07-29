@@ -16,6 +16,7 @@ Global workflow preferences and behavioral overrides.
   - Performance issues
 - Run lint/typecheck/tests after changes (check package.json/README for commands)
 - Mark todos incomplete if tests fail or implementation is partial
+- **No mock implementations** - make things actually work, no placeholders or workarounds
 
 ## Error Recovery
 - When blocked: Create specific todo describing the blocker

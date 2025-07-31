@@ -6,7 +6,11 @@
   },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "buffer_font_family": "JetBrains Mono",
-  "buffer_font_fallbacks": ["JetBrainsMono Nerd Font", "Zed Plex Mono"],
+  "buffer_font_fallbacks": [
+    "JetBrains Mono",
+    "JetBrainsMono Nerd Font",
+    "Zed Plex Mono"
+  ],
   "buffer_font_size": 14,
   "agent_font_size": 16,
   "active_pane_modifiers": {
@@ -32,12 +36,11 @@
   },
   "autosave": "on_focus_change",
   "agent": {
-    "version": "2",
     "always_allow_tool_actions": true,
     "play_sound_when_agent_done": true,
     "default_model": {
-      "provider": "google",
-      "model": "gemini-2.5-pro"
+      "provider": "openrouter",
+      "model": "z-ai/glm-4.5"
     }
   },
   "language_models": {

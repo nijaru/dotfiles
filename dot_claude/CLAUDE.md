@@ -70,6 +70,7 @@ Navigation flow: CLAUDE.md → spec.md/business.md → docs/internal/ (if needed
 - Use CLI tools for dates: `date +"%Y-%m-%d"` (not hardcoded)
 - Follow existing patterns and styles in each project
 - Never assume libraries are available - check imports/dependencies first
+- **Keep root directory clean**: Implementation → `src/`, tests → `test/`, scripts → `scripts/`, docs → `docs/`
 
 ## Logging Standards
 - **Concise messages**: Clear, actionable, avoid verbose explanations

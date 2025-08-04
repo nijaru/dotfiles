@@ -18,3 +18,6 @@ homebrew/Brewfile.lock.json
 
 # Claude configuration files are now properly managed
 .claude/
+
+# Secrets and sensitive data
+dot_config/fish/conf.d/secrets.fish

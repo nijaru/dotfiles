@@ -40,6 +40,11 @@ Global workflow preferences and behavioral overrides.
 - **NEVER** add Claude attribution to commit messages (no "🤖 Generated with Claude" etc.)
 - **ALWAYS** sign commits with `git commit -s` for CLA projects
 - **Prefer jj over git for version control** - faster, safer Git-compatible VCS
+- **NEVER** create pull requests, merge requests, or similar operations without explicit user permission
+- **NEVER** push to remote repositories unless explicitly requested
+- **ASK BEFORE** any operations that affect remote repositories or create public artifacts
+- **NEVER** use gh pr create or similar commands without explicit permission
+- **DO NOT** create PRs automatically - user will create them manually when ready
 
 ## Execution Flow
 1. **Plan**: Use TodoWrite for multi-step tasks

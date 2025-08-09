@@ -5,6 +5,6 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-25); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); MODEL=$(echo \"$INPUT\" | jq -r '.model.display_name // \"Claude\"' | sed 's/.*Sonnet.*/Sonnet/' | sed 's/.*Opus.*/Opus/' | sed 's/.*Haiku.*/Haiku/'); BRANCH_DISPLAY=\"\"; [ -n \"$BRANCH\" ] && BRANCH_DISPLAY=\" [\\033[32m$BRANCH\\033[0m]\"; printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m%s | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$BRANCH_DISPLAY\" \"$MODEL\""
+    "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-25); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); MODEL=$(echo \"$INPUT\" | jq -r '.model.display_name // \"Claude\"' | sed 's/.*Sonnet.*/Sonnet/' | sed 's/.*Opus.*/Opus/' | sed 's/.*Haiku.*/Haiku/'); if [ -n \"$BRANCH\" ]; then printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m [\\033[32m%s\\033[0m] | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$BRANCH\" \"$MODEL\"; else printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$MODEL\"; fi"
   }
 }

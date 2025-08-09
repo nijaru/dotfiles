@@ -5,6 +5,6 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-15); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); MODEL=$(echo \"$INPUT\" | jq -r '.model.display_name // \"Claude\"' | sed 's/.*Sonnet.*/Sonnet/' | sed 's/.*Opus.*/Opus/' | sed 's/.*Haiku.*/Haiku/' | sed 's/.*/Claude/'); CTX=$(echo \"$INPUT\" | jq -r 'if .context_used and .context_limit then \"\\(.context_used / .context_limit * 100 | floor)%\" else \"N/A\" end'); printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m%s | 🤖 \\033[33m%s\\033[0m | 📊 %s' \"$TIME\" \"$DIR\" \"$([ -n \\\"$BRANCH\\\" ] && printf ' [\\033[32m%s\\033[0m]' \\\"$BRANCH\\\")\" \"$MODEL\" \"$CTX\""
+    "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-15); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); MODEL=$(echo \"$INPUT\" | jq -r '.model.display_name // \"Claude\"' | sed 's/.*Sonnet.*/Sonnet/' | sed 's/.*Opus.*/Opus/' | sed 's/.*Haiku.*/Haiku/' | sed 's/.*/Claude/'); CTX=$(echo \"$INPUT\" | jq -r 'if .context_used and .context_limit then \"\\(.context_used / .context_limit * 100 | floor)%\" else \"N/A\" end'); BRANCH_DISPLAY=\"\"; [ -n \"$BRANCH\" ] && BRANCH_DISPLAY=\" [\\\\033[32m$BRANCH\\\\033[0m]\"; printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m%s | 🤖 \\033[33m%s\\033[0m | 📊 %s' \"$TIME\" \"$DIR\" \"$BRANCH_DISPLAY\" \"$MODEL\" \"$CTX\""
   }
 }

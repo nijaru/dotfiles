@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "feedbackSurveyState": {
+    "lastShownTime": 1754058924879
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-15); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); eval $(echo \"$INPUT\" | jq -r '@sh \"MODEL=\\(.model.display_name // \\\"Claude\\\"); CTX=\\(if .context_used and .context_limit then \\\"\\(.context_used / .context_limit * 100 | floor)%\\\" else \\\"N/A\\\" end)\"'); MODEL=$(echo \"$MODEL\" | sed 's/.*Sonnet.*/Sonnet/' | sed 's/.*Opus.*/Opus/' | sed 's/.*Haiku.*/Haiku/' | sed 's/.*/Claude/'); printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m%s | 🤖 \\033[33m%s\\033[0m | 📊 %s' \"$TIME\" \"$DIR\" \"$([ -n \\\"$BRANCH\\\" ] && printf ' [\\033[32m%s\\033[0m]' \\\"$BRANCH\\\")\" \"$MODEL\" \"$CTX\""
+  }
+}

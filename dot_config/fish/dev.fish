@@ -13,8 +13,20 @@ end
 # mise
 ###############################################################################
 if command -v mise >/dev/null 2>&1
-    # Initialize mise (Fish has a better way to do this)
-    mise activate fish | source
+    # Lazy-load mise activation to avoid startup delay
+    # Create a function that activates mise on first use
+    function __mise_activate_if_needed
+        if not set -q __mise_activated
+            mise activate fish | source
+            set -g __mise_activated 1
+        end
+    end
+    
+    # Create wrapper functions for mise commands that auto-activate
+    function mise
+        __mise_activate_if_needed
+        command mise $argv
+    end
     
     # Core operations
     abbr --add mi "mise install" # Install tool version
@@ -39,6 +51,33 @@ if command -v mise >/dev/null 2>&1
         
         # Set global versions
         mise global python@latest go@latest rust@latest
+    end
+end
+
+###############################################################################
+# direnv (lazy-loaded)
+###############################################################################
+if command -v direnv >/dev/null 2>&1
+    # Create lazy-loaded direnv that only hooks when needed
+    function __direnv_activate_if_needed
+        if not set -q __direnv_activated
+            eval (direnv hook fish)
+            set -g __direnv_activated 1
+        end
+    end
+    
+    # Wrapper that activates direnv on first use
+    function direnv
+        __direnv_activate_if_needed
+        command direnv $argv
+    end
+    
+    # Auto-activate direnv only when entering directories with .envrc
+    function __auto_direnv --on-variable PWD
+        if test -f .envrc
+            __direnv_activate_if_needed
+            direnv allow .
+        end
     end
 end
 

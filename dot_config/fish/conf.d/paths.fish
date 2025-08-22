@@ -1,24 +1,24 @@
 #!/usr/bin/env fish
-# Fish path configuration
+# Fish path configuration - optimized for performance
 # Fish handles path deduplication automatically
-# Note: Homebrew PATH is handled by 'brew shellenv' in env.fish
 
-# Universal development tool paths (cross-platform)
-fish_add_path $HOME/.local/bin
-fish_add_path $HOME/bin
-fish_add_path $HOME/go/bin
-fish_add_path $HOME/.cargo/bin  
-fish_add_path $HOME/.mise/bin
-fish_add_path $HOME/.modular/bin
-fish_add_path $HOME/.pixi/bin
-fish_add_path $HOME/.local/share/gem/bin
+# Only add paths in interactive shells or if not already set
+if status is-interactive; or not set -q __paths_initialized
+    # Batch add all paths at once to minimize operations
+    # Only add paths that actually exist to avoid unnecessary checks
+    set -l paths_to_add \
+        $HOME/.local/bin \
+        $HOME/bin \
+        $HOME/go/bin \
+        $HOME/.cargo/bin \
+        $HOME/.mise/bin \
+        $HOME/.modular/bin \
+        $HOME/.pixi/bin \
+        $HOME/.local/share/gem/bin
 
-# Platform-specific paths (non-Homebrew)
-switch (uname -s)
-    case Linux
-        # Add any Linux-specific paths here if needed
-        # e.g., fish_add_path /usr/local/bin
-    case Darwin
-        # macOS-specific non-Homebrew paths
-        # Homebrew paths are handled by 'brew shellenv' in env.fish
+    for path in $paths_to_add
+        test -d $path && fish_add_path -g $path
+    end
+    
+    set -g __paths_initialized 1
 end

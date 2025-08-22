@@ -25,6 +25,8 @@
 - Run `chezmoi apply --dry-run` then `chezmoi apply` to validate changes.
 - For Fish functions/aliases, open a new session and smoke‑test key commands.
 - Use `chezmoi doctor` to verify environment prerequisites.
+- Measure Fish startup performance: `hyperfine -w 3 'fish -lc exit'`
+- Test lazy-loading: Type `dev` or cd to a project directory
 
 ## Commit & Pull Request Guidelines
 - **Messages**: Imperative mood (e.g., “Add”, “Update”); include path scope when helpful (e.g., `Update .config/zed/settings.json`).

@@ -28,14 +28,9 @@ if status is-interactive
     abbr --add ltd 'ls -T -L'
     abbr --add lltd 'ls -T -l -L'
     abbr --add tree 'ls -T'
-    abbr --add diff 'delta'
+    # Modern CLI tools now use smart fallback functions
+    # See functions/modern-cli/ for implementations
     abbr --add preview "fzf --preview 'bat --color=always {}'"
-    abbr --add top 'btop'
-    abbr --add df 'duf'
-    abbr --add du 'dust'
-    abbr --add ps 'procs'
-    abbr --add dig 'doggo'
-    abbr --add ping 'gping'
     abbr --add hypf 'hyperfine -N --warmup 5'
 
     # File operations

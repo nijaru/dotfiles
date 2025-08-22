@@ -1,0 +1,26 @@
+#!/usr/bin/env fish
+# Generate kubectl completions once when kubectl is available
+# This avoids running kubectl completion on every shell startup
+
+if command -v kubectl >/dev/null 2>&1
+    set -l completions_dir ~/.config/fish/completions
+    set -l kubectl_completions "$completions_dir/kubectl.fish"
+    
+    # Create completions directory if it doesn't exist
+    if not test -d $completions_dir
+        mkdir -p $completions_dir
+    end
+    
+    # Generate kubectl completions
+    echo "Generating kubectl completions..."
+    kubectl completion fish > $kubectl_completions
+    
+    if test -f $kubectl_completions
+        echo "kubectl completions generated successfully at $kubectl_completions"
+    else
+        echo "Failed to generate kubectl completions"
+        exit 1
+    end
+else
+    echo "kubectl not found, skipping completion generation"
+end

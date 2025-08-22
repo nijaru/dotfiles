@@ -13,26 +13,41 @@ else
     echo "Warning: Could not read file: $HOME/.config/fish/env.fish" >&2
 end
 
-# Source configuration files
-set -l config_files \
-    $HOME/.config/fish/dev.fish \
-    $HOME/.config/fish/docker.fish \
+# Source only essential configuration files at startup
+# Heavy development tools are lazy-loaded
+set -l essential_configs \
     $HOME/.config/fish/editor.fish
 
 # Platform-specific configuration
 switch (uname -s)
     case Darwin
-        set -a config_files $HOME/.config/fish/darwin.fish
+        set -a essential_configs $HOME/.config/fish/darwin.fish
     case Linux
-        set -a config_files $HOME/.config/fish/linux.fish
+        set -a essential_configs $HOME/.config/fish/linux.fish
 end
 
-# Source core configuration files
-for file in $config_files
-    if test -r $file
-        source $file
-    else
-        echo "Warning: Could not read file: $file" >&2
+# Source essential configs only
+for file in $essential_configs
+    test -r $file && source $file
+end
+
+# Lazy-load development environment on demand
+function dev
+    if not set -q __dev_loaded
+        test -r $HOME/.config/fish/dev.fish && source $HOME/.config/fish/dev.fish
+        test -r $HOME/.config/fish/docker.fish && source $HOME/.config/fish/docker.fish
+        set -g __dev_loaded 1
+        echo "Development environment loaded"
+    end
+end
+
+# Auto-load dev tools when entering project directories
+function __auto_load_dev --on-variable PWD
+    # Common project indicators
+    if test -f package.json -o -f go.mod -o -f Cargo.toml -o -f Gemfile -o -f pyproject.toml -o -f requirements.txt -o -d .git
+        if not set -q __dev_loaded
+            dev >/dev/null 2>&1
+        end
     end
 end
 
@@ -61,11 +76,6 @@ set -g fish_color_cancel -r
 
 # Enable modern features
 set -g fish_key_bindings fish_default_key_bindings  # Default key bindings
-
-# Initialize Starship prompt if available (only if Tide is not active)
-if status is-interactive; and type -q starship; and not functions -q fish_prompt
-    starship init fish | source
-end
 
 # SSH-aware configuration
 if status is-interactive

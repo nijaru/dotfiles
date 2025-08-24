@@ -1,85 +1,132 @@
 # Claude Code Agent Guidelines
 
-Global workflow preferences and behavioral overrides.
+## Universal Rules (All Tasks)
 
-## Core Principles
-- **Read project context first**: CLAUDE.md + spec.md/business.md for complex tasks
-- **Edit existing files over creating new ones**
-- **Never create documentation unless explicitly requested**
-- **Max 4 lines of text response (excluding tool use/code)**
+### Core Principles
+1. **Edit over create** - Modify existing files instead of creating new
+2. **Clean up after** - Delete temp files, test artifacts, debug output
+3. **Test claims** - Verify before stating (performance, functionality)
+4. **Respect existing** - Don't refactor unless asked
+5. **Be precise** - Exact numbers/paths, not approximations
 
-## Quality Assurance
-- **ALWAYS** review code changes for:
-  - Syntax errors and typos
-  - Logic errors and edge cases
-  - Security vulnerabilities (no secrets, injection attacks)
-  - Performance issues
-- Run lint/typecheck/tests after changes (check package.json/README for commands)
-- Mark todos incomplete if tests fail or implementation is partial
-- **Deliver working code** - no stubs or workarounds; TODO comments fine but functionality must work
+### Git Safety
+- **NEVER open PRs** - Without explicit user permission
+- **No Claude attribution** - Never add "🤖 Generated with Claude"
+- **No auto push** - Always ask before remote operations
+- **Check first** - `git status` and `git diff` before commits
 
-## Error Recovery
-- When blocked: Create specific todo describing the blocker
-- When code fails: Read error messages carefully, check logs
-- When tests fail: Fix root cause, don't just make tests pass
-- When dependencies missing: Check existing package files before adding new ones
+## Development Tasks
 
-## Tool Usage Strategy
-- **TodoWrite**: Use for 3+ step tasks or multi-file changes  
-- **Task tool**: Open-ended searches requiring multiple rounds
-- **Batch calls**: Run multiple bash commands in parallel when independent
-- **Search smart**: Use `rg --no-ignore` (private docs), `rg --hidden` (hidden files)
+### File Management
+**Clean up patterns:**
+- Code: `*_wip.*`, `*_temp.*`, `test_*.py`, `.pyc`, `__pycache__`
+- Docs: Outdated drafts, duplicate content
+- System: `.DS_Store`, `*.swp`, debug logs
 
-## Communication Style
-- Answer directly - no "Here's what I'll do" or "Based on the code"
-- Include file paths and line numbers for references (`file.js:123`)
-- Add code comments only for complex logic or business reasoning
-- Format next steps as copyable blocks with @docs/file.md references
+**Version naming:**
+- `feature.ext` - Current active
+- `feature_old_YYYYMMDD.ext` - Archived with date
+- `feature_wip.ext` - Work in progress (delete before finishing)
 
-## Git & Commits
-- **NEVER** add Claude attribution to commit messages (no "🤖 Generated with Claude" etc.)
-- **ALWAYS** sign commits with `git commit -s` for CLA projects
-- **Prefer jj over git for version control** - faster, safer Git-compatible VCS
-- **NEVER** create pull requests, merge requests, or similar operations without explicit user permission
-- **NEVER** push to remote repositories unless explicitly requested
-- **ASK BEFORE** any operations that affect remote repositories or create public artifacts
-- **NEVER** use gh pr create or similar commands without explicit permission
-- **DO NOT** create PRs automatically - user will create them manually when ready
+### Code Quality
+- **Follow patterns** - Check existing with `rg` first
+- **Working code only** - No stubs or "TODO: implement"
+- **Comments explain WHY** - Code shows what, comments explain why
+- **Remove debug artifacts** - Print statements, verbose logging
 
-## Execution Flow
-1. **Plan**: Use TodoWrite for multi-step tasks
-2. **Implement**: Follow existing conventions  
-3. **Complete**: Mark todos done immediately after finishing each task
+### Performance
+- **Test 3x minimum** - Report median
+- **Include conditions** - Hardware, data size, version
+- **Exact numbers** - "156,937 req/s" not "~157K"
 
-## Documentation Hierarchy (Project-Specific)
-- **CLAUDE.md** → Global workflow and principles (this file)
-- **Project overview** → `spec.md`, `business.md`, `status.md`, `tasks.json` (key context files)  
-- **Detailed topics** → `docs/` subdirectories only when necessary:
-  - `docs/internal/` → Architecture, technical decisions, performance
-  - `docs/dev/` → Setup, troubleshooting, development workflows  
-  - `docs/public/` → User guides, API, tutorials
-  - `docs/agent/` → AI session tracking, references
+## System & Dotfiles Tasks
 
-Navigation flow: CLAUDE.md → spec.md/business.md → docs/internal/ (if needed)
+### File Safety
+- **Backup critical files** - Before major changes
+- **Test in safe location** - Try dotfile changes in test dir first
+- **Preserve permissions** - Note file modes before editing
+- **Check symlinks** - Don't break linked configs
 
-## Writing Internal Docs (For AI Agents)
-- **Structure**: Use clear headings, bullets, numbered lists
-- **Content**: Context + decisions + examples + file paths
-- **Format**: Token-efficient - no fluff, redundancy, or pleasantries
-- **Examples**: Include code snippets, command examples, file references
-- **Scope**: Cover "why" decisions were made, not just "what" was implemented
-- **Updates**: Keep current - remove outdated information immediately
+### System Commands
+- **Explain destructive ops** - What `rm -rf`, `dd`, etc. will do
+- **Use safe flags** - `cp -i`, `mv -i` for interactive
+- **Check before sudo** - Explain why elevated permissions needed
 
-## Code Standards
-- Always add newlines to end of files
-- Use CLI tools for dates: `date +"%Y-%m-%d"` (not hardcoded)
-- Follow existing patterns and styles in each project
-- Never assume libraries are available - check imports/dependencies first
-- **Keep root directory clean**: Implementation → `src/`, tests → `test/`, scripts → `scripts/`, docs → `docs/`
+## Blog & Documentation
 
-## Logging Standards
-- **Concise messages**: Clear, actionable, avoid verbose explanations
-- **Appropriate levels**: Debug for development, info for user events, warn for recoverable issues, error for failures
-- **Context over detail**: "Using bundled model" vs "Using embedded SweRankEmbed-Small model (bundled, fast startup)"
-- **No redundant info**: Avoid stating obvious or repeating function/method names
-- **Include error context**: Always log the actual error when available
+### Content Creation
+- **Preserve voice** - Match existing tone/style
+- **Check frontmatter** - Don't break Jekyll/Hugo metadata
+- **Test locally** - Verify markdown renders correctly
+- **Keep drafts separate** - Use `_drafts/` or similar
+
+## Response Style
+
+### Be Concise
+- **Max 4 lines** (excluding code/tools)
+- **Direct answers** - No preamble
+- **One-word when possible** - "Yes", "4", "Fixed"
+
+### Be Precise
+- **Exact paths** - `/Users/nick/file` not `~/file`
+- **Line references** - `config.py:45`
+- **Actual errors** - Quote exact error messages
+
+### Tool Usage
+- **Batch when possible** - Multiple ops in parallel
+- **Right tool for job** - `rg` for search, `sed` for replace
+- **Check first** - `ls` before `cd`, `which` before running
+
+## Common Mistakes to Avoid
+
+### Over-Engineering
+- Creating abstractions for single use
+- Adding features not requested
+- Reorganizing working code
+
+### Assuming Context  
+- Using `~/` instead of full paths
+- Assuming tools are installed
+- Not checking current directory
+
+### Being Verbose
+- Long explanations when action suffices
+- Repeating what code does
+- Unnecessary status updates
+
+## Task-Specific Patterns
+
+### Development Projects
+- Check `CLAUDE.md` if exists
+- Look for `package.json`, `Cargo.toml`, `pyproject.toml`
+- Use project's test/lint commands
+- Follow existing code style
+
+### System Management
+- Explain before `sudo`
+- Show what will change
+- Provide rollback commands
+- Test in safe location first
+
+### Documentation/Blog
+- Preserve formatting style
+- Check build/preview commands
+- Don't break frontmatter
+- Match existing voice
+
+## Quick Checklist
+
+**Before starting:**
+- [ ] Understand exact request
+- [ ] Check existing patterns
+- [ ] Note current state
+
+**Before finishing:**
+- [ ] Task completed as requested
+- [ ] No temp files remain
+- [ ] No debug output left
+- [ ] Changes are minimal
+- [ ] Functionality preserved
+
+---
+*Optimized for all Claude Code use cases*

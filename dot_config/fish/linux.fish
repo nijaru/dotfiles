@@ -105,9 +105,21 @@ end
 
 # Ensure SSH agent is working with keys loaded
 if status is-interactive
-    # Check if ssh-add can list keys (agent working + keys loaded)
-    if not ssh-add -l >/dev/null 2>&1
-        eval (ssh-agent -c)
-        ssh-add ~/.ssh/id_ed25519 2>/dev/null
+    # For GNOME desktop, use GNOME Keyring's SSH agent
+    if set -q DESKTOP_SESSION; and string match -q "*gnome*" $DESKTOP_SESSION
+        # GNOME Keyring should handle SSH automatically
+        # Just ensure the key is added if not present
+        ssh-add -l >/dev/null 2>&1
+        if test $status -eq 1
+            # No keys loaded, add with keyring support
+            ssh-add ~/.ssh/id_ed25519 2>/dev/null
+        end
+    else
+        # Fallback for non-GNOME environments
+        # Check if ssh-add can list keys (agent working + keys loaded)
+        if not ssh-add -l >/dev/null 2>&1
+            eval (ssh-agent -c)
+            ssh-add ~/.ssh/id_ed25519 2>/dev/null
+        end
     end
 end

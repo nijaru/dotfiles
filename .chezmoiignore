@@ -1,7 +1,6 @@
 # Repository documentation files - should not be installed to home directory
 LICENSE
 README.md
-.claude
 AGENTS.md
 DOTFILES_OPTIMIZATION.md
 

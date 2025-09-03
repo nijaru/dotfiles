@@ -82,7 +82,7 @@ switch (uname -s)
         # Container Configuration (Docker & OrbStack)
         set -gx DOCKER_HOST "unix://$HOME/.orbstack/run/docker.sock"
         set -gx DOCKER_DEFAULT_PLATFORM "linux/arm64"
-        
+
         # Homebrew setup
         switch (uname -m)
             case arm64 aarch64
@@ -91,5 +91,6 @@ switch (uname -s)
                 eval (/usr/local/bin/brew shellenv)
         end
 end
+
 
 # Path configuration is handled in conf.d/paths.fish

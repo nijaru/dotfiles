@@ -1,0 +1,40 @@
+# Smart case: case-insensitive unless pattern has uppercase
+--smart-case
+
+# Search hidden files/directories (but still respect .gitignore)
+--hidden
+
+# Follow symlinks
+--follow
+
+# Exclude directories
+--glob=!.git/
+--glob=!node_modules/
+--glob=!.venv/
+--glob=!__pycache__/
+--glob=!*.pyc
+--glob=!.mypy_cache/
+--glob=!.pytest_cache/
+--glob=!.ruff_cache/
+--glob=!target/
+--glob=!dist/
+--glob=!build/
+--glob=!.next/
+--glob=!.turbo/
+--glob=!.cache/
+--glob=!.DS_Store
+
+# Limit output width to prevent binary file spam
+--max-columns=200
+--max-columns-preview
+
+# Add useful type definitions
+--type-add=web:*.{html,css,scss,sass,less,js,jsx,ts,tsx,vue,svelte}
+--type-add=config:*.{json,toml,yaml,yml,ini,conf}
+--type-add=docs:*.{md,mdx,rst,txt,adoc}
+
+# Better colors for dark terminals (Catppuccin-inspired)
+--colors=path:fg:blue
+--colors=line:fg:green
+--colors=match:fg:red
+--colors=match:style:bold

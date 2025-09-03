@@ -72,6 +72,9 @@ set -gx BUNDLE_USER_HOME "$XDG_CONFIG_HOME/bundle"
 # Modular
 contains "$HOME/.modular/bin" $PATH; or set -gx PATH "$HOME/.modular/bin" $PATH
 
+# Ripgrep configuration
+set -gx RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
+
 # Platform-specific settings
 switch (uname -s)
     case Darwin

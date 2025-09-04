@@ -7,6 +7,9 @@ DOTFILES_OPTIMIZATION.md
 # Fish shell runtime files that change frequently
 .config/fish/fish_variables
 
+# Secrets and API keys
+.config/fish/secrets.fish
+
 # macOS-specific files - ignore on Linux
 {{ if ne .chezmoi.os "darwin" }}
 Library

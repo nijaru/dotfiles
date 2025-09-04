@@ -95,5 +95,9 @@ switch (uname -s)
         end
 end
 
+# Load API keys (secrets.fish is NOT tracked by chezmoi)
+if test -r $HOME/.config/fish/secrets.fish
+    source $HOME/.config/fish/secrets.fish
+end
 
 # Path configuration is handled in conf.d/paths.fish

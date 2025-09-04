@@ -1,3 +1,4 @@
 theme = "catppuccin-macchiato"
 font-family = "JetBrainsMono Nerd Font"
 font-size = 15
+keybind = shift+enter=text:\x1b\r

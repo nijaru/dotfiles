@@ -12,7 +12,7 @@
     "Zed Plex Mono"
   ],
   "buffer_font_size": 14,
-  "agent_font_size": 16,
+  "agent_font_size": null,
   "active_pane_modifiers": {
     "inactive_opacity": 0.9
   },
@@ -39,8 +39,8 @@
     "always_allow_tool_actions": true,
     "play_sound_when_agent_done": true,
     "default_model": {
-      "provider": "openrouter",
-      "model": "z-ai/glm-4.5"
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-latest"
     }
   },
   "language_models": {
@@ -181,6 +181,27 @@
     }
   ],
   "context_servers": {
+    "mcp-server-exa-search": {
+      "source": "extension",
+      "enabled": true,
+      "settings": {
+        "exa_api_key": "$EXA_API_KEY"
+      }
+    },
+    "mcp-server-brave-search": {
+      "source": "extension",
+      "enabled": true,
+      "settings": {
+        "brave_api_key": "$BRAVE_API_KEY"
+      }
+    },
+    "mcp-server-github": {
+      "source": "extension",
+      "enabled": true,
+      "settings": {
+        "github_personal_access_token": "$GITHUB_TOKEN"
+      }
+    },
     "mcp-server-context7": {
       "source": "extension",
       "settings": {

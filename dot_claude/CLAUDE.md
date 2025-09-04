@@ -8,14 +8,81 @@
 3. **Test claims** - Verify before stating (performance, functionality)
 4. **Respect existing** - Don't refactor unless asked
 5. **Be precise** - Exact numbers/paths, not approximations
+6. **Proactive jj** - Run jj commands at logical boundaries (no hooks needed)
 
-### Git Safety
+### Version Control (Git/JJ)
 - **NEVER open PRs** - Without explicit user permission
 - **No Claude attribution** - Never add "🤖 Generated with Claude"
 - **No auto push** - Always ask before remote operations
-- **Check first** - `git status` and `git diff` before commits
+
+**CRITICAL: Always detect VCS first:**
+```bash
+if [ -d .jj ]; then
+    echo "🎯 JJ detected - using JJ commands"
+    # Use JJ patterns below
+else
+    echo "📁 Git detected - using Git commands"
+    # Check first: git status and git diff before commits
+fi
+```
+
+**JJ Usage (when .jj exists):**
+- **Session start**: `jj new -m "claude: session $(date +%H:%M)"`
+- **Major features**: `jj new -m "feat: description"`  
+- **Task complete**: `jj describe -m "completed: what changed"`
+- **Before risky ops**: `jj op log -l 5` (show history first)
+- **Recovery**: NEVER `jj op undo` without showing `jj op log` first
+- **Submodule updates**: `jj describe -m "chore: update submodules"`
+
+**Safety rules:**
+- Always run `jj st` to check current state
+- Use "claude:" prefix for session management commits
+- Let user decide when to squash/clean history
 
 ## Development Tasks
+
+### Python Environment Management
+**Modern workflow with mise + uv:**
+```bash
+# Install Python runtime
+mise install python@latest
+mise use python@latest
+
+# Initialize/sync project (uv manages venv automatically)
+uv init new-project  # OR uv sync for existing
+cd new-project
+uv add requests fastapi
+uv add --dev pytest ruff
+
+# Run code (uv handles activation)
+uv run python main.py
+uv run pytest
+uv format  # Built-in formatting (calls ruff)
+```
+
+**Environment hygiene:**
+- **Never** `pip install` outside of uv-managed projects
+- **Always** use `uv add` for dependencies
+- **If mise Python polluted**: `mise uninstall python@X && mise install python@X`
+- **Use** `uv tool install <tool>` for global tools
+
+## AGENT-CONTEXTS INTEGRATION
+
+### Context Loading Decision Trees
+```
+IF starting_new_task:
+    → Load @agent-contexts/AI_AGENT_INDEX.md for routing
+IF error_encountered:
+    → Load @agent-contexts/ERROR_PATTERNS.md
+IF language_specific_work:
+    → Load @agent-contexts/languages/[lang]/
+IF tool_specific_work:
+    → Load @agent-contexts/tools/[tool]/
+IF version_control_operations:
+    → Load @agent-contexts/standards/JJ_DECISION_TREES.md
+```
+
+**Load** `@agent-contexts/tools/python/UV_PATTERNS.md` for complete uv workflows
 
 ### File Management
 **Clean up patterns:**
@@ -28,16 +95,38 @@
 - `feature_old_YYYYMMDD.ext` - Archived with date
 - `feature_wip.ext` - Work in progress (delete before finishing)
 
-### Code Quality
-- **Follow patterns** - Check existing with `rg` first
-- **Working code only** - No stubs or "TODO: implement"
-- **Comments explain WHY** - Code shows what, comments explain why
-- **Remove debug artifacts** - Print statements, verbose logging
+### Code Quality Decision Trees
+```
+IF .editorconfig exists:
+    → Use those formatting settings
+ELIF .clang-format exists:
+    → Use clang-format for C/C++
+ELIF .prettierrc exists:
+    → Use prettier for JS/TS
+ELSE:
+    → Match surrounding code patterns (rg "function|class" for style)
 
-### Performance
-- **Test 3x minimum** - Report median
-- **Include conditions** - Hardware, data size, version
-- **Exact numbers** - "156,937 req/s" not "~157K"
+IF adding_comments:
+    IF explaining_what_code_does:
+        → Skip comment (code should be self-documenting)
+    ELIF explaining_why_business_logic:
+        → Add comment explaining reasoning
+    ELIF explaining_complex_algorithm:
+        → Add comment with approach/complexity
+```
+
+### Performance Decision Trees
+```
+IF performance_testing_needed:
+    → Run benchmark 3+ times, report median
+    → Include: hardware, data size, version info
+    → Use exact numbers: "156,937 req/s" not "~157K"
+
+IF performance_claims_made:
+    → ALWAYS verify with actual measurements
+    → Include test conditions in report
+    → Compare against baseline if available
+```
 
 ## System & Dotfiles Tasks
 
@@ -72,47 +161,84 @@
 - **Line references** - `config.py:45`
 - **Actual errors** - Quote exact error messages
 
-### Tool Usage
-- **Batch when possible** - Multiple ops in parallel
-- **Right tool for job** - `rg` for search, `sed` for replace
-- **Check first** - `ls` before `cd`, `which` before running
+### Tool Selection Decision Trees
+```
+IF searching_text:
+    → rg (faster than grep, better defaults)
+IF finding_files:
+    → fd (faster than find, better syntax)
+IF reading_code:
+    → bat (syntax highlighting over cat)
+IF text_replacement:
+    → sd (more intuitive than sed)
+IF structural_code_changes:
+    → ast-grep (better than regex for refactoring)
+IF git_diff_viewing:
+    → delta (better formatting)
 
-## Common Mistakes to Avoid
+IF multiple_operations_possible:
+    → Batch tool calls in single message for parallel execution
+IF tool_availability_uncertain:
+    → Check with `which [tool]` before running
+```
 
-### Over-Engineering
-- Creating abstractions for single use
-- Adding features not requested
-- Reorganizing working code
+## ERROR → SOLUTION MAPPINGS
 
-### Assuming Context  
-- Using `~/` instead of full paths
-- Assuming tools are installed
-- Not checking current directory
+| Common Error | Fix Command | Context |
+|-------------|-------------|----------|
+| `mise: command not found` | `curl https://mise.jdx.dev/install.sh \| sh` | Python setup |
+| `uv: not found` | `mise use python@latest && pip install uv` | Python env |
+| `rg: command not found` | `brew install ripgrep` or `cargo install ripgrep` | Text search |
+| `fd: command not found` | `brew install fd-find` or `cargo install fd-find` | File finding |
+| `bat: command not found` | `brew install bat` or `cargo install bat` | Code viewing |
+| `Permission denied` | Check file permissions with `ls -la` | File access |
+| `No such file or directory` | Use absolute paths: `/Users/...` not `~/...` | Path resolution |
+| Fish syntax error | Wrap in `bash -c "command"` | Cross-shell compat |
 
-### Being Verbose
-- Long explanations when action suffices
-- Repeating what code does
-- Unnecessary status updates
+## ANTI-PATTERNS → CORRECT PATTERNS
 
-## Task-Specific Patterns
+```
+❌ WRONG: Using ~/paths
+✅ CORRECT: Use full paths /Users/[user]/...
 
-### Development Projects
-- Check `CLAUDE.md` if exists
-- Look for `package.json`, `Cargo.toml`, `pyproject.toml`
-- Use project's test/lint commands
-- Follow existing code style
+❌ WRONG: Assuming tools installed  
+✅ CORRECT: Check with `which [tool]` first
 
-### System Management
-- Explain before `sudo`
-- Show what will change
-- Provide rollback commands
-- Test in safe location first
+❌ WRONG: Creating abstractions for single use
+✅ CORRECT: Keep code simple, add abstraction when needed
 
-### Documentation/Blog
-- Preserve formatting style
-- Check build/preview commands
-- Don't break frontmatter
-- Match existing voice
+❌ WRONG: Long explanations when action suffices
+✅ CORRECT: Show, don't tell - run the command
+```
+
+## Task-Specific Decision Trees
+
+### Development Project Detection
+```
+IF CLAUDE.md exists:
+    → Load project-specific instructions first
+IF package.json exists:
+    → Node.js project → Use npm/yarn commands
+IF Cargo.toml exists:
+    → Rust project → Use cargo commands  
+IF pyproject.toml exists:
+    → Python project → Use uv/poetry commands
+IF go.mod exists:
+    → Go project → Use go commands
+IF pixi.toml exists:
+    → Mojo/Python project → Use pixi commands
+```
+
+### System Operation Safety
+```
+IF destructive_command (rm, dd, truncate):
+    → Explain what will be deleted/changed
+    → Provide rollback commands
+    → Test in safe location first
+IF sudo_needed:
+    → Explain why elevated permissions required
+    → Show exact commands that will run
+```
 
 ## Quick Checklist
 

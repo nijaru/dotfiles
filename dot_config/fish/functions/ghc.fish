@@ -1,10 +1,17 @@
 function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     if test (count $argv) -eq 0
-        echo "Usage: ghc <username/repo-name> or ghc <org-name/repo-name>"
+        echo "Usage: ghc <username/repo-name> [gh-options]"
+        echo "       ghc <https://github.com/username/repo> [gh-options]"
         return 1
     end
 
     set -l repo_path $argv[1]
+    set -l extra_args $argv[2..-1]
+    
+    # Strip GitHub URL prefix if present
+    set repo_path (string replace "https://github.com/" "" $repo_path)
+    set repo_path (string replace "git@github.com:" "" $repo_path)
+    set repo_path (string replace ".git" "" $repo_path)
     
     # Extract org/user and repo name
     set -l parts (string split "/" $repo_path)
@@ -23,10 +30,16 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
         return 1
     end
     
+    # Check if gh is available
+    if not command -q gh
+        echo "Error: gh CLI not found. Install with: brew install gh"
+        return 1
+    end
+    
     # Create parent directory if needed
     mkdir -p ~/github/$org
     
     # Clone the repository
     echo "Cloning $repo_path to $target_dir..."
-    gh repo clone $repo_path $target_dir
+    gh repo clone $repo_path $target_dir $extra_args
 end

@@ -123,12 +123,6 @@
     auto            = false                        # Disable automatic maintenance
     strategy        = incremental                  # Use incremental maintenance strategy
 
-[gc]
-    auto            = true                         # Enable automatic garbage collection
-    autoPackLimit   = 64                           # Pack objects after reaching 64 packs
-    pruneExpire     = 2.weeks.ago                  # Expire objects older than two weeks
-    autoDetach      = true                         # Detach garbage collection process
-
 ##############################
 # Delta & Git LFS Settings
 ##############################

@@ -8,36 +8,21 @@
 3. **Test claims** - Verify before stating (performance, functionality)
 4. **Respect existing** - Don't refactor unless asked
 5. **Be precise** - Exact numbers/paths, not approximations
-6. **Proactive jj** - Run jj commands at logical boundaries (no hooks needed)
 
-### Version Control (Git/JJ)
+### Version Control (Git)
 - **NEVER open PRs** - Without explicit user permission
 - **No Claude attribution** - Never add "🤖 Generated with Claude"
 - **No auto push** - Always ask before remote operations
 
-**CRITICAL: Always detect VCS first:**
-```bash
-if [ -d .jj ]; then
-    echo "🎯 JJ detected - using JJ commands"
-    # Use JJ patterns below
-else
-    echo "📁 Git detected - using Git commands"
-    # Check first: git status and git diff before commits
-fi
-```
+**Commit frequency:**
+- After each **logical unit of work** (feature, fix, refactor)
+- Before **switching context** to different area
+- Use **atomic commits** with clear messages
+- Format: `type: description` (feat, fix, docs, refactor, test, chore)
 
-**JJ Usage (when .jj exists):**
-- **Session start**: `jj new -m "claude: session $(date +%H:%M)"`
-- **Major features**: `jj new -m "feat: description"`  
-- **Task complete**: `jj describe -m "completed: what changed"`
-- **Before risky ops**: `jj op log -l 5` (show history first)
-- **Recovery**: NEVER `jj op undo` without showing `jj op log` first
-- **Submodule updates**: `jj describe -m "chore: update submodules"`
-
-**Safety rules:**
-- Always run `jj st` to check current state
-- Use "claude:" prefix for session management commits
-- Let user decide when to squash/clean history
+**Git workflow:**
+- Always check: `git status` and `git diff` before commits
+- Let user decide when to push/squash history
 
 ## Development Tasks
 
@@ -65,24 +50,6 @@ uv format  # Built-in formatting (calls ruff)
 - **Always** use `uv add` for dependencies
 - **If mise Python polluted**: `mise uninstall python@X && mise install python@X`
 - **Use** `uv tool install <tool>` for global tools
-
-## AGENT-CONTEXTS INTEGRATION
-
-### Context Loading Decision Trees
-```
-IF starting_new_task:
-    → Load @agent-contexts/AI_AGENT_INDEX.md for routing
-IF error_encountered:
-    → Load @agent-contexts/ERROR_PATTERNS.md
-IF language_specific_work:
-    → Load @agent-contexts/languages/[lang]/
-IF tool_specific_work:
-    → Load @agent-contexts/tools/[tool]/
-IF version_control_operations:
-    → Load @agent-contexts/standards/JJ_DECISION_TREES.md
-```
-
-**Load** `@agent-contexts/tools/python/UV_PATTERNS.md` for complete uv workflows
 
 ### File Management
 **Clean up patterns:**
@@ -227,6 +194,22 @@ IF go.mod exists:
     → Go project → Use go commands
 IF pixi.toml exists:
     → Mojo/Python project → Use pixi commands
+```
+
+### Test Discovery
+```
+IF package.json exists:
+    → Check scripts: npm test, npm run test, jest, vitest
+IF pyproject.toml exists:
+    → Check: pytest, python -m pytest, uv run pytest
+IF Cargo.toml exists:
+    → Use: cargo test
+IF go.mod exists:
+    → Use: go test ./...
+IF Makefile exists:
+    → Check: make test, make check
+ELSE:
+    → Search: find . -name "*test*" -type f
 ```
 
 ### System Operation Safety

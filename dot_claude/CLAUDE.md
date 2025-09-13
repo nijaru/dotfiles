@@ -14,14 +14,14 @@
 - **No Claude attribution** - Never add "🤖 Generated with Claude"
 - **No auto push** - Always ask before remote operations
 
-**Commit frequency:**
-- After each **logical unit of work** (feature, fix, refactor)
-- Before **switching context** to different area
-- Use **atomic commits** with clear messages
+**MANDATORY: Commit without being asked when:**
+- ✅ Function/method implementation complete
+- ✅ Bug fix applied
+- ✅ Test added or passing
+- ✅ Refactor finished
+- ✅ 10+ minutes since last commit (if files changed)
+- ✅ Before switching to different file/feature
 - Format: `type: description` (feat, fix, docs, refactor, test, chore)
-- **PROACTIVELY commit** - Don't wait to be asked
-- **Every 5-10 file changes** - Create a checkpoint commit
-- **After passing tests** - Commit working state before next change
 
 **Git workflow:**
 - Always check: `git status` and `git diff` before commits

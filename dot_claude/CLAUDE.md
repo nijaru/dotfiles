@@ -19,6 +19,9 @@
 - Before **switching context** to different area
 - Use **atomic commits** with clear messages
 - Format: `type: description` (feat, fix, docs, refactor, test, chore)
+- **PROACTIVELY commit** - Don't wait to be asked
+- **Every 5-10 file changes** - Create a checkpoint commit
+- **After passing tests** - Commit working state before next change
 
 **Git workflow:**
 - Always check: `git status` and `git diff` before commits

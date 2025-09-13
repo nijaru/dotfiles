@@ -19,8 +19,8 @@
 - ✅ Bug fix applied
 - ✅ Test added or passing
 - ✅ Refactor finished
-- ✅ 10+ minutes since last commit (if files changed)
 - ✅ Before switching to different file/feature
+- ✅ Each logical unit of work complete (atomic commits)
 - Format: `type: description` (feat, fix, docs, refactor, test, chore)
 
 **Git workflow:**

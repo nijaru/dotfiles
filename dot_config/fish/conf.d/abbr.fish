@@ -19,6 +19,7 @@ if status is-interactive
     # Editor abbreviations - moved to a separate file to ensure $EDITOR is set
 
     # Command improvements
+    abbr --add y 'yazi'
     abbr --add l 'ls -1'
     abbr --add ll 'ls -l'
     abbr --add la 'ls -a'

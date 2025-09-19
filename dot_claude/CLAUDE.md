@@ -269,19 +269,20 @@ IF sudo_needed:
     → Show exact commands that will run
 ```
 
-## Quick Checklist
+## Task Completion Checklist
 
-**Before starting:**
-- [ ] Understand exact request
-- [ ] Check existing patterns
-- [ ] Note current state
+```
+BEFORE_STARTING:
+    → Load AGENTS.md/CLAUDE.md if exists
+    → Understand exact success criteria
+    → Check for previous attempts
 
-**Before finishing:**
-- [ ] Task completed as requested
-- [ ] No temp files remain
-- [ ] No debug output left
-- [ ] Changes are minimal
-- [ ] Functionality preserved
+BEFORE_FINISHING:
+    → Delete temp files (*_wip.*, *.tmp, analysis.md)
+    → Remove debug output (console.log, print statements)
+    → Commit logical units (no AI attribution)
+    → Verify functionality still works
+```
 
 ---
 *Optimized for all Claude Code use cases*

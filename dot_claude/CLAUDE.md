@@ -11,10 +11,11 @@
 
 ### Version Control (Git)
 - **NEVER open PRs** - Without explicit user permission
-- **No Claude attribution** - Never add "🤖 Generated with Claude"
+- **NO AI attribution** - Never add "🤖 Generated with Claude" or similar
+- **STRIP attribution** - Remove any AI attribution found in commits/code
 - **No auto push** - Always ask before remote operations
 
-**MANDATORY: Commit without being asked when:**
+**AUTO-COMMIT when logical unit complete:**
 - ✅ Function/method implementation complete
 - ✅ Bug fix applied
 - ✅ Test added or passing
@@ -46,6 +47,41 @@
 ❌ "Fix everything" (too broad)
 ❌ "Optimize" (what specifically?)
 ```
+
+## AI Context Engineering
+
+### Universal AI Context Files
+- **Primary**: AGENTS.md (2025 industry standard)
+- **Legacy**: CLAUDE.md (Claude Code compatibility)
+- **IDE**: .cursorrules (Cursor), .github/prompts/*.prompt.md (Copilot)
+
+### Context Optimization Patterns
+```
+IF providing_code_context:
+    → Include imports and dependencies
+    → Show related functions/classes
+    → Include test cases if available
+    → Remove verbose comments
+    → Focus on patterns over implementation
+
+IF debugging_with_ai:
+    → Include full error message
+    → Show relevant code snippet
+    → Provide stack trace
+    → List recent changes
+    → Include environment details
+
+IF complex_task:
+    → Break into subtasks
+    → Define success criteria per task
+    → Provide relevant context per subtask
+    → Chain tasks with clear dependencies
+```
+
+### Examples Directory Pattern
+- **Critical**: AI agents perform significantly better with examples
+- **Structure**: examples/{feature}/ with input/output samples
+- **Include**: Edge cases, error handling, common patterns
 
 ## Development Tasks
 
@@ -205,8 +241,9 @@ IF tool_availability_uncertain:
 
 ### Development Project Detection
 ```
-IF CLAUDE.md exists:
+IF AGENTS.md OR CLAUDE.md exists:
     → Load project-specific instructions first
+    → @external/agent-contexts/AI_AGENT_INDEX.md for patterns
 IF package.json exists:
     → Node.js project → Use npm/yarn commands
 IF Cargo.toml exists:
@@ -266,4 +303,8 @@ IF sudo_needed:
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
-NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+## Documentation Creation Guidelines
+- **Create when valuable**: AGENTS.md, permanent reference docs, core project documentation
+- **Avoid when temporary**: Task-specific analysis, one-off explanations, throwaway files
+- **Decision tree**: Will this doc serve ongoing project needs beyond current task?

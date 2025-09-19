@@ -27,6 +27,26 @@
 - Always check: `git status` and `git diff` before commits
 - Let user decide when to push/squash history
 
+## Documentation Best Practices
+
+### For Any Technical Project
+1. **Load project context first** - Check README, STATUS, or main docs
+2. **Get current state** - Specific metrics/status, not vague descriptions
+3. **Check for existing solutions** - Don't reinvent or repeat failed attempts
+4. **Be specific in requests** - "Fix login bug" not "make it work"
+5. **Validate changes work** - Test functionality after modifications
+
+### Effective vs Ineffective Prompts
+```
+✅ "Fix the CSS centering issue in login.css line 45"
+✅ "Add error handling to the API call in user.py"
+✅ "Optimize database query that takes 2 seconds"
+
+❌ "Make it better" (too vague)
+❌ "Fix everything" (too broad)
+❌ "Optimize" (what specifically?)
+```
+
 ## Development Tasks
 
 ### Python Environment Management

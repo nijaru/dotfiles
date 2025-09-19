@@ -28,32 +28,34 @@
 - Always check: `git status` and `git diff` before commits
 - Let user decide when to push/squash history
 
-## Documentation Best Practices
+## Project Context Loading
 
-### For Any Technical Project
-1. **Load project context first** - Check README, STATUS, or main docs
-2. **Get current state** - Specific metrics/status, not vague descriptions
-3. **Check for existing solutions** - Don't reinvent or repeat failed attempts
-4. **Be specific in requests** - "Fix login bug" not "make it work"
-5. **Validate changes work** - Test functionality after modifications
-
-### Effective vs Ineffective Prompts
 ```
-✅ "Fix the CSS centering issue in login.css line 45"
-✅ "Add error handling to the API call in user.py"
-✅ "Optimize database query that takes 2 seconds"
+IF starting_task:
+    → Check README/AGENTS.md/CLAUDE.md for context
+    → Get specific current state (metrics, versions)
+    → Check for previous attempts/solutions
+    → Understand success criteria
+```
 
-❌ "Make it better" (too vague)
-❌ "Fix everything" (too broad)
-❌ "Optimize" (what specifically?)
+### Effective Task Requests
+```
+✅ Specific: "Fix CSS centering in login.css:45"
+✅ Measurable: "Optimize query taking 2+ seconds"
+✅ Actionable: "Add error handling to user.py API call"
+
+❌ Vague: "Make it better"
+❌ Broad: "Fix everything"
+❌ Unclear: "Optimize" (what/how/why?)
 ```
 
 ## AI Context Engineering
 
 ### Universal AI Context Files
-- **Primary**: AGENTS.md (2025 industry standard)
-- **Legacy**: CLAUDE.md (Claude Code compatibility)
+- **Primary**: AGENTS.md (2025 industry standard, create as main file)
+- **Compatibility**: CLAUDE.md (symlink to AGENTS.md for Claude Code)
 - **IDE**: .cursorrules (Cursor), .github/prompts/*.prompt.md (Copilot)
+- **Pattern**: Always create AGENTS.md, then `ln -s AGENTS.md CLAUDE.md`
 
 ### Context Optimization Patterns
 ```
@@ -85,30 +87,21 @@ IF complex_task:
 
 ## Development Tasks
 
-### Python Environment Management
-**Modern workflow with mise + uv:**
-```bash
-# Install Python runtime
-mise install python@latest
-mise use python@latest
-
-# Initialize/sync project (uv manages venv automatically)
-uv init new-project  # OR uv sync for existing
-cd new-project
-uv add requests fastapi
-uv add --dev pytest ruff
-
-# Run code (uv handles activation)
-uv run python main.py
-uv run pytest
-uv format  # Built-in formatting (calls ruff)
+### Python Environment Patterns
 ```
-
-**Environment hygiene:**
-- **Never** `pip install` outside of uv-managed projects
-- **Always** use `uv add` for dependencies
-- **If mise Python polluted**: `mise uninstall python@X && mise install python@X`
-- **Use** `uv tool install <tool>` for global tools
+IF new_python_project:
+    → mise install python@latest && mise use python@latest
+    → uv init && uv sync
+IF adding_dependencies:
+    → uv add [packages]  # Never pip install
+    → uv add --dev [dev-packages]
+IF running_code:
+    → uv run python script.py  # Handles venv automatically
+IF global_tool_needed:
+    → uv tool install [tool]
+IF environment_broken:
+    → mise uninstall python@X && mise install python@X
+```
 
 ### File Management
 **Clean up patterns:**
@@ -167,13 +160,6 @@ IF performance_claims_made:
 - **Use safe flags** - `cp -i`, `mv -i` for interactive
 - **Check before sudo** - Explain why elevated permissions needed
 
-## Blog & Documentation
-
-### Content Creation
-- **Preserve voice** - Match existing tone/style
-- **Check frontmatter** - Don't break Jekyll/Hugo metadata
-- **Test locally** - Verify markdown renders correctly
-- **Keep drafts separate** - Use `_drafts/` or similar
 
 ## Response Style
 
@@ -305,6 +291,13 @@ NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 
 ## Documentation Creation Guidelines
-- **Create when valuable**: AGENTS.md, permanent reference docs, core project documentation
-- **Avoid when temporary**: Task-specific analysis, one-off explanations, throwaway files
-- **Decision tree**: Will this doc serve ongoing project needs beyond current task?
+```
+IF permanent_reference_needed:
+    → Create: AGENTS.md, API docs, architecture docs
+IF temporary_but_useful:
+    → Create during task, DELETE after completion
+    → Examples: analysis.md, investigation.md, notes.md
+IF redundant_or_unnecessary:
+    → Don't create, add to existing docs instead
+```
+**Cleanup rule**: Delete all task-specific docs when task completes

@@ -19,8 +19,7 @@ if status is-interactive
     # Editor abbreviations - moved to a separate file to ensure $EDITOR is set
 
     # Secrets editing
-    abbr --add secrets '$EDITOR /Users/nick/.config/fish/conf.d/secrets.fish'
-    abbr --add chezsec 'chezmoi edit /Users/nick/.config/fish/conf.d/secrets.fish'
+    abbr --add secrets 'chezmoi edit /Users/nick/.config/fish/conf.d/secrets.fish'
 
     # Command improvements
     abbr --add y 'yazi'

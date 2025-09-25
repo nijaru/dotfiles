@@ -161,6 +161,16 @@ IF performance_claims_made:
 - **Check before sudo** - Explain why elevated permissions needed
 
 
+## Code Style Rules
+
+### Comments
+- **NEVER add comments** unless explicitly asked
+- **No debugging comments** - Remove all CRITICAL/FIXED/TODO/etc
+- **No explanatory comments** - Code should be self-documenting
+- **No narrative comments** - Don't explain what code does
+- **Exceptions only**: Complex algorithms or non-obvious business logic (if asked)
+- **If you add a comment anyway** - You're doing it wrong
+
 ## Response Style
 
 ### Be Concise

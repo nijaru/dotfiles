@@ -163,13 +163,37 @@ IF performance_claims_made:
 
 ## Code Style Rules
 
-### Comments
-- **NEVER add comments** unless explicitly asked
-- **No debugging comments** - Remove all CRITICAL/FIXED/TODO/etc
-- **No explanatory comments** - Code should be self-documenting
-- **No narrative comments** - Don't explain what code does
-- **Exceptions only**: Complex algorithms or non-obvious business logic (if asked)
-- **If you add a comment anyway** - You're doing it wrong
+### Comments - Best Practices
+**Default**: Most code needs NO comments. Well-structured code is self-documenting.
+
+#### ✅ GOOD Comments (Rare but Valuable)
+- **WHY decisions**: `# Use 1000 threshold - benchmarks show 3x speedup`
+- **Non-obvious requirements**: `# EU GDPR requires 7-year retention`
+- **Complexity notes**: `# O(n log n) despite linear scan - sorting dominates`
+- **External workarounds**: `# Workaround: Mojo lacks thread-safe bulk insert`
+- **Algorithm rationale**: `# Quickselect over sort - only need top K`
+
+#### ❌ BAD Comments (Never Add These)
+- **WHAT code does**: `# Increment counter` (obvious from code)
+- **Narrative/emotional**: `# CRITICAL FIX!` `# This works perfectly!`
+- **Debugging breadcrumbs**: `# TODO: Fix this` (remove before commit)
+- **Syntax explanation**: `# Convert to global ID` (use better variable names)
+- **Stating the obvious**: `# Update size` for `size += count`
+
+#### 📏 Comment Litmus Test
+Before adding ANY comment, ask:
+1. Does this explain WHY, not WHAT?
+2. Will this be valuable in 6 months?
+3. Can better naming eliminate this comment?
+
+**Example**: Instead of commenting, use clear names:
+```python
+# Bad: Comment needed
+id = s * c + l  # Calculate global ID
+
+# Good: Self-documenting
+global_id = segment_id * segment_capacity + local_node_id
+```
 
 ## Response Style
 

@@ -8,6 +8,12 @@
 3. **Test claims** - Verify before stating (performance, functionality)
 4. **Respect existing** - Don't refactor unless asked
 5. **Be precise** - Exact numbers/paths, not approximations
+6. **ASK on blockers** - STOP and ask for clarification when hitting major issues:
+   - Package name conflicts (PyPI, npm, etc.)
+   - Permission/access denied errors
+   - API rejections or unexpected failures
+   - Service unavailable or quota exceeded
+   - Ambiguous requirements or conflicting constraints
 
 ### Version Control (Git)
 - **NEVER open PRs** - Without explicit user permission

@@ -20,8 +20,8 @@ function up --description "Update all package managers and tools"
             echo "📦 Updating DNF packages..."
             if command -q dnf
                 sudo dnf upgrade -y
-                and dnf autoremove -y
-                and dnf clean all
+                and sudo dnf autoremove -y
+                and sudo dnf clean all
             else
                 echo "⚠️  DNF not found, skipping"
             end

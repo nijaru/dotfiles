@@ -38,6 +38,7 @@ if command -v dnf >/dev/null 2>&1
     # Basic operations
     abbr --add dnfu "sudo dnf check-update"
     abbr --add dnfup "sudo dnf upgrade"
+    abbr --add dnfupy "sudo dnf upgrade --assumeyes"
     abbr --add dnfi "sudo dnf install"
     abbr --add dnfx "sudo dnf remove"
     abbr --add dnfax "sudo dnf autoremove"

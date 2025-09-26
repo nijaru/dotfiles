@@ -6,7 +6,7 @@
     },
     "exa": {
       "command": "npx",
-      "args": ["-y", "exa-mcp-server"]
+      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp"]
     },
     "context7": {
       "command": "npx",

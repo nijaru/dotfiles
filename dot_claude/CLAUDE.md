@@ -110,6 +110,24 @@ IF environment_broken:
 ```
 
 ### File Management
+
+**🔴 CRITICAL RULE: Always Read Before Modifying**
+```
+BEFORE ANY file operation (edit, move, delete, refactor):
+    → Read file contents with Read tool FIRST
+    → Understand purpose, dependencies, and value
+    → Check for non-obvious connections to other files
+    → Only then decide appropriate action
+```
+
+**File Content Analysis Required:**
+- ❌ **NEVER** delete/move files without reading contents
+- ❌ **NEVER** assume file purpose from filename alone
+- ❌ **NEVER** bulk reorganize without content review
+- ✅ **ALWAYS** use Read tool before any file operation
+- ✅ **ALWAYS** check imports/references before moving
+- ✅ **ALWAYS** preserve valuable content even in "temp" files
+
 **Clean up patterns:**
 - Code: `*_wip.*`, `*_temp.*`, `test_*.py`, `.pyc`, `__pycache__`
 - Docs: Outdated drafts, duplicate content

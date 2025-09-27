@@ -7,7 +7,6 @@
 
 # Homebrew abbreviations
 if command -v brew >/dev/null 2>&1
-    abbr --add up "brew update && brew upgrade"     # Update and upgrade all
     abbr --add brews "brew search"                  # Search packages
     abbr --add brewin "brew info"                   # Package info
     abbr --add brewi "brew install"                 # Install package

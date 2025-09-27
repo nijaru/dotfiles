@@ -1,0 +1,11 @@
+[manager]
+prepend_keymap = [
+  # Open with system default on 'o'
+  { on = [ "o" ], run = "open", desc = "Open with system default" },
+
+  # Open with system default on Enter
+  { on = [ "<Enter>" ], run = "open", desc = "Open with system default" },
+
+  # Alternative: open multiple selected files
+  { on = [ "O" ], run = "open --interactive", desc = "Open interactively" }
+]

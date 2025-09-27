@@ -1,0 +1,10 @@
+[ui]
+default-command = "log"
+diff-editor = ":builtin"
+paginate = "never"
+editor = "cat"
+pager = "cat"
+
+[user]
+name = "Nick Russo"
+email = "nijaru7@gmail.com"

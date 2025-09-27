@@ -1,0 +1,33 @@
+[opener]
+# macOS system default opener - improved version
+open-default = [
+  { run = 'open "$1"', orphan = true, desc = "Open with system default" }
+]
+
+# Alternative with better argument handling
+open-all = [
+  { run = '''for file in "$@"; do open "$file"; done''', orphan = true, desc = "Open all with system default" }
+]
+
+[open]
+prepend_rules = [
+  # Video files - use system default (should open with VLC if that's your default)
+  { mime = "video/mp4", use = "open-default" },
+  { mime = "video/quicktime", use = "open-default" },
+  { mime = "video/x-msvideo", use = "open-default" },
+  { mime = "video/webm", use = "open-default" },
+  { mime = "video/x-matroska", use = "open-default" },
+  { mime = "video/*", use = "open-default" },
+
+  # Audio files
+  { mime = "audio/*", use = "open-default" },
+
+  # Images
+  { mime = "image/*", use = "open-default" },
+
+  # PDFs and documents
+  { mime = "application/pdf", use = "open-default" },
+
+  # Fallback for everything else
+  { mime = "*/*", use = "open-default" }
+]

@@ -13,20 +13,8 @@ end
 # mise
 ###############################################################################
 if command -v mise >/dev/null 2>&1
-    # Lazy-load mise activation to avoid startup delay
-    # Create a function that activates mise on first use
-    function __mise_activate_if_needed
-        if not set -q __mise_activated
-            mise activate fish | source
-            set -g __mise_activated 1
-        end
-    end
-    
-    # Create wrapper functions for mise commands that auto-activate
-    function mise
-        __mise_activate_if_needed
-        command mise $argv
-    end
+    # Directly activate mise (simpler and avoids infinite loops)
+    mise activate fish | source
     
     # Core operations
     abbr --add mi "mise install" # Install tool version

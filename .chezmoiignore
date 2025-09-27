@@ -4,6 +4,10 @@ README.md
 AGENTS.md
 DOTFILES_OPTIMIZATION.md
 
+# LazyVim template files - not personal config
+.config/nvim/LICENSE
+.config/nvim/README.md
+
 # Fish shell runtime files that change frequently
 .config/fish/fish_variables
 

@@ -11,7 +11,7 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     # Strip GitHub URL prefix if present
     set repo_path (string replace "https://github.com/" "" $repo_path)
     set repo_path (string replace "git@github.com:" "" $repo_path)
-    set repo_path (string replace ".git" "" $repo_path)
+    set repo_path (string replace --regex '\.git$' "" $repo_path)
     
     # Extract org/user and repo name
     set -l parts (string split "/" $repo_path)
@@ -40,6 +40,6 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     mkdir -p ~/github/$org
     
     # Clone the repository
-    echo "Cloning $repo_path to $target_dir..."
-    gh repo clone $repo_path $target_dir $extra_args
+    echo "Cloning $org/$repo to $target_dir..."
+    gh repo clone "$org/$repo" "$target_dir" $extra_args
 end

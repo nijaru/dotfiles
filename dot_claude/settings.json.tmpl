@@ -1,7 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "statusLine": {
-    "type": "command",
-    "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-25); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); MODEL=$(echo \"$INPUT\" | jq -r '.model.display_name // \"Claude\"'); case \"$MODEL\" in *Sonnet*) MODEL=\"Sonnet\" ;; *Opus*) MODEL=\"Opus\" ;; *Haiku*) MODEL=\"Haiku\" ;; *) MODEL=\"Claude\" ;; esac; if [ -n \"$BRANCH\" ]; then printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m [\\033[32m%s\\033[0m] | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$BRANCH\" \"$MODEL\"; else printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$MODEL\"; fi"
-  }
+  "alwaysThinkingEnabled": true
+  // "statusLine": {
+  //   "type": "command",
+  //   "command": "INPUT=$(cat); TIME=$(date +\"%H:%M:%S\"); DIR=$(basename \"$(pwd)\" | cut -c1-25); BRANCH=$(git branch --show-current 2>/dev/null | cut -c1-12); MODEL=$(echo \"$INPUT\" | jq -r '.model.display_name // \"Claude\"'); case \"$MODEL\" in *Sonnet*) MODEL=\"Sonnet\" ;; *Opus*) MODEL=\"Opus\" ;; *Haiku*) MODEL=\"Haiku\" ;; *) MODEL=\"Claude\" ;; esac; if [ -n \"$BRANCH\" ]; then printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m [\\033[32m%s\\033[0m] | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$BRANCH\" \"$MODEL\"; else printf '🕐 \\033[36m%s\\033[0m | 📁 \\033[34m%s\\033[0m | 🤖 \\033[33m%s\\033[0m' \"$TIME\" \"$DIR\" \"$MODEL\"; fi"
+  // }
 }

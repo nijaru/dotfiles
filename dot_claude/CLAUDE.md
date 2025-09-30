@@ -76,6 +76,23 @@ mise uninstall python@X && mise install python@X
 - Platform-specific files handled via templates with `.tmpl` extension
 - Use `.chezmoiignore` for files that shouldn't be applied
 
+## System Information
+
+### Local Machines
+- **Mac** (primary): macOS, user: `nick`, Tailscale: available
+- **Fedora PC**: Linux (Fedora), user: `nick`, Tailscale: `fedora` (100.93.39.25)
+
+### Remote Access
+- Sync dotfiles to Fedora: `ssh nick@fedora 'chezmoi update'`
+- Both machines use same username: `nick`
+
+### MCP Server API Keys
+Environment variables needed on both machines:
+- `EXA_API_KEY` - Exa search API
+- `BRAVE_API_KEY` - Brave search API
+
+**Fedora PC**: Keys need to be added to `~/.bashrc` or `~/.config/fish/config.fish`
+
 ## Quick Reference
 
 ### Common Error → Fix

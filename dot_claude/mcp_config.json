@@ -2,11 +2,17 @@
   "mcpServers": {
     "brave-search": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"]
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
     },
     "exa": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp"]
+      "args": ["-y", "exa-mcp-server@2.0.9"],
+      "env": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      }
     },
     "context7": {
       "command": "npx",

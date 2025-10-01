@@ -9,7 +9,7 @@
     },
     "exa": {
       "command": "npx",
-      "args": ["-y", "exa-mcp-server@2.0.9"],
+      "args": ["-y", "exa-mcp-server@2.0.5"],
       "env": {
         "EXA_API_KEY": "${EXA_API_KEY}"
       }

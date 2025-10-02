@@ -6,6 +6,7 @@
 - **No auto PR** - Never open pull requests without explicit permission
 - **No auto push** - Always ask before pushing to remote
 - **Commit format**: `type: description` (feat, fix, docs, refactor, test, chore)
+- **NO archiving** - Delete files directly, don't "archive" them. Git history preserves everything
 
 ## Code Comment Philosophy
 

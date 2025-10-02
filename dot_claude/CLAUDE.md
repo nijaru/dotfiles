@@ -79,8 +79,8 @@ mise uninstall python@X && mise install python@X
 
 ## System Information
 
-- **Mac** (primary): macOS, user: `nick`
-- **Fedora PC**: Linux (Fedora), user: `nick`, Tailscale: `nick@fedora`
+- **Mac** (primary): MacBook Pro M3 Max, 128GB RAM, 16 cores, macOS, user: `nick`
+- **Fedora PC**: i9-13900KF, 32GB DDR5, 24 cores/32 threads, RTX 4090, user: `nick`, Tailscale: `nick@fedora`
 
 ## Quick Reference
 

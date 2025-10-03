@@ -41,6 +41,10 @@ id = s * c + l  # Calculate global ID
 global_id = segment_id * segment_capacity + local_node_id
 ```
 
+## Web Development
+
+- **Use icons, not emojis** - Use icon libraries (lucide, heroicons, etc.) instead of emoji characters in UI
+
 ## Python Development (Personal Stack)
 
 ### Toolchain: uv + mise
@@ -100,11 +104,115 @@ STOP and ask for clarification when hitting:
 - Service unavailable or quota exceeded
 - Ambiguous requirements or conflicting constraints
 
-## Performance Testing
+## Performance Testing & Benchmarking
+
+### Golden Rules
 - Run benchmarks 3+ times, report median
 - Include: hardware, data size, version info
 - Use exact numbers: "156,937 req/s" not "~157K"
 - Compare against baseline if available
 
+### CRITICAL: Honest Comparisons Only
+
+**⚠️ NEVER compare different levels of the stack**
+
+❌ **INVALID Comparisons:**
+- In-memory structure vs full database (different features)
+- Algorithm vs complete system (missing I/O, durability, concurrency)
+- Best-case data distribution vs real workload
+- Bulk operations vs incremental operations
+- System with feature X disabled vs system with feature X enabled
+
+✅ **VALID Comparisons:**
+- Full system vs full system (same features enabled)
+- Same workload, same data distribution on both sides
+- Document what's included/excluded explicitly
+
+### Benchmark Checklist
+
+Before claiming "Nx faster", verify:
+- [ ] **Same features**: Both systems have persistence, ACID, durability, etc.
+- [ ] **Same data**: Same distribution (sequential/random/zipfian/realistic)
+- [ ] **Same workload**: Same operations (bulk vs incremental, read vs write ratio)
+- [ ] **Same environment**: Same hardware, OS, file system
+- [ ] **Multiple runs**: At least 3 runs, report median + variance
+- [ ] **Documented caveats**: Explicitly state what IS and ISN'T tested
+
+### Documentation Template
+
+```markdown
+## Benchmark: [Name]
+
+**Systems Compared:**
+- System A: [version, features enabled, configuration]
+- System B: [version, features enabled, configuration]
+
+**Data:**
+- Distribution: [sequential/random/zipfian/mixed]
+- Size: [rows, GB, unique keys]
+- Schema: [structure]
+
+**Workload:**
+- Operations: [bulk insert/point queries/range scans/mixed]
+- Pattern: [how data is accessed]
+- Concurrency: [threads, connections]
+
+**Results:**
+| Metric | System A | System B | Speedup |
+|--------|----------|----------|---------|
+| Throughput | X ops/sec | Y ops/sec | Z.Zx |
+| Latency (p50) | X ms | Y ms | Z.Zx |
+| Latency (p99) | X ms | Y ms | Z.Zx |
+
+**Caveats:**
+- Tested on [specific data distribution] only
+- [What features are/aren't included]
+- [What this proves/doesn't prove]
+
+**Honest Assessment:**
+[What this means in practice, limitations, when speedup applies]
+```
+
+### Performance Claims
+
+**When you want to say:**
+> "System X is Nx faster than Y"
+
+**Actually say:**
+> "System X delivers Nx faster [specific operation] for [specific workload type] on [specific data distribution]. Tested with [features enabled]. [Other workloads/data types]: performance TBD."
+
+**Example - Bad:**
+> "OmenDB is 500x faster than SQLite"
+
+**Example - Good:**
+> "OmenDB delivers 20-50x faster bulk inserts for time-series workloads (sequential timestamps) compared to SQLite, with durability enabled on both systems. Tested at 10M rows. Random UUID performance: 2-5x faster."
+
+### Red Flags to Avoid
+
+🚩 **Suspiciously high speedups** (100x+):
+- Usually means you're comparing different things
+- Check if both systems have same features enabled
+- Verify data distribution is realistic
+
+🚩 **Only testing best-case data:**
+- Sequential/sorted data is optimal for many algorithms
+- Always test random/zipfian/realistic distributions too
+
+🚩 **Vague claims:**
+- "Faster" without context
+- No mention of workload type
+- No documentation of what's tested
+
+### ASK Before Publishing
+
+When benchmarks show exceptional results (>50x), STOP and verify:
+1. Are we comparing the same level of abstraction?
+2. Are all features accounted for on both sides?
+3. Have we tested on realistic data distributions?
+4. Can we explain WHY the speedup is this large?
+5. What happens when we add missing features?
+
+If uncertain, document honestly and flag caveats.
+
 ---
-*Streamlined for Sonnet 4.5 - Focus on personal preferences & workflows*
+*Updated Oct 2025 - Added benchmarking guidelines after misleading comparison incident*

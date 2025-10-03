@@ -45,6 +45,12 @@ global_id = segment_id * segment_capacity + local_node_id
 
 - **Use icons, not emojis** - Use icon libraries (lucide, heroicons, etc.) instead of emoji characters in UI
 
+## Development Workflow
+
+- **Commit frequently** - After each logical change
+- **NO temp files** - Delete after use, don't leave around
+- **Keep docs current** - Update documentation when changing related code
+
 ## Python Development (Personal Stack)
 
 ### Toolchain: uv + mise

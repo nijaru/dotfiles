@@ -93,6 +93,14 @@ switch (uname -s)
             case '*'
                 eval (/usr/local/bin/brew shellenv)
         end
+
+        # Homebrew performance optimizations
+        set -gx HOMEBREW_DOWNLOAD_CONCURRENCY "auto"  # Enable parallel downloads (4.6.0+)
+        set -gx HOMEBREW_NO_AUTO_UPDATE 1              # Disable auto-update on install (update manually)
+        set -gx HOMEBREW_NO_INSTALL_CLEANUP 1          # Skip cleanup during install (cleanup manually)
+        set -gx HOMEBREW_NO_ENV_HINTS 1                # Reduce verbose output
+        set -gx HOMEBREW_NO_ANALYTICS 1                # Disable analytics
+        set -gx HOMEBREW_BOOTSNAP 1                    # Enable bootsnap for faster Ruby startup
 end
 
 # Load API keys (secrets.fish is NOT tracked by chezmoi)

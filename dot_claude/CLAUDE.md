@@ -41,6 +41,20 @@ id = s * c + l  # Calculate global ID
 global_id = segment_id * segment_capacity + local_node_id
 ```
 
+## Code Quality Standards
+
+Analyze the codebase thoroughly, then implement state-of-the-art, production-ready, enterprise-grade changes.
+
+**Requirements:**
+- **State-of-the-art** - Research current best practices before implementing. Ask: Is this truly the best approach?
+- **Test as you go** - Verify changes work before moving to next step
+- **Production-ready** - Include error handling, logging, and validation
+- **Follow patterns** - Match existing conventions and architecture in the codebase
+- **Backwards compatible** - Don't break existing functionality unless explicitly required
+- **Update project docs** - Keep README, internal/, API docs current (not inline comments)
+- **Optimize** - Consider performance, security, and maintainability
+- **Verify before done** - Ensure codebase is production-ready and all tests pass
+
 ## Web Development
 
 - **Use icons, not emojis** - Use icon libraries (lucide, heroicons, etc.) instead of emoji characters in UI
@@ -71,6 +85,24 @@ uv tool install [tool]         # e.g., ruff, black, pytest
 
 # Fix broken environment
 mise uninstall python@X && mise install python@X
+```
+
+### Code Quality: uv + Vulture
+
+**uv (linting + formatting):**
+```bash
+uv run ruff check . --fix        # Lint (800+ rules, auto-fix)
+uv format                        # Format code (experimental)
+```
+
+**Vulture (dead code detection):**
+```bash
+uvx vulture . --min-confidence 80  # Find unused code
+```
+
+**ty (type checking) - pre-alpha, GA late 2025:**
+```bash
+uvx ty check .                   # Fast type checking (replaces mypy/pyright)
 ```
 
 ## Dotfiles Management (chezmoi)

@@ -124,6 +124,38 @@ uvx ty check .                   # Fast type checking (replaces mypy/pyright)
 - **Mac** (primary): M3 Max, 128GB, Tailscale: `nick@apple`
 - **Fedora PC**: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
+## Universal Pattern Library (agent-contexts)
+
+**Location**: `~/github/nijaru/agent-contexts/`
+
+Load these patterns on-demand when working on specific tasks:
+
+**Languages**:
+- Rust: `languages/rust/RUST_PATTERNS.md` - Build, test, profile, optimize, 2025 tooling
+- Python: `languages/python/PYTHON_PATTERNS.md` - Modern Python patterns
+- Go: `languages/go/GO_PATTERNS.md` - Concurrency and testing
+- Mojo: `languages/mojo/MOJO_PATTERNS.md` - Performance and memory
+
+**Standards**:
+- Errors: `standards/ERROR_PATTERNS.md` - Error message → solution mappings
+- Docs: `standards/DOC_PATTERNS.md` - Documentation organization
+- Code: `standards/AI_CODE_PATTERNS.md` - Code naming and structure
+- Release: `standards/RELEASE_PATTERNS.md` - Versioning and releases
+
+**Tools**:
+- JJ: `tools/jj/JJ_PATTERNS.md` - Version control workflows
+- GitHub: `tools/github/GITHUB_PATTERNS.md` - Project management
+- UV: `tools/python/UV_PATTERNS.md` - Python package manager
+- Modular: `tools/modular/BUILD_PATTERNS.md` - Bazel/Pixi patterns
+
+**Usage**:
+```
+IF writing Rust code → Load languages/rust/RUST_PATTERNS.md
+IF organizing docs → Load standards/DOC_PATTERNS.md
+IF debugging errors → Load standards/ERROR_PATTERNS.md
+IF using specific tool → Load tools/[tool]/[TOOL]_PATTERNS.md
+```
+
 ## Quick Reference
 
 ### Common Error → Fix

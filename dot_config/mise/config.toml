@@ -1,8 +1,8 @@
 [tools]
-python = "latest"
-rust = "latest"
 go = "latest"
 node = "latest"
+python = "latest"
+rust = "latest"
 usage = "latest"
 
 [settings]

@@ -101,7 +101,7 @@
       "language_servers": ["mojo-lsp"]
     },
     "Python": {
-      "language_servers": ["ruff"],
+      "language_servers": ["ruff", "ty"],
       "formatter": [
         {
           "code_actions": {

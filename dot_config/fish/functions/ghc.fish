@@ -42,4 +42,7 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     # Clone the repository
     echo "Cloning $org/$repo to $target_dir..."
     gh repo clone "$org/$repo" "$target_dir" $extra_args
+
+    # cd into the directory if clone succeeded
+    and cd $target_dir
 end

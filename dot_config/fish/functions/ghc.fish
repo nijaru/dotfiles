@@ -1,6 +1,7 @@
 function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     if test (count $argv) -eq 0
-        echo "Usage: ghc <username/repo-name> [gh-options]"
+        echo "Usage: ghc <repo-name> [gh-options]"
+        echo "       ghc <username/repo-name> [gh-options]"
         echo "       ghc <https://github.com/username/repo> [gh-options]"
         return 1
     end
@@ -15,13 +16,21 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     
     # Extract org/user and repo name
     set -l parts (string split "/" $repo_path)
-    if test (count $parts) -ne 2
-        echo "Error: Invalid format. Use 'username/repo' or 'org-name/repo'"
+    set -l org
+    set -l repo
+
+    # Default to user's GitHub username if no username provided
+    if test (count $parts) -eq 1
+        set org nijaru
+        set repo $parts[1]
+    else if test (count $parts) -eq 2
+        set org $parts[1]
+        set repo $parts[2]
+    else
+        echo "Error: Invalid format. Use 'repo-name' or 'username/repo'"
         return 1
     end
-    
-    set -l org $parts[1]
-    set -l repo $parts[2]
+
     set -l target_dir ~/github/$org/$repo
     
     # Check if directory already exists

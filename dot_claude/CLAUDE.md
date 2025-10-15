@@ -62,6 +62,7 @@ Analyze the codebase thoroughly, then implement state-of-the-art, production-rea
 ## Development Workflow
 
 - **Commit frequently** - After each logical change
+- **Push regularly** - Run `git push` after commits to keep remote in sync
 - **NO temp files** - Delete after use, don't leave around
 - **Keep docs current** - Update documentation when changing related code
 

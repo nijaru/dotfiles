@@ -21,7 +21,7 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
 
     # Default to user's GitHub username if no username provided
     if test (count $parts) -eq 1
-        set org nijaru
+        set org (gh api user --jq .login 2>/dev/null || echo "nijaru")
         set repo $parts[1]
     else if test (count $parts) -eq 2
         set org $parts[1]

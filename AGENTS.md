@@ -1,39 +1,58 @@
-# Repository Guidelines
+# Chezmoi Dotfiles Repository
 
-## Project Structure & Module Organization
-- `dot_config/`: Per‑app configs (e.g., `fish/`, `ghostty/`, `zed/`).
-- `dot_gitconfig.tmpl`, `dot_gitignore`: Global Git setup (templated when needed).
-- `private_dot_ssh/`: Sensitive SSH config; managed by chezmoi, not for plaintext secrets.
-- `run_once_*`: One‑time setup scripts (e.g., `run_once_setup-tide.fish.tmpl`).
-- `.chezmoiignore`: Paths excluded from apply to `$HOME`.
-- `.claude/`: Local assistant settings relevant to this repo.
+## Quick Commands
+```bash
+chezmoi add <path>           # Track new dotfile
+chezmoi apply               # Apply all changes
+chezmoi apply <path>        # Apply specific file
+chezmoi diff                # Preview changes
+chezmoi status              # Show drift
+```
 
-## Build, Test, and Development Commands
-- `chezmoi status`: Show drift between repo and `$HOME`.
-- `chezmoi diff`: Preview changes that would be applied.
-- `chezmoi apply --dry-run --verbose`: Simulate apply to verify effects safely.
-- `chezmoi apply`: Apply changes to your home directory.
-- `chezmoi cd`: Open the working tree for direct edits.
+## CRITICAL: Portable Paths
+- Use `~/` not `/Users/nick/` or `/home/nick/`
+- Ensures cross-platform compatibility (Mac/Linux)
 
-## Coding Style & Naming Conventions
-- **ChezMoi names**: `dot_*` → `~/.*`; `dot_config/<app>` → `~/.config/<app>`.
-- **Templates**: Use `*.tmpl`; keep logic minimal and data‑driven.
-- **Shell**: Prefer POSIX sh or Fish; 2‑space indent; snake_case for functions/aliases.
-- **Secrets**: Store in `private_*` or template data, never in tracked plaintext files.
+## Platform-Specific Files
+- Suffix `_darwin` for Mac-only (e.g., `Brewfile_darwin`)
+- Suffix `_linux` for Linux-only
+- chezmoi auto-applies based on OS
 
-## Testing Guidelines
-- Run `chezmoi apply --dry-run` then `chezmoi apply` to validate changes.
-- For Fish functions/aliases, open a new session and smoke‑test key commands.
-- Use `chezmoi doctor` to verify environment prerequisites.
-- Measure Fish startup performance: `hyperfine -w 3 'fish -lc exit'`
-- Test lazy-loading: Type `dev` or cd to a project directory
+## Project Structure
+- `dot_config/` → `~/.config/`
+- `dot_claude/` → `~/.claude/`
+- `private_dot_ssh/` → `~/.ssh/` (encrypted)
+- `run_once_*` → One-time setup scripts
+- `.chezmoiignore` → Files excluded from apply
 
-## Commit & Pull Request Guidelines
-- **Messages**: Imperative mood (e.g., “Add”, “Update”); include path scope when helpful (e.g., `Update .config/zed/settings.json`).
-- **Scope**: Keep commits focused; explain rationale for non‑obvious changes.
-- **PRs**: Include summary, affected apps/paths, screenshots for UI changes (Ghostty/Zed), and link issues when applicable.
+## Naming Convention
+- `dot_*` → `~/.*`
+- `dot_config/<app>` → `~/.config/<app>`
+- `private_*` → Encrypted sensitive files
 
-## Security & Configuration Tips
-- Do not commit secrets; rely on `private_*` and `.chezmoiignore`.
-- Review diffs before first apply on a new machine; confirm `private_dot_ssh` permissions after apply.
+## Files to Exclude
+- Runtime: `fish_variables`, cache, session data
+- Secrets: API keys, tokens (use `~/.config/fish/secrets.fish` - NOT tracked)
+- Templates: Use `.tmpl`, keep logic minimal
 
+## Testing
+```bash
+chezmoi apply --dry-run --verbose   # Simulate
+chezmoi apply                        # Apply
+chezmoi doctor                       # Verify environment
+```
+
+Fish: Open new session, test commands
+Performance: `hyperfine -w 3 'fish -lc exit'`
+
+## Cross-Machine Sync
+Mac: `nick@apple`, Fedora: `nick@fedora`
+
+```bash
+ssh nick@fedora 'fish -l -i -c "chezmoi update && chezmoi apply --force"'
+```
+
+## Security
+- Never commit secrets in plaintext
+- Use `private_*` for sensitive files
+- Verify `private_dot_ssh` permissions after apply

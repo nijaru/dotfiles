@@ -66,6 +66,16 @@ STOP and ask for clarification when hitting:
 - Ambiguous requirements or conflicting constraints
 - Unclear which approach to take between valid options
 
+## Common Error Patterns
+| Error | Fix |
+|-------|-----|
+| `No current bookmark` (jj) | `jj bookmark create main` |
+| `Working copy is stale` (jj) | `jj edit @` |
+| `not a git repository` | `cd` to repo or `git init` |
+| `port already in use` | `lsof -ti:PORT \| xargs kill` |
+| `permission denied` | `chmod +x file` or check ownership |
+| `module not found` | Check dependencies, run install |
+
 ## Language-Specific
 
 ### Python
@@ -83,7 +93,7 @@ uvx ty check .              # type checking (replaces mypy/pyright)
 ```
 
 ### Other Languages
-Rust/Go/Mojo: Load toolchain from agent-contexts patterns as needed
+Rust/Go/Mojo: Use mise for version management, consult official docs for patterns
 
 ### Web Development
 - Use icon libraries (lucide, heroicons) not emoji characters in UI

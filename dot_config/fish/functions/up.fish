@@ -17,13 +17,24 @@ function up --description "Update all package managers and tools"
             end
 
         case Linux
-            echo "📦 Updating DNF packages..."
+            # Try distro-specific package managers
             if command -q dnf
-                sudo dnf upgrade -y
+                echo "📦 Updating DNF packages..."
+                sudo dnf upgrade -y --refresh
                 and sudo dnf autoremove -y
                 and sudo dnf clean all
+            else if command -q apt
+                echo "📦 Updating APT packages..."
+                sudo apt update
+                and sudo apt upgrade -y
+                and sudo apt autoremove -y
+                and sudo apt clean
+            else if command -q pacman
+                echo "📦 Updating Pacman packages..."
+                sudo pacman -Syu --noconfirm
+                and sudo pacman -Sc --noconfirm
             else
-                echo "⚠️  DNF not found, skipping"
+                echo "⚠️  No supported package manager found"
             end
 
         case '*'

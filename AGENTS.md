@@ -3,10 +3,10 @@
 ## Quick Commands
 ```bash
 chezmoi add <path>           # Track new dotfile
-chezmoi apply               # Apply all changes
-chezmoi apply <path>        # Apply specific file
-chezmoi diff                # Preview changes
-chezmoi status              # Show drift
+chezmoi apply --force        # Apply all changes (use --force to overwrite)
+chezmoi apply --force <path> # Apply specific file
+chezmoi diff                 # Preview changes
+chezmoi status               # Show drift
 ```
 
 ## CRITICAL: Portable Paths
@@ -38,7 +38,7 @@ chezmoi status              # Show drift
 ## Testing
 ```bash
 chezmoi apply --dry-run --verbose   # Simulate
-chezmoi apply                        # Apply
+chezmoi apply --force                # Apply (use --force to overwrite)
 chezmoi doctor                       # Verify environment
 ```
 

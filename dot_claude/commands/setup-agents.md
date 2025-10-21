@@ -53,6 +53,8 @@ Analyze this project and set up AI agent configuration files.
    - Confirm no machine-specific paths (use ~/ not absolute paths)
 
 **Output:**
-- Show what sections were included and why
-- Display first 30 lines of created AGENTS.md
-- Confirm symlink created successfully
+- Show which scenario was detected (neither/only AGENTS.md/only CLAUDE.md/both exist)
+- List what sections were included from global ~/.claude/CLAUDE.md and why
+- Display first 30 lines of final AGENTS.md
+- Confirm final state: AGENTS.md (file) + CLAUDE.md (symlink → AGENTS.md)
+- Verify both files work with Claude Code, Sourcegraph Amp, and any tool using AGENTS.md

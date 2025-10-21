@@ -25,6 +25,18 @@ Always include:
 - Update project docs (README, internal/, API docs) not inline comments
 - Verify before done: codebase is production-ready, all tests pass
 
+## Naming Conventions
+Variables:
+- Boolean → question form: `isEnabled`, `hasData`, `canRetry`
+- Constants → UPPER_SNAKE: `MAX_RETRIES`, `DEFAULT_PORT`
+- With units → include unit: `timeoutMs`, `bufferKB`
+- Collections → plural: `users`, `items`
+
+Functions:
+- Side effects → action verb: `updateDatabase`, `saveUser`
+- Query only → get/find/check: `getUser`, `findById`
+- Boolean return → is/has/can: `isValid`, `hasPermission`
+
 ## Comments (Rarely Needed)
 Default: NO comments. Self-documenting code > comments.
 
@@ -75,22 +87,6 @@ Rust/Go/Mojo: Load toolchain from agent-contexts patterns as needed
 
 ### Web Development
 - Use icon libraries (lucide, heroicons) not emoji characters in UI
-
-## Pattern Library
-Location: `external/agent-contexts/` or `~/github/nijaru/agent-contexts/`
-
-Load on-demand for specific tasks:
-- `languages/{rust,python,go,mojo}/PATTERNS.md` - Language-specific patterns
-- `standards/{ERROR,DOC,AI_CODE,RELEASE}_PATTERNS.md` - Universal standards
-- `tools/{jj,github,uv,modular}/PATTERNS.md` - Tool workflows
-
-Usage:
-```
-IF writing Rust code → Load languages/rust/RUST_PATTERNS.md
-IF organizing docs → Load standards/DOC_PATTERNS.md
-IF debugging errors → Load standards/ERROR_PATTERNS.md
-IF using specific tool → Load tools/[tool]/[TOOL]_PATTERNS.md
-```
 
 ## Performance Claims
 CRITICAL: Never compare different levels of the stack.

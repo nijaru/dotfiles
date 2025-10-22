@@ -20,7 +20,8 @@ Before implementing:
 - IF changes break existing code → ask unless explicitly required
 
 Agent knowledge organization:
-- Reference: `github.com/nijaru/agent-contexts` - consolidated guide for structuring agent context in repos
+- Use standard `ai/` structure: TODO.md, STATUS.md, DECISIONS.md, RESEARCH.md
+- Guide: `github.com/nijaru/agent-contexts` (organization, not coding patterns)
 
 Always include:
 - Production-ready: error handling, logging, validation

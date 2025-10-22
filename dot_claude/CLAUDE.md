@@ -65,6 +65,35 @@ Versions: MAJOR.MINOR.PATCH (breaking.feature.bugfix)
 - NO drastic jumps: 0.0.1 → 1.0.0 is bad, use 0.1.0 → 0.2.0 → 1.0.0
 - 1.0.0 = production-ready, stable API
 
+## Release Checklist (CRITICAL)
+**NEVER tag or release before CI passes!**
+
+Pre-release steps (in order):
+1. **Code complete**: All features implemented and tested locally
+2. **Version bump**: Update version in all relevant files (Cargo.toml, package.json, etc.)
+3. **Update docs**: README, CHANGELOG, STATUS.md, release notes
+4. **Commit changes**: `git add -u && git commit -m "chore: bump version to X.Y.Z"`
+5. **Push to remote**: `git push`
+6. **WAIT FOR CI**: Use `gh run watch` or check GitHub Actions
+   - ✅ All checks must be GREEN (lint, test, build, integration)
+   - ❌ If CI fails: fix issues, DO NOT proceed
+7. **Tag release**: Only after CI passes: `git tag -a vX.Y.Z -m "vX.Y.Z - Description"`
+8. **Push tag**: `git push --tags`
+9. **Create GitHub release**: `gh release create vX.Y.Z --notes-file release_notes.md`
+10. **Verify release workflow**: Check that release binaries build successfully
+
+**Common mistakes to avoid:**
+- ❌ Tagging before CI completes
+- ❌ Releasing with failing tests
+- ❌ Skipping version updates in documentation
+- ❌ Forgetting to update CHANGELOG/STATUS
+- ❌ Using `git commit && git tag && git push --all --tags` in one line
+
+**If you released prematurely:**
+1. Check CI status immediately: `gh run list --limit 5`
+2. If CI failed: delete tag and release, fix issues, restart process
+3. If CI passed: You got lucky, but don't do it again!
+
 ## ASK on Blockers
 STOP and ask for clarification when hitting:
 - Package name conflicts (PyPI, npm, etc.)

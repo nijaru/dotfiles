@@ -1,8 +1,6 @@
 # Cargo build configuration for faster compilation
 
 [build]
-# Auto-detect CPU cores (0 = automatic)
-jobs = 0
 incremental = true
 
 {{- if eq .chezmoi.os "linux" }}

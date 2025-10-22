@@ -190,22 +190,27 @@ end
 
 ## Portable SSH Config
 
-**Decision**: Create `ssh-fish` command for SSH with portable Fish config
+**Decision**: Create `ssh-fish` command for SSH with temporary portable Fish config
 
 **Rationale**:
-- Use familiar Fish environment on remote servers
+- Use familiar Fish environment on random servers
 - Don't require full dotfiles installation on every server
-- Lightweight config transfers quickly (<10KB)
+- Lightweight config transfers quickly (<5KB)
+- Temporary - no trace left on remote servers
 - Graceful fallback when Fish not available
 
 **Implementation**:
-- Portable config in `~/.config/fish/portable/`
-- Minimal config: aliases, basic functions, simple prompt
-- `ssh-fish` function syncs config then connects
-- Uses rsync for efficiency, falls back to tar+ssh
+- Portable config in `~/.config/fish/portable/config.fish`
+- Minimal essentials: aliases, extract, mkcd, git shortcuts, simple prompt
+- `ssh-fish` function:
+  1. Creates temp dir on remote: `/tmp/.ssh-fish.XXXXXX`
+  2. Syncs config (rsync preferred, tar+ssh fallback)
+  3. Sources config with `--init-command`
+  4. Auto-cleanup on exit via Fish event handler
 - Checks for Fish availability before syncing
 
 **Trade-offs**:
 - SSH-only (Mosh uses SSH for handshake anyway)
 - Explicit command (`ssh-fish`) vs automatic (opt-in behavior)
-- Minimal config only (full dotfiles via chezmoi for permanent servers)
+- Re-syncs every connection (but config is tiny, <5KB)
+- Minimal config only (full dotfiles via chezmoi for owned servers)

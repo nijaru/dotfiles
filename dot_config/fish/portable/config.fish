@@ -93,43 +93,6 @@ function extract -d "Extract various archive formats"
     end
 end
 
-function jsonf -d "Format JSON data"
-    # Check if input is from pipe or argument
-    if test -t 0
-        if test (count $argv) -eq 0
-            echo "Usage: jsonf '<json-string>' or pipe JSON content" >&2
-            return 1
-        end
-        echo $argv[1] | python3 -m json.tool
-    else
-        python3 -m json.tool
-    end
-end
-
-function timecmd -d "Profile command execution time"
-    set -l start (date +%s)
-    eval $argv
-    set -l duration (math (date +%s) - $start)
-    echo "Execution time: {$duration}s"
-end
-
-# Navigation shortcuts
-function dl -d "Go to Downloads directory"
-    cd ~/Downloads
-end
-
-function dt -d "Go to Desktop directory"
-    cd ~/Desktop
-end
-
-function doc -d "Go to Documents directory"
-    cd ~/Documents
-end
-
-function ghub -d "Go to GitHub directory"
-    cd ~/github
-end
-
 # Prompt - simple and fast
 function fish_prompt
     set -l last_status $status

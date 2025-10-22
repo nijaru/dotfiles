@@ -9,7 +9,8 @@ chezmoi diff                 # Preview changes
 chezmoi status               # Show drift
 ```
 
-## CRITICAL: Portable Paths
+## CRITICAL
+- Always use `chezmoi apply --force` to overwrite and avoid prompts
 - Use `~/` not `/Users/nick/` or `/home/nick/`
 - Ensures cross-platform compatibility (Mac/Linux)
 

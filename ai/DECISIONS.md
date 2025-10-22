@@ -187,3 +187,25 @@ end
 - Wrap completions/prompt in `if status is-interactive`
 - One-time completion generation via `run_once_*` scripts
 - Lazy loading for expensive tools (GCP, etc.)
+
+## Portable SSH Config
+
+**Decision**: Create `ssh-fish` command for SSH with portable Fish config
+
+**Rationale**:
+- Use familiar Fish environment on remote servers
+- Don't require full dotfiles installation on every server
+- Lightweight config transfers quickly (<10KB)
+- Graceful fallback when Fish not available
+
+**Implementation**:
+- Portable config in `~/.config/fish/portable/`
+- Minimal config: aliases, basic functions, simple prompt
+- `ssh-fish` function syncs config then connects
+- Uses rsync for efficiency, falls back to tar+ssh
+- Checks for Fish availability before syncing
+
+**Trade-offs**:
+- SSH-only (Mosh uses SSH for handshake anyway)
+- Explicit command (`ssh-fish`) vs automatic (opt-in behavior)
+- Minimal config only (full dotfiles via chezmoi for permanent servers)

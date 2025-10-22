@@ -2,7 +2,7 @@
 LICENSE
 README.md
 AGENTS.md
-DOTFILES_OPTIMIZATION.md
+ai/
 
 # LazyVim template files - not personal config
 .config/nvim/LICENSE

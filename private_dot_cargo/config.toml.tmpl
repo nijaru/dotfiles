@@ -6,25 +6,10 @@ incremental = true
 {{- if eq .chezmoi.os "linux" }}
 
 [target.x86_64-unknown-linux-gnu]
-# mold linker - 2-5x faster linking
+# mold linker - 5-10x faster linking on Linux
 linker = "clang"
 rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 
-{{- else if eq .chezmoi.os "darwin" }}
-
-{{- if eq .chezmoi.arch "arm64" }}
-
-[target.aarch64-apple-darwin]
-# lld linker for Mac M-series
-rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
-
-{{- else }}
-
-[target.x86_64-apple-darwin]
-# lld linker for Mac Intel
-rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
-
-{{- end }}
 {{- end }}
 
 [profile.release]

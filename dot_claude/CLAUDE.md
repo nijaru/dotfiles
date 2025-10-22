@@ -73,6 +73,7 @@ Versions: MAJOR.MINOR.PATCH (breaking.feature.bugfix)
 3. **WAIT FOR CI**: `gh run watch` - all checks must be ✅ before proceeding
 4. `git tag -a vX.Y.Z -m "vX.Y.Z - Description" && git push --tags`
 5. `gh release create vX.Y.Z --notes-file release_notes.md`
+6. **Publish to registries**: `cargo publish` (Rust), `npm publish` (Node), `uv publish` (Python)
 
 If CI fails: Delete tag/release (`git tag -d vX.Y.Z && git push --delete origin vX.Y.Z`), fix, restart.
 

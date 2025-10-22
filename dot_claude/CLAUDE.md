@@ -26,7 +26,7 @@ Agent knowledge organization:
 Always include:
 - Production-ready: error handling, logging, validation
 - Follow existing patterns in codebase
-- Update project docs (README, internal/, API docs) not inline comments
+- Update project docs (README, docs/, internal/, API docs) and agent context (ai/, CLAUDE.md, AGENTS.md)
 - Verify before done: codebase is production-ready, all tests pass
 
 ## Naming Conventions

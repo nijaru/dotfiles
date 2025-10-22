@@ -1,0 +1,35 @@
+# Cargo build configuration for faster compilation
+
+[build]
+# Auto-detect CPU cores (0 = automatic)
+jobs = 0
+incremental = true
+
+{{- if eq .chezmoi.os "linux" }}
+
+[target.x86_64-unknown-linux-gnu]
+# mold linker - 2-5x faster linking
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=mold"]
+
+{{- else if eq .chezmoi.os "darwin" }}
+
+{{- if eq .chezmoi.arch "arm64" }}
+
+[target.aarch64-apple-darwin]
+# lld linker for Mac M-series
+rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
+
+{{- else }}
+
+[target.x86_64-apple-darwin]
+# lld linker for Mac Intel
+rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
+
+{{- end }}
+{{- end }}
+
+[profile.release]
+# Faster compilation for cargo install (uses release profile)
+codegen-units = 16  # more units = faster compile, slightly slower runtime
+lto = "thin"        # thin LTO balances compile time and performance

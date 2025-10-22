@@ -57,24 +57,9 @@ NEVER:
 Format: `type: description` (feat, fix, docs, refactor, test, chore)
 Frequency: Commit after each logical change, push regularly
 
-## Semantic Versioning
-Follow semantic versioning (SemVer): MAJOR.MINOR.PATCH
-
-Version increments:
-- PATCH (0.0.x → 0.0.y): Bug fixes, no breaking changes
-- MINOR (0.x.0 → 0.y.0): New features, backward compatible
-- MAJOR (x.0.0 → y.0.0): Breaking changes only
-
-CRITICAL: Do NOT jump versions drastically
-- BAD: 0.0.1 → 1.0.0 (unless truly warranted with breaking changes)
-- GOOD: 0.0.1 → 0.1.0 → 0.2.0 → 1.0.0 (incremental)
-- Version 1.0.0 signals production-ready with stable API
-- Pre-1.0 (0.x.y) indicates development/unstable
-
-When bumping versions, ask yourself:
-- Are there breaking changes? → MAJOR
-- New features backward compatible? → MINOR
-- Only bug fixes? → PATCH
+Versions: MAJOR.MINOR.PATCH (breaking.feature.bugfix)
+- NO drastic jumps: 0.0.1 → 1.0.0 is bad, use 0.1.0 → 0.2.0 → 1.0.0
+- 1.0.0 = production-ready, stable API
 
 ## ASK on Blockers
 STOP and ask for clarification when hitting:

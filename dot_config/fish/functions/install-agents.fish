@@ -24,16 +24,16 @@ function install-agents --description "Install AI coding agents (Claude Code, So
 
     # Verify Claude Code
     if command -q claude
-        set -l version (claude --version 2>/dev/null)
-        echo "  ✓ claude: $version"
+        set -l ver (claude --version 2>/dev/null)
+        echo "  ✓ claude: $ver"
     else
         echo "  ✗ claude: not found in PATH"
     end
 
     # Verify Amp
     if command -q amp
-        set -l version (amp --version 2>/dev/null)
-        echo "  ✓ amp: $version"
+        set -l ver (amp --version 2>/dev/null)
+        echo "  ✓ amp: $ver"
     else
         echo "  ✗ amp: not found in PATH"
     end

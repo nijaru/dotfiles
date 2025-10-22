@@ -19,6 +19,9 @@ Before implementing:
 - Test as you go before moving to next step
 - IF changes break existing code → ask unless explicitly required
 
+Agent knowledge organization:
+- Reference: `github.com/nijaru/agent-contexts` - consolidated guide for structuring agent context in repos
+
 Always include:
 - Production-ready: error handling, logging, validation
 - Follow existing patterns in codebase

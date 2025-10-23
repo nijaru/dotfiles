@@ -21,11 +21,14 @@ Before implementing:
 
 Agent knowledge organization:
 - `ai/`: Agent context (for AI sessions)
-  - TODO.md, STATUS.md, DECISIONS.md (core files)
+  - **STATUS.md**: Read FIRST when starting work - current state, what works/doesn't
+  - TODO.md, DECISIONS.md: Track tasks and architectural decisions
   - `ai/research/` for research files and findings
 - `docs/`: User-facing project documentation (for humans)
 - `CLAUDE.md`/`AGENTS.md`: Project-specific agent instructions
 - Keep all documentation in repo for git tracking
+- **Update ai/STATUS.md at end of EVERY session** - keep it current
+- **NO dated summary files** (e.g., SUMMARY_OCT23.md) - update ai/STATUS.md instead
 - Reference: `github.com/nijaru/agent-contexts` (organization, not coding patterns)
 
 Always include:

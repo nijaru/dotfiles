@@ -20,7 +20,9 @@ Before implementing:
 - IF changes break existing code → ask unless explicitly required
 
 Agent knowledge organization:
-- `ai/`: Agent context - TODO.md, STATUS.md, DECISIONS.md, RESEARCH.md (for AI sessions)
+- `ai/`: Agent context (for AI sessions)
+  - TODO.md, STATUS.md, DECISIONS.md (core files)
+  - `ai/research/` for research files and findings
 - `docs/`: User-facing project documentation (for humans)
 - `CLAUDE.md`/`AGENTS.md`: Project-specific agent instructions
 - Keep all documentation in repo for git tracking

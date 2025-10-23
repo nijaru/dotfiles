@@ -22,6 +22,8 @@ Before implementing:
 Agent knowledge organization:
 - Use standard `ai/` structure: TODO.md, STATUS.md, DECISIONS.md, RESEARCH.md
 - Guide: `github.com/nijaru/agent-contexts` (organization, not coding patterns)
+- NEVER write docs to /tmp - always use ai/, docs/, or CLAUDE.md/AGENTS.md
+- Keep all documentation in repo for git tracking (delete later if temporary)
 
 Always include:
 - Production-ready: error handling, logging, validation

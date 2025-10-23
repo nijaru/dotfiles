@@ -4,6 +4,7 @@
 # Core environment variables
 set -gx EDITOR "zed"
 set -gx VISUAL "zed"
+set -gx GIT_EDITOR "zed --wait"  # Git needs blocking mode
 set -gx ALTERNATE_EDITOR "nvim"
 set -gx MOAR "--style=catppuccin-macchiato --quit-if-one-screen --no-statusbar --wrap"
 set -gx BAT_THEME "Catppuccin Macchiato"

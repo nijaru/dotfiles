@@ -29,6 +29,7 @@ Agent knowledge organization:
 - Keep all documentation in repo for git tracking
 - **Update ai/STATUS.md at end of EVERY session** - keep it current
 - **NO dated summary files** (e.g., SUMMARY_OCT23.md) - update ai/STATUS.md instead
+- **Reference commits by short hash** - When documenting changes/fixes in ai/ or docs/, include short commit hash (e.g., "Fixed in a1b2c3d") so agents can easily locate commits later
 - Reference: `github.com/nijaru/agent-contexts` (organization, not coding patterns)
 
 Always include:
@@ -118,6 +119,19 @@ uv run ruff check . --fix   # lint (800+ rules, auto-fix)
 uv format                   # format code
 uvx vulture . --min-confidence 80  # find unused code
 uvx ty check .              # type checking (replaces mypy/pyright)
+```
+
+### JavaScript/TypeScript
+Toolchain: bun + mise (never npm/yarn)
+```bash
+mise install bun@latest && mise use bun@latest
+bun init                    # initialize project
+bun add [packages]          # dependencies
+bun add -d [packages]       # dev dependencies
+bun run script.ts           # run code (no build step needed)
+bun test                    # test runner
+bun build                   # bundle for production
+bunx [tool]                 # run packages without installing
 ```
 
 ### Other Languages

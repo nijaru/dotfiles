@@ -71,6 +71,8 @@ Format: `type: description` (feat, fix, docs, refactor, test, chore)
 Frequency: Commit after each logical change, push regularly
 
 Versions: MAJOR.MINOR.PATCH (breaking.feature.bugfix)
+- **DEFAULT: Only bump PATCH versions** - track progress via commit hashes instead
+- Only bump MINOR/MAJOR when explicitly instructed
 - NO drastic jumps: 0.0.1 → 1.0.0 is bad, use 0.1.0 → 0.2.0 → 1.0.0
 - 1.0.0 = production-ready, stable API
 

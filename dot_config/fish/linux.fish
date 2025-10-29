@@ -92,15 +92,6 @@ if command -v xdg-open >/dev/null 2>&1
 end
 
 ###################
-# Container Management
-###################
-
-# Ollama CLI via podman
-if command -v podman >/dev/null 2>&1
-    alias ollama "sudo podman exec -it ollama ollama"
-end
-
-###################
 # SSH Agent Setup
 ###################
 

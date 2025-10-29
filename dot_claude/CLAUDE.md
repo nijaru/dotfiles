@@ -40,13 +40,7 @@ Always include:
 
 ## Testing & Validation
 - Test in containers/isolated environments where possible
-  - Prevents system pollution
-  - Ensures reproducibility
-  - Use Docker/Podman for service dependencies
-- Use Fedora machine for testing when appropriate
-  - Hardware-intensive tasks (GPU, multi-core)
-  - Linux-specific features/behaviors
-  - Performance testing with production-like environment
+- Use Fedora for hardware-intensive/Linux-specific testing
 
 ## Naming Conventions
 Variables:

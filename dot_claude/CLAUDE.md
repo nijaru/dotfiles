@@ -38,6 +38,16 @@ Always include:
 - Update project docs (README, docs/, internal/, API docs) and agent context (ai/, CLAUDE.md, AGENTS.md)
 - Verify before done: codebase is production-ready, all tests pass
 
+## Testing & Validation
+- Test in containers/isolated environments where possible
+  - Prevents system pollution
+  - Ensures reproducibility
+  - Use Docker/Podman for service dependencies
+- Use Fedora machine for testing when appropriate
+  - Hardware-intensive tasks (GPU, multi-core)
+  - Linux-specific features/behaviors
+  - Performance testing with production-like environment
+
 ## Naming Conventions
 Variables:
 - Boolean → question form: `isEnabled`, `hasData`, `canRetry`

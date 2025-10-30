@@ -27,6 +27,17 @@
 - Reference commits by hash (e.g., "Fixed in a1b2c3d")
 - Reference: github.com/nijaru/agent-contexts
 
+## ai/ Directory: Machine-Optimized
+
+**ai/ is for AI agents, docs/ is for humans**
+
+ai/ writing style:
+- Tables, lists, key-value pairs (NOT narrative prose)
+- Answer first, evidence second (inverted pyramid)
+- Docs >500 lines: Executive summary at top
+- Cross-reference, don't duplicate
+- Token-efficient and scannable
+
 ## Code Standards
 Before implementing:
 - Research best practices first - ask: Is this truly state-of-the-art?

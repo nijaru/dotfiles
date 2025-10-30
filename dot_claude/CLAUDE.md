@@ -71,10 +71,12 @@ Add ONLY for WHY (never WHAT):
 - Algorithm rationale: `# Quickselect over sort - only need top K`
 - Workarounds: `# Workaround: Library X lacks feature Y`
 
-NEVER:
-- Change tracking: `# Fixed: use X instead of Y`, `# Changed: now using Z` (git tracks this)
-- Obvious behavior, TODOs, emotional comments, syntax explanations
-- What the code does (code itself shows this)
+NEVER: Change tracking (git does this), obvious behavior, TODOs, what code does
+
+Examples:
+- ❌ `# Fixed: use X instead of Y`, `# Changed: now using Z method`
+- ❌ `# Loop through items`, `# Set variable to 5`
+- ✅ `# SHA-256 required by API spec v2.1`
 
 ## Git Workflow
 Format: `type: description` (feat, fix, docs, refactor, test, chore)

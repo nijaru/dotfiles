@@ -7,6 +7,12 @@
 
 # Homebrew abbreviations
 if command -v brew >/dev/null 2>&1
+    # Use bru wrapper if available (comment out to disable)
+    if command -v bru >/dev/null 2>&1
+        abbr --add brew bru
+        alias brew=bru
+    end
+
     abbr --add brews "brew search"                  # Search packages
     abbr --add brewin "brew info"                   # Package info
     abbr --add brewi "brew install"                 # Install package

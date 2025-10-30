@@ -15,7 +15,6 @@
 
 ## Where Information Belongs
 
-**Quick Lookup**:
 - Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
 - Project overview + pointers → Project `CLAUDE.md`/`AGENTS.md` (brief, ~100-200 lines)
 - Detailed technical issues → `ai/STATUS.md` (read FIRST)
@@ -23,12 +22,6 @@
 - Decisions + rationale → `ai/DECISIONS.md`
 - Research → `ai/RESEARCH.md` + `ai/research/`
 - Permanent docs → `docs/`
-
-**Project CLAUDE.md/AGENTS.md**:
-- ✅ Brief: `"⚠️ Model routing issues. See ai/STATUS.md"`
-- ❌ Detailed: `"⚠️ Model Routing: 1. Issue A... 2. Issue B..."`
-
-**Key Rules**:
 - Update ai/STATUS.md every session, NO dated summaries
 - Reference commits by hash (e.g., "Fixed in a1b2c3d")
 - Reference: github.com/nijaru/agent-contexts

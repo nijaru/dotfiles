@@ -16,7 +16,9 @@
 ## Where Information Belongs
 
 - Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
-- Project overview + pointers → Project `CLAUDE.md`/`AGENTS.md` (brief, ~100-200 lines)
+- Project overview + pointers → Project `AGENTS.md` (brief, ~100-200 lines)
+  - Prefer AGENTS.md (universal: Cursor, Cline, Claude Code, Copilot, Windsurf)
+  - For Claude Code: `ln -s AGENTS.md CLAUDE.md`
 - Detailed technical issues → `ai/STATUS.md` (read FIRST)
 - Active tasks → `ai/TODO.md`
 - Decisions + rationale → `ai/DECISIONS.md`
@@ -35,7 +37,7 @@ Before implementing:
 Always include:
 - Production-ready: error handling, logging, validation
 - Follow existing patterns in codebase
-- Update project docs (README, docs/, internal/, API docs) and agent context (ai/, CLAUDE.md, AGENTS.md)
+- Update project docs (README, docs/, internal/, API docs) and agent context (ai/, AGENTS.md)
 - Verify before done: codebase is production-ready, all tests pass
 
 ## Testing & Validation

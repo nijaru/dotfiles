@@ -13,24 +13,31 @@
 - Commit frequently after each logical change
 - Push regularly to keep remote in sync
 
+## Where Information Belongs
+
+**Quick Lookup**:
+- Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
+- Project overview + pointers → Project `CLAUDE.md`/`AGENTS.md` (brief, ~100-200 lines)
+- Detailed technical issues → `ai/STATUS.md` (read FIRST)
+- Active tasks → `ai/TODO.md`
+- Decisions + rationale → `ai/DECISIONS.md`
+- Research → `ai/RESEARCH.md` + `ai/research/`
+- Permanent docs → `docs/`
+
+**Project CLAUDE.md/AGENTS.md**:
+- ✅ Brief: `"⚠️ Model routing issues. See ai/STATUS.md"`
+- ❌ Detailed: `"⚠️ Model Routing: 1. Issue A... 2. Issue B..."`
+
+**Key Rules**:
+- Update ai/STATUS.md every session, NO dated summaries
+- Reference commits by hash (e.g., "Fixed in a1b2c3d")
+- Reference: github.com/nijaru/agent-contexts
+
 ## Code Standards
 Before implementing:
 - Research best practices first - ask: Is this truly state-of-the-art?
 - Test as you go before moving to next step
 - IF changes break existing code → ask unless explicitly required
-
-Agent knowledge organization:
-- `ai/`: Agent context (for AI sessions)
-  - **STATUS.md**: Read FIRST when starting work - current state, what works/doesn't
-  - TODO.md, DECISIONS.md: Track tasks and architectural decisions
-  - `ai/research/` for research files and findings
-- `docs/`: User-facing project documentation (for humans)
-- `CLAUDE.md`/`AGENTS.md`: Project-specific agent instructions
-- Keep all documentation in repo for git tracking
-- **Update ai/STATUS.md at end of EVERY session** - keep it current
-- **NO dated summary files** (e.g., SUMMARY_OCT23.md) - update ai/STATUS.md instead
-- **Reference commits by short hash** - When documenting changes/fixes in ai/ or docs/, include short commit hash (e.g., "Fixed in a1b2c3d") so agents can easily locate commits later
-- Reference: `github.com/nijaru/agent-contexts` (organization, not coding patterns)
 
 Always include:
 - Production-ready: error handling, logging, validation

@@ -29,7 +29,7 @@
 
 ## ai/ Directory: Machine-Optimized
 
-**ai/ is for AI agents, docs/ is for humans**
+**ai/ is for AI agents, docs/ is for users/team**
 
 ai/ writing style:
 - Tables, lists, key-value pairs (NOT narrative prose)

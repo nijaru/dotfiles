@@ -4,23 +4,21 @@
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
-## Critical Rules (Always Follow)
-- NO AI attribution in commits/PRs. Strip if found.
+## Critical Rules
+- NO AI attribution in commits/PRs (strip if found)
 - Ask before: pushing to remote, opening PRs
 - Never force push to main/master
-- NO archiving - delete files directly (git preserves history)
-- NO temp files - delete immediately after use
-- Commit frequently after each logical change
-- Push regularly to keep remote in sync
+- NO archiving (delete files, git preserves history)
+- NO temp files (delete immediately after use)
+- Commit frequently after each logical change, push regularly
 
 ## Where Information Belongs
-
 - Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
-- Project overview + pointers → Project `CLAUDE.md` (brief, ~100-200 lines)
-  - Optional: `ln -s CLAUDE.md AGENTS.md` (for tools supporting AGENTS.md standard)
-- Detailed technical issues → `ai/STATUS.md` (read FIRST)
-- Active tasks → `ai/TODO.md`
-- Decisions + rationale → `ai/DECISIONS.md`
+- Project overview + pointers → Project `CLAUDE.md` (~100-200 lines)
+  - Optional: `ln -s CLAUDE.md AGENTS.md`
+- Detailed issues → `ai/STATUS.md` (read FIRST)
+- Tasks → `ai/TODO.md`
+- Decisions → `ai/DECISIONS.md`
 - Research → `ai/RESEARCH.md` + `ai/research/`
 - Permanent docs → `docs/`
 - Update ai/STATUS.md every session, NO dated summaries
@@ -28,147 +26,108 @@
 - Reference: github.com/nijaru/agent-contexts
 
 ## ai/ Directory: Machine-Optimized
-
 **ai/ is for AI agents, docs/ is for users/team**
 
-ai/ writing style:
+ai/ writing:
 - Tables, lists, key-value pairs (NOT narrative prose)
 - Answer first, evidence second (inverted pyramid)
 - Docs >500 lines: Executive summary at top
 - Cross-reference, don't duplicate
-- Token-efficient and scannable
 
 ## Code Standards
 Before implementing:
-- Research best practices first - ask: Is this truly state-of-the-art?
+- Research best practices - is this truly SOTA?
 - Test as you go before moving to next step
 - IF changes break existing code → ask unless explicitly required
 
-Always include:
+Always:
 - Production-ready: error handling, logging, validation
 - Follow existing patterns in codebase
-- Update project docs (README, docs/, internal/, API docs) and agent context (ai/, CLAUDE.md)
-- Verify before done: codebase is production-ready, all tests pass
+- Update project docs (README, docs/, internal/) and agent context (ai/, CLAUDE.md)
+- Verify: codebase production-ready, all tests pass
 
 ## Testing & Validation
 - Test in containers/isolated environments where possible
 - Use Fedora for hardware-intensive/Linux-specific testing
 
 ## Naming Conventions
-Variables:
-- Boolean → question form: `isEnabled`, `hasData`, `canRetry`
-- Constants → UPPER_SNAKE: `MAX_RETRIES`, `DEFAULT_PORT`
-- With units → include unit: `timeoutMs`, `bufferKB`
-- Collections → plural: `users`, `items`
+**Variables:**
+- Boolean: `isEnabled`, `hasData`, `canRetry`
+- Constants: `MAX_RETRIES`, `DEFAULT_PORT`
+- With units: `timeoutMs`, `bufferKB`
+- Collections: plural (`users`, `items`)
 
-Functions:
-- Side effects → action verb: `updateDatabase`, `saveUser`
-- Query only → get/find/check: `getUser`, `findById`
-- Boolean return → is/has/can: `isValid`, `hasPermission`
+**Functions:**
+- Side effects: action verb (`updateDatabase`, `saveUser`)
+- Query only: get/find/check (`getUser`, `findById`)
+- Boolean return: is/has/can (`isValid`, `hasPermission`)
 
-## Comments (Rarely Needed)
-Default: NO comments. Self-documenting code > comments.
+## Comments
+Default: NO comments (self-documenting code > comments)
 
 Add ONLY for WHY (never WHAT):
 - Non-obvious decisions: `# Use 1000 threshold - benchmarks show 3x speedup`
 - External requirements: `# GDPR requires 7-year retention`
 - Algorithm rationale: `# Quickselect over sort - only need top K`
-- Complexity notes: `# O(n log n) despite linear scan - sorting dominates`
-- External workarounds: `# Workaround: Library X lacks feature Y`
+- Workarounds: `# Workaround: Library X lacks feature Y`
 
-NEVER:
-- Obvious code behavior: `# Increment counter`
-- TODOs (fix before commit)
-- Emotional/narrative comments: `# CRITICAL FIX!`
-- Syntax explanations (use better variable names)
+NEVER: Obvious behavior, TODOs, emotional comments, syntax explanations
 
 ## Git Workflow
 Format: `type: description` (feat, fix, docs, refactor, test, chore)
-Frequency: Commit after each logical change, push regularly
 
-Versions: MAJOR.MINOR.PATCH (breaking.feature.bugfix)
-- **DEFAULT: Never bump versions** - track progress via commit hashes
-- Only bump versions when explicitly instructed (e.g., "bump to 1.2.3", "bump patch", "create release")
-- When bumping: NO drastic jumps (0.0.1 → 1.0.0 is bad, use 0.1.0 → 0.2.0 → 1.0.0)
+Versions (MAJOR.MINOR.PATCH):
+- DEFAULT: Never bump versions (track via commit hashes)
+- Only bump when explicitly instructed
+- NO drastic jumps (0.0.1 → 1.0.0 is bad)
 - 1.0.0 = production-ready, stable API
 
 ## Release Process
-**Only run when explicitly instructed to create a release**
-**CRITICAL: Never tag/release before CI passes!**
+**Only when explicitly instructed. CRITICAL: Never tag/release before CI passes!**
 
-1. Bump version (Cargo.toml, package.json, etc.) + update docs (README, STATUS.md, notes)
+1. Bump version + update docs
 2. `git add -u && git commit -m "chore: bump version to X.Y.Z" && git push`
-3. **WAIT FOR CI**: `gh run watch` - all checks must be ✅ before proceeding
+3. **WAIT FOR CI**: `gh run watch` (all checks ✅)
 4. `git tag -a vX.Y.Z -m "vX.Y.Z - Description" && git push --tags`
 5. `gh release create vX.Y.Z --notes-file release_notes.md`
-6. **Publish to registries**: `cargo publish` (Rust), `npm publish` (Node), `uv publish` (Python)
+6. Publish: `cargo publish` (Rust), `npm publish` (Node), `uv publish` (Python)
 
-If CI fails: Delete tag/release (`git tag -d vX.Y.Z && git push --delete origin vX.Y.Z`), fix, restart.
+If CI fails: Delete tag/release, fix, restart
 
 ## ASK on Blockers
-STOP and ask for clarification when hitting:
-- Package name conflicts (PyPI, npm, etc.)
-- Permission/access denied errors
+STOP and ask when hitting:
+- Package name conflicts
+- Permission/access denied
 - API rejections or unexpected failures
 - Service unavailable or quota exceeded
 - Ambiguous requirements or conflicting constraints
-- Unclear which approach to take between valid options
+- Unclear which approach to take
 
-## Common Error Patterns
-| Error | Fix |
-|-------|-----|
-| `No current bookmark` (jj) | `jj bookmark create main` |
-| `Working copy is stale` (jj) | `jj edit @` |
-| `not a git repository` | `cd` to repo or `git init` |
-| `port already in use` | `lsof -ti:PORT \| xargs kill` |
-| `permission denied` | `chmod +x file` or check ownership |
-| `module not found` | Check dependencies, run install |
+## Toolchains
 
-## Language-Specific
+**Python**: uv + mise (never pip)
+- Tools: ruff (lint), ty (type check), vulture (find unused code)
+- Commands: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
+- `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
 
-### Python
-Toolchain: uv + mise (never pip)
-```bash
-mise install python@latest && mise use python@latest
-uv init && uv sync
-uv add [packages]           # dependencies
-uv add --dev [packages]     # dev dependencies
-uv run python script.py     # run code
-uv run ruff check . --fix   # lint (800+ rules, auto-fix)
-uv format                   # format code
-uvx vulture . --min-confidence 80  # find unused code
-uvx ty check .              # type checking (replaces mypy/pyright)
-```
+**JavaScript/TypeScript**: bun + mise (never npm/yarn)
+- Commands: `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
 
-### JavaScript/TypeScript
-Toolchain: bun + mise (never npm/yarn)
-```bash
-mise install bun@latest && mise use bun@latest
-bun init                    # initialize project
-bun add [packages]          # dependencies
-bun add -d [packages]       # dev dependencies
-bun run script.ts           # run code (no build step needed)
-bun test                    # test runner
-bun build                   # bundle for production
-bunx [tool]                 # run packages without installing
-```
+**Other**: mise for version management, consult official docs
 
-### Other Languages
-Rust/Go/Mojo: Use mise for version management, consult official docs for patterns
-
-### Web Development
-- Use icon libraries (lucide, heroicons) not emoji characters in UI
+**Web/CLI/TUI**: Use icon libraries (lucide, heroicons), NOT emoji characters in UI
 
 ## Performance Claims
-CRITICAL: Never compare different levels of the stack.
+CRITICAL: Never compare different levels of the stack
 
 Before claiming "Nx faster":
 - Same features (ACID, durability, persistence)
 - Same workload (not bulk vs incremental)
-- Same data distribution (realistic, not best-case only)
+- Realistic data distribution (not best-case only)
 - Multiple runs (3+), report median, document caveats
 
-Bad: "System X is 100x faster than Y"
-Good: "System X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
+Format:
+- ❌ "System X is 100x faster than Y"
+- ✅ "System X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
 
 Stop if speedup >50x - verify: same abstraction level? all features? realistic data? can you explain WHY?

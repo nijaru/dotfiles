@@ -2,7 +2,12 @@
 LICENSE
 README.md
 AGENTS.md
+CLAUDE.md
 ai/
+
+# Homebrew files - keep in repo but don't install to home directory
+Brewfile
+Brewfile_darwin
 
 # LazyVim template files - not personal config
 .config/nvim/LICENSE

@@ -12,15 +12,8 @@ Analyze this project and set up AI agent configuration files.
    - Verify we're in a git repository (check for .git/)
    - Examine languages, frameworks, and tools used
    - Check for existing CLAUDE.md or AGENTS.md files
-   - Check if external/agent-contexts/ exists or can be added
 
-2. **Set up agent-contexts (if git repo):**
-   - Check if external/agent-contexts/ exists
-   - If NOT exists: Ask user if they want to add it as submodule
-   - If yes: `git submodule add https://github.com/nijaru/agent-contexts external/agent-contexts`
-   - If no: Skip submodule setup
-
-3. **Handle existing files:**
+2. **Handle existing files:**
    - **IF neither CLAUDE.md nor AGENTS.md exist:**
      - Create CLAUDE.md from scratch
      - Create symlink: `ln -s CLAUDE.md AGENTS.md`
@@ -44,20 +37,17 @@ Analyze this project and set up AI agent configuration files.
    - **IF AGENTS.md is symlink to somewhere else:**
      - Ask user what to do before modifying
 
-4. **Create ai/ directory structure:**
+3. **Create ai/ directory structure:**
    ```bash
    mkdir -p ai/research
    touch ai/TODO.md ai/STATUS.md ai/DECISIONS.md ai/RESEARCH.md
    ```
 
-5. **Content for CLAUDE.md (minimal, ~100-200 lines):**
+4. **Content for CLAUDE.md (minimal, ~100-200 lines):**
    ```markdown
    # Project: [name]
 
    [Brief 1-2 sentence description]
-
-   ## Organization Patterns
-   @external/agent-contexts/PRACTICES.md  # If submodule exists
 
    ## Project Structure
    - Documentation: docs/
@@ -90,13 +80,13 @@ Analyze this project and set up AI agent configuration files.
 
    **DO NOT duplicate from global ~/.claude/CLAUDE.md** - it's auto-loaded by Claude Code
 
-6. **Initialize ai/ files with templates:**
+5. **Initialize ai/ files with templates:**
    - ai/TODO.md: Empty checklist template
    - ai/STATUS.md: Basic structure (Current State, What Worked, What Didn't Work, Blockers)
    - ai/DECISIONS.md: Empty with template comment
    - ai/RESEARCH.md: Empty with template comment
 
-7. **Verify setup:**
+6. **Verify setup:**
    - Check symlink points correctly: `AGENTS.md → CLAUDE.md`
    - Verify CLAUDE.md is concise (<200 lines)
    - Confirm ai/ directory exists with all files
@@ -104,7 +94,6 @@ Analyze this project and set up AI agent configuration files.
 
 **Output:**
 - Show which scenario was detected
-- Report if agent-contexts submodule was added
 - Confirm ai/ directory created with files
 - Display first 50 lines of final CLAUDE.md
 - Confirm final state: CLAUDE.md (file) + AGENTS.md (symlink → CLAUDE.md)

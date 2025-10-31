@@ -40,6 +40,10 @@ Before implementing:
 - Test as you go before moving to next step
 - IF changes break existing code → ask unless explicitly required
 
+Bug fixing:
+- Fix properly on first attempt (investigate root cause)
+- NO workarounds that need fixing later (wastes time, users may rely on incomplete fix)
+
 Always:
 - Production-ready: error handling, logging, validation
 - Follow existing patterns in codebase

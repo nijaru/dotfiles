@@ -14,8 +14,8 @@
 
 ## Where Information Belongs
 - Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
-- Project overview + pointers → Project `CLAUDE.md` (~100-200 lines)
-  - Optional: `ln -s CLAUDE.md AGENTS.md`
+- Project overview + pointers → Project `AGENTS.md` (~100-200 lines)
+  - Create symlink: `ln -s AGENTS.md CLAUDE.md` (Claude Code compatibility)
 - Strategic roadmap → `ai/PLAN.md` (optional, if 3+ phases/dependencies)
 - Current state + learnings → `ai/STATUS.md` (read FIRST)
 - Tasks → `ai/TODO.md`

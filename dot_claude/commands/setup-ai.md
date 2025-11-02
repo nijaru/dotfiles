@@ -1,9 +1,10 @@
 Analyze project and set up AI agent configuration files.
 
 **Philosophy:**
-- CLAUDE.md = primary (Claude Code), AGENTS.md = symlink (compatibility)
+- AGENTS.md = primary file (tool-agnostic)
+- CLAUDE.md → AGENTS.md = symlink (Claude Code compatibility)
 - Reference: github.com/nijaru/agent-contexts
-- Keep CLAUDE.md minimal (~100-200 lines)
+- Keep AGENTS.md minimal (~100-200 lines)
 - DO NOT duplicate global ~/.claude/CLAUDE.md
 
 **Reading order:** PLAN → STATUS → TODO → DECISIONS → RESEARCH
@@ -27,12 +28,12 @@ Detect and gather:
 
 | Scenario | Action |
 |----------|--------|
-| Neither exists | Create CLAUDE.md + symlink AGENTS.md |
-| Only CLAUDE.md (file) | Keep as-is + create symlink |
-| Only AGENTS.md | Rename to CLAUDE.md + create symlink |
-| Both, AGENTS.md → CLAUDE.md | Already correct, update content if needed |
-| Both files | Merge into CLAUDE.md + remove AGENTS.md + create symlink |
-| AGENTS.md → elsewhere | Ask user before modifying |
+| Neither exists | Create AGENTS.md + symlink CLAUDE.md → AGENTS.md |
+| Only AGENTS.md (file) | Keep as-is + create symlink CLAUDE.md → AGENTS.md |
+| Only CLAUDE.md | Rename to AGENTS.md + create symlink CLAUDE.md → AGENTS.md |
+| Both, CLAUDE.md → AGENTS.md | Already correct, update content if needed |
+| Both files | Merge into AGENTS.md + remove CLAUDE.md + create symlink CLAUDE.md → AGENTS.md |
+| CLAUDE.md → elsewhere | Ask user before modifying |
 
 ### 3. Determine PLAN.md
 
@@ -139,7 +140,7 @@ Initial setup complete.
 - [deferred features]
 ```
 
-### 5. Create CLAUDE.md
+### 5. Create AGENTS.md
 
 Use ALL detected information:
 
@@ -184,8 +185,8 @@ See ai/STATUS.md for current state.
 
 ### 6. Verify
 
-- Symlink correct: `ls -la AGENTS.md CLAUDE.md`
-- CLAUDE.md < 200 lines
+- Symlink correct: `ls -la AGENTS.md CLAUDE.md` (CLAUDE.md → AGENTS.md)
+- AGENTS.md < 200 lines
 - ai/ directory exists with populated files
 
 ## Output
@@ -194,6 +195,6 @@ Show:
 - Which scenario detected
 - ai/ directory created with populated files
 - PLAN.md decision (created/skipped + why)
-- First 50 lines of CLAUDE.md
-- Final state: CLAUDE.md (file) + AGENTS.md (symlink → CLAUDE.md)
+- First 50 lines of AGENTS.md
+- Final state: AGENTS.md (file) + CLAUDE.md (symlink → AGENTS.md)
 - List ai/ files with detected info summary

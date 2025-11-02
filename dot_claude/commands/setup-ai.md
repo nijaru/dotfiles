@@ -1,202 +1,199 @@
-Analyze this project and set up AI agent configuration files.
+Analyze project and set up AI agent configuration files.
 
 **Philosophy:**
-- CLAUDE.md = primary file (you use Claude Code)
-- AGENTS.md → CLAUDE.md = symlink (compatibility with other tools)
-- Reference: github.com/nijaru/agent-contexts for complete guide
-- Keep project CLAUDE.md minimal (~100-200 lines)
-- DO NOT duplicate from global ~/.claude/CLAUDE.md
+- CLAUDE.md = primary (Claude Code), AGENTS.md = symlink (compatibility)
+- Reference: github.com/nijaru/agent-contexts
+- Keep CLAUDE.md minimal (~100-200 lines)
+- DO NOT duplicate global ~/.claude/CLAUDE.md
 
-**Reading order:**
-PLAN.md (strategic vision) → STATUS.md (current state) → TODO.md (next actions) → DECISIONS.md (rationale) → RESEARCH.md (domain knowledge)
+**Reading order:** PLAN → STATUS → TODO → DECISIONS → RESEARCH
 
-**Tasks:**
+## Tasks
 
-1. **Analyze the project:**
-   - Verify we're in a git repository (check for .git/)
-   - Examine languages, frameworks, and tools used
-   - Check for existing CLAUDE.md or AGENTS.md files
-   - Check README/docs for mentions of phases, milestones, roadmap, or multi-month timeline
+### 1. Analyze Project
 
-2. **Handle existing files:**
-   - **IF neither CLAUDE.md nor AGENTS.md exist:**
-     - Create CLAUDE.md from scratch
-     - Create symlink: `ln -s CLAUDE.md AGENTS.md`
+Detect and gather:
+- Git repo (check .git/)
+- Project name (git remote, package.json, Cargo.toml, pyproject.toml)
+- Languages/frameworks (file extensions, package managers, config files)
+- Build/test/run commands (package.json scripts, Makefile, Cargo.toml)
+- Project description (README first paragraph)
+- Phases/milestones/roadmap (README, docs/)
+- Existing CLAUDE.md or AGENTS.md
 
-   - **IF only CLAUDE.md exists (and it's a file, not symlink):**
-     - Keep CLAUDE.md as-is (already correct setup)
-     - Create symlink: `ln -s CLAUDE.md AGENTS.md`
+**CRITICAL**: Fill in ALL detected info. Use [TBD] ONLY when cannot detect.
 
-   - **IF only AGENTS.md exists:**
-     - Rename AGENTS.md → CLAUDE.md
-     - Create symlink: `ln -s CLAUDE.md AGENTS.md`
+### 2. Handle Existing Files
 
-   - **IF both exist and AGENTS.md is symlink to CLAUDE.md:**
-     - Already properly configured, just update CLAUDE.md content if needed
+| Scenario | Action |
+|----------|--------|
+| Neither exists | Create CLAUDE.md + symlink AGENTS.md |
+| Only CLAUDE.md (file) | Keep as-is + create symlink |
+| Only AGENTS.md | Rename to CLAUDE.md + create symlink |
+| Both, AGENTS.md → CLAUDE.md | Already correct, update content if needed |
+| Both files | Merge into CLAUDE.md + remove AGENTS.md + create symlink |
+| AGENTS.md → elsewhere | Ask user before modifying |
 
-   - **IF both exist and both are files:**
-     - Merge both files into CLAUDE.md (preserve all content)
-     - Remove AGENTS.md
-     - Create symlink: `ln -s CLAUDE.md AGENTS.md`
+### 3. Determine PLAN.md
 
-   - **IF AGENTS.md is symlink to somewhere else:**
-     - Ask user what to do before modifying
+Check README/docs for: "phases", "milestones", "roadmap", "v1.0", "v2.0", "Q1", "Q2", quarters, multi-month timeline
 
-3. **Determine if PLAN.md is needed:**
-   - Check if README/docs mention: phases, milestones, roadmap, v1.0/v2.0, quarters, or multi-month timeline
-   - If mentions found → suggest creating PLAN.md
-   - If unclear → ask user: "Does this project have 3+ phases or critical dependencies between features?"
-   - If yes → create PLAN.md with template
-   - If no → skip PLAN.md (can add later if needed)
+- **If found** → create PLAN.md
+- **If unclear** → ask: "Does this project have 3+ phases or critical dependencies?"
+- **If no** → skip (can add later)
 
-4. **Create ai/ directory and populate with templates:**
+### 4. Create ai/ Directory
 
-   ```bash
-   mkdir -p ai/research
-   ```
+```bash
+mkdir -p ai/research
+```
 
-   **ai/TODO.md:**
-   ```markdown
-   ## High Priority
-   - [ ]
+**ai/TODO.md:**
+```markdown
+## High Priority
+- [ ]
 
-   ## In Progress
-   - [ ]
+## In Progress
+- [ ]
 
-   ## Backlog
-   - [ ]
-   ```
+## Backlog
+- [ ]
+```
 
-   **ai/STATUS.md:**
-   ```markdown
-   ## Current State
-   | Metric | Value | Updated |
-   |--------|-------|---------|
-   | | | [date] |
+**ai/STATUS.md:**
+```markdown
+## Current State
+| Metric | Value | Updated |
+|--------|-------|---------|
+| | | [TODAY'S DATE] |
 
-   ## What Worked
-   -
+## What Worked
+-
 
-   ## What Didn't Work
-   -
+## What Didn't Work
+-
 
-   ## Active Work
+## Active Work
+Initial setup complete.
 
+## Blockers
+-
+```
 
-   ## Blockers
-   -
-   ```
+**ai/DECISIONS.md:**
+```markdown
+<!-- Template:
 
-   **ai/DECISIONS.md:**
-   ```markdown
-   <!-- Template for recording architectural decisions:
+## YYYY-MM-DD: Decision Title
 
-   ## YYYY-MM-DD: Decision Title
+**Context**: [situation]
+**Decision**: [choice]
+**Rationale**:
+- [reason 1]
+- [reason 2]
 
-   **Context**: [What's the situation requiring a decision?]
-   **Decision**: [What did we choose?]
-   **Rationale**:
-   - [Reason 1]
-   - [Reason 2]
+**Tradeoffs**:
+| Pro | Con |
+|-----|-----|
+| | |
 
-   **Tradeoffs**:
-   | Pro | Con |
-   |-----|-----|
-   | | |
+**Evidence**: [ai/research/ link]
+**Commits**: [hash]
 
-   **Evidence**: [Link to ai/research/ file if applicable]
-   **Commits**: [commit hash]
+---
+-->
+```
 
-   ---
-   -->
-   ```
+**ai/RESEARCH.md:**
+```markdown
+<!-- Template:
 
-   **ai/RESEARCH.md:**
-   ```markdown
-   <!-- Index of research findings:
+## Topic (YYYY-MM-DD)
+**Sources**: [links, books, docs]
+**Key Finding**: [main takeaway]
+**Decision**: [action]
+→ Details: ai/research/topic.md
 
-   ## Topic Name (YYYY-MM-DD)
-   **Sources**: [links, books, docs]
-   **Key Finding**: [main takeaway]
-   **Decision**: [action taken based on research]
-   → Details: ai/research/topic-name.md
+## Open Questions
+- [ ] Question needing research
+-->
+```
 
-   ## Open Questions
-   - [ ] Question needing research
-   -->
-   ```
+**ai/PLAN.md** (only if determined needed):
+```markdown
+## Goal
+[What building? Target timeline?]
 
-   **ai/PLAN.md** (only if needed):
-   ```markdown
-   ## Goal
-   [What are we building? Target timeline?]
+## Milestones
+| Phase | Timeline | Status | Deliverables | Success Criteria |
+|-------|----------|--------|--------------|------------------|
+| Phase 1 | Q1 2025 | ← CURRENT | | |
+| Phase 2 | Q2 2025 | Planned | | |
 
-   ## Milestones
-   | Phase | Timeline | Status | Deliverables | Success Criteria |
-   |-------|----------|--------|--------------|------------------|
-   | Phase 1 | Q1 2025 | ← CURRENT | | |
-   | Phase 2 | Q2 2025 | Planned | | |
+## Critical Dependencies
+| Dependency | Blocks | Reason |
+|------------|--------|--------|
+| | | |
 
-   ## Critical Dependencies
-   | Dependency | Blocks | Reason |
-   |------------|--------|--------|
-   | | | |
+## Out of Scope
+- [deferred features]
+```
 
-   ## Out of Scope
-   - [Feature deferred]
-   ```
+### 5. Create CLAUDE.md
 
-5. **Create CLAUDE.md (minimal, ~100-200 lines):**
-   ```markdown
-   # [Project Name]
+Use ALL detected information:
 
-   [Brief 1-2 sentence description]
+```markdown
+# [DETECTED PROJECT NAME]
 
-   ## Project Structure
-   - Documentation: docs/
-   - AI working context: ai/
-     - PLAN.md — Strategic roadmap [if created]
-     - STATUS.md — Current state (read first)
-     - TODO.md — Next steps
-   [Other project-specific directories]
+[Description from README or "TBD"]
 
-   ## Technology Stack
-   - Language: [detected language]
-   - Framework: [detected framework]
-   [Other relevant tools]
+## Project Structure
+- Documentation: docs/
+- AI working context: ai/
+  [- PLAN.md — Strategic roadmap  # only if created]
+  - STATUS.md — Current state (read first)
+  - TODO.md — Next steps
+[List detected dirs: src/, lib/, tests/, etc.]
 
-   ## Development Commands
-   ```bash
-   # Build
-   [detected build command or "TBD"]
+## Technology Stack
+- Language: [DETECTED - "Python 3.11", "TypeScript", "Rust"]
+- Framework: [DETECTED - "Next.js", "FastAPI", "Axum", or "None"]
+- Package Manager: [DETECTED - "uv", "bun", "cargo"]
+[Other tools: database, testing, etc.]
 
-   # Test
-   [detected test command or "TBD"]
+## Development Commands
+```bash
+# Build
+[DETECTED or "TBD"]
 
-   # Run
-   [detected run command or "TBD"]
-   ```
+# Test
+[DETECTED or "TBD"]
 
-   ## Code Standards
-   [Project-specific patterns/conventions - leave empty if none detected]
+# Run
+[DETECTED or "TBD"]
+```
 
-   ## Current Focus
-   See ai/STATUS.md for current state and active work.
-   [If PLAN.md created: For strategic roadmap: ai/PLAN.md]
-   ```
+## Code Standards
+[Empty unless patterns detected]
 
-   **DO NOT duplicate from global ~/.claude/CLAUDE.md** - it's auto-loaded by Claude Code
+## Current Focus
+See ai/STATUS.md for current state.
+[Only if PLAN.md: For roadmap: ai/PLAN.md]
+```
 
-6. **Verify setup:**
-   - Check symlink points correctly: `AGENTS.md → CLAUDE.md`
-   - Verify CLAUDE.md is concise (<200 lines)
-   - Confirm ai/ directory exists with all required files
-   - Test symlink: `ls -la AGENTS.md CLAUDE.md`
+### 6. Verify
 
-**Output:**
-- Show which scenario was detected
-- Confirm ai/ directory created with populated files
-- Show if PLAN.md was created and why (or why not)
-- Display first 50 lines of final CLAUDE.md
-- Confirm final state: CLAUDE.md (file) + AGENTS.md (symlink → CLAUDE.md)
-- List all created ai/ files with "(populated)" indicator
+- Symlink correct: `ls -la AGENTS.md CLAUDE.md`
+- CLAUDE.md < 200 lines
+- ai/ directory exists with populated files
+
+## Output
+
+Show:
+- Which scenario detected
+- ai/ directory created with populated files
+- PLAN.md decision (created/skipped + why)
+- First 50 lines of CLAUDE.md
+- Final state: CLAUDE.md (file) + AGENTS.md (symlink → CLAUDE.md)
+- List ai/ files with detected info summary

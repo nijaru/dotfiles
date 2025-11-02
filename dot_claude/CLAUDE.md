@@ -24,7 +24,7 @@
 - Permanent docs → `docs/`
 
 **Session workflow:**
-- Read: STATUS.md → TODO.md → PLAN.md (if exists) → DECISIONS.md → RESEARCH.md
+- Read: PLAN.md (if exists) → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
 - Update ai/STATUS.md every session, NO dated summaries
 - Update ai/PLAN.md quarterly/on pivots, NOT every session
 - Reference commits by hash (e.g., "Fixed in a1b2c3d")

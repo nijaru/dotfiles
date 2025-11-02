@@ -8,7 +8,7 @@ Analyze this project and set up AI agent configuration files.
 - DO NOT duplicate from global ~/.claude/CLAUDE.md
 
 **Reading order:**
-STATUS.md (where am I?) → TODO.md (what's next?) → PLAN.md (strategic context) → DECISIONS.md (rationale) → RESEARCH.md (domain knowledge)
+PLAN.md (strategic vision) → STATUS.md (current state) → TODO.md (next actions) → DECISIONS.md (rationale) → RESEARCH.md (domain knowledge)
 
 **Tasks:**
 

@@ -16,12 +16,17 @@
 - Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
 - Project overview + pointers → Project `CLAUDE.md` (~100-200 lines)
   - Optional: `ln -s CLAUDE.md AGENTS.md`
-- Detailed issues → `ai/STATUS.md` (read FIRST)
+- Strategic roadmap → `ai/PLAN.md` (optional, if 3+ phases/dependencies)
+- Current state + learnings → `ai/STATUS.md` (read FIRST)
 - Tasks → `ai/TODO.md`
 - Decisions → `ai/DECISIONS.md`
 - Research → `ai/RESEARCH.md` + `ai/research/`
 - Permanent docs → `docs/`
+
+**Session workflow:**
+- Read: STATUS.md → TODO.md → PLAN.md (if exists) → DECISIONS.md → RESEARCH.md
 - Update ai/STATUS.md every session, NO dated summaries
+- Update ai/PLAN.md quarterly/on pivots, NOT every session
 - Reference commits by hash (e.g., "Fixed in a1b2c3d")
 - Reference: github.com/nijaru/agent-contexts
 

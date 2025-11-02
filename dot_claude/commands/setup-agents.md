@@ -3,8 +3,12 @@ Analyze this project and set up AI agent configuration files.
 **Philosophy:**
 - CLAUDE.md = primary file (you use Claude Code)
 - AGENTS.md → CLAUDE.md = symlink (compatibility with other tools)
-- Reference agent-contexts, don't duplicate global ~/.claude/CLAUDE.md
+- Reference: github.com/nijaru/agent-contexts for complete guide
 - Keep project CLAUDE.md minimal (~100-200 lines)
+- DO NOT duplicate from global ~/.claude/CLAUDE.md
+
+**Reading order:**
+STATUS.md (where am I?) → TODO.md (what's next?) → PLAN.md (strategic context) → DECISIONS.md (rationale) → RESEARCH.md (domain knowledge)
 
 **Tasks:**
 
@@ -41,6 +45,8 @@ Analyze this project and set up AI agent configuration files.
    ```bash
    mkdir -p ai/research
    touch ai/TODO.md ai/STATUS.md ai/DECISIONS.md ai/RESEARCH.md
+   # Only create PLAN.md if project has 3+ phases or critical dependencies
+   # touch ai/PLAN.md  # Uncomment if needed
    ```
 
 4. **Content for CLAUDE.md (minimal, ~100-200 lines):**
@@ -51,7 +57,10 @@ Analyze this project and set up AI agent configuration files.
 
    ## Project Structure
    - Documentation: docs/
-   - AI working context: ai/ (read ai/STATUS.md first)
+   - AI working context: ai/
+     - STATUS.md — Current state (read first)
+     - TODO.md — Next steps
+     - PLAN.md — Strategic roadmap (optional, if 3+ phases/dependencies)
    [Other project-specific directories]
 
    ## Technology Stack
@@ -76,15 +85,17 @@ Analyze this project and set up AI agent configuration files.
 
    ## Current Focus
    See ai/STATUS.md for current state and active work.
+   For strategic roadmap: ai/PLAN.md (if complex project).
    ```
 
    **DO NOT duplicate from global ~/.claude/CLAUDE.md** - it's auto-loaded by Claude Code
 
 5. **Initialize ai/ files with templates:**
-   - ai/TODO.md: Empty checklist template
-   - ai/STATUS.md: Basic structure (Current State, What Worked, What Didn't Work, Blockers)
+   - ai/TODO.md: Empty checklist template (High Priority, In Progress, Backlog)
+   - ai/STATUS.md: Basic structure (Current State, What Worked, What Didn't Work, Active Work, Blockers)
    - ai/DECISIONS.md: Empty with template comment
    - ai/RESEARCH.md: Empty with template comment
+   - ai/PLAN.md: Only create if project has 3+ phases or critical dependencies (Goal, Milestones, Critical Dependencies, Out of Scope)
 
 6. **Verify setup:**
    - Check symlink points correctly: `AGENTS.md → CLAUDE.md`

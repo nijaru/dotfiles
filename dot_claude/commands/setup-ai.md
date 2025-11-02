@@ -4,8 +4,8 @@ Analyze project and set up AI agent configuration files.
 - AGENTS.md = primary file (tool-agnostic)
 - CLAUDE.md → AGENTS.md = symlink (Claude Code compatibility)
 - Reference: github.com/nijaru/agent-contexts
-- Keep AGENTS.md minimal (~100-200 lines)
-- DO NOT duplicate global ~/.claude/CLAUDE.md
+- Optimize AGENTS.md for AI consumption: tables, lists, clear sections, scannable
+- DO NOT duplicate global ~/.claude/CLAUDE.md or ai/ files
 
 **Reading order:** PLAN → STATUS → TODO → DECISIONS → RESEARCH
 
@@ -186,7 +186,7 @@ See ai/STATUS.md for current state.
 ### 6. Verify
 
 - Symlink correct: `ls -la AGENTS.md CLAUDE.md` (CLAUDE.md → AGENTS.md)
-- AGENTS.md < 200 lines
+- AGENTS.md is well-structured (clear sections, no duplication)
 - ai/ directory exists with populated files
 
 ## Output

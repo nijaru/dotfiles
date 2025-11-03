@@ -56,3 +56,20 @@ end
 # Clipboard operations
 abbr --add clip pbcopy
 abbr --add paste pbpaste
+
+###################
+# SSH Session Setup
+###################
+
+# Unlock keychain and load SSH keys when connecting via SSH
+# This enables git signing and Claude Code OAuth access
+if set -q SSH_CLIENT; or set -q SSH_TTY
+    if not set -q SSH_KEYS_LOADED
+        echo "Unlocking keychain and loading SSH keys..."
+        security unlock-keychain ~/Library/Keychains/login.keychain-db
+        and ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
+        and set -gx SSH_KEYS_LOADED true
+        and set -gx KEYCHAIN_UNLOCKED true
+        and echo "SSH keys loaded successfully"
+    end
+end

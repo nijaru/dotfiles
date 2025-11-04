@@ -5,8 +5,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "mcp-remote",
-        "https://mcp.exa.ai/mcp"
+        "exa-mcp-server"
       ],
       "env": {
         "EXA_API_KEY": "REDACTED_EXA_API_KEY"
@@ -22,7 +21,7 @@
         "BRAVE_API_KEY": "REDACTED_BRAVE_API_KEY"
       }
     },
-    "Context7": {
+    "context7": {
       "command": "npx",
       "args": [
         "-y",

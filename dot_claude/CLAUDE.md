@@ -127,6 +127,31 @@ STOP and ask when hitting:
 
 **Web/CLI/TUI**: Use icon libraries (lucide, heroicons), NOT emoji characters in UI
 
+## Modern CLI Tools
+
+**ALWAYS prefer modern tools over traditional Unix commands:**
+
+| Task | Use | NOT |
+|------|-----|-----|
+| **Search code** | `rg` (ripgrep) | grep |
+| **Find files** | `fd` | find |
+| **View files** | `bat` | cat |
+| **List files** | `eza` | ls |
+| **JSON query** | `jq` | grep/awk |
+| **Git diffs** | `delta` | diff |
+| **AST search** | `ast-grep` | grep/sed for code |
+| **Interactive select** | `fzf` | manual selection |
+
+**Available tools:**
+- `rg`: Fast code search with smart defaults (respects .gitignore)
+- `fd`: Fast file finder, simpler syntax than find
+- `bat`: Syntax highlighting, git integration, line numbers
+- `eza`: Modern ls with colors, icons, git status
+- `jq`: JSON processor and query language
+- `delta`: Better git diffs with syntax highlighting
+- `ast-grep`: Structural code search (language-aware)
+- `fzf`: Fuzzy finder for interactive filtering
+
 ## Performance Claims
 CRITICAL: Never compare different levels of the stack
 

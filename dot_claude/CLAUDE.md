@@ -135,6 +135,26 @@ LLM training data is outdated. Always use latest stable versions:
 
 **Web/CLI/TUI**: Use icon libraries (lucide, heroicons), NOT emoji characters in UI
 
+## Language Selection
+
+| Language | Use When | Avoid When |
+|----------|----------|------------|
+| **Python** | Scripts, ML/data, rapid prototyping, glue code | Performance critical, large codebases |
+| **Rust** | CLI tools, systems, performance-critical, memory safety | Rapid prototyping, simple scripts |
+| **Go** | Services/APIs, simple concurrency, easy deployment | Complex data structures, tight performance loops |
+| **Mojo** | Python + performance (experimental, evaluate maturity first) | Production (too new) |
+
+**Default**: Python for scripts/prototypes, Rust for tools/performance, Go for services.
+
+## Programming Principles
+
+**Avoid unnecessary allocations:**
+- Think: copy or reference? Copy only when semantically needed
+- Rust: `&str` not `String`, `&[T]` not `Vec<T>` for params, don't `.clone()` to bypass borrow checker
+- Go: Pointers for large structs. Python: Views, generators
+
+**Rust**: Error handling = `anyhow` (apps) / `thiserror` (libs). Async = sync for files, `tokio` for network, `rayon` for parallel CPU
+
 ## Modern CLI Tools
 
 **Prefer tools with structured output and predictable behavior:**

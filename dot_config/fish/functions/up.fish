@@ -120,7 +120,7 @@ function up --description "Update all package managers and tools"
     if test "$platform" = Linux
         if command -q flatpak
             echo "📦 Updating flatpak apps..."
-            flatpak update -y
+            sudo flatpak update -y
         end
 
         if command -q snap

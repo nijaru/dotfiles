@@ -58,5 +58,76 @@ function up --description "Update all package managers and tools"
         echo "⚠️  uv not found, skipping"
     end
 
+    # Rust toolchain
+    echo "🦀 Updating Rust toolchain..."
+    if command -q rustup
+        rustup update
+    else
+        echo "⚠️  rustup not found, skipping"
+    end
+
+    # Cargo packages
+    echo "📦 Updating cargo packages..."
+    if command -q cargo-install-update
+        cargo install-update -a
+    else if command -q cargo
+        echo "⚠️  cargo-update not installed. Install with: cargo install cargo-update"
+    else
+        echo "⚠️  cargo not found, skipping"
+    end
+
+    # Bun
+    echo "🥟 Updating Bun..."
+    if command -q bun
+        bun upgrade
+    else
+        echo "⚠️  bun not found, skipping"
+    end
+
+    # npm global packages
+    echo "📦 Updating npm global packages..."
+    if command -q npm
+        npm update -g
+    else
+        echo "⚠️  npm not found, skipping"
+    end
+
+    # pipx (Python CLI tools)
+    echo "🐍 Updating pipx packages..."
+    if command -q pipx
+        pipx upgrade-all
+    else
+        echo "⚠️  pipx not found, skipping"
+    end
+
+    # fisher (Fish plugin manager)
+    echo "🐟 Updating fisher plugins..."
+    if command -q fisher
+        fisher update
+    else
+        echo "⚠️  fisher not found, skipping"
+    end
+
+    # chezmoi (dotfiles)
+    echo "🏠 Updating dotfiles..."
+    if command -q chezmoi
+        chezmoi update
+    else
+        echo "⚠️  chezmoi not found, skipping"
+    end
+
+    # Linux-specific: flatpak and snap
+    if test "$platform" = Linux
+        if command -q flatpak
+            echo "📦 Updating flatpak apps..."
+            flatpak update -y
+        end
+
+        if command -q snap
+            echo "📦 Updating snap apps..."
+            sudo snap refresh
+        end
+    end
+
     echo "✅ System updates complete!"
 end

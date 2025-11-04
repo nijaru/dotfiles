@@ -141,6 +141,7 @@ STOP and ask when hitting:
 | **String replace** | `sd` | sed | Safer defaults, simpler syntax |
 | **HTTP requests** | `xh`/`httpie` | curl | Structured JSON output |
 | **Tabular data** | `miller` | awk | CSV/TSV/JSON processing |
+| **File sync** | `sy` | rsync | 2-11x faster, JSON output, parallel (experimental) |
 
 **Avoid human-centric tools:**
 - `bat`, `eza`, `delta` - Syntax highlighting/colors don't help AI

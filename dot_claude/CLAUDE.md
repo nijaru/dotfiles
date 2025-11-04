@@ -115,32 +115,11 @@ STOP and ask when hitting:
 
 ## Version Selection
 
-**CRITICAL: Always use latest stable versions**
-
-LLMs have outdated training data. Never assume version numbers - let package managers resolve to latest stable:
-
-**Language versions:**
-- Rust: Use latest stable edition (`edition = "2024"` as of 2025)
-- Python: Check `mise list-all python` for latest stable
-- Node: Check `mise list-all node` for latest stable
-- Don't hardcode versions like `edition = "2021"` in new projects
-
-**Dependencies:**
-- Use version ranges, not pinned versions: `serde = "1.0"` not `serde = "1.0.150"`
-- Let `cargo`, `uv`, `bun` resolve to latest compatible version
-- For new projects: check crates.io/npm/PyPI for current latest before suggesting versions
-- If LLM suggests old version, check package manager first: `cargo search <pkg>`, `mise list-all <tool>`
-
-**When to pin versions:**
-- Production deployments (lock files handle this)
-- Known compatibility issues (document why)
-- Security-sensitive dependencies (with explanation)
-
-**Examples:**
-- ✅ `sysinfo = "0.37"` (latest compatible minor)
-- ❌ `sysinfo = "0.33"` (outdated, LLM training data)
-- ✅ Check `cargo search sysinfo` before suggesting version
-- ✅ Use `mise list-all rust` to find latest stable edition
+LLM training data is outdated. Always use latest stable versions:
+- Languages: Check `mise list-all <tool>` for latest stable (Rust: edition "2024", not "2021")
+- Dependencies: Use ranges (`serde = "1.0"`), not pinned (`serde = "1.0.150"`)
+- Before suggesting versions: `cargo search <pkg>`, check crates.io/npm/PyPI for current latest
+- Only pin for known compatibility issues (document why)
 
 ## Toolchains
 

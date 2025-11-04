@@ -129,28 +129,28 @@ STOP and ask when hitting:
 
 ## Modern CLI Tools
 
-**ALWAYS prefer modern tools over traditional Unix commands:**
+**Prefer tools with structured output and predictable behavior:**
 
-| Task | Use | NOT |
-|------|-----|-----|
-| **Search code** | `rg` (ripgrep) | grep |
-| **Find files** | `fd` | find |
-| **View files** | `bat` | cat |
-| **List files** | `eza` | ls |
-| **JSON query** | `jq` | grep/awk |
-| **Git diffs** | `delta` | diff |
-| **AST search** | `ast-grep` | grep/sed for code |
-| **Interactive select** | `fzf` | manual selection |
+| Task | Use | NOT | Why |
+|------|-----|-----|-----|
+| **Search code** | `rg` (ripgrep) | grep | Faster, respects .gitignore, better defaults |
+| **Find files** | `fd` | find | Simpler syntax, predictable output |
+| **JSON query** | `jq` | grep/awk | Proper JSON manipulation |
+| **YAML query** | `yq` | grep/awk | Proper YAML manipulation (k8s configs) |
+| **AST search** | `ast-grep` | grep/sed | Language-aware code search/refactor |
+| **String replace** | `sd` | sed | Safer defaults, simpler syntax |
+| **HTTP requests** | `xh`/`httpie` | curl | Structured JSON output |
+| **Tabular data** | `miller` | awk | CSV/TSV/JSON processing |
 
-**Available tools:**
-- `rg`: Fast code search with smart defaults (respects .gitignore)
-- `fd`: Fast file finder, simpler syntax than find
-- `bat`: Syntax highlighting, git integration, line numbers
-- `eza`: Modern ls with colors, icons, git status
-- `jq`: JSON processor and query language
-- `delta`: Better git diffs with syntax highlighting
-- `ast-grep`: Structural code search (language-aware)
-- `fzf`: Fuzzy finder for interactive filtering
+**Avoid human-centric tools:**
+- `bat`, `eza`, `delta` - Syntax highlighting/colors don't help AI
+- `fzf` - Interactive selection (AI can't interact)
+- Use standard `cat`, `ls`, `diff` instead
+
+**Structured shells for AI-driven tasks:**
+- `nushell` - Everything is typed data (tables/records), not text
+- Built-in JSON/CSV/YAML support, no text parsing needed
+- Consider for complex data pipelines or AI automation scripts
 
 ## Performance Claims
 CRITICAL: Never compare different levels of the stack

@@ -14,7 +14,7 @@ Check for:
   - "~X-Y days" estimates
   - Quarter-based timelines without external deadlines (Q1 2025, Q2 2025)
   - "_Last Updated: Week X Day Y_" datestamps
-- Dated files: `WEEK*_DAY*.md`, `*_OCT23.md`, `SUMMARY_*.md`
+- Artificial time tracking files: `WEEK*_DAY*.md` (not real dates like `ANALYSIS_2025-11-05.md`)
 - Detailed task breakdowns in PLAN.md that should be in TODO.md
 
 ### 2. Present Findings
@@ -30,10 +30,11 @@ Show user:
 - [ ] Detailed task breakdowns (should be in TODO.md)
 - [ ] Datestamps in updates
 
-**Dated files found:**
-- ai/WEEK11_DAY1_SUMMARY.md
-- ai/research/WEEK19_DAY2_PLAN.md
-- [list all]
+**Artificial time tracking files found:**
+- ai/WEEK11_DAY1_SUMMARY.md (no real date)
+- ai/research/WEEK19_DAY2_PLAN.md (no real date)
+- [list all WEEK*_DAY*.md files]
+- Note: Files with real dates (e.g., ANALYSIS_2025-11-05.md) are fine
 
 **Recommendation**: Clean up [X] issues
 ```
@@ -94,9 +95,9 @@ After:
 
 (Move "Planned Work" → TODO.md)
 
-### 5. Consolidate Dated Files
+### 5. Consolidate Artificial Time Tracking Files
 
-For each dated file (WEEK*_DAY*.md, etc.):
+For each artificial time tracking file (WEEK*_DAY*.md - no real date):
 
 1. Extract key learnings/decisions
 2. Add to STATUS.md (if current) or DECISIONS.md (if permanent)
@@ -128,7 +129,8 @@ Ensure AGENTS.md reflects correct PLAN.md purpose:
 Check:
 - [ ] PLAN.md has no time estimates (unless external deadline confirmed)
 - [ ] PLAN.md has no progress markers
-- [ ] No dated files in ai/ or ai/research/
+- [ ] No artificial time tracking files (WEEK*_DAY*.md) in ai/ or ai/research/
+- [ ] Files with real dates (e.g., ANALYSIS_2025-11-05.md) are fine to keep
 - [ ] Key learnings consolidated to STATUS.md
 - [ ] Architectural decisions in DECISIONS.md
 - [ ] AGENTS.md updated
@@ -140,8 +142,10 @@ Show:
 ## Cleanup Complete
 
 **PLAN.md**: Removed [X] time estimates, [Y] progress markers
-**Dated files**: Consolidated [Z] files → STATUS.md/DECISIONS.md, deleted
+**Artificial time tracking files**: Consolidated [Z] WEEK*_DAY*.md files → STATUS.md/DECISIONS.md, deleted
 **TODO.md**: Moved [N] detailed task breakdowns from PLAN.md
+
+**Note**: Files with real dates (e.g., ANALYSIS_2025-11-05.md, BENCHMARK_NOV2025.md) were kept - those are good for tracking actual dates.
 
 **Result**: ai/ directory now focuses on dependencies and architecture, not arbitrary time tracking.
 ```
@@ -151,4 +155,5 @@ Show:
 - Ask before deleting any files
 - If user wants to keep quarters/estimates, ask why (external deadline? Scrum sprint? Funding milestone?)
 - Focus: dependencies (what blocks what) > time estimates (how long it takes)
-- Git preserves history - dated files can be deleted safely
+- Git preserves history - artificial time tracking files (WEEK*_DAY*.md) can be deleted safely
+- Files with real dates/months (ANALYSIS_2025-11-05.md, BENCHMARK_NOV2025.md) are good - keep them

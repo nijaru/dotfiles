@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+# Configure Tide prompt items (run once when changed)
+
+set -U tide_left_prompt_items pwd git newline character
+set -U tide_right_prompt_items status cmd_duration context jobs direnv bun node python rustc java ruby go kubectl zig time
+
+echo "✓ Tide prompt configured (gcloud removed)"

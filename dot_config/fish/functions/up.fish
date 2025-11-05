@@ -92,14 +92,6 @@ function up --description "Update all package managers and tools"
         echo "⚠️  npm not found, skipping"
     end
 
-    # pipx (Python CLI tools)
-    echo "🐍 Updating pipx packages..."
-    if command -q pipx
-        pipx upgrade-all
-    else
-        echo "⚠️  pipx not found, skipping"
-    end
-
     # fisher (Fish plugin manager)
     echo "🐟 Updating fisher plugins..."
     if type -q fisher

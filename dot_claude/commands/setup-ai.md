@@ -123,21 +123,28 @@ Initial setup complete.
 **ai/PLAN.md** (only if determined needed):
 ```markdown
 ## Goal
-[What building? Target timeline?]
+[What building? Why? External deadline if exists]
 
-## Milestones
-| Phase | Timeline | Status | Deliverables | Success Criteria |
-|-------|----------|--------|--------------|------------------|
-| Phase 1 | Q1 2025 | ← CURRENT | | |
-| Phase 2 | Q2 2025 | Planned | | |
+## Phases
+| Phase | Status | Deliverables | Success Criteria |
+|-------|--------|--------------|------------------|
+| Phase 1 | ← CURRENT | | |
+| Phase 2 | Planned | | |
 
-## Critical Dependencies
-| Dependency | Blocks | Reason |
-|------------|--------|--------|
+## Dependencies
+| Must Complete | Before Starting | Why |
+|---------------|-----------------|-----|
+| | | |
+
+## Technical Architecture
+| Component | Approach | Rationale |
+|-----------|----------|-----------|
 | | | |
 
 ## Out of Scope
 - [deferred features]
+
+**Note**: Skip time estimates (days/weeks/quarters) unless external deadline exists. Focus: what blocks what.
 ```
 
 ### 5. Create AGENTS.md

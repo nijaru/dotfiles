@@ -17,7 +17,7 @@
 - Project overview + pointers → Project `AGENTS.md`
   - Well-structured, scannable, no duplication of ai/ files
   - Create symlink: `ln -s AGENTS.md CLAUDE.md` (Claude Code compatibility)
-- Strategic roadmap → `ai/PLAN.md` (optional, if 3+ phases/dependencies)
+- Dependencies + architecture + scope → `ai/PLAN.md` (optional, if 3+ phases/dependencies/deadlines)
 - Current state + learnings → `ai/STATUS.md` (read FIRST)
 - Tasks → `ai/TODO.md`
 - Decisions → `ai/DECISIONS.md`
@@ -27,7 +27,7 @@
 **Session workflow:**
 - Read: PLAN.md (if exists) → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
 - Update ai/STATUS.md every session, NO dated summaries
-- Update ai/PLAN.md quarterly/on pivots, NOT every session
+- Update ai/PLAN.md on major pivots only. PLAN = what blocks what, technical approach, scope
 - Reference commits by hash (e.g., "Fixed in a1b2c3d")
 - Reference: github.com/nijaru/agent-contexts
 
@@ -180,6 +180,10 @@ LLM training data is outdated. Always use latest stable versions:
 - `nushell` - Everything is typed data (tables/records), not text
 - Built-in JSON/CSV/YAML support, no text parsing needed
 - Consider for complex data pipelines or AI automation scripts
+
+**Custom Tools (Our Projects):**
+- `stop --json` / `stop --csv` - Structured process monitoring (experimental)
+- `sy` - Fast file sync, 2-11x faster than rsync (experimental)
 
 ## Performance Claims
 CRITICAL: Never compare different levels of the stack

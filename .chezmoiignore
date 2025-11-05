@@ -22,4 +22,7 @@ Brewfile_darwin
 # macOS-specific files - ignore on Linux
 {{ if ne .chezmoi.os "darwin" }}
 Library
-{{ end }}dot_claude/mcp_config.json
+{{ end }}
+
+# MCP config with API keys - managed manually, not synced
+dot_claude/mcp_config.json

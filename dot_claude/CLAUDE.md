@@ -4,9 +4,48 @@
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
+## LLM Provider Strategy
+
+**NEVER use per-token API billing** - Always use one of these options:
+
+**Priority Order**:
+1. **Claude Max OAuth** (PREFERRED for production work)
+   - Uses Max subscription (unlimited usage, no per-token billing)
+   - OAuth tokens stored in `~/.local/share/aircher/auth.json` (Mac) or `~/.local/share/opencode/auth.json`
+   - Copy tokens from Claude Code/OpenCode if needed: browser DevTools → Application → Local Storage
+   - Format: `{"anthropic": {"type": "oauth", "refresh": "...", "access": "...", "expires": 123456}}`
+   - Provider automatically refreshes tokens (if Cloudflare allows)
+
+2. **vLLM on Fedora GPU** (for fast local inference)
+   - RTX 4090 setup, openai/gpt-oss-20b model
+   - Endpoint: `http://100.93.39.25:11435/v1`
+   - 6-8x faster than Ollama on Mac
+   - Cost: $0 (local hardware)
+
+3. **DeepSeek on OpenRouter** (cheap paid fallback)
+   - `deepseek/deepseek-chat` via OpenRouter
+   - One API key for all providers
+   - Much cheaper than Claude/OpenAI API billing
+
+4. **Ollama on Mac** (local, slowest but always available)
+   - Models: qwen2.5-coder:latest, gpt-oss:20b
+   - Latency: 7-10s per request
+   - Cost: $0 (local)
+
+**DO NOT**:
+- ❌ Set ANTHROPIC_API_KEY (per-token billing)
+- ❌ Set OPENAI_API_KEY (per-token billing)
+- ❌ Use any provider with per-token costs
+
+**Authentication Files**:
+- Claude Max OAuth: `~/.local/share/aircher/auth.json`
+- OpenRouter (if needed): `~/.config/aircher/config.toml` → `[providers.openrouter]`
+- Ollama: No auth needed (local)
+- vLLM: Bearer token in config
+
 ## Critical Rules
 - NO AI attribution in commits/PRs (strip if found)
-- Ask before: pushing to remote, opening PRs
+- Ask before: pushing to remote, opening PRs, **publishing packages to registries**
 - Never force push to main/master
 - NO archiving (delete files, git preserves history)
 - NO temp files (delete immediately after use)
@@ -101,7 +140,8 @@ Versions (MAJOR.MINOR.PATCH):
 3. **WAIT FOR CI**: `gh run watch` (all checks ✅)
 4. `git tag -a vX.Y.Z -m "vX.Y.Z - Description" && git push --tags`
 5. `gh release create vX.Y.Z --notes-file release_notes.md`
-6. Publish: `cargo publish` (Rust), `npm publish` (Node), `uv publish` (Python)
+6. **ASK BEFORE PUBLISHING**: Premature publishing wastes version numbers (buggy 0.0.5 → forced 0.0.6+). Cannot unpublish after 72h.
+   - `cargo publish` (Rust), `npm publish` (Node), `uv publish` (Python)
 
 If CI fails: Delete tag/release, fix, restart
 

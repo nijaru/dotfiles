@@ -66,16 +66,6 @@ function up --description "Update all package managers and tools"
         echo "⚠️  rustup not found, skipping"
     end
 
-    # Cargo packages
-    echo "📦 Updating cargo packages..."
-    if command -q cargo-install-update
-        cargo install-update -a
-    else if command -q cargo
-        echo "⚠️  cargo-update not installed. Install with: cargo install cargo-update"
-    else
-        echo "⚠️  cargo not found, skipping"
-    end
-
     # Bun
     echo "🥟 Updating Bun..."
     if command -q bun

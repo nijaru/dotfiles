@@ -97,12 +97,36 @@ After:
 
 ### 5. Consolidate Artificial Time Tracking Files
 
+**CRITICAL**: Always read files before deleting to verify information is preserved!
+
 For each artificial time tracking file (WEEK*_DAY*.md - no real date):
 
-1. Extract key learnings/decisions
-2. Add to STATUS.md (if current) or DECISIONS.md (if permanent)
-3. Delete the dated file
-4. Commit: `git rm ai/WEEK*_DAY*.md && git commit -m "Clean up dated files, consolidated to STATUS.md/DECISIONS.md"`
+1. **Read the file** - Check what information it contains
+2. **Verify consolidation** - Check if info already exists in:
+   - STATUS.md (current state, recent achievements)
+   - TODO.md (completed milestones, ongoing work)
+   - DECISIONS.md (architectural choices)
+   - PLAN.md (phase achievements)
+3. **Extract missing info** - If anything important is NOT already documented:
+   - Key achievements/metrics → STATUS.md or TODO.md
+   - Technical decisions → DECISIONS.md
+   - Performance results → STATUS.md
+   - Bug fixes/learnings → STATUS.md
+4. **Ask user** - Show what will be consolidated/deleted, get approval
+5. **Delete the file** - Only after verifying info preserved
+6. Commit: `git rm ai/WEEK*_DAY*.md && git commit -m "Clean up dated files (info consolidated to STATUS.md/TODO.md/DECISIONS.md)"`
+
+**Example check**:
+```bash
+# Read file
+cat ai/WEEK19_DAY2_SUMMARY.md
+
+# Check if info already in TODO.md
+grep -A20 "WritableDiskStorage" ai/TODO.md
+
+# If info is there → safe to delete
+# If NOT there → consolidate first, THEN delete
+```
 
 **Template for consolidation**:
 ```markdown

@@ -102,7 +102,7 @@ function up --description "Update all package managers and tools"
 
     # fisher (Fish plugin manager)
     echo "🐟 Updating fisher plugins..."
-    if command -q fisher
+    if type -q fisher
         fisher update
     else
         echo "⚠️  fisher not found, skipping"
@@ -116,16 +116,11 @@ function up --description "Update all package managers and tools"
         echo "⚠️  chezmoi not found, skipping"
     end
 
-    # Linux-specific: flatpak and snap
+    # Linux-specific: flatpak
     if test "$platform" = Linux
         if command -q flatpak
             echo "📦 Updating flatpak apps..."
             sudo flatpak update -y
-        end
-
-        if command -q snap
-            echo "📦 Updating snap apps..."
-            sudo snap refresh
         end
     end
 

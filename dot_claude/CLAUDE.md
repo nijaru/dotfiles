@@ -26,7 +26,8 @@
 
 **Session workflow:**
 - Read: PLAN.md (if exists) → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
-- Update ai/STATUS.md every session, NO dated summaries
+- Update ai/STATUS.md every session, NO artificial time tracking (WEEK*_DAY*.md files)
+- Real dates okay for tracking: ANALYSIS_2025-11-05.md, BENCHMARK_NOV2025.md
 - Update ai/PLAN.md on major pivots only. PLAN = what blocks what, technical approach, scope
 - Reference commits by hash (e.g., "Fixed in a1b2c3d")
 - Reference: github.com/nijaru/agent-contexts

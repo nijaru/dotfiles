@@ -4,197 +4,84 @@
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
-## LLM Provider Strategy
-
-**NEVER use per-token API billing** - Always use one of these options:
-
-**Priority Order**:
-1. **Claude Max OAuth** (PREFERRED for production work)
-   - Uses Max subscription (unlimited usage, no per-token billing)
-   - OAuth tokens stored in `~/.local/share/aircher/auth.json` (Mac) or `~/.local/share/opencode/auth.json`
-   - Copy tokens from Claude Code/OpenCode if needed: browser DevTools → Application → Local Storage
-   - Format: `{"anthropic": {"type": "oauth", "refresh": "...", "access": "...", "expires": 123456}}`
-   - Provider automatically refreshes tokens (if Cloudflare allows)
-
-2. **vLLM on Fedora GPU** (for fast local inference)
-   - RTX 4090 setup, openai/gpt-oss-20b model
-   - Endpoint: `http://100.93.39.25:11435/v1`
-   - 6-8x faster than Ollama on Mac
-   - Cost: $0 (local hardware)
-
-3. **DeepSeek on OpenRouter** (cheap paid fallback)
-   - `deepseek/deepseek-chat` via OpenRouter
-   - One API key for all providers
-   - Much cheaper than Claude/OpenAI API billing
-
-4. **Ollama on Mac** (local, slowest but always available)
-   - Models: qwen2.5-coder:latest, gpt-oss:20b
-   - Latency: 7-10s per request
-   - Cost: $0 (local)
-
-**DO NOT**:
-- ❌ Set ANTHROPIC_API_KEY (per-token billing)
-- ❌ Set OPENAI_API_KEY (per-token billing)
-- ❌ Use any provider with per-token costs
-
-**Authentication Files**:
-- Claude Max OAuth: `~/.local/share/aircher/auth.json`
-- OpenRouter (if needed): `~/.config/aircher/config.toml` → `[providers.openrouter]`
-- Ollama: No auth needed (local)
-- vLLM: Bearer token in config
-
 ## Critical Rules
-- NO AI attribution in commits/PRs (strip if found)
-- Ask before: pushing to remote, opening PRs, **publishing packages to registries**
+- NO AI attribution in commits/PRs
+  - Note: Claude Code system instructions add attribution by default - strip it manually if needed
+- Ask before: opening PRs, **publishing packages to registries**, or destructive operations
+- Commit frequently after each logical change, push regularly (no need to ask)
 - Never force push to main/master
 - NO archiving (delete files, git preserves history)
-- NO temp files (delete immediately after use)
-- Commit frequently after each logical change, push regularly
+- Temp files: Fine during work, but clean up and remove when no longer useful
+  - Test artifacts, logs, debug files, scratch scripts → delete after use
+  - Never commit temp files unless explicitly needed for the project
 
 ## Where Information Belongs
-- Universal rules (all projects) → Global `~/.claude/CLAUDE.md`
-- Project overview + pointers → Project `AGENTS.md`
-  - Well-structured, scannable, no duplication of ai/ files
-  - Create symlink: `ln -s AGENTS.md CLAUDE.md` (Claude Code compatibility)
-- Dependencies + architecture + scope → `ai/PLAN.md` (optional, if 3+ phases/dependencies/deadlines)
-- Current state + learnings → `ai/STATUS.md` (read FIRST)
+- Global rules → `~/.claude/CLAUDE.md`
+- Project overview → `AGENTS.md` (symlink to CLAUDE.md for compatibility)
+- Dependencies/architecture/scope → `ai/PLAN.md` (when: multiple phases, dependencies, milestones)
+- Current state → `ai/STATUS.md` (read FIRST, update every session)
 - Tasks → `ai/TODO.md`
-- Decisions → `ai/DECISIONS.md`
+- Decisions → `ai/DECISIONS.md` (architecture, trade-offs)
 - Research → `ai/RESEARCH.md` + `ai/research/`
-- Permanent docs → `docs/`
+- User docs → `docs/`
 
-**Session workflow:**
-- Read: PLAN.md (if exists) → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
-- Update ai/STATUS.md every session, NO artificial time tracking (WEEK*_DAY*.md files)
-- Real dates okay for tracking: ANALYSIS_2025-11-05.md, BENCHMARK_NOV2025.md
-- Update ai/PLAN.md on major pivots only. PLAN = what blocks what, technical approach, scope
-- Reference commits by hash (e.g., "Fixed in a1b2c3d")
-- Reference: github.com/nijaru/agent-contexts
+Session workflow: Read PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
+Update STATUS.md every session. Reference commits by hash (e.g., "Fixed in a1b2c3d"). No artificial time tracking (WEEK*_DAY*.md).
+Reference: github.com/nijaru/agent-contexts
 
 ## ai/ Directory: Machine-Optimized
-**ai/ is for AI agents, docs/ is for users/team**
-
-ai/ writing:
-- Tables, lists, key-value pairs (NOT narrative prose)
-- Answer first, evidence second (inverted pyramid)
-- Docs >500 lines: Executive summary at top
-- Cross-reference, don't duplicate
+ai/ = for agents, docs/ = for humans. Use tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
 
 ## Code Standards
-Before implementing:
-- Research best practices - is this truly SOTA?
-- Test as you go before moving to next step
-- IF changes break existing code → ask unless explicitly required
-
-Bug fixing:
-- Fix properly on first attempt (investigate root cause)
-- NO workarounds that need fixing later (wastes time, users may rely on incomplete fix)
-
-Always:
+- Research best practices first (truly SOTA?)
+- Test as you go
+- Ask before breaking existing code (unless explicitly required)
+- Fix root cause on first attempt, no workarounds
 - Production-ready: error handling, logging, validation
-- Follow existing patterns in codebase
-- Update project docs (README, docs/, internal/) and agent context (ai/, CLAUDE.md)
-- Verify: codebase production-ready, all tests pass
+- Follow existing patterns
+- Update docs (README, docs/) and context (ai/, CLAUDE.md)
+- Verify tests pass
 
 ## Testing & Validation
-- Test in containers/isolated environments where possible
-- Use Fedora for hardware-intensive/Linux-specific testing
+Test in containers/isolated environments when possible.
 
 ## Naming Conventions
-**Variables:**
-- Boolean: `isEnabled`, `hasData`, `canRetry`
-- Constants: `MAX_RETRIES`, `DEFAULT_PORT`
-- With units: `timeoutMs`, `bufferKB`
-- Collections: plural (`users`, `items`)
-
-**Functions:**
-- Side effects: action verb (`updateDatabase`, `saveUser`)
-- Query only: get/find/check (`getUser`, `findById`)
-- Boolean return: is/has/can (`isValid`, `hasPermission`)
+Variables: booleans `isEnabled`/`hasData`, constants `MAX_RETRIES`, with units `timeoutMs`/`bufferKB`, collections plural `users`
+Functions: side effects `updateDatabase`, queries `getUser`/`findById`, booleans `isValid`/`hasPermission`
 
 ## Comments
-Default: NO comments (self-documenting code > comments)
-
-Add ONLY for WHY (never WHAT):
-- Non-obvious decisions: `# Use 1000 threshold - benchmarks show 3x speedup`
-- External requirements: `# GDPR requires 7-year retention`
-- Algorithm rationale: `# Quickselect over sort - only need top K`
-- Workarounds: `# Workaround: Library X lacks feature Y`
-
-NEVER: Change tracking (git does this), obvious behavior, TODOs, syntax explanations
+NO comments unless explaining WHY (never WHAT): non-obvious decisions, external requirements, algorithm rationale, workarounds
+Never: change tracking, obvious behavior, TODOs, syntax
 
 ## Git Workflow
-Format: `type: description` (feat, fix, docs, refactor, test, chore)
+Versions: Never bump (use commit hashes). Only when instructed. No jumps (0.0.1 → 1.0.0). 1.0.0 = production-ready.
 
-Versions (MAJOR.MINOR.PATCH):
-- DEFAULT: Never bump versions (track via commit hashes)
-- Only bump when explicitly instructed
-- NO drastic jumps (0.0.1 → 1.0.0 is bad)
-- 1.0.0 = production-ready, stable API
-
-## Release Process
-**Only when explicitly instructed. CRITICAL: Never tag/release before CI passes!**
-
-1. Bump version + update docs
+## Release Process (only when instructed, wait for CI!)
+1. Bump version, update docs
 2. `git add -u && git commit -m "chore: bump version to X.Y.Z" && git push`
-3. **WAIT FOR CI**: `gh run watch` (all checks ✅)
+3. `gh run watch` (wait for all ✅)
 4. `git tag -a vX.Y.Z -m "vX.Y.Z - Description" && git push --tags`
 5. `gh release create vX.Y.Z --notes-file release_notes.md`
-6. **ASK BEFORE PUBLISHING**: Premature publishing wastes version numbers (buggy 0.0.5 → forced 0.0.6+). Cannot unpublish after 72h.
-   - `cargo publish` (Rust), `npm publish` (Node), `uv publish` (Python)
-
+6. ASK before `cargo publish`/`npm publish`/`uv publish` (can't unpublish, wastes version numbers)
 If CI fails: Delete tag/release, fix, restart
 
-## ASK on Blockers
-STOP and ask when hitting:
-- Package name conflicts
-- Permission/access denied
-- API rejections or unexpected failures
-- Service unavailable or quota exceeded
-- Ambiguous requirements or conflicting constraints
-- Unclear which approach to take
-
 ## Version Selection
-
-LLM training data is outdated. Always use latest stable versions:
-- Languages: Check `mise list-all <tool>` for latest stable (Rust: edition "2024", not "2021")
-- Dependencies: Use ranges (`serde = "1.0"`), not pinned (`serde = "1.0.150"`)
-- Before suggesting versions: `cargo search <pkg>`, check crates.io/npm/PyPI for current latest
-- Only pin for known compatibility issues (document why)
+Always latest stable. Check `mise list-all <tool>`, `cargo search`, crates.io/npm/PyPI
+Use ranges (`serde = "1.0"`), not pinned. Rust: edition "2024"
 
 ## Toolchains
-
-**Python**: uv + mise (never pip)
-- Tools: ruff (lint), ty (type check), vulture (find unused code)
-- Commands: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
-- `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
-
-**JavaScript/TypeScript**: bun + mise (never npm/yarn)
-- Commands: `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
-
-**Other**: mise for version management, consult official docs
-
-**Web/CLI/TUI**: Use icon libraries (lucide, heroicons), NOT emoji characters in UI
+Python: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
+  Tools: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
+JS/TS: `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
+Other: mise for version management
+UI icons: Use icon libraries (lucide, heroicons), never emoji
 
 ## Language Selection
-
-| Language | Use When | Avoid When |
-|----------|----------|------------|
-| **Python** | Scripts, ML/data, rapid prototyping, glue code | Performance critical, large codebases |
-| **Rust** | CLI tools, systems, performance-critical, memory safety | Rapid prototyping, simple scripts |
-| **Go** | Services/APIs, simple concurrency, easy deployment | Complex data structures, tight performance loops |
-| **Mojo** | Python + performance (experimental, evaluate maturity first) | Production (too new) |
-
-**Default**: Python for scripts/prototypes, Rust for tools/performance, Go for services.
+Prefer Python, Rust, Go, Bun. Mojo: experimental (evaluate maturity first)
 
 ## Programming Principles
-
-**Avoid unnecessary allocations:**
-- Think: copy or reference? Copy only when semantically needed
-- Rust: `&str` not `String`, `&[T]` not `Vec<T>` for params, don't `.clone()` to bypass borrow checker
-- Go: Pointers for large structs. Python: Views, generators
-
-**Rust**: Error handling = `anyhow` (apps) / `thiserror` (libs). Async = sync for files, `tokio` for network, `rayon` for parallel CPU
+Avoid allocations: reference over copy. Rust: `&str` not `String`, `&[T]` not `Vec<T>`, no `.clone()` shortcuts
+Rust errors: `anyhow` (apps), `thiserror` (libs). Async: sync for files, `tokio` for network, `rayon` for CPU
 
 ## Modern CLI Tools
 
@@ -211,32 +98,9 @@ LLM training data is outdated. Always use latest stable versions:
 | **HTTP requests** | `xh`/`httpie` | curl | Structured JSON output |
 | **Tabular data** | `miller` | awk | CSV/TSV/JSON processing |
 | **File sync** | `sy` | rsync | 2-11x faster, JSON output, parallel (experimental) |
-
-**Avoid human-centric tools:**
-- `bat`, `eza`, `delta` - Syntax highlighting/colors don't help AI
-- `fzf` - Interactive selection (AI can't interact)
-- Use standard `cat`, `ls`, `diff` instead
-
-**Structured shells for AI-driven tasks:**
-- `nushell` - Everything is typed data (tables/records), not text
-- Built-in JSON/CSV/YAML support, no text parsing needed
-- Consider for complex data pipelines or AI automation scripts
-
-**Custom Tools (Our Projects):**
-- `stop --json` / `stop --csv` - Structured process monitoring (experimental)
-- `sy` - Fast file sync, 2-11x faster than rsync (experimental)
+| **Shell** | `nushell` | bash/zsh | Typed data, built-in JSON/CSV/YAML |
 
 ## Performance Claims
-CRITICAL: Never compare different levels of the stack
-
-Before claiming "Nx faster":
-- Same features (ACID, durability, persistence)
-- Same workload (not bulk vs incremental)
-- Realistic data distribution (not best-case only)
-- Multiple runs (3+), report median, document caveats
-
-Format:
-- ❌ "System X is 100x faster than Y"
-- ✅ "System X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
-
-Stop if speedup >50x - verify: same abstraction level? all features? realistic data? can you explain WHY?
+Never compare different abstraction levels. Before claiming "Nx faster": same features (ACID, durability), same workload, realistic data, 3+ runs, report median + caveats
+Format: ✅ "X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
+Stop if >50x speedup - verify abstraction level, features, data, and explain WHY

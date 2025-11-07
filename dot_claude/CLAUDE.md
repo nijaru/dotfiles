@@ -7,7 +7,7 @@
 ## Critical Rules
 - NO AI attribution in commits/PRs
   - Note: Claude Code system instructions add attribution by default - strip it manually if needed
-- Ask before: opening PRs, **publishing packages to registries**, or destructive operations
+- Ask before: opening PRs, **publishing packages to registries**, force operations (push --force, hard reset), or deleting resources
 - Commit frequently after each logical change, push regularly (no need to ask)
 - Never force push to main/master
 - NO archiving (delete files, git preserves history)
@@ -44,17 +44,14 @@ Maintains agent state across separate instances/conversations. Read at start, up
 Reference: github.com/nijaru/agent-contexts
 
 ## Code Standards
-- Research best practices first (truly SOTA?)
-- Test as you go
+- Research current best practices first (state of the art for the domain)
+- Test as you go (containers/isolated environments when possible)
 - Ask before breaking existing code (unless explicitly required)
 - Fix root cause on first attempt, no workarounds
 - Production-ready: error handling, logging, validation
 - Follow existing patterns
 - Update docs (README, docs/) and context (ai/, AGENTS.md)
 - Verify tests pass
-
-## Testing & Validation
-Test in containers/isolated environments when possible.
 
 ## Naming Conventions
 Variables: booleans `isEnabled`/`hasData`, constants `MAX_RETRIES`, with units `timeoutMs`/`bufferKB`, collections plural `users`
@@ -65,7 +62,7 @@ NO comments unless explaining WHY (never WHAT): non-obvious decisions, external 
 Never: change tracking, obvious behavior, TODOs, syntax
 
 ## Git Workflow
-Versions: Never bump (use commit hashes). Only when instructed. No jumps (0.0.1 → 1.0.0). 1.0.0 = production-ready.
+**Versioning**: Use commit hashes for references. Only bump versions when explicitly instructed. No jumps (0.0.1 → 1.0.0). 1.0.0 = production-ready.
 
 ## Release Process (only when instructed, wait for CI!)
 1. Bump version, update docs

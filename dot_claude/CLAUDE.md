@@ -16,17 +16,17 @@
   - Never commit temp files unless explicitly needed for the project
 
 ## Where Information Belongs
+**ai/ directory**: Agent working context for maintaining state across separate agent instances and conversations
 - Global rules → `~/.claude/CLAUDE.md`
 - Project overview → `AGENTS.md` (with `CLAUDE.md` → `AGENTS.md` symlink)
 - Dependencies/architecture/scope → `ai/PLAN.md` (only if 3+ phases/dependencies)
-- Current state → `ai/STATUS.md` (read FIRST, update every session)
+- Current state → `ai/STATUS.md` (read FIRST at conversation start, update before exit)
 - Tasks → `ai/TODO.md`
 - Decisions → `ai/DECISIONS.md` (architecture, trade-offs)
 - Research → `ai/RESEARCH.md` + `ai/research/`
 - User docs → `docs/`
 
-Session workflow: Read PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
-Update STATUS.md every session. Reference commits by hash (e.g., "Fixed in a1b2c3d").
+**Conversation workflow**: Read PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md, then update STATUS.md before conversation ends. Reference commits by hash (e.g., "Fixed in a1b2c3d").
 Reference: github.com/nijaru/agent-contexts
 
 ## File Maintenance
@@ -44,8 +44,8 @@ Keep ai/ files focused on current/relevant info. Git preserves all history.
 
 **Principle**: Prune when files contain substantial irrelevant/historical content
 
-## ai/ Directory: Machine-Optimized
-ai/ = for agents, docs/ = for humans. Use tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
+## ai/ Directory Format
+Machine-optimized for cross-conversation context handoff. Use tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
 
 ## Code Standards
 - Research best practices first (truly SOTA?)

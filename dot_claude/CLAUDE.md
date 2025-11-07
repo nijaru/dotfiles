@@ -15,26 +15,26 @@
   - Test artifacts, logs, debug files, scratch scripts → delete after use
   - Never commit temp files unless explicitly needed for the project
 
-## ai/ Directory - Cross-Conversation Context
-Maintains agent state across separate instances/conversations. Read at start, update before exit.
+## ai/ Directory - Cross-Session Context
+Maintains agent state across separate sessions. Read at start, update before exit.
 
 **Structure:**
 - `AGENTS.md` - Project overview (with `CLAUDE.md` → `AGENTS.md` symlink)
 - `ai/PLAN.md` - Dependencies/architecture/scope (only if 3+ phases/dependencies)
-- `ai/STATUS.md` - Current state (read FIRST, update every conversation)
+- `ai/STATUS.md` - Current state (read FIRST, update every session)
 - `ai/TODO.md` - Active tasks
 - `ai/DECISIONS.md` - Architecture decisions, trade-offs
 - `ai/RESEARCH.md` + `ai/research/` - Research findings
 - `docs/` - User/team documentation
 
-**Conversation workflow:**
+**Session workflow:**
 1. Read: PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
 2. Work & commit frequently (reference by hash: "Fixed in a1b2c3d")
-3. Update STATUS.md before conversation ends
+3. Update STATUS.md before session ends
 
 **Format:** Tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
 
-**Maintenance:** Keep current/relevant only. Git preserves history.
+**Maintenance:** Keep current/relevant for cross-session handoff. Git preserves history.
 - STATUS.md: Delete old pivots, completed phases, resolved blockers
 - DECISIONS.md: Active decisions only. Superseded → `ai/decisions/superseded-YYYY-MM.md`. Large topics → `ai/decisions/architecture.md`
 - TODO.md: Delete completed tasks (no "Done" section)

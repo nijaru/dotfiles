@@ -17,8 +17,8 @@
 
 ## Where Information Belongs
 - Global rules → `~/.claude/CLAUDE.md`
-- Project overview → `AGENTS.md` (symlink to CLAUDE.md for compatibility)
-- Dependencies/architecture/scope → `ai/PLAN.md` (when: multiple phases, dependencies, milestones)
+- Project overview → `AGENTS.md` (with `CLAUDE.md` → `AGENTS.md` symlink)
+- Dependencies/architecture/scope → `ai/PLAN.md` (only if 3+ phases/dependencies)
 - Current state → `ai/STATUS.md` (read FIRST, update every session)
 - Tasks → `ai/TODO.md`
 - Decisions → `ai/DECISIONS.md` (architecture, trade-offs)
@@ -26,8 +26,23 @@
 - User docs → `docs/`
 
 Session workflow: Read PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
-Update STATUS.md every session. Reference commits by hash (e.g., "Fixed in a1b2c3d"). No artificial time tracking (WEEK*_DAY*.md).
+Update STATUS.md every session. Reference commits by hash (e.g., "Fixed in a1b2c3d").
 Reference: github.com/nijaru/agent-contexts
+
+## File Maintenance
+Keep ai/ files current - prune when scrolling to find info. Git preserves all history.
+
+**STATUS.md**: Current state only - delete old pivots, completed phases, resolved blockers
+
+**DECISIONS.md**: Active decisions only
+- Superseded → ai/decisions/superseded-YYYY-MM.md
+- Topic splits → ai/decisions/architecture.md, database.md, etc.
+
+**TODO.md**: Active work only - delete completed tasks (no "Done" section)
+
+**Anti-pattern**: No artificial time tracking (WEEK*_DAY*.md) - use git log for timeline
+
+**Principle**: <2 screens to answer "what's current?"
 
 ## ai/ Directory: Machine-Optimized
 ai/ = for agents, docs/ = for humans. Use tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
@@ -39,7 +54,7 @@ ai/ = for agents, docs/ = for humans. Use tables/lists, not prose. Answer first,
 - Fix root cause on first attempt, no workarounds
 - Production-ready: error handling, logging, validation
 - Follow existing patterns
-- Update docs (README, docs/) and context (ai/, CLAUDE.md)
+- Update docs (README, docs/) and context (ai/, AGENTS.md)
 - Verify tests pass
 
 ## Testing & Validation

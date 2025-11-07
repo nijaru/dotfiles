@@ -1,183 +1,197 @@
-Audit and clean up existing AI agent context files to remove time-tracking artifacts.
+Audit and maintain AI agent context files following current best practices.
 
-**Purpose**: Remove arbitrary time estimates and progress tracking from ai/ directory. Focus PLAN.md on dependencies, architecture, and scope.
+**Purpose**: Apply file maintenance practices to ai/ directory. Remove time-tracking artifacts, prune historical content, organize decisions, keep files current.
 
-## Tasks
+**Reference**: github.com/nijaru/agent-contexts PRACTICES.md
 
-### 1. Analyze Current State
+## Analysis Phase
 
-Check for:
-- ai/ directory exists
-- PLAN.md exists
-- Time-based artifacts in PLAN.md:
-  - "Week X Day Y" markers
-  - "~X-Y days" estimates
-  - Quarter-based timelines without external deadlines (Q1 2025, Q2 2025)
-  - "_Last Updated: Week X Day Y_" datestamps
-- Artificial time tracking files: `WEEK*_DAY*.md` (not real dates like `ANALYSIS_2025-11-05.md`)
-- Detailed task breakdowns in PLAN.md that should be in TODO.md
+### 1. Check Structure
 
-### 2. Present Findings
+Verify:
+- ai/ directory exists with core files (STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md)
+- PLAN.md exists if needed (3+ phases/dependencies)
+- AGENTS.md exists (or CLAUDE.md)
+- ai/research/ directory for detailed research
 
-Show user:
+### 2. Identify Issues
+
+**Time-tracking artifacts:**
+- PLAN.md: "Week X Day Y", "~X-Y days", quarter timelines without external deadline
+- Artificial time tracking files: WEEK*_DAY*.md (no real date)
+- Progress markers: "← YOU ARE HERE", "_Last Updated: Week X Day Y_"
+
+**File maintenance needed:**
+- STATUS.md: >2 screens or contains old pivots/completed phases/resolved blockers
+- DECISIONS.md: >50 decisions or has superseded/reversed decisions
+- TODO.md: Has "Done" sections or completed tasks
+- PLAN.md: Completed phases, detailed task breakdowns (should be in TODO.md)
+
+**Anti-patterns:**
+- ai/archive/ directory exists (use git instead)
+- Code files in ai/ (belongs in src/)
+- Duplicate content between docs/ and ai/
+
+### 3. Present Findings
+
+Show structured report:
 ```markdown
-## Audit Results
+## ai/ Directory Audit
 
-**PLAN.md issues found:**
-- [ ] Time estimates ("~3-4 days")
-- [ ] Progress markers ("Week 19 Day 5 ← YOU ARE HERE")
-- [ ] Quarter timelines without external deadline
-- [ ] Detailed task breakdowns (should be in TODO.md)
-- [ ] Datestamps in updates
+**Time-tracking artifacts:**
+- [ ] PLAN.md: [X] time estimates, [Y] progress markers
+- [ ] [N] artificial time tracking files (WEEK*_DAY*.md)
 
-**Artificial time tracking files found:**
-- ai/WEEK11_DAY1_SUMMARY.md (no real date)
-- ai/research/WEEK19_DAY2_PLAN.md (no real date)
-- [list all WEEK*_DAY*.md files]
-- Note: Files with real dates (e.g., ANALYSIS_2025-11-05.md) are fine
+**File maintenance:**
+- [ ] STATUS.md: [size] - needs pruning (old pivots/phases)
+- [ ] DECISIONS.md: [count] decisions - [N] superseded, [M] should split by topic
+- [ ] TODO.md: [N] completed tasks in "Done" section
+- [ ] PLAN.md: [N] completed phases
 
-**Recommendation**: Clean up [X] issues
+**Anti-patterns:**
+- [ ] ai/archive/ exists
+- [ ] Code files in ai/
+- [ ] Duplicate docs/ and ai/ content
+
+**Files with real dates (GOOD - keeping):**
+- ai/research/ANALYSIS_2025-11-05.md
+- ai/BENCHMARK_NOV2025.md
 ```
 
-### 3. Get User Approval
+If no issues: "✓ ai/ directory follows best practices" and exit.
 
-Ask: "Clean up time-tracking artifacts from ai/ directory?"
+### 4. Get Approval
 
-If no issues found, report "✓ ai/ directory follows best practices" and exit.
+Ask: "Apply file maintenance to ai/ directory? This will prune historical content (git preserves all history)."
 
-### 4. Clean Up PLAN.md
+## Cleanup Phase
 
-**Remove**:
-- All "Week X Day Y" markers
-- All "~X-Y days/weeks" estimates
-- Quarter timelines (unless user confirms external deadline exists)
-- "_Last Updated: Week X Day Y_" datestamps
-- Progress indicators ("← YOU ARE HERE")
+### 5. Remove Time-Tracking Artifacts
 
-**Keep**:
-- Dependencies (A before B)
-- Technical architecture decisions
-- Scope boundaries (what's in/out)
-- Success criteria
-- External deadlines (if confirmed by user)
+**PLAN.md:**
+- Remove: "Week X Day Y", "~X-Y days/weeks", quarter timelines (unless external deadline), progress markers
+- Keep: Dependencies, architecture, scope, success criteria
+- Move detailed task breakdowns → TODO.md
 
-**Move to TODO.md**:
-- Detailed task breakdowns with sub-items
-- "Planned Work" sections with implementation steps
+**Artificial time tracking files (WEEK*_DAY*.md):**
+1. Read each file
+2. Verify info exists in STATUS.md/DECISIONS.md/TODO.md
+3. Consolidate missing info:
+   - Key learnings → STATUS.md
+   - Decisions → DECISIONS.md
+   - Metrics → STATUS.md
+4. Delete files
+5. Commit: `git rm ai/WEEK*.md && git commit -m "Remove time-tracking files - info consolidated"`
 
-**Example transformation**:
+### 6. Prune STATUS.md
 
-Before:
+Extract current state only:
+- Keep: Current metrics, active blockers, recent learnings (1-2 sessions)
+- Delete: Old pivots, completed phases, historical architectures, resolved blockers
+
+**Action:**
+1. Create temp file with current state
+2. Replace STATUS.md
+3. Commit: `git add ai/STATUS.md && git commit -m "Compact STATUS.md - removed historical content"`
+
+### 7. Organize DECISIONS.md
+
+**If has superseded decisions:**
+1. Create ai/decisions/superseded-YYYY-MM.md
+2. Move reversed/replaced decisions there
+3. Keep only active decisions in main file
+
+**If >50 decisions or hard to navigate:**
+1. Create topic files: ai/decisions/architecture.md, ai/decisions/database.md, etc.
+2. Move related decisions to topic files
+3. Keep index in main DECISIONS.md linking to topics
+
+**Delete entirely:** Reversed decisions with no historical value
+
+Commit after each change.
+
+### 8. Clean TODO.md
+
+- Delete all completed tasks (no "Done" sections)
+- Keep only pending/in-progress work
+- Commit: `git add ai/TODO.md && git commit -m "Clean TODO.md - removed completed tasks"`
+
+### 9. Prune PLAN.md
+
+- Delete completed phases
+- Keep current phase + dependencies for next 1-2 phases
+- Archive major phase completions to DECISIONS.md if valuable
+- Commit changes
+
+### 10. Remove Anti-Patterns
+
+**ai/archive/:**
+1. Review contents
+2. Consolidate valuable info to appropriate files
+3. Delete directory: `git rm -r ai/archive && git commit -m "Remove ai/archive - use git history"`
+
+**Code in ai/:**
+1. Identify code files (*.py, *.rs, *.ts, etc.)
+2. Ask: "Move [files] to src/ or delete?"
+3. Move or delete as directed
+
+**Duplicate docs/ and ai/:**
+- Identify overlapping content
+- Keep permanent docs in docs/, working context in ai/
+
+### 11. Update AGENTS.md
+
+Ensure it reflects correct file purposes:
 ```markdown
-## Milestones
-| Phase | Timeline | Status |
-|-------|----------|--------|
-| Phase 1 | Q1 2025 | ← CURRENT |
-
-**Week 19 Day 5+ ← YOU ARE HERE**
-
-**Planned Work**:
-1. **Feature X** (~3-4 days)
-   - Sub-task A
-   - Sub-task B
+- ai/PLAN.md — Dependencies, architecture, scope (optional, only if 3+ phases)
+- ai/STATUS.md — Current state (read first, updated every session)
+- ai/TODO.md — Active tasks only
+- ai/DECISIONS.md — Active architectural decisions
+- ai/RESEARCH.md — Research index
 ```
 
-After:
-```markdown
-## Phases
-| Phase | Status | Deliverables | Success Criteria |
-|-------|--------|--------------|------------------|
-| Phase 1 | ← CURRENT | [from original] | [from original] |
-
-## Dependencies
-[Extracted from context]
-```
-
-(Move "Planned Work" → TODO.md)
-
-### 5. Consolidate Artificial Time Tracking Files
-
-**CRITICAL**: Always read files before deleting to verify information is preserved!
-
-For each artificial time tracking file (WEEK*_DAY*.md - no real date):
-
-1. **Read the file** - Check what information it contains
-2. **Verify consolidation** - Check if info already exists in:
-   - STATUS.md (current state, recent achievements)
-   - TODO.md (completed milestones, ongoing work)
-   - DECISIONS.md (architectural choices)
-   - PLAN.md (phase achievements)
-3. **Extract missing info** - If anything important is NOT already documented:
-   - Key achievements/metrics → STATUS.md or TODO.md
-   - Technical decisions → DECISIONS.md
-   - Performance results → STATUS.md
-   - Bug fixes/learnings → STATUS.md
-4. **Ask user** - Show what will be consolidated/deleted, get approval
-5. **Delete the file** - Only after verifying info preserved
-6. Commit: `git rm ai/WEEK*_DAY*.md && git commit -m "Clean up dated files (info consolidated to STATUS.md/TODO.md/DECISIONS.md)"`
-
-**Example check**:
-```bash
-# Read file
-cat ai/WEEK19_DAY2_SUMMARY.md
-
-# Check if info already in TODO.md
-grep -A20 "WritableDiskStorage" ai/TODO.md
-
-# If info is there → safe to delete
-# If NOT there → consolidate first, THEN delete
-```
-
-**Template for consolidation**:
-```markdown
-# In STATUS.md, add relevant findings:
-## What Worked
-- [Key learning from WEEK*_DAY*.md with commit hash]
-
-# In DECISIONS.md, add architectural choices:
-## YYYY-MM-DD: [Decision from WEEK*_DAY*.md]
-**Context**: [situation]
-**Decision**: [choice]
-**Commits**: [hash]
-```
-
-### 6. Update File Descriptions
-
-Ensure AGENTS.md reflects correct PLAN.md purpose:
-```markdown
-- ai/PLAN.md — Dependencies, architecture, scope (not time tracking)
-```
-
-### 7. Verify
+## Verification
 
 Check:
-- [ ] PLAN.md has no time estimates (unless external deadline confirmed)
-- [ ] PLAN.md has no progress markers
-- [ ] No artificial time tracking files (WEEK*_DAY*.md) in ai/ or ai/research/
-- [ ] Files with real dates (e.g., ANALYSIS_2025-11-05.md) are fine to keep
-- [ ] Key learnings consolidated to STATUS.md
-- [ ] Architectural decisions in DECISIONS.md
+- [ ] No time estimates in PLAN.md (unless external deadline confirmed)
+- [ ] No progress markers or artificial time tracking
+- [ ] STATUS.md <2 screens, current state only
+- [ ] DECISIONS.md organized (superseded moved, topics split if needed)
+- [ ] TODO.md has no completed tasks
+- [ ] PLAN.md focused on current + next 1-2 phases
+- [ ] No ai/archive/ directory
+- [ ] No code files in ai/
 - [ ] AGENTS.md updated
 
-### 8. Summary
+## Summary
 
 Show:
 ```markdown
-## Cleanup Complete
+## Update Complete
 
-**PLAN.md**: Removed [X] time estimates, [Y] progress markers
-**Artificial time tracking files**: Consolidated [Z] WEEK*_DAY*.md files → STATUS.md/DECISIONS.md, deleted
-**TODO.md**: Moved [N] detailed task breakdowns from PLAN.md
+**Time-tracking artifacts:**
+- PLAN.md: Removed [X] estimates, [Y] progress markers
+- Deleted [N] WEEK*_DAY*.md files (info consolidated)
 
-**Note**: Files with real dates (e.g., ANALYSIS_2025-11-05.md, BENCHMARK_NOV2025.md) were kept - those are good for tracking actual dates.
+**File maintenance:**
+- STATUS.md: Pruned to [current size] (removed historical content)
+- DECISIONS.md: [action taken - organized/split/cleaned]
+- TODO.md: Removed [N] completed tasks
+- PLAN.md: Pruned to current + next phases
 
-**Result**: ai/ directory now focuses on dependencies and architecture, not arbitrary time tracking.
+**Anti-patterns fixed:**
+- [list if any: removed ai/archive/, moved code files, deduplicated docs]
+
+**Result:** ai/ directory current, focused, maintainable (<2 screens per file)
+
+**Note:** All historical content preserved in git history
 ```
 
-## Notes
+## Guidelines
 
-- Ask before deleting any files
-- If user wants to keep quarters/estimates, ask why (external deadline? Scrum sprint? Funding milestone?)
-- Focus: dependencies (what blocks what) > time estimates (how long it takes)
-- Git preserves history - artificial time tracking files (WEEK*_DAY*.md) can be deleted safely
-- Files with real dates/months (ANALYSIS_2025-11-05.md, BENCHMARK_NOV2025.md) are good - keep them
+- Always ask before deleting files
+- Verify info consolidated before deletion
+- Commit after each logical change
+- If user wants to keep time estimates, ask about external deadlines
+- Files with real dates (ANALYSIS_2025-11-05.md) are good - keep them
+- Focus: Keep files answering "what's current?" in <2 screens

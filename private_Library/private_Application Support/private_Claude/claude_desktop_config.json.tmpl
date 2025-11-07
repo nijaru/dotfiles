@@ -8,25 +8,18 @@
         "exa-mcp-server"
       ],
       "env": {
-        "EXA_API_KEY": "REDACTED_EXA_API_KEY"
+        "EXA_API_KEY": "{{ .exa_api_key }}"
       }
     },
     "brave-search": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-brave-search"
+        "@brave/brave-search-mcp-server"
       ],
       "env": {
-        "BRAVE_API_KEY": "REDACTED_BRAVE_API_KEY"
+        "BRAVE_API_KEY": "{{ .brave_api_key }}"
       }
-    },
-    "context7": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ]
     }
   }
 }

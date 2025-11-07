@@ -46,7 +46,7 @@ Check README/docs for: "phases", "milestones", "roadmap", "v1.0", "v2.0", "Q1", 
 ### 4. Create ai/ Directory
 
 ```bash
-mkdir -p ai/research
+mkdir -p ai/research ai/design
 ```
 
 **ai/TODO.md:**
@@ -162,6 +162,8 @@ Use ALL detected information:
   [- PLAN.md — Strategic roadmap  # only if created]
   - STATUS.md — Current state (read first)
   - TODO.md — Next steps
+  - research/ — Research findings (optional)
+  - design/ — Design documents (optional)
 [List detected dirs: src/, lib/, tests/, etc.]
 
 ## Technology Stack

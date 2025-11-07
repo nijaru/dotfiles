@@ -12,7 +12,8 @@ Verify:
 - ai/ directory exists with core files (STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md)
 - PLAN.md exists if needed (3+ phases/dependencies)
 - AGENTS.md exists (or CLAUDE.md)
-- ai/research/ directory for detailed research
+- ai/research/ directory for detailed research (optional)
+- ai/design/ directory for design documents (optional)
 
 ### 2. Identify Issues
 
@@ -148,6 +149,8 @@ Ensure it reflects correct file purposes:
 - ai/TODO.md — Active tasks only
 - ai/DECISIONS.md — Active architectural decisions
 - ai/RESEARCH.md — Research index
+- ai/research/ — Research findings (optional)
+- ai/design/ — Design documents (optional)
 ```
 
 ## Verification

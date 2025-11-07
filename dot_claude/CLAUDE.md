@@ -24,7 +24,8 @@ Maintains agent state across sessions. Read at start, update before exit.
 - `ai/STATUS.md` - Current state (read FIRST, update every session)
 - `ai/TODO.md` - Active tasks
 - `ai/DECISIONS.md` - Architecture decisions, trade-offs
-- `ai/RESEARCH.md` + `ai/research/` - Research findings
+- `ai/RESEARCH.md` + `ai/research/` - Research findings (inputs)
+- `ai/design/` - Design documents/specifications (outputs from research)
 - `docs/` - User/team documentation
 
 **Session workflow:**

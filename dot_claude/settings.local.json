@@ -1,29 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(rm:*)",
-      "Bash(chezmoi add:*)",
-      "Bash(chezmoi apply:*)",
-      "Bash(chezmoi status:*)",
-      "Bash(cat:*)",
-      "Bash(git push:*)",
-      "Bash(git pull:*)",
-      "Bash(for repo in omendb/omendb omendb/omendb-cloud zendb aircher fast-dict)",
-      "Bash(do)",
-      "Bash(echo \"=== $repo ===\")",
-      "Bash(if [ -d \"/Users/nick/github/$repo/.jj\" ])",
-      "Bash(then)",
-      "Bash(elif [ -d \"/Users/nick/github/$repo/.git\" ])",
-      "Bash(else)",
-      "Bash(fi)",
-      "Bash(done)",
-      "Bash(jj git init:*)",
-      "Bash(git submodule:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(claude config --help)",
-      "Bash(claude mcp:*)"
-    ],
+    "allow": [],
     "deny": []
   }
 }

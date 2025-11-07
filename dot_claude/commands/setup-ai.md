@@ -4,7 +4,7 @@ Analyze project and set up AI agent configuration files.
 - AGENTS.md = primary file (tool-agnostic)
 - CLAUDE.md → AGENTS.md = symlink (Claude Code compatibility)
 - Reference: github.com/nijaru/agent-contexts
-- Optimize AGENTS.md for AI consumption: tables, lists, clear sections, scannable
+- Optimize AGENTS.md for AI consumption: tables, lists, clear sections, structured
 - DO NOT duplicate global ~/.claude/CLAUDE.md or ai/ files
 
 **Reading order:** PLAN → STATUS → TODO → DECISIONS → RESEARCH

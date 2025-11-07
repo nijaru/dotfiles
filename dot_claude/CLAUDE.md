@@ -30,11 +30,11 @@ Update STATUS.md every session. Reference commits by hash (e.g., "Fixed in a1b2c
 Reference: github.com/nijaru/agent-contexts
 
 ## File Maintenance
-Keep ai/ files current - prune when scrolling to find info. Git preserves all history.
+Keep ai/ files focused on current/relevant info. Git preserves all history.
 
 **STATUS.md**: Current state only - delete old pivots, completed phases, resolved blockers
 
-**DECISIONS.md**: Active decisions only
+**DECISIONS.md**: Active decisions affecting current codebase
 - Superseded → ai/decisions/superseded-YYYY-MM.md
 - Topic splits → ai/decisions/architecture.md, database.md, etc.
 
@@ -42,7 +42,7 @@ Keep ai/ files current - prune when scrolling to find info. Git preserves all hi
 
 **Anti-pattern**: No artificial time tracking (WEEK*_DAY*.md) - use git log for timeline
 
-**Principle**: <2 screens to answer "what's current?"
+**Principle**: Prune when files contain substantial irrelevant/historical content
 
 ## ai/ Directory: Machine-Optimized
 ai/ = for agents, docs/ = for humans. Use tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.

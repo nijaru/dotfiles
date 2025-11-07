@@ -22,8 +22,8 @@ Verify:
 - Progress markers: "← YOU ARE HERE", "_Last Updated: Week X Day Y_"
 
 **File maintenance needed:**
-- STATUS.md: >2 screens or contains old pivots/completed phases/resolved blockers
-- DECISIONS.md: >50 decisions or has superseded/reversed decisions
+- STATUS.md: Contains substantial old pivots/completed phases/resolved blockers
+- DECISIONS.md: Has many superseded/reversed decisions or is difficult to navigate
 - TODO.md: Has "Done" sections or completed tasks
 - PLAN.md: Completed phases, detailed task breakdowns (should be in TODO.md)
 
@@ -43,7 +43,7 @@ Show structured report:
 - [ ] [N] artificial time tracking files (WEEK*_DAY*.md)
 
 **File maintenance:**
-- [ ] STATUS.md: [size] - needs pruning (old pivots/phases)
+- [ ] STATUS.md: [size/tokens] - contains [N] old pivots/completed phases
 - [ ] DECISIONS.md: [count] decisions - [N] superseded, [M] should split by topic
 - [ ] TODO.md: [N] completed tasks in "Done" section
 - [ ] PLAN.md: [N] completed phases
@@ -155,7 +155,7 @@ Ensure it reflects correct file purposes:
 Check:
 - [ ] No time estimates in PLAN.md (unless external deadline confirmed)
 - [ ] No progress markers or artificial time tracking
-- [ ] STATUS.md <2 screens, current state only
+- [ ] STATUS.md focused on current state only
 - [ ] DECISIONS.md organized (superseded moved, topics split if needed)
 - [ ] TODO.md has no completed tasks
 - [ ] PLAN.md focused on current + next 1-2 phases
@@ -182,7 +182,7 @@ Show:
 **Anti-patterns fixed:**
 - [list if any: removed ai/archive/, moved code files, deduplicated docs]
 
-**Result:** ai/ directory current, focused, maintainable (<2 screens per file)
+**Result:** ai/ directory current, focused, efficient (minimal irrelevant content)
 
 **Note:** All historical content preserved in git history
 ```
@@ -194,4 +194,4 @@ Show:
 - Commit after each logical change
 - If user wants to keep time estimates, ask about external deadlines
 - Files with real dates (ANALYSIS_2025-11-05.md) are good - keep them
-- Focus: Keep files answering "what's current?" in <2 screens
+- Focus: Keep files focused on current/relevant info without substantial historical content

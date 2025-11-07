@@ -70,7 +70,8 @@ Always latest stable. Check `mise list-all <tool>`, `cargo search`, crates.io/np
 Use ranges (`serde = "1.0"`), not pinned. Rust: edition "2024"
 
 ## Toolchains
-Python: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
+Python: `uv > pip/venv` (use uv, not pip or venv)
+  Setup: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
   Tools: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
 JS/TS: `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
 Other: mise for version management
@@ -89,6 +90,7 @@ Rust errors: `anyhow` (apps), `thiserror` (libs). Async: sync for files, `tokio`
 
 | Task | Use | NOT | Why |
 |------|-----|-----|-----|
+| **Python packages** | `uv` | pip/venv | Faster, unified tool for deps + envs + scripts |
 | **Search code** | `rg` (ripgrep) | grep | Faster, respects .gitignore, better defaults |
 | **Find files** | `fd` | find | Simpler syntax, predictable output |
 | **JSON query** | `jq` | grep/awk | Proper JSON manipulation |

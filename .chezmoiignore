@@ -15,6 +15,16 @@ Brewfile_darwin
 
 # Fish shell runtime files that change frequently
 .config/fish/fish_variables
+.config/fish/**/*cache*
+.config/fish/**/*.local
+.config/fish/functions/tide/configure/functions/_fake_tide_cache_variables.fish
+
+# Claude Code runtime files
+.claude/**/*.local
+
+# Build artifacts and dependencies
+.config/**/*.lock
+.config/**/node_modules
 
 # macOS-specific files - ignore on Linux
 {{ if ne .chezmoi.os "darwin" }}

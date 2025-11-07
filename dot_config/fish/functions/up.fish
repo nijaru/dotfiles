@@ -58,6 +58,14 @@ function up --description "Update all package managers and tools"
         echo "⚠️  uv not found, skipping"
     end
 
+    # pixi (conda package manager - for Mojo, scientific tools)
+    echo "📦 Updating pixi global environments..."
+    if command -q pixi
+        pixi global update
+    else
+        echo "⚠️  pixi not found, skipping"
+    end
+
     # Rust toolchain
     echo "🦀 Updating Rust toolchain..."
     if command -q rustup

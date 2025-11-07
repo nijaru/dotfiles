@@ -15,37 +15,33 @@
   - Test artifacts, logs, debug files, scratch scripts → delete after use
   - Never commit temp files unless explicitly needed for the project
 
-## Where Information Belongs
-**ai/ directory**: Agent working context for maintaining state across separate agent instances and conversations
-- Global rules → `~/.claude/CLAUDE.md`
-- Project overview → `AGENTS.md` (with `CLAUDE.md` → `AGENTS.md` symlink)
-- Dependencies/architecture/scope → `ai/PLAN.md` (only if 3+ phases/dependencies)
-- Current state → `ai/STATUS.md` (read FIRST at conversation start, update before exit)
-- Tasks → `ai/TODO.md`
-- Decisions → `ai/DECISIONS.md` (architecture, trade-offs)
-- Research → `ai/RESEARCH.md` + `ai/research/`
-- User docs → `docs/`
+## ai/ Directory - Cross-Conversation Context
+Maintains agent state across separate instances/conversations. Read at start, update before exit.
 
-**Conversation workflow**: Read PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md, then update STATUS.md before conversation ends. Reference commits by hash (e.g., "Fixed in a1b2c3d").
+**Structure:**
+- `AGENTS.md` - Project overview (with `CLAUDE.md` → `AGENTS.md` symlink)
+- `ai/PLAN.md` - Dependencies/architecture/scope (only if 3+ phases/dependencies)
+- `ai/STATUS.md` - Current state (read FIRST, update every conversation)
+- `ai/TODO.md` - Active tasks
+- `ai/DECISIONS.md` - Architecture decisions, trade-offs
+- `ai/RESEARCH.md` + `ai/research/` - Research findings
+- `docs/` - User/team documentation
+
+**Conversation workflow:**
+1. Read: PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
+2. Work & commit frequently (reference by hash: "Fixed in a1b2c3d")
+3. Update STATUS.md before conversation ends
+
+**Format:** Tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
+
+**Maintenance:** Keep current/relevant only. Git preserves history.
+- STATUS.md: Delete old pivots, completed phases, resolved blockers
+- DECISIONS.md: Active decisions only. Superseded → `ai/decisions/superseded-YYYY-MM.md`. Large topics → `ai/decisions/architecture.md`
+- TODO.md: Delete completed tasks (no "Done" section)
+- Anti-pattern: No artificial time tracking (WEEK*_DAY*.md)
+- Prune when files contain substantial irrelevant/historical content
+
 Reference: github.com/nijaru/agent-contexts
-
-## File Maintenance
-Keep ai/ files focused on current/relevant info. Git preserves all history.
-
-**STATUS.md**: Current state only - delete old pivots, completed phases, resolved blockers
-
-**DECISIONS.md**: Active decisions affecting current codebase
-- Superseded → ai/decisions/superseded-YYYY-MM.md
-- Topic splits → ai/decisions/architecture.md, database.md, etc.
-
-**TODO.md**: Active work only - delete completed tasks (no "Done" section)
-
-**Anti-pattern**: No artificial time tracking (WEEK*_DAY*.md) - use git log for timeline
-
-**Principle**: Prune when files contain substantial irrelevant/historical content
-
-## ai/ Directory Format
-Machine-optimized for cross-conversation context handoff. Use tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
 
 ## Code Standards
 - Research best practices first (truly SOTA?)

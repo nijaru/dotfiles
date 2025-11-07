@@ -15,8 +15,8 @@
   - Test artifacts, logs, debug files, scratch scripts → delete after use
   - Never commit temp files unless explicitly needed for the project
 
-## ai/ Directory - Cross-Session Context
-Maintains agent state across separate sessions. Read at start, update before exit.
+## ai/ Directory
+Maintains agent state across sessions. Read at start, update before exit.
 
 **Structure:**
 - `AGENTS.md` - Project overview (with `CLAUDE.md` → `AGENTS.md` symlink)
@@ -34,7 +34,7 @@ Maintains agent state across separate sessions. Read at start, update before exi
 
 **Format:** Tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
 
-**Maintenance:** Keep current/relevant for cross-session handoff. Git preserves history.
+**Maintenance:** Keep current/relevant only. Git preserves history.
 - STATUS.md: Delete old pivots, completed phases, resolved blockers
 - DECISIONS.md: Active decisions only. Superseded → `ai/decisions/superseded-YYYY-MM.md`. Large topics → `ai/decisions/architecture.md`
 - TODO.md: Delete completed tasks (no "Done" section)

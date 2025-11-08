@@ -3,8 +3,15 @@
 .DS_Store?
 ._*
 
-# Fish shell runtime files
-config/fish/fish_variables
+# Fish shell runtime files that change frequently
+dot_config/fish/fish_variables
+dot_config/fish/**/*cache*
+dot_config/fish/**/*.local
+dot_config/fish/functions/tide/configure/functions/_fake_tide_cache_variables.fish
+
+# Claude Code runtime files
+dot_claude/**/*.local
+dot_claude/settings.local.json
 
 # Homebrew lock files
 homebrew/Brewfile.lock.json
@@ -16,8 +23,6 @@ homebrew/Brewfile.lock.json
 .swp
 .swo
 
-# Claude configuration files are now properly managed
-.claude/
-
-# Secrets and sensitive data
+# Secrets and sensitive data (templates are OK, generated files are not)
+dot_config/fish/secrets.fish
 dot_config/fish/conf.d/secrets.fish

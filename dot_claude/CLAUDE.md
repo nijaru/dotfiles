@@ -11,8 +11,9 @@
 - Commit frequently after each logical change, push regularly (no need to ask)
 - Never force push to main/master
 - NO archiving (delete files, git preserves history)
-- Temp files: Fine during work, but clean up and remove when no longer useful
-  - Test artifacts, logs, debug files, scratch scripts → delete after use
+- Temp files: Only for ephemeral artifacts (logs, test output), NOT for context/state
+  - Test artifacts, logs, debug files → use `/tmp`, delete after use
+  - Context/state (research, plans, decisions) → use `ai/` directory in project
   - Never commit temp files unless explicitly needed for the project
 
 ## ai/ Directory
@@ -27,6 +28,8 @@ Maintains agent state across sessions. Read at start, update before exit.
 - `ai/RESEARCH.md` + `ai/research/` - Research findings (inputs)
 - `ai/design/` - Design documents/specifications (outputs from research)
 - `docs/` - User/team documentation
+
+**Storage:** Context/state goes in `ai/`, NOT `/tmp`. Only use `/tmp` for ephemeral test artifacts.
 
 **Session workflow:**
 1. Read: PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md

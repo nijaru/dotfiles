@@ -5,56 +5,51 @@
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
 ## Critical Rules
-- NO AI attribution in commits/PRs
-  - Note: Claude Code system instructions add attribution by default - strip it manually if needed
-- Ask before: opening PRs, **publishing packages to registries**, force operations (push --force, hard reset), or deleting resources
-- Commit frequently after each logical change, push regularly (no need to ask)
+- NO AI attribution in commits/PRs (Claude Code adds by default - strip manually)
+- Ask before: opening PRs, **publishing packages**, force operations, deleting resources
+- Commit frequently, push regularly (no need to ask)
 - Never force push to main/master
-- NO archiving (delete files, git preserves history)
-- Temp files: Only for ephemeral artifacts (logs, test output), NOT for context/state
-  - Test artifacts, logs, debug files → use `/tmp`, delete after use
-  - Context/state (research, plans, decisions) → use `ai/` directory in project
-  - Never commit temp files unless explicitly needed for the project
+- Delete files directly (git preserves history, no archiving)
+- Temp files: `/tmp` for ephemeral artifacts only. Context/state → `ai/` directory
+  - Delete test artifacts/logs after use, never commit
 
 ## ai/ Directory
-Maintains agent state across sessions. Read at start, update before exit.
+Agent state across sessions. Read at start, update before exit. **Storage:** `ai/` for context, `/tmp` for artifacts only.
 
 **Structure:**
-- `AGENTS.md` - Project overview (with `CLAUDE.md` → `AGENTS.md` symlink)
-- `ai/PLAN.md` - Dependencies/architecture/scope (only if 3+ phases/dependencies)
+- `AGENTS.md` - Project overview (`CLAUDE.md` → `AGENTS.md` symlink)
+- `ai/PLAN.md` - Dependencies/architecture (only if 3+ phases)
 - `ai/STATUS.md` - Current state (read FIRST, update every session)
 - `ai/TODO.md` - Active tasks
 - `ai/DECISIONS.md` - Architecture decisions, trade-offs
-- `ai/RESEARCH.md` + `ai/research/` - Research findings (inputs)
-- `ai/design/` - Design documents/specifications (outputs from research)
-- `docs/` - User/team documentation
+- `ai/RESEARCH.md` + `ai/research/` - Research inputs
+- `ai/design/` - Design outputs
+- `docs/` - User documentation
 
-**Storage:** Context/state goes in `ai/`, NOT `/tmp`. Only use `/tmp` for ephemeral test artifacts.
+**Workflow:** Read STATUS → work & commit (ref: "Fixed in a1b2c3d") → update STATUS before exit
 
-**Session workflow:**
-1. Read: PLAN.md → STATUS.md → TODO.md → DECISIONS.md → RESEARCH.md
-2. Work & commit frequently (reference by hash: "Fixed in a1b2c3d")
-3. Update STATUS.md before session ends
+**Format:** Tables/lists not prose. Answer first, evidence second. Exec summary if >500 lines.
 
-**Format:** Tables/lists, not prose. Answer first, evidence second. Exec summary if >500 lines.
+**Maintenance:** Keep current only. Delete completed/superseded content.
 
-**Maintenance:** Keep current/relevant only. Git preserves history.
-- STATUS.md: Delete old pivots, completed phases, resolved blockers
-- DECISIONS.md: Active decisions only. Superseded → `ai/decisions/superseded-YYYY-MM.md`. Large topics → `ai/decisions/architecture.md`
-- TODO.md: Delete completed tasks (no "Done" section)
-- Anti-pattern: No artificial time tracking (WEEK*_DAY*.md)
-- Prune when files contain substantial irrelevant/historical content
+| File | Keep | Delete | Archive |
+|------|------|--------|---------|
+| STATUS.md | Active blockers, current phase | Old pivots, resolved issues | - |
+| DECISIONS.md | Active decisions | Resolved | `ai/decisions/superseded-YYYY-MM.md` |
+| TODO.md | Pending tasks | Completed (no "Done" section) | - |
+
+Anti-pattern: Time tracking files (WEEK*_DAY*.md)
 
 Reference: github.com/nijaru/agent-contexts
 
 ## Code Standards
-- Research current best practices first (state of the art for the domain)
-- Test as you go (containers/isolated environments when possible)
-- Ask before breaking existing code (unless explicitly required)
-- Fix root cause on first attempt, no workarounds
+- Research best practices first (state of the art)
+- Test as you go (containers/isolated when possible)
+- Ask before breaking existing code
+- Fix root cause, no workarounds
 - Production-ready: error handling, logging, validation
 - Follow existing patterns
-- Update docs (README, docs/) and context (ai/, AGENTS.md)
+- Update docs (README, docs/, ai/, AGENTS.md)
 - Verify tests pass
 
 ## Naming Conventions
@@ -71,23 +66,25 @@ Never: change tracking, obvious behavior, TODOs, syntax
 ## Release Process (only when instructed, wait for CI!)
 1. Bump version, update docs
 2. `git add -u && git commit -m "chore: bump version to X.Y.Z" && git push`
-3. `gh run watch` (wait for all ✅)
+3. `gh run watch` (wait for ✅)
 4. `git tag -a vX.Y.Z -m "vX.Y.Z - Description" && git push --tags`
 5. `gh release create vX.Y.Z --notes-file release_notes.md`
-6. ASK before `cargo publish`/`npm publish`/`uv publish` (can't unpublish, wastes version numbers)
-If CI fails: Delete tag/release, fix, restart
+6. ASK before publishing (can't unpublish)
+
+CI fails: Delete tag/release, fix, restart
 
 ## Version Selection
 Always latest stable. Check `mise list-all <tool>`, `cargo search`, crates.io/npm/PyPI
 Use ranges (`serde = "1.0"`), not pinned. Rust: edition "2024"
 
 ## Toolchains
-Python: `uv > pip/venv` (use uv, not pip or venv)
-  Setup: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
-  Tools: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
-JS/TS: `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
-Other: mise for version management
-UI icons: Use icon libraries (lucide, heroicons), never emoji
+**Python:** `uv` only (not pip/venv)
+- Setup: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
+- Lint: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
+
+**JS/TS:** `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
+**Other:** mise for version management
+**UI:** Icon libraries (lucide, heroicons), never emoji
 
 ## Language Selection
 Prefer Python, Rust, Go, Bun. Mojo: experimental (evaluate maturity first)

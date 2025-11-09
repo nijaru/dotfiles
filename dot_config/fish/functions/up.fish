@@ -101,7 +101,7 @@ function up --description "Update all package managers and tools"
     # chezmoi (dotfiles)
     echo "🏠 Updating dotfiles..."
     if command -q chezmoi
-        chezmoi update
+        chezmoi update --force
     else
         echo "⚠️  chezmoi not found, skipping"
     end

@@ -1,133 +1,134 @@
 # AI Agent Instructions
 
-## System Context
+## Environment
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
-## Critical Rules
-- NO AI attribution in commits/PRs (Claude Code adds by default - strip manually)
-- Ask before: opening PRs, **publishing packages**, force operations, deleting resources
-- Commit frequently, push regularly (no need to ask)
+## Workflow Rules
+- NO AI attribution in commits/PRs (strip manually)
+- Ask before: PRs, publishing packages, force ops, resource deletion
+- Commit frequently, push regularly (no ask needed)
 - Never force push to main/master
-- Delete files directly (git preserves history, no archiving)
-- Temp files: `/tmp` for ephemeral artifacts only. Context/state → `ai/` directory
-  - Delete test artifacts/logs after use, never commit
+- Delete files directly (no archiving)
+- `/tmp`: ephemeral test artifacts only. `ai/`: context/state across sessions
+  - Delete temp artifacts after use, never commit
 
-## ai/ Directory
-Agent state across sessions. Read at start, update before exit. **Storage:** `ai/` for context, `/tmp` for artifacts only.
+### ai/ Directory
+Session state. Read first, update on exit.
 
-**Structure:**
-- `AGENTS.md` - Project overview (`CLAUDE.md` → `AGENTS.md` symlink)
-- `ai/PLAN.md` - Dependencies/architecture (only if 3+ phases)
-- `ai/STATUS.md` - Current state (read FIRST, update every session)
-- `ai/TODO.md` - Active tasks
-- `ai/DECISIONS.md` - Architecture decisions, trade-offs
-- `ai/RESEARCH.md` + `ai/research/` - Research inputs
-- `ai/design/` - Design outputs
-- `docs/` - User documentation
+| File | Purpose |
+|------|---------|
+| `AGENTS.md` | Project overview (symlink: `CLAUDE.md` → `AGENTS.md`) |
+| `ai/STATUS.md` | Current phase, blockers (read FIRST) |
+| `ai/TODO.md` | Active tasks only |
+| `ai/PLAN.md` | Architecture, dependencies (if 3+ phases) |
+| `ai/DECISIONS.md` | Active decisions, trade-offs |
+| `ai/RESEARCH.md` + `ai/research/` | Research inputs |
+| `ai/design/` | Design outputs |
+| `docs/` | User documentation |
 
-**Workflow:** Read STATUS → work & commit (ref: "Fixed in a1b2c3d") → update STATUS before exit
+**Format:** Tables/lists. Answer first, evidence second. Exec summary if >500 lines.
 
-**Format:** Tables/lists not prose. Answer first, evidence second. Exec summary if >500 lines.
-
-**Maintenance:** Keep current only. Delete completed/superseded content.
-
-| File | Keep | Delete | Archive |
-|------|------|--------|---------|
-| STATUS.md | Active blockers, current phase | Old pivots, resolved issues | - |
-| DECISIONS.md | Active decisions | Resolved | `ai/decisions/superseded-YYYY-MM.md` |
-| TODO.md | Pending tasks | Completed (no "Done" section) | - |
+**Maintenance:** Keep current only. Delete completed items. Archive old decisions to `ai/decisions/superseded-YYYY-MM.md`.
 
 Anti-pattern: Time tracking files (WEEK*_DAY*.md)
 
 Reference: github.com/nijaru/agent-contexts
 
-## Code Standards
+## Development
+
+### Code Quality
 - Research best practices first (state of the art)
-- Test as you go (containers/isolated when possible)
-- Ask before breaking existing code
 - Fix root cause, no workarounds
 - Production-ready: error handling, logging, validation
 - Follow existing patterns
-- Update docs (README, docs/, ai/, AGENTS.md)
-- Verify tests pass
+- Update docs: README, docs/, ai/, AGENTS.md
+- Ask before breaking existing code
 
-## Testing
-TDD provides binary success criteria, prevents drift during multi-step implementations. AI excels at test generation and rapid iteration.
+### Testing & TDD
+TDD provides binary success criteria, prevents drift. AI excels at test generation and rapid iteration.
 
 **Workflow:** Plan → Red (failing tests) → Green (minimal pass) → Refactor → Validate
 
 | Use TDD | Skip |
 |---------|------|
-| Systems: DBs, compilers, storage engines | Docs, configs, typos |
+| Systems: DBs, compilers, storage | Docs, configs, typos |
 | Performance: SIMD, algorithms, hot paths | Prototypes, spikes |
-| Production services with test infra | Simple scripts |
+| Services with test infrastructure | Simple scripts, fixes |
 | Complex logic prone to regression | Exploratory code |
 
+**Rules:**
 - Declare TDD upfront (prevents mock implementations)
 - Commit tests before coding, don't modify during implementation
+- Test in isolation (containers when possible)
 - Iterate until green
+- Verify all tests pass before completion
 
-## Naming Conventions
-Variables: booleans `isEnabled`/`hasData`, constants `MAX_RETRIES`, with units `timeoutMs`/`bufferKB`, collections plural `users`
-Functions: side effects `updateDatabase`, queries `getUser`/`findById`, booleans `isValid`/`hasPermission`
+### Code Style
 
-## Comments
-NO comments unless explaining WHY (never WHAT): non-obvious decisions, external requirements, algorithm rationale, workarounds
-Never: change tracking, obvious behavior, TODOs, syntax
+**Naming:**
+- Booleans: `isEnabled`, `hasData`
+- Constants: `MAX_RETRIES`
+- Units: `timeoutMs`, `bufferKB`
+- Collections: plural (`users`)
+- Functions: `updateDatabase` (side effects), `getUser`/`findById` (queries), `isValid` (booleans)
 
-## Git Workflow
-**Versioning**: Use commit hashes for references. Only bump versions when explicitly instructed. No jumps (0.0.1 → 1.0.0). 1.0.0 = production-ready.
+**Comments:** Only WHY, never WHAT
+- Allowed: non-obvious decisions, external requirements, algorithm rationale, workarounds
+- Never: change tracking, obvious behavior, TODOs, syntax
 
-## Release Process (only when instructed, wait for CI!)
-1. Bump version, update docs
-2. `git add -u && git commit -m "chore: bump version to X.Y.Z" && git push`
-3. `gh run watch` (wait for ✅)
-4. `git tag -a vX.Y.Z -m "vX.Y.Z - Description" && git push --tags`
-5. `gh release create vX.Y.Z --notes-file release_notes.md`
-6. ASK before publishing (can't unpublish)
+**Rust:**
+- Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`, no `.clone()` shortcuts
+- Errors: `anyhow` (apps), `thiserror` (libs)
+- Async: sync for files, `tokio` for network, `rayon` for CPU
+- Edition: "2024"
 
-CI fails: Delete tag/release, fix, restart
+## Git & Releases
 
-## Version Selection
-Always latest stable. Check `mise list-all <tool>`, `cargo search`, crates.io/npm/PyPI
-Use ranges (`serde = "1.0"`), not pinned. Rust: edition "2024"
+**Versioning:** Use commit hashes. Bump versions only when instructed. No jumps (0.0.1 → 1.0.0). 1.0.0 = production-ready.
 
-## Toolchains
-**Python:** `uv` only (not pip/venv)
-- Setup: `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
-- Lint: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
+**Release:** (wait for CI ✅)
+1. Bump version, update docs → commit → push
+2. `gh run watch` (wait for pass)
+3. Tag: `git tag -a vX.Y.Z -m "Description" && git push --tags`
+4. `gh release create vX.Y.Z --notes-file release_notes.md`
+5. ASK before publishing (can't unpublish)
 
-**JS/TS:** `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
-**Other:** mise for version management
-**UI:** Icon libraries (lucide, heroicons), never emoji
+CI fails: delete tag/release, fix, restart
 
-## Language Selection
-Prefer Python, Rust, Go, Bun. Mojo: experimental (evaluate maturity first)
+## Stack
 
-## Programming Principles
-Avoid allocations: reference over copy. Rust: `&str` not `String`, `&[T]` not `Vec<T>`, no `.clone()` shortcuts
-Rust errors: `anyhow` (apps), `thiserror` (libs). Async: sync for files, `tokio` for network, `rayon` for CPU
+**Languages:** Prefer Python, Rust, Go, Bun. Mojo: experimental (evaluate first).
 
-## Modern CLI Tools
+**Versions:** Latest stable. Use ranges (`serde = "1.0"`), not pinned. Check: `mise list-all`, `cargo search`, crates.io/npm/PyPI.
 
-**Prefer tools with structured output and predictable behavior:**
+**Toolchains:**
+- Python: `uv` (not pip/venv) → `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
+  - Lint: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
+- JS/TS: `bun` → `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
+- Versions: `mise`
+- UI: Icon libraries (lucide, heroicons), never emoji
 
-| Task | Use | NOT | Why |
-|------|-----|-----|-----|
-| **Python packages** | `uv` | pip/venv | Faster, unified tool for deps + envs + scripts |
-| **Search code** | `rg` (ripgrep) | grep | Faster, respects .gitignore, better defaults |
-| **Find files** | `fd` | find | Simpler syntax, predictable output |
-| **JSON query** | `jq` | grep/awk | Proper JSON manipulation |
-| **YAML query** | `yq` | grep/awk | Proper YAML manipulation (k8s configs) |
-| **AST search** | `ast-grep` | grep/sed | Language-aware code search/refactor |
-| **String replace** | `sd` | sed | Safer defaults, simpler syntax |
-| **HTTP requests** | `xh`/`httpie` | curl | Structured JSON output |
-| **Tabular data** | `miller` | awk | CSV/TSV/JSON processing |
-| **File sync** | `sy` | rsync | 2-11x faster, JSON output, parallel (experimental) |
-| **Shell** | `nushell` | bash/zsh | Typed data, built-in JSON/CSV/YAML |
+**CLI Tools:** Prefer structured output, modern alternatives
 
-## Performance Claims
-Never compare different abstraction levels. Before claiming "Nx faster": same features (ACID, durability), same workload, realistic data, 3+ runs, report median + caveats
+| Instead of | Use | Why |
+|------------|-----|-----|
+| grep | `rg` (ripgrep) | Faster, respects .gitignore |
+| find | `fd` | Simpler syntax |
+| sed | `sd` | Safer defaults |
+| awk | `miller` | Proper CSV/TSV/JSON |
+| curl | `xh`/`httpie` | Structured output |
+| rsync | `sy` | 2-11x faster, parallel (experimental) |
+
+For jq/yq/ast-grep: use for proper JSON/YAML/AST manipulation.
+
+## Standards
+
+**Performance Claims:**
+Never compare different abstraction levels. Requirements:
+- Same features (ACID, durability, etc.)
+- Same workload, realistic data
+- 3+ runs, report median + caveats
+- If >50x speedup: verify abstraction, explain WHY
+
 Format: ✅ "X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
-Stop if >50x speedup - verify abstraction level, features, data, and explain WHY

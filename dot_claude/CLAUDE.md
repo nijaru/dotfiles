@@ -48,7 +48,7 @@ Reference: github.com/nijaru/agent-contexts
 ### Testing & TDD
 TDD provides binary success criteria, prevents drift. AI excels at test generation and rapid iteration.
 
-**Workflow:** Plan → Red (failing tests) → Green (minimal pass) → Refactor → Validate
+**Workflow:** Plan → Red → Green → Refactor → Validate
 
 | Use TDD | Skip |
 |---------|------|
@@ -60,22 +60,19 @@ TDD provides binary success criteria, prevents drift. AI excels at test generati
 **Rules:**
 - Declare TDD upfront (prevents mock implementations)
 - Commit tests before coding, don't modify during implementation
-- Test in isolation (containers when possible)
 - Iterate until green
-- Verify all tests pass before completion
 
 ### Code Style
 
-**Naming:**
-- Booleans: `isEnabled`, `hasData`
-- Constants: `MAX_RETRIES`
-- Units: `timeoutMs`, `bufferKB`
-- Collections: plural (`users`)
-- Functions: `updateDatabase` (side effects), `getUser`/`findById` (queries), `isValid` (booleans)
+**Naming:** Concise, context-aware, no redundancy
+- Proportional to scope (local: `count`, package: `userCount`)
+- Omit redundant context (`Cache` not `LRUCache_V2`, `users` not `userSlice`)
+- Omit type info already clear (`count` not `numUsers`, `timeout` not `timeoutInt`)
+- Booleans: `isEnabled`/`hasData`. Constants: `MAX_RETRIES`. Units: `timeoutMs`/`bufferKB`
 
-**Comments:** Only WHY, never WHAT
-- Allowed: non-obvious decisions, external requirements, algorithm rationale, workarounds
-- Never: change tracking, obvious behavior, TODOs, syntax
+**Comments:** Only WHY, never WHAT. NO narrating code changes.
+- Write: non-obvious decisions, external requirements, algorithm rationale, workarounds
+- Never: change tracking, obvious behavior, TODOs, what code does
 
 **Rust:**
 - Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`, no `.clone()` shortcuts
@@ -85,7 +82,11 @@ TDD provides binary success criteria, prevents drift. AI excels at test generati
 
 ## Git & Releases
 
-**Versioning:** Use commit hashes. Bump versions only when instructed. No jumps (0.0.1 → 1.0.0). 1.0.0 = production-ready.
+**Versioning:**
+- Use commit hashes for references
+- Bump versions only when instructed
+- 0.1.0+ = production ready. 1.0.0 = proven in production
+- Sequential bumps only: 0.0.1 → 0.0.2 → 0.1.0 → 1.0.0 (not 0.0.1 → 1.0.0)
 
 **Release:** (wait for CI ✅)
 1. Bump version, update docs → commit → push
@@ -98,9 +99,13 @@ CI fails: delete tag/release, fix, restart
 
 ## Stack
 
-**Languages:** Prefer Python, Rust, Go, Bun. Mojo: experimental (evaluate first).
+**Languages:** Python, Rust, Go, Bun preferred. Shell: `nushell` for typed data/JSON/CSV. Mojo: experimental (evaluate first).
 
-**Versions:** Latest stable. Use ranges (`serde = "1.0"`), not pinned. Check: `mise list-all`, `cargo search`, crates.io/npm/PyPI.
+**Packages:** Let package manager choose versions unless pinning required.
+- `cargo add serde` (not `cargo add serde@1.0`)
+- `uv add requests` (not `uv add requests==2.31.0`)
+- `bun add zod` (not `bun add zod@3.22.0`)
+- Pin only for: reproducibility requirements, known breaking changes, or explicit user request
 
 **Toolchains:**
 - Python: `uv` (not pip/venv) → `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`

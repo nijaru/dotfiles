@@ -52,6 +52,22 @@ Reference: github.com/nijaru/agent-contexts
 - Update docs (README, docs/, ai/, AGENTS.md)
 - Verify tests pass
 
+## Testing
+TDD provides binary success criteria, prevents drift during multi-step implementations. AI excels at test generation and rapid iteration.
+
+**Workflow:** Plan → Red (failing tests) → Green (minimal pass) → Refactor → Validate
+
+| Use TDD | Skip |
+|---------|------|
+| Systems: DBs, compilers, storage engines | Docs, configs, typos |
+| Performance: SIMD, algorithms, hot paths | Prototypes, spikes |
+| Production services with test infra | Simple scripts |
+| Complex logic prone to regression | Exploratory code |
+
+- Declare TDD upfront (prevents mock implementations)
+- Commit tests before coding, don't modify during implementation
+- Iterate until green
+
 ## Naming Conventions
 Variables: booleans `isEnabled`/`hasData`, constants `MAX_RETRIES`, with units `timeoutMs`/`bufferKB`, collections plural `users`
 Functions: side effects `updateDatabase`, queries `getUser`/`findById`, booleans `isValid`/`hasPermission`

@@ -6,13 +6,9 @@
   },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "buffer_font_family": "JetBrains Mono",
-  "buffer_font_fallbacks": [
-    "JetBrains Mono",
-    "JetBrainsMono Nerd Font",
-    ".ZedMono"
-  ],
+  "buffer_font_fallbacks": ["JetBrains Mono", "JetBrainsMono Nerd Font", ".ZedMono"],
   "buffer_font_size": 14,
-  "agent_font_size": null,
+  "agent_buffer_font_size": 14,
   "active_pane_modifiers": {
     "inactive_opacity": 0.9
   },
@@ -79,10 +75,10 @@
       "language_servers": ["biome"],
       "formatter": [
         {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
+          "code_action": "source.organizeImports.biome"
+        },
+        {
+          "code_action": "source.fixAll.biome"
         },
         {
           "language_server": {
@@ -104,10 +100,10 @@
       "language_servers": ["ruff", "ty"],
       "formatter": [
         {
-          "code_actions": {
-            "source.organizeImports.ruff": true,
-            "source.fixAll.ruff": true
-          }
+          "code_action": "source.organizeImports.ruff"
+        },
+        {
+          "code_action": "source.fixAll.ruff"
         },
         {
           "language_server": {
@@ -123,10 +119,10 @@
       "language_servers": ["biome"],
       "formatter": [
         {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
+          "code_action": "source.organizeImports.biome"
+        },
+        {
+          "code_action": "source.fixAll.biome"
         },
         {
           "language_server": {
@@ -139,10 +135,10 @@
       "language_servers": ["biome"],
       "formatter": [
         {
-          "code_actions": {
-            "source.organizeImports.biome": true,
-            "source.fixAll.biome": true
-          }
+          "code_action": "source.organizeImports.biome"
+        },
+        {
+          "code_action": "source.fixAll.biome"
         },
         {
           "language_server": {

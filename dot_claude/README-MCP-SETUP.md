@@ -1,8 +1,19 @@
 # Claude Code MCP Server Configuration
 
-MCP servers are configured in `~/.claude.json` with environment variable references.
+MCP servers are configured via **external config file** managed by chezmoi.
 
-## Current Setup
+## Setup
+
+MCP servers are defined in `~/.config/claude/mcp-servers.json` (managed by chezmoi).
+
+The `claude` fish function automatically loads this config:
+```fish
+function claude
+    command claude --mcp-config ~/.config/claude/mcp-servers.json $argv
+end
+```
+
+## Current Servers
 
 All MCP servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
 
@@ -11,37 +22,21 @@ All MCP servers use `${VAR}` syntax to reference environment variables from `~/.
 - **exa**: Uses `${EXA_API_KEY}`
 - **parallel-search-mcp**: Uses `${PARALLEL_API_KEY}`
 
-## To Reconfigure (if needed)
-
-```bash
-# Remove existing servers
-claude mcp remove context7 -s user
-claude mcp remove brave-search -s user
-claude mcp remove exa -s user
-claude mcp remove parallel-search-mcp -s user
-
-# Add with env var references
-claude mcp add --transport stdio context7 -s user -- npx -y context7-mcp-server
-
-claude mcp add --transport stdio brave-search -s user \
-  --env 'BRAVE_API_KEY=${BRAVE_API_KEY}' \
-  -- npx -y @brave/brave-search-mcp-server
-
-claude mcp add --transport stdio exa -s user \
-  --env 'EXA_API_KEY=${EXA_API_KEY}' \
-  -- npx -y exa-mcp-server
-
-# HTTP server (parallel-search-mcp) - update manually in .claude.json
-jq '.mcpServers["parallel-search-mcp"] = {
-  "type": "http",
-  "url": "https://search-mcp.parallel.ai/mcp",
-  "headers": {"Authorization": "Bearer ${PARALLEL_API_KEY}"}
-}' ~/.claude.json > /tmp/claude.json.tmp && mv /tmp/claude.json.tmp ~/.claude.json
-```
-
 ## When API Keys Change
 
 1. Update keys in `~/.config/chezmoi/chezmoi.toml`
 2. Run `chezmoi apply`
 3. Open new shell to load new env vars
 4. Claude Code automatically uses new values via `${VAR}` expansion
+
+## Manual Config (Not Recommended)
+
+If you prefer to configure MCP servers in `~/.claude.json` directly:
+
+```bash
+claude mcp add --transport stdio brave-search -s user \
+  --env 'BRAVE_API_KEY=${BRAVE_API_KEY}' \
+  -- npx -y @brave/brave-search-mcp-server
+```
+
+But the external config file approach is cleaner and fully managed by chezmoi.

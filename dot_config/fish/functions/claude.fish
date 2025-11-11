@@ -7,6 +7,6 @@ function claude
         command claude $argv
     else
         # Main interactive mode - load MCP config (strict mode to ignore .claude.json)
-        command claude --mcp-config ~/.config/claude/mcp-servers.json --strict-mcp-config $argv
+        command claude --mcp-config ~/.config/claude/mcp-servers-lite.json --strict-mcp-config $argv
     end
 end

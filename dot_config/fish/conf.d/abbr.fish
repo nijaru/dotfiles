@@ -14,6 +14,7 @@ if status is-interactive
     abbr --add doc 'cd ~/Documents'
     abbr --add ghub 'cd ~/github'
     abbr --add nijaru 'cd ~/github/nijaru'
+    abbr --add omendb 'cd ~/github/omendb'
     abbr --add p 'cd ~/Projects'
 
     # Editor abbreviations - moved to a separate file to ensure $EDITOR is set

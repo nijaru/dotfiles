@@ -11,11 +11,12 @@ Analyze project and set up AI agent configuration files.
 
 **ai/ directory purpose:**
 - **AI session context management** - AI agent's workspace for tracking project state between sessions
-- **Session files** (ai/ root): Read every session - keep minimal, current only (<500 lines each)
+- **Session files** (ai/ root): Read every session - keep current/active work only
 - **Reference files** (subdirs): Read only when needed - no token cost unless accessed
 - **Not for humans** - User documentation goes in docs/, AI working context in ai/
 - **Token efficiency** - Subdirectories prevent loading unused context every session
 - **Scales with project** - Start minimal (STATUS.md + TODO.md), grow as needed
+- **Prune based on relevance** - Delete historical/completed content, not based on size
 
 **Reading order:** PLAN → STATUS → TODO → DECISIONS → RESEARCH
 (Load subdirectories only when context requires: research/, design/, decisions/)
@@ -132,7 +133,6 @@ mkdir -p ai/research ai/design ai/decisions
 - [ ]
 
 **Note:** Keep current work only. Delete completed tasks immediately (no "Done" section).
-Keep <300 lines.
 ```
 
 **ai/STATUS.md:**
@@ -155,7 +155,7 @@ Initial setup complete.
 -
 
 **Note:** Update this file EVERY session with current state, learnings, and progress.
-Keep <200 lines (prune old content, trust git history).
+Prune historical/completed content regularly (trust git history).
 ```
 
 **ai/DECISIONS.md:**
@@ -163,7 +163,7 @@ Keep <200 lines (prune old content, trust git history).
 <!-- AI Decision Log
 
 This file tracks architectural decisions for AI context across sessions.
-When >500 lines: split to ai/decisions/{topic}.md
+When becomes difficult to navigate: split to ai/decisions/{topic}.md
 When decisions superseded: move to ai/decisions/superseded-YYYY-MM.md
 
 Template:
@@ -193,8 +193,8 @@ Template:
 <!-- Research Index
 
 This file indexes research findings for AI context.
-Detailed research (>200 lines) goes in ai/research/{topic}.md
-Keep this file <300 lines (index only).
+Detailed research goes in ai/research/{topic}.md
+Keep this file as index only (summaries + pointers).
 
 Template:
 
@@ -284,23 +284,23 @@ Use machine-readable structure:
 
 **Session files** (ai/ root - read every session):
 
-| File | Purpose | Read Frequency | Max Size |
-|------|---------|----------------|----------|
-| ai/STATUS.md | Current state, metrics, blockers | Every session (read FIRST) | ~200 lines |
-| ai/TODO.md | Active tasks only | Every session | ~300 lines |
-| ai/DECISIONS.md | Active architectural decisions | Every session | ~500 lines |
-| ai/RESEARCH.md | Research findings index | As needed | ~300 lines |
-[- ai/PLAN.md | Strategic roadmap, dependencies | Major pivots | ~400 lines  # only if created]
+| File | Purpose | Read Frequency |
+|------|---------|----------------|
+| ai/STATUS.md | Current state, metrics, blockers | Every session (read FIRST) |
+| ai/TODO.md | Active tasks only | Every session |
+| ai/DECISIONS.md | Active architectural decisions | Every session |
+| ai/RESEARCH.md | Research findings index | As needed |
+[- ai/PLAN.md | Strategic roadmap, dependencies | Major pivots  # only if created]
 
 **Reference files** (subdirectories - loaded only when needed):
 
 | Directory | Purpose | When to Use |
 |-----------|---------|-------------|
-| ai/research/ | Detailed research findings (>200 lines) | On demand |
+| ai/research/ | Detailed research findings | On demand |
 | ai/design/ | Design specifications, architecture docs | On demand |
-| ai/decisions/ | Superseded decisions, topic-based splits | When DECISIONS.md >50 entries |
+| ai/decisions/ | Superseded decisions, topic-based splits | When DECISIONS.md difficult to navigate |
 
-**Token efficiency:** Session files kept minimal (<500 lines) for efficiency. Detailed content in subdirectories loaded only when AI needs them.
+**Token efficiency:** Session files kept current/active only. Detailed content in subdirectories loaded only when AI needs them.
 
 ## Technology Stack
 

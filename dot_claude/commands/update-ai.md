@@ -4,6 +4,23 @@ Audit and maintain AI agent context files following current best practices.
 
 **Reference**: github.com/nijaru/agent-contexts PRACTICES.md
 
+**AI coding agent best practices:**
+- Research current best practices, don't rely on stale patterns
+- Update STATUS.md every session (current state + learnings)
+- Trust git history - delete completed/historical content
+- Use tables/lists over prose for efficient token usage
+- Separate permanent docs (docs/) from working context (ai/)
+- Focus PLAN.md on dependencies ("A before B"), not time estimates
+- Keep TODO.md current only (no "Done" sections)
+- Archive superseded decisions to ai/decisions/superseded-YYYY-MM.md
+- Quality over brevity in AGENTS.md (comprehensive > minimal)
+- AGENTS.md = primary file, CLAUDE.md → AGENTS.md symlink
+
+**Claude Code integration:**
+- Check .claude/commands/ for custom slash commands
+- Document MCP servers if configured
+- Note project-specific hooks if used
+
 ## Analysis Phase
 
 ### 1. Check Structure
@@ -28,6 +45,14 @@ Verify:
 - TODO.md: Has "Done" sections or completed tasks
 - PLAN.md: Completed phases, detailed task breakdowns (should be in TODO.md)
 
+**AGENTS.md optimization needed:**
+- Missing CLAUDE.md symlink or symlink points elsewhere
+- Uses prose instead of tables/lists
+- Lacks clear ## sections or poor hierarchy
+- Duplicates ai/ file content instead of using pointers
+- Missing comprehensive coverage (commands, standards, structure)
+- Not documenting Claude Code integration (.claude/commands/, MCP, hooks)
+
 **Anti-patterns:**
 - ai/archive/ directory exists (use git instead)
 - Code files in ai/ (belongs in src/)
@@ -49,6 +74,14 @@ Show structured report:
 - [ ] TODO.md: [N] completed tasks in "Done" section
 - [ ] PLAN.md: [N] completed phases
 
+**AGENTS.md optimization:**
+- [ ] Symlink: CLAUDE.md → AGENTS.md [correct / missing / wrong target]
+- [ ] Format: [N] prose sections need conversion to tables/lists
+- [ ] Duplication: [N] sections duplicate ai/ content
+- [ ] Structure: [missing sections / poor hierarchy / good]
+- [ ] Coverage: [missing: commands/standards/structure]
+- [ ] Claude Code: [.claude/ integration not documented]
+
 **Anti-patterns:**
 - [ ] ai/archive/ exists
 - [ ] Code files in ai/
@@ -59,7 +92,7 @@ Show structured report:
 - ai/BENCHMARK_NOV2025.md
 ```
 
-If no issues: "✓ ai/ directory follows best practices" and exit.
+If no issues: "✓ ai/ directory and AGENTS.md follow best practices" and exit.
 
 ### 4. Get Approval
 
@@ -140,18 +173,63 @@ Commit after each change.
 - Identify overlapping content
 - Keep permanent docs in docs/, working context in ai/
 
-### 11. Update AGENTS.md
+### 11. Optimize AGENTS.md
 
-Ensure it reflects correct file purposes:
-```markdown
-- ai/PLAN.md — Dependencies, architecture, scope (optional, only if 3+ phases)
-- ai/STATUS.md — Current state (read first, updated every session)
-- ai/TODO.md — Active tasks only
-- ai/DECISIONS.md — Active architectural decisions
-- ai/RESEARCH.md — Research index
-- ai/research/ — Research findings (optional)
-- ai/design/ — Design documents (optional)
+**Check symlink relationship:**
+```bash
+ls -la AGENTS.md CLAUDE.md
 ```
+Expected: `CLAUDE.md → AGENTS.md` (AGENTS.md is primary file, CLAUDE.md symlink for Claude Code)
+
+**Optimize format (PRACTICES.md lines 273-295):**
+
+Verify AGENTS.md uses machine-readable structure:
+- [ ] Tables, lists, code blocks (not prose)
+- [ ] Clear ## sections with logical hierarchy
+- [ ] Well-structured: easy to parse, comprehensive coverage
+- [ ] No duplication with ai/ files (use pointers: "See ai/STATUS.md for current state")
+- [ ] Quality over brevity: well-structured 500 lines > poorly organized 100 lines
+
+**What belongs in AGENTS.md:**
+- ✅ Project overview, tech stack, architecture
+- ✅ Build/test/deploy commands
+- ✅ Code standards, naming conventions
+- ✅ Development workflow
+- ✅ Project structure explanation
+- ✅ Pointers to ai/ files: "See ai/STATUS.md for current state"
+
+**What does NOT belong:**
+- ❌ Current issues, blockers (→ ai/STATUS.md)
+- ❌ Active tasks, TODO items (→ ai/TODO.md)
+- ❌ Recent learnings, metrics (→ ai/STATUS.md)
+- ❌ Detailed tactical roadmap (→ ai/PLAN.md)
+- ❌ Duplicating ai/ file content
+
+**Verify ai/ structure documented:**
+```markdown
+## Project Structure
+- AI working context: ai/
+  - PLAN.md — Dependencies, architecture, scope (optional, only if 3+ phases)
+  - STATUS.md — Current state (read first, updated every session)
+  - TODO.md — Active tasks only
+  - DECISIONS.md — Active architectural decisions
+  - RESEARCH.md — Research index
+  - research/ — Research findings (optional)
+  - design/ — Design documents (optional)
+```
+
+**Claude Code integration:**
+- [ ] Mention custom slash commands if in .claude/commands/
+- [ ] Note MCP servers if configured
+- [ ] Document project-specific hooks if used
+
+**Action:**
+1. Read AGENTS.md
+2. Identify prose sections → convert to tables/lists
+3. Find duplicated ai/ content → replace with pointers
+4. Verify comprehensive coverage (commands, standards, structure)
+5. Ensure clear ## sections
+6. Commit: `git add AGENTS.md && git commit -m "Optimize AGENTS.md - structured format, removed duplication"`
 
 ## Verification
 
@@ -164,7 +242,11 @@ Check:
 - [ ] PLAN.md focused on current + next 1-2 phases
 - [ ] No ai/archive/ directory
 - [ ] No code files in ai/
-- [ ] AGENTS.md updated
+- [ ] CLAUDE.md → AGENTS.md symlink correct
+- [ ] AGENTS.md uses tables/lists (not prose)
+- [ ] AGENTS.md has clear ## sections
+- [ ] AGENTS.md has no duplication with ai/ files
+- [ ] AGENTS.md comprehensive (commands, standards, structure)
 
 ## Summary
 
@@ -181,6 +263,12 @@ Show:
 - DECISIONS.md: [action taken - organized/split/cleaned]
 - TODO.md: Removed [N] completed tasks
 - PLAN.md: Pruned to current + next phases
+
+**AGENTS.md optimization:**
+- Symlink: CLAUDE.md → AGENTS.md ✓
+- Format: [converted X prose sections to tables/lists]
+- Duplication: [removed Y duplicated sections, added pointers]
+- Structure: [X clear sections, comprehensive coverage]
 
 **Anti-patterns fixed:**
 - [list if any: removed ai/archive/, moved code files, deduplicated docs]

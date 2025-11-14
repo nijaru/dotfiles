@@ -1,6 +1,18 @@
 Audit and maintain AI agent context files following current best practices.
 
-**Purpose**: Apply file maintenance practices to ai/ directory. Remove time-tracking artifacts, prune historical content, organize decisions, keep files current.
+**Purpose**: Audit and maintain AI agent context files. Apply best practices to ai/ directory - the AI agent's workspace for maintaining project state across sessions.
+
+**Goals:**
+- Remove time-tracking artifacts (agents use git, not calendars)
+- Prune historical content from session files (trust git history)
+- Organize reference files in subdirectories
+- Optimize token efficiency (session files <500 lines, details in subdirs)
+- Keep files current and focused on active work
+
+**ai/ is for AI session context:**
+- **Session files** (root): Read every session - keep minimal, current (<500 lines)
+- **Reference files** (subdirs): Read only when needed - can be any size
+- Move detailed content to subdirectories to minimize tokens per session
 
 **Reference**: github.com/nijaru/agent-contexts PRACTICES.md
 
@@ -45,6 +57,13 @@ Verify:
 - TODO.md: Has "Done" sections or completed tasks
 - PLAN.md: Completed phases, detailed task breakdowns (should be in TODO.md)
 
+**Token efficiency issues:**
+- Session files >500 lines (move detailed content to subdirectories)
+- Detailed research in RESEARCH.md (should be in ai/research/)
+- All decisions in DECISIONS.md when >50 entries (split to ai/decisions/)
+- Design specs in root (should be in ai/design/)
+- Missing subdirectories (research/, design/, decisions/)
+
 **AGENTS.md optimization needed:**
 - Missing CLAUDE.md symlink or symlink points elsewhere
 - Uses prose instead of tables/lists
@@ -52,11 +71,13 @@ Verify:
 - Duplicates ai/ file content instead of using pointers
 - Missing comprehensive coverage (commands, standards, structure)
 - Not documenting Claude Code integration (.claude/commands/, MCP, hooks)
+- Doesn't explain ai/ is for AI session context management
 
 **Anti-patterns:**
 - ai/archive/ directory exists (use git instead)
 - Code files in ai/ (belongs in src/)
 - Duplicate content between docs/ and ai/
+- Human documentation in ai/ (belongs in docs/)
 
 ### 3. Present Findings
 
@@ -74,18 +95,27 @@ Show structured report:
 - [ ] TODO.md: [N] completed tasks in "Done" section
 - [ ] PLAN.md: [N] completed phases
 
+**Token efficiency:**
+- [ ] Session file sizes: STATUS [N] lines, TODO [N] lines, DECISIONS [N] lines, RESEARCH [N] lines
+- [ ] Files >500 lines: [list files]
+- [ ] Detailed research in RESEARCH.md: [Y/N] (should be in ai/research/)
+- [ ] Subdirectories exist: research/ [Y/N], design/ [Y/N], decisions/ [Y/N]
+- [ ] Estimated tokens per session: [X] (target: <2,000)
+
 **AGENTS.md optimization:**
 - [ ] Symlink: CLAUDE.md → AGENTS.md [correct / missing / wrong target]
 - [ ] Format: [N] prose sections need conversion to tables/lists
 - [ ] Duplication: [N] sections duplicate ai/ content
 - [ ] Structure: [missing sections / poor hierarchy / good]
 - [ ] Coverage: [missing: commands/standards/structure]
+- [ ] AI context explanation: [missing / present]
 - [ ] Claude Code: [.claude/ integration not documented]
 
 **Anti-patterns:**
 - [ ] ai/archive/ exists
 - [ ] Code files in ai/
 - [ ] Duplicate docs/ and ai/ content
+- [ ] Human docs in ai/ (should be in docs/)
 
 **Files with real dates (GOOD - keeping):**
 - ai/research/ANALYSIS_2025-11-05.md
@@ -173,7 +203,49 @@ Commit after each change.
 - Identify overlapping content
 - Keep permanent docs in docs/, working context in ai/
 
-### 11. Optimize AGENTS.md
+### 11. Optimize Token Efficiency
+
+**Check session file sizes:**
+```bash
+wc -l ai/*.md
+```
+
+**Move detailed content to subdirectories:**
+
+**If RESEARCH.md >300 lines:**
+1. Identify research topics (sections >200 lines)
+2. Extract to ai/research/{topic}.md
+3. Update RESEARCH.md to index format:
+   ```markdown
+   ## Database Selection (2025-01-15)
+   **Finding:** PostgreSQL best fit
+   **Decision:** Proceeding with PostgreSQL
+   → Details: ai/research/database-comparison.md
+   ```
+4. Commit: `git add ai/RESEARCH.md ai/research/ && git commit -m "Move detailed research to subdirectory - token efficiency"`
+
+**If DECISIONS.md >500 lines:**
+1. Check for superseded decisions → move to ai/decisions/superseded-YYYY-MM.md
+2. If still >500 lines, split by topic → ai/decisions/{architecture,database,etc}.md
+3. Keep index in DECISIONS.md with recent decisions
+4. Commit changes
+
+**If design content in root:**
+1. Move to ai/design/{component}.md
+2. Reference from PLAN.md or STATUS.md
+3. Commit: `git add ai/design/ && git commit -m "Organize design specs in subdirectory"`
+
+**Verify subdirectories exist:**
+```bash
+mkdir -p ai/research ai/design ai/decisions
+```
+
+**Token savings:**
+- Before: Session files = [X] lines (~[X] tokens)
+- After: Session files = [Y] lines (~[Y] tokens), reference files loaded only when needed
+- Savings: ~[Z] tokens per session ([%] reduction)
+
+### 12. Optimize AGENTS.md
 
 **Check symlink relationship:**
 ```bash
@@ -205,17 +277,31 @@ Verify AGENTS.md uses machine-readable structure:
 - ❌ Detailed tactical roadmap (→ ai/PLAN.md)
 - ❌ Duplicating ai/ file content
 
-**Verify ai/ structure documented:**
+**Verify ai/ structure documented with purpose:**
 ```markdown
 ## Project Structure
-- AI working context: ai/
-  - PLAN.md — Dependencies, architecture, scope (optional, only if 3+ phases)
-  - STATUS.md — Current state (read first, updated every session)
-  - TODO.md — Active tasks only
-  - DECISIONS.md — Active architectural decisions
-  - RESEARCH.md — Research index
-  - research/ — Research findings (optional)
-  - design/ — Design documents (optional)
+
+| Directory | Purpose |
+|-----------|---------|
+| ai/ | **AI session context** - Agent workspace for tracking state across sessions |
+
+### AI Context Organization
+
+**Purpose:** AI uses ai/ to maintain continuity between sessions
+
+**Session files** (ai/ root - read every session):
+- STATUS.md — Current state, metrics, blockers (read FIRST)
+- TODO.md — Active tasks only
+- DECISIONS.md — Active architectural decisions
+- RESEARCH.md — Research findings index
+- PLAN.md — Strategic roadmap (optional)
+
+**Reference files** (subdirectories - loaded only when needed):
+- research/ — Detailed research (>200 lines per topic)
+- design/ — Design specifications
+- decisions/ — Superseded/split decisions
+
+**Purpose:** AI uses ai/ to maintain continuity between sessions. Session files kept minimal (<500 lines) for token efficiency. Detailed content in subdirectories loaded on demand.
 ```
 
 **Claude Code integration:**
@@ -225,26 +311,31 @@ Verify AGENTS.md uses machine-readable structure:
 
 **Action:**
 1. Read AGENTS.md
-2. Identify prose sections → convert to tables/lists
-3. Find duplicated ai/ content → replace with pointers
-4. Verify comprehensive coverage (commands, standards, structure)
-5. Ensure clear ## sections
-6. Commit: `git add AGENTS.md && git commit -m "Optimize AGENTS.md - structured format, removed duplication"`
+2. Add ai/ directory explanation if missing (session context management)
+3. Identify prose sections → convert to tables/lists
+4. Find duplicated ai/ content → replace with pointers
+5. Verify comprehensive coverage (commands, standards, structure)
+6. Ensure clear ## sections
+7. Commit: `git add AGENTS.md && git commit -m "Optimize AGENTS.md - structured format, explain ai/ purpose"`
 
 ## Verification
 
 Check:
 - [ ] No time estimates in PLAN.md (unless external deadline confirmed)
 - [ ] No progress markers or artificial time tracking
-- [ ] STATUS.md focused on current state only
-- [ ] DECISIONS.md organized (superseded moved, topics split if needed)
-- [ ] TODO.md has no completed tasks
-- [ ] PLAN.md focused on current + next 1-2 phases
+- [ ] STATUS.md focused on current state only (<200 lines)
+- [ ] DECISIONS.md organized (superseded moved, topics split if needed, <500 lines)
+- [ ] TODO.md has no completed tasks (<300 lines)
+- [ ] PLAN.md focused on current + next 1-2 phases (<400 lines)
+- [ ] RESEARCH.md is index only (<300 lines, detailed research in ai/research/)
+- [ ] Subdirectories exist: ai/research/, ai/design/, ai/decisions/
+- [ ] Session files <500 lines each (detailed content in subdirs)
 - [ ] No ai/archive/ directory
 - [ ] No code files in ai/
 - [ ] CLAUDE.md → AGENTS.md symlink correct
 - [ ] AGENTS.md uses tables/lists (not prose)
 - [ ] AGENTS.md has clear ## sections
+- [ ] AGENTS.md explains ai/ is for AI session context
 - [ ] AGENTS.md has no duplication with ai/ files
 - [ ] AGENTS.md comprehensive (commands, standards, structure)
 
@@ -259,21 +350,32 @@ Show:
 - Deleted [N] WEEK*_DAY*.md files (info consolidated)
 
 **File maintenance:**
-- STATUS.md: Pruned to [current size] (removed historical content)
-- DECISIONS.md: [action taken - organized/split/cleaned]
-- TODO.md: Removed [N] completed tasks
-- PLAN.md: Pruned to current + next phases
+- STATUS.md: Pruned to [current size] lines (removed historical content)
+- DECISIONS.md: [action taken - organized/split/cleaned] ([size] lines)
+- TODO.md: Removed [N] completed tasks ([size] lines)
+- PLAN.md: Pruned to current + next phases ([size] lines)
+- RESEARCH.md: [converted to index / kept as-is] ([size] lines)
+
+**Token efficiency:**
+- Session files total: [X] lines (~[Y] tokens per session)
+- Moved [N] detailed docs to subdirectories (loaded only when needed)
+- Subdirectories: research/ ([N] files), design/ ([N] files), decisions/ ([N] files)
+- Estimated token savings: [X] tokens per session ([%] reduction)
 
 **AGENTS.md optimization:**
 - Symlink: CLAUDE.md → AGENTS.md ✓
 - Format: [converted X prose sections to tables/lists]
 - Duplication: [removed Y duplicated sections, added pointers]
 - Structure: [X clear sections, comprehensive coverage]
+- AI context explanation: [added / already present]
 
 **Anti-patterns fixed:**
 - [list if any: removed ai/archive/, moved code files, deduplicated docs]
 
-**Result:** ai/ directory current, focused, efficient (minimal irrelevant content)
+**Result:** ai/ directory optimized for AI session context management
+- Session files minimal and current (<500 lines each)
+- Reference files organized in subdirectories
+- Token-efficient structure (load only what's needed per session)
 
 **Note:** All historical content preserved in git history
 ```

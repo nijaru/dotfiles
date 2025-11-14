@@ -40,6 +40,8 @@ Reference: github.com/nijaru/agent-contexts
 
 ## Development
 
+**Do it right the first time.** Rushing leads to bugs, tech debt, and rework. Research, understand requirements, plan, implement.
+
 ### Code Quality
 - Research best practices first (state of the art)
 - Fix root cause, no workarounds

@@ -3,5 +3,8 @@
   "alwaysThinkingEnabled": true,
   "permissions": {
     "defaultMode": "bypassPermissions"
+  },
+  "hooks": {
+    "onSessionStart": "echo -ne '\\033]0;'\"$(basename \"$(pwd)\")\"'\\007'"
   }
 }

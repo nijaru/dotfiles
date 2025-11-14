@@ -40,14 +40,17 @@ if [[ "$cwd" == "$HOME"* ]]; then
 fi
 
 # Calculate token usage from transcript
-token_info=""
+estimated_tokens=0
 if [ -f "$transcript_path" ]; then
-    # Rough token estimation: average ~4 chars per token
-    file_size=$(wc -c < "$transcript_path")
-    estimated_tokens=$((file_size / 4))
-elif [ -n "$transcript_path" ]; then
-    # Transcript path provided but file doesn't exist yet (0 tokens)
-    estimated_tokens=0
+    # Parse actual token usage from the last assistant message
+    # Total context = input_tokens + cache_read + cache_creation (all count toward 200k limit)
+    last_message=$(tail -20 "$transcript_path" | jq -c 'select(.type == "assistant" and .message.usage)' 2>/dev/null | tail -1)
+    if [ -n "$last_message" ]; then
+        input_tokens=$(echo "$last_message" | jq -r '.message.usage.input_tokens // 0' 2>/dev/null)
+        cache_read=$(echo "$last_message" | jq -r '.message.usage.cache_read_input_tokens // 0' 2>/dev/null)
+        cache_creation=$(echo "$last_message" | jq -r '.message.usage.cache_creation_input_tokens // 0' 2>/dev/null)
+        estimated_tokens=$((input_tokens + cache_read + cache_creation))
+    fi
 fi
 
 # Build token info based on flags

@@ -14,24 +14,27 @@
   - Delete temp artifacts after use, never commit
 
 ### ai/ Directory
-Session state. Read first, update on exit.
+**AI session context** - workspace for tracking project state across sessions. Read first, update on exit.
 
 | File | Purpose |
 |------|---------|
 | `AGENTS.md` | Project overview (symlink: `CLAUDE.md` → `AGENTS.md`) |
-| `ai/STATUS.md` | Current phase, blockers (read FIRST) |
+| `ai/STATUS.md` | Current state, blockers (read FIRST) |
 | `ai/TODO.md` | Active tasks only |
 | `ai/PLAN.md` | Architecture, dependencies (if 3+ phases) |
 | `ai/DECISIONS.md` | Active decisions, trade-offs |
-| `ai/RESEARCH.md` + `ai/research/` | Research inputs |
-| `ai/design/` | Design outputs |
+| `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
+| `ai/design/` | Design specifications |
+| `ai/decisions/` | Superseded/split decisions |
 | `docs/` | User documentation |
 
-**Format:** Tables/lists. Answer first, evidence second. Exec summary if >500 lines.
+**Format:** All ai/ files - tables/lists/structured (not prose). Answer first, evidence second. Exec summary if lengthy.
 
-**Maintenance:** Keep current only. Delete completed items. Archive old decisions to `ai/decisions/superseded-YYYY-MM.md`.
+**Maintenance:** Keep current/active only. Delete historical/completed content. Archive superseded decisions to `ai/decisions/superseded-YYYY-MM.md`.
 
-Anti-pattern: Time tracking files (WEEK*_DAY*.md)
+**Principle:** Session files (ai/ root) read every session - keep focused on current work. Reference files (subdirs) loaded on demand - detailed content with zero token cost unless accessed.
+
+Anti-pattern: Time tracking files (WEEK*_DAY*.md), narrative prose, size-based decisions
 
 Reference: github.com/nijaru/agent-contexts
 

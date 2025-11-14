@@ -5,6 +5,6 @@
     "defaultMode": "bypassPermissions"
   },
   "hooks": {
-    "onSessionStart": "echo -ne '\\033]0;'\"$(basename \"$(pwd)\")\"'\\007'"
+    "onSessionStart": "printf '\\033]2;%s\\007' (basename (pwd))"
   }
 }

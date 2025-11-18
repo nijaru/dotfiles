@@ -1,130 +1,66 @@
-Analyze project and set up AI agent configuration files.
+Initialize AI agent context management for project.
 
-**Philosophy:**
-- AGENTS.md = primary file (tool-agnostic, works with all AI coding agents)
-- CLAUDE.md → AGENTS.md = symlink (Claude Code compatibility)
-- Reference: github.com/nijaru/agent-contexts PRACTICES.md
-- Optimize AGENTS.md for AI consumption: tables, lists, clear sections, structured
-- Quality over brevity: well-structured 500 lines > poorly organized 100 lines
-- DO NOT duplicate global ~/.claude/CLAUDE.md or ai/ files
-- NO time estimates in PLAN.md unless external deadline exists
+**Reference:** github.com/nijaru/agent-contexts PRACTICES.md
+**Philosophy:** Session files (<500 lines, current only) + Reference subdirs (on-demand) = token efficiency
 
-**ai/ directory purpose:**
-- **AI session context management** - AI agent's workspace for tracking project state between sessions
-- **Session files** (ai/ root): Read every session - keep current/active work only
-- **Reference files** (subdirs): Read only when needed - no token cost unless accessed
-- **Not for humans** - User documentation goes in docs/, AI working context in ai/
-- **Token efficiency** - Subdirectories prevent loading unused context every session
-- **Scales with project** - Start minimal (STATUS.md + TODO.md), grow as needed
-- **Prune based on relevance** - Delete historical/completed content, not based on size
+## Execution Guidelines
 
-**Reading order:** PLAN → STATUS → TODO → DECISIONS → RESEARCH
-(Load subdirectories only when context requires: research/, design/, decisions/)
+- Run independent operations in parallel (file reads, git commands, directory creation)
+- Use extended reasoning for complex projects (>100 files, multi-phase)
+- Research current best practices before implementing (research/ → design/ → code)
+- Apply detection rigorously: fill ALL detected info, [TBD] only if truly cannot detect
 
-**Claude Code best practices:**
-- Project uses AGENTS.md/CLAUDE.md (this file)
-- Global config in ~/.claude/CLAUDE.md (workflow rules, stack preferences)
-- Custom slash commands in .claude/commands/ (optional)
-- MCP servers in ~/.claude/settings.json (optional)
-- Hooks in project settings.local.json (optional)
+## 1. Detect Project Info
 
-**AI coding agent best practices:**
-- Research current best practices, don't rely on stale patterns
-- Update STATUS.md every session (current state + learnings)
-- Trust git history - delete completed/historical content
-- Use tables/lists over prose for efficient token usage
-- Separate permanent docs (docs/) from working context (ai/)
-- Focus PLAN.md on dependencies ("A before B"), not time estimates
-- Keep TODO.md current only (no "Done" sections)
-- Archive superseded decisions to ai/decisions/superseded-YYYY-MM.md
-- Quality over brevity in AGENTS.md (comprehensive > minimal)
+| Item | Detection Sources | Parallel Read |
+|------|------------------|---------------|
+| Name | git remote, package.json, Cargo.toml, pyproject.toml, go.mod | ✓ |
+| Language | File extensions (.rs/.py/.ts), package managers | ✓ |
+| Framework | package.json deps, Cargo.toml deps, imports | ✓ |
+| Commands | package.json scripts, Makefile, Cargo.toml, justfile | ✓ |
+| Description | README first paragraph | ✓ |
+| Complexity | README/docs for: "phases", "milestones", "roadmap", "v1/v2" | ✓ |
+| Existing config | AGENTS.md, CLAUDE.md (check symlink target) | ✓ |
+| Claude Code | .claude/commands/, settings.json, settings.local.json | ✓ |
 
-## Tasks
+**Action:** Read all sources in parallel. Consolidate detected info.
 
-**Goal:** Set up AI agent context management for this project
-
-AI will use ai/ directory to:
-- Track project state across sessions (STATUS.md)
-- Manage active work (TODO.md)
-- Record architectural decisions (DECISIONS.md)
-- Index research findings (RESEARCH.md, research/)
-- Document designs before implementation (design/)
-- Plan multi-phase work (PLAN.md - optional)
-
-**Principle:** Start minimal, scale complexity with project size
-
-### 1. Analyze Project
-
-Detect and gather:
-- Git repo (check .git/)
-- Project name (git remote, package.json, Cargo.toml, pyproject.toml)
-- Languages/frameworks (file extensions, package managers, config files)
-- Build/test/run commands (package.json scripts, Makefile, Cargo.toml)
-- Project description (README first paragraph)
-- Phases/milestones/roadmap (README, docs/)
-- Existing CLAUDE.md or AGENTS.md
-
-**CRITICAL**: Fill in ALL detected info. Use [TBD] ONLY when cannot detect.
-
-### 2. Handle Existing Files
+## 2. Handle Existing Config
 
 | Scenario | Action |
 |----------|--------|
 | Neither exists | Create AGENTS.md + symlink CLAUDE.md → AGENTS.md |
-| Only AGENTS.md (file) | Keep as-is + create symlink CLAUDE.md → AGENTS.md |
-| Only CLAUDE.md | Rename to AGENTS.md + create symlink CLAUDE.md → AGENTS.md |
-| Both, CLAUDE.md → AGENTS.md | Already correct, update content if needed |
-| Both files | Merge into AGENTS.md + remove CLAUDE.md + create symlink CLAUDE.md → AGENTS.md |
+| Only AGENTS.md | Add symlink CLAUDE.md → AGENTS.md |
+| Only CLAUDE.md | Rename → AGENTS.md + create symlink |
+| CLAUDE.md → AGENTS.md | Update content if needed |
+| Both files | Merge → AGENTS.md, remove old CLAUDE.md, create symlink |
 | CLAUDE.md → elsewhere | Ask user before modifying |
 
-### 3. Determine PLAN.md and Directory Structure
+## 3. Determine Structure
 
-**Check project complexity indicators:**
-- README/docs mentions: "phases", "milestones", "roadmap", "v1.0", "v2.0", quarters
-- Multi-phase development
-- Critical dependencies between components
-- External deadlines
+| Project Complexity | Files | Subdirs | PLAN.md |
+|-------------------|-------|---------|---------|
+| Minimal (<1mo) | STATUS.md, TODO.md | research/, design/, decisions/ | ⊘ Skip |
+| Standard (1-6mo) | +DECISIONS.md, RESEARCH.md | research/, design/, decisions/ | ⊘ Skip |
+| Complex (6+mo) | +PLAN.md | research/, design/, decisions/ | ✓ Create |
 
-**Determine structure:**
+**PLAN.md criteria:** 3+ phases OR critical dependencies OR external deadline
+**Subdirs:** Always create (empty okay - 0 token cost, clear structure)
 
-| Project Size | Duration | Files to Create | Subdirs |
-|--------------|----------|-----------------|---------|
-| **Minimal** | <1 month | STATUS.md, TODO.md | When needed (3+ files) |
-| **Standard** | 1-6 months | +DECISIONS.md, RESEARCH.md | When needed (3+ files) |
-| **Complex** | 6+ months | +PLAN.md | research/, design/ as needed |
-
-**Questions to ask:**
-- **If found indicators** → create PLAN.md
-- **If unclear** → ask: "Does this project have 3+ phases or critical dependencies?"
-- **If no indicators** → skip PLAN.md (can add later)
-- **Subdirectories** → create research/ and design/ dirs, populate as needed
-
-### 4. Create ai/ Directory Structure
-
-**Philosophy:** Start minimal, add complexity as project grows
+## 4. Create Structure
 
 ```bash
 mkdir -p ai/research ai/design ai/decisions
 ```
 
-**Always create subdirectories** (even if empty initially):
-- ai/research/ - Detailed research findings (loaded on demand)
-- ai/design/ - Design specifications (loaded on demand)
-- ai/decisions/ - Decision organization (used when DECISIONS.md >50 entries)
+**Templates:** See PRACTICES.md lines 277-291 (TODO), 293-314 (STATUS), 316-339 (DECISIONS), 341-353 (RESEARCH), 247-275 (PLAN if needed)
 
-**Why create empty dirs:**
-- Clear structure for AI to use
-- No token cost (empty dirs don't consume tokens)
-- Ready when needed (AI knows where to put detailed content)
-
-**Token efficiency:**
-- Session files (ai/*.md): ~1-2K tokens per session
-- Reference files (ai/*/): 0 tokens unless AI explicitly loads them
+**File initialization:**
 
 **ai/TODO.md:**
 ```markdown
 ## High Priority
-- [ ]
+- [ ] [Add tasks from detection: missing tests, TODO comments, etc.]
 
 ## In Progress
 - [ ]
@@ -132,7 +68,7 @@ mkdir -p ai/research ai/design ai/decisions
 ## Backlog
 - [ ]
 
-**Note:** Keep current work only. Delete completed tasks immediately (no "Done" section).
+**Note:** Keep current work only. Delete completed immediately (no "Done" section).
 ```
 
 **ai/STATUS.md:**
@@ -140,275 +76,192 @@ mkdir -p ai/research ai/design ai/decisions
 ## Current State
 | Metric | Value | Updated |
 |--------|-------|---------|
-| | | [TODAY'S DATE] |
+| [Detect if applicable: test coverage, build status] | | YYYY-MM-DD |
 
 ## What Worked
--
+- Initial setup complete
 
 ## What Didn't Work
 -
 
 ## Active Work
-Initial setup complete.
+Initial AI context setup.
 
 ## Blockers
 -
 
-**Note:** Update this file EVERY session with current state, learnings, and progress.
-Prune historical/completed content regularly (trust git history).
+**Note:** Update EVERY session. Prune historical content (trust git history).
 ```
 
-**ai/DECISIONS.md:**
-```markdown
-<!-- AI Decision Log
+**ai/DECISIONS.md:** (Include PRACTICES.md template lines 316-339 as comment)
 
-This file tracks architectural decisions for AI context across sessions.
-When becomes difficult to navigate: split to ai/decisions/{topic}.md
-When decisions superseded: move to ai/decisions/superseded-YYYY-MM.md
+**ai/RESEARCH.md:** (Include PRACTICES.md template lines 341-353 as comment)
 
-Template:
+**ai/PLAN.md (if complex):** (Include PRACTICES.md template lines 247-275)
 
-## YYYY-MM-DD: Decision Title
+## 5. Create AGENTS.md
 
-**Context**: [situation requiring decision]
-**Decision**: [choice made]
-**Rationale**:
-- [reason 1]
-- [reason 2]
+**Structure:** Tables/lists/code blocks (machine-readable). Comprehensive coverage. NO duplication with ai/ (use pointers).
 
-**Tradeoffs**:
-| Pro | Con |
-|-----|-----|
-| | |
+**Include:**
+- Project overview (detected description)
+- Structure table (docs/, ai/, src/, tests/, etc.)
+- AI context organization (session vs reference files - see template)
+- Tech stack table (detected: language, framework, package manager, tools)
+- Commands (detected: build/test/run or TBD)
+- Code standards (detect from existing code or empty table)
+- Claude Code integration (if .claude/ exists: commands, MCP, hooks)
+- Current focus pointers (ai/STATUS.md, ai/PLAN.md if exists)
 
-**Evidence**: [link to ai/research/ if applicable]
-**Commits**: [hash]
-
----
--->
-```
-
-**ai/RESEARCH.md:**
-```markdown
-<!-- Research Index
-
-This file indexes research findings for AI context.
-Detailed research goes in ai/research/{topic}.md
-Keep this file as index only (summaries + pointers).
-
-Template:
-
-## Topic (YYYY-MM-DD)
-**Sources**: [links, books, docs]
-**Key Finding**: [main takeaway]
-**Decision**: [action taken or pending]
-→ Details: ai/research/topic.md  # if detailed research exists
-
-## Open Questions
-- [ ] Question needing research
--->
-```
-
-**ai/PLAN.md** (only if determined needed):
-```markdown
-## Goal
-[What building? Why? External deadline if exists]
-
-## Phases
-| Phase | Status | Deliverables | Success Criteria |
-|-------|--------|--------------|------------------|
-| Phase 1 | ← CURRENT | | |
-| Phase 2 | Planned | | |
-
-## Dependencies
-| Must Complete | Before Starting | Why |
-|---------------|-----------------|-----|
-| | | |
-
-## Technical Architecture
-| Component | Approach | Rationale |
-|-----------|----------|-----------|
-| | | |
-
-## Out of Scope
-- [deferred features]
-
-**Note**: Skip time estimates (days/weeks/quarters) unless external deadline exists. Focus: what blocks what.
-```
-
-### 5. Create AGENTS.md
-
-**CRITICAL: Follow PRACTICES.md optimization (lines 273-295)**
-
-Use machine-readable structure:
-- Tables, lists, code blocks (NOT prose)
-- Clear ## sections with logical hierarchy
-- Comprehensive coverage (all commands, standards, structure)
-- NO duplication with ai/ files (use pointers)
-
-**What to include:**
-- ✅ Project overview, description
-- ✅ Technology stack (detected languages, frameworks, tools)
-- ✅ Build/test/deploy commands
-- ✅ Code standards, naming conventions
-- ✅ Development workflow
-- ✅ Project structure explanation
-- ✅ Pointers to ai/ files: "See ai/STATUS.md for current state"
-- ✅ Claude Code integration (.claude/commands/, MCP servers, hooks if exist)
-
-**What NOT to include:**
-- ❌ Current issues/blockers (→ ai/STATUS.md)
-- ❌ Active tasks/TODOs (→ ai/TODO.md)
-- ❌ Recent learnings/metrics (→ ai/STATUS.md)
-- ❌ Detailed roadmap (→ ai/PLAN.md)
-- ❌ Duplicating ai/ file content
-
-**Template using ALL detected information:**
+**Template:**
 
 ```markdown
 # [DETECTED PROJECT NAME]
 
-[Description from README or "TBD"]
+[DETECTED DESCRIPTION or TBD]
 
 ## Project Structure
 
 | Directory | Purpose |
 |-----------|---------|
-| docs/ | Permanent user/team documentation |
-| ai/ | **AI session context** - Agent workspace for tracking state across sessions |
-[List detected dirs: src/, lib/, tests/, etc.]
+| docs/ | User/team documentation |
+| ai/ | **AI session context** - workspace for tracking state across sessions |
+[DETECTED: src/, lib/, tests/, etc.]
 
 ### AI Context Organization
 
-**Purpose:** AI uses ai/ to maintain project context between sessions
+**Purpose:** AI maintains project context between sessions using ai/
 
-**Session files** (ai/ root - read every session):
+**Session files** (read every session):
+- ai/STATUS.md — Current state, metrics, blockers (read FIRST)
+- ai/TODO.md — Active tasks only
+- ai/DECISIONS.md — Architectural decisions
+- ai/RESEARCH.md — Research index
+[- ai/PLAN.md — Strategic roadmap (only if created)]
 
-| File | Purpose | Read Frequency |
-|------|---------|----------------|
-| ai/STATUS.md | Current state, metrics, blockers | Every session (read FIRST) |
-| ai/TODO.md | Active tasks only | Every session |
-| ai/DECISIONS.md | Active architectural decisions | Every session |
-| ai/RESEARCH.md | Research findings index | As needed |
-[- ai/PLAN.md | Strategic roadmap, dependencies | Major pivots  # only if created]
+**Reference files** (loaded on demand):
+- ai/research/ — Detailed research
+- ai/design/ — Design specs
+- ai/decisions/ — Archived decisions
 
-**Reference files** (subdirectories - loaded only when needed):
-
-| Directory | Purpose | When to Use |
-|-----------|---------|-------------|
-| ai/research/ | Detailed research findings | On demand |
-| ai/design/ | Design specifications, architecture docs | On demand |
-| ai/decisions/ | Superseded decisions, topic-based splits | When DECISIONS.md difficult to navigate |
-
-**Token efficiency:** Session files kept current/active only. Detailed content in subdirectories loaded only when AI needs them.
+**Token efficiency:** Session files = current work only. Details in subdirs.
 
 ## Technology Stack
 
 | Component | Technology |
 |-----------|-----------|
-| Language | [DETECTED - "Python 3.11", "TypeScript", "Rust"] |
-| Framework | [DETECTED - "Next.js", "FastAPI", "Axum", or "None"] |
-| Package Manager | [DETECTED - "uv", "bun", "cargo"] |
-[Other tools: database, testing, etc.]
+| Language | [DETECTED] |
+| Framework | [DETECTED or None] |
+| Package Manager | [DETECTED] |
+[DETECTED: database, testing, linting, etc.]
 
-## Development Commands
+## Commands
 
 ```bash
 # Build
-[DETECTED or "TBD"]
+[DETECTED or TBD]
 
 # Test
-[DETECTED or "TBD"]
+[DETECTED or TBD]
 
 # Run
-[DETECTED or "TBD"]
+[DETECTED or TBD]
+
+# Lint
+[DETECTED or TBD]
 ```
 
 ## Code Standards
 
-[Empty table unless patterns detected in codebase]
+[DETECT from existing code or provide empty table]
 
 | Aspect | Standard |
 |--------|----------|
-[Detected patterns like naming, formatting, imports, etc.]
+[naming, formatting, imports, error handling if detected]
 
 ## Claude Code Integration
 
-[Only if .claude/ directory exists:]
-| Feature | Status |
-|---------|--------|
-| Custom Commands | .claude/commands/[list detected] |
-| MCP Servers | [check settings.json] |
-| Project Hooks | [check settings.local.json] |
+[Only if .claude/ exists]
+| Feature | Details |
+|---------|---------|
+| Commands | [LIST from .claude/commands/] |
+| MCP Servers | [FROM settings.json] |
+| Hooks | [FROM settings.local.json or "None"] |
+
+## Development Workflow
+
+**Before implementing:**
+1. Research best practices → ai/research/{topic}.md
+2. Document decision → DECISIONS.md
+3. Design if complex → ai/design/{component}.md
+4. Implement → [src dir]
+5. Update STATUS.md with learnings
 
 ## Current Focus
 
-**Current state:** ai/STATUS.md (read first)
-[Only if PLAN.md: **Roadmap:** ai/PLAN.md]
+See ai/STATUS.md for current state[, ai/PLAN.md for roadmap]
 ```
 
-### 6. Verify
+**Create symlink:** `ln -s AGENTS.md CLAUDE.md`
 
-**File structure:**
+## 6. Verify & Report
+
+**Check (parallel):**
 ```bash
 ls -la AGENTS.md CLAUDE.md
 ls -la ai/
+wc -l AGENTS.md ai/*.md
 ```
 
-**Check AGENTS.md optimization:**
-- [ ] CLAUDE.md → AGENTS.md symlink correct
-- [ ] Uses tables, lists, code blocks (not prose)
-- [ ] Clear ## sections with logical hierarchy
-- [ ] Comprehensive coverage (tech stack, commands, standards)
-- [ ] NO duplication with ai/ files (uses pointers)
-- [ ] **Explains ai/ is for AI session context management**
-- [ ] Quality format: well-structured, easy to parse
-- [ ] Documents Claude Code integration if .claude/ exists
+**Verification:**
 
-**Check ai/ structure:**
-- [ ] ai/STATUS.md populated with template and notes
-- [ ] ai/TODO.md populated with sections and notes
-- [ ] ai/DECISIONS.md has template with usage guidance
-- [ ] ai/RESEARCH.md has template with usage guidance
-- [ ] ai/PLAN.md created if 3+ phases (or skipped)
-- [ ] ai/research/ directory exists (even if empty)
-- [ ] ai/design/ directory exists (even if empty)
-- [ ] ai/decisions/ directory exists (even if empty)
+| Check | Expected |
+|-------|----------|
+| Symlink | CLAUDE.md → AGENTS.md |
+| AGENTS.md format | Tables/lists, clear ## sections |
+| AGENTS.md content | Comprehensive, no ai/ duplication, explains ai/ purpose |
+| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md (+ PLAN.md if complex) |
+| ai/ subdirs | research/, design/, decisions/ exist |
+| Claude Code | Documented if .claude/ exists |
 
-## Output
+**Output:**
 
-Show structured report:
 ```markdown
-## Setup Complete
+## AI Context Setup Complete
 
 **Scenario:** [detected scenario from step 2]
 
-**AGENTS.md created:**
+**Project detected:**
+- Name: [detected]
+- Language: [detected]
+- Framework: [detected]
+- Build: [detected or TBD]
+- Test: [detected or TBD]
+- Complexity: [minimal/standard/complex]
+
+**AGENTS.md:** [X] lines
 - Symlink: CLAUDE.md → AGENTS.md ✓
-- Format: Tables/lists, clear sections ✓
-- Detected: [project name], [language], [framework], [package manager]
-- Commands: [build/test/run detected or TBD]
-- Standards: [detected patterns or empty]
-- Size: [X] lines
-- Claude Code: [.claude/commands/, MCP servers, hooks - or "none"]
+- Format: Tables/lists ✓
+- Claude Code: [commands/MCP/hooks or "none"]
 
-**ai/ directory:**
-| File | Status |
-|------|--------|
-| STATUS.md | ✓ Template |
-| TODO.md | ✓ Template |
-| DECISIONS.md | ✓ Template |
-| RESEARCH.md | ✓ Template |
-| PLAN.md | [✓ Created / ⊘ Skipped - reason] |
-| research/ | ✓ Directory |
-| design/ | ✓ Directory |
+**ai/ structure:**
+- STATUS.md ✓
+- TODO.md ✓
+- DECISIONS.md ✓
+- RESEARCH.md ✓
+- PLAN.md: [✓ created / ⊘ skipped - why]
+- Subdirs: research/, design/, decisions/ ✓
 
-**First 50 lines of AGENTS.md:**
-[show preview]
+**Preview AGENTS.md** (first 50 lines):
+[SHOW]
 
-**Next steps:**
+**Next:**
 1. Update ai/STATUS.md with current project state
-2. Add active tasks to ai/TODO.md
-3. Update AGENTS.md with project-specific details
-4. Commit: `git add . && git commit -m "Initialize AI agent context"`
+2. Add tasks to ai/TODO.md
+3. Commit: `git add . && git commit -m "Initialize AI context"`
 ```
+
+## Maintenance
+
+**Version:** 2025-11 (review quarterly or when PRACTICES.md changes)
+**Self-optimization:** Apply same token efficiency principles to this command

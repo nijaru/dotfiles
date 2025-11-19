@@ -1,6 +1,6 @@
 # MCP Configuration Across CLI Tools
 
-This document covers MCP server setup for Claude Code, Claude Desktop, Gemini CLI, and Amp CLI.
+This document covers MCP server setup for Claude Code, Claude Desktop, Gemini CLI, Amp CLI, Droid, and Opencode.
 
 ## Claude Code CLI
 
@@ -65,7 +65,7 @@ Each tool prompts for approval when first called.
 1. Update keys in `~/.config/chezmoi/chezmoi.toml`
 2. Run `chezmoi apply --force`
 3. Open new shell (loads new env vars from `secrets.fish`)
-4. **CLI tools** (Claude Code, Gemini, Amp, Droid): Automatically use new values via `${VAR}` expansion
+4. **CLI tools** (Claude Code, Gemini, Amp, Droid, Opencode): Automatically use new values via `${VAR}` expansion
 5. **Claude Desktop**: Restart app to reload config file
 
 ## Gemini CLI
@@ -128,6 +128,24 @@ All servers use `${VAR}` syntax to reference environment variables from `~/.conf
 
 Droid automatically loads `~/.factory/AGENTS.md` (symlinked to `~/.claude/CLAUDE.md`) for AI agent instructions.
 
+## Opencode CLI
+
+### MCP Server Configuration
+
+Servers are defined in `~/.config/opencode/opencode.json` (managed by chezmoi).
+
+### Current Servers (Opencode)
+
+All servers use `${VAR}` syntax in the `environment` field to reference environment variables from `~/.config/fish/secrets.fish`:
+
+- **context7**: No authentication (enabled)
+- **brave-search**: Uses `${BRAVE_API_KEY}` (enabled)
+- **exa**: Uses `${EXA_API_KEY}` (enabled)
+
+### AGENTS.md Integration
+
+Opencode automatically loads `~/.config/opencode/AGENTS.md` (symlinked to `~/.claude/CLAUDE.md`) for AI agent instructions.
+
 ## Cross-Machine Setup
 
 ```bash
@@ -138,5 +156,6 @@ chezmoi init --apply https://github.com/nijaru/dotfiles
 # - Gemini CLI
 # - Amp CLI
 # - Droid (Factory.ai CLI)
+# - Opencode CLI
 # Reminder: Add remote servers to Claude Desktop via UI Settings > Connectors
 ```

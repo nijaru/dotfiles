@@ -6,14 +6,6 @@
       "command": ["npx", "-y", "context7-mcp-server"],
       "enabled": true
     },
-    "brave-search": {
-      "type": "local",
-      "command": ["npx", "-y", "@brave/brave-search-mcp-server"],
-      "environment": {
-        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
-      },
-      "enabled": true
-    },
     "exa": {
       "type": "local",
       "command": ["npx", "-y", "exa-mcp-server"],

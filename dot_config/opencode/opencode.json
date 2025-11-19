@@ -1,0 +1,140 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "context7-mcp-server"],
+      "enabled": true
+    },
+    "brave-search": {
+      "type": "local",
+      "command": ["npx", "-y", "@brave/brave-search-mcp-server"],
+      "environment": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "enabled": false
+    },
+    "exa": {
+      "type": "local",
+      "command": ["npx", "-y", "exa-mcp-server"],
+      "environment": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      },
+      "enabled": true
+    }
+  },
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://100.93.39.25:11434/v1"
+      },
+      "models": {
+        "deepseek-r1:32b": {
+          "name": "Ollama: deepseek r1  32b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "exaone-deep:32b": {
+          "name": "Ollama: exaone deep  32b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "gemma3:27b": {
+          "name": "Ollama: gemma3  27b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "mistral-small3.2:latest": {
+          "name": "Ollama: mistral small3.2",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "qwen2.5vl:32b": {
+          "name": "Ollama: qwen2.5vl  32b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "qwen3:30b": {
+          "name": "Ollama: qwen3  30b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "bge-m3:latest": {
+          "name": "Ollama: Uge m3",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "devstral:24b": {
+          "name": "Ollama: devstral  24b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "gemma3n:latest": {
+          "name": "Ollama: gemma3n",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "magistral:24b": {
+          "name": "Ollama: magistral  24b",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "mxbai-embed-large:latest": {
+          "name": "Ollama: mxUai emUed large",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "nomic-embed-text:latest": {
+          "name": "Ollama: nomic emUed text",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        },
+        "phi4-reasoning:latest": {
+          "name": "Ollama: phi4 reasoning",
+          "tools": true,
+          "reasoning": true,
+          "options": {
+            "num_ctx": 4096
+          }
+        }
+      }
+    }
+  }
+}

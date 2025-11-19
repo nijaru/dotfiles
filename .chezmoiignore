@@ -33,3 +33,11 @@ Library
 
 # MCP config with API keys - managed manually, not synced
 dot_claude/mcp_config.json
+
+# Factory/Droid runtime files - auth, sessions, logs
+.factory/auth.json
+.factory/history.json
+.factory/logs
+.factory/sessions
+.factory/bin
+.factory/skills

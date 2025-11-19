@@ -109,11 +109,21 @@ Ask: "Apply maintenance to ai/? This will prune historical content (git preserve
 | WEEK*_DAY*.md | Read → consolidate info → delete | "Remove time-tracking files" |
 | Progress markers | Delete from all files | "Remove progress markers" |
 
+**Promote learnings (BEFORE pruning STATUS.md):**
+
+| Learning Type | Destination | Example |
+|---------------|-------------|---------|
+| Permanent project rule | AGENTS.md (Standards section) | "Always use UTC timestamps", "Never expose internal IDs in API" |
+| Permanent codebase quirk | ai/KNOWLEDGE.md or docs/internal/ | "Auth service has 30s cache", "DB migration order matters" |
+| Transient/Fixed | Delete | "Build was failing due to npm cache (now fixed)" |
+
+**Action:** Review STATUS.md "Recent Learnings" → Promote permanent knowledge → Then prune
+
 **Prune session files:**
 
 | File | Keep | Delete | Commit Message |
 |------|------|--------|----------------|
-| STATUS.md | Current metrics, active blockers, recent learnings (1-2 sessions) | Old pivots, completed phases, resolved blockers, historical metrics | "Prune STATUS.md - current state only" |
+| STATUS.md | Current metrics, active blockers, recent learnings (1-2 sessions) | Old pivots, completed phases, resolved blockers, historical metrics (AFTER promoting learnings) | "Prune STATUS.md - current state only" |
 | TODO.md | Pending, in-progress | All completed tasks, "Done" sections | "Clean TODO.md - active work only" |
 | DECISIONS.md | Active decisions affecting codebase | Superseded/reversed (→ decisions/superseded-YYYY-MM.md) | "Archive superseded decisions" |
 | RESEARCH.md | Index with summaries | Detailed research (→ research/{topic}.md) | "Move detailed research to subdir" |
@@ -134,7 +144,8 @@ Ask: "Apply maintenance to ai/? This will prune historical content (git preserve
 
 **Ensure subdirs exist:**
 ```bash
-mkdir -p ai/research ai/design ai/decisions
+mkdir -p ai/research ai/design ai/decisions ai/tmp
+echo '*' > ai/tmp/.gitignore
 ```
 
 **Fix AGENTS.md (see PRACTICES.md lines 494-539):**
@@ -165,6 +176,7 @@ mkdir -p ai/research ai/design ai/decisions
 - ai/research/ — Detailed research
 - ai/design/ — Design specs
 - ai/decisions/ — Archived decisions
+- ai/tmp/ — Temporary artifacts (gitignored)
 
 **Token efficiency:** Session files = current work only. Details in subdirs.
 ```
@@ -190,7 +202,7 @@ wc -l ai/*.md
 | Symlink | CLAUDE.md → AGENTS.md |
 | AGENTS.md | Tables/lists, clear sections, no duplication, explains ai/ |
 | Session files | <500 lines each, current/active only |
-| Subdirs | research/, design/, decisions/ exist |
+| Subdirs | research/, design/, decisions/, tmp/ exist (tmp/ gitignored) |
 | No time-tracking | No WEEK*.md, no estimates (unless external deadline) |
 | Claude Code | Documented if .claude/ exists |
 
@@ -212,7 +224,7 @@ wc -l ai/*.md
 - DECISIONS.md: [action taken: archived superseded / split by topic]
 - RESEARCH.md: [moved N topics to ai/research/ / kept as-is]
 - PLAN.md: Pruned to current + next phases
-- Created subdirs: research/ ([N] files), design/ ([N] files), decisions/ ([N] files)
+- Created subdirs: research/ ([N] files), design/ ([N] files), decisions/ ([N] files), tmp/ (gitignored)
 
 **AGENTS.md:**
 - Symlink: CLAUDE.md → AGENTS.md ✓

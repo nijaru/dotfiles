@@ -26,6 +26,7 @@
 | `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
 | `ai/design/` | Design specifications |
 | `ai/decisions/` | Superseded/split decisions |
+| `ai/tmp/` | Temporary artifacts (gitignored) |
 | `docs/` | User documentation |
 
 **Format:** All ai/ files - tables/lists/structured (not prose). Answer first, evidence second. Exec summary if lengthy.

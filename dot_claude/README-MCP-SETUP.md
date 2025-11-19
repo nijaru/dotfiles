@@ -20,7 +20,6 @@ end
 All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
 
 - **context7**: No authentication
-- **brave-search**: Uses `${BRAVE_API_KEY}`
 - **exa**: Uses `${EXA_API_KEY}`
 - **parallel-search-mcp**: Uses `${PARALLEL_API_KEY}` (HTTP server)
 
@@ -35,7 +34,6 @@ All servers use `${VAR}` syntax to reference environment variables from `~/.conf
 Configured in `~/Library/Application Support/Claude/claude_desktop_config.json` (managed by chezmoi):
 
 - **context7**: No authentication
-- **brave-search**: Uses `{{ .brave_api_key }}` template
 - **exa**: Uses `{{ .exa_api_key }}` template
 
 ### Remote Servers (HTTP/SSE) - UI Only
@@ -79,7 +77,6 @@ Servers are defined in `~/.gemini/settings.json` (managed by chezmoi).
 All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
 
 - **context7**: No authentication
-- **brave-search**: Uses `${BRAVE_API_KEY}`
 - **exa**: Uses `${EXA_API_KEY}`
 
 ### Verification
@@ -99,7 +96,6 @@ Servers are defined in `~/.config/amp/settings.json` (managed by chezmoi).
 All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
 
 - **context7**: No authentication
-- **brave-search**: Uses `${BRAVE_API_KEY}`
 - **exa**: Uses `${EXA_API_KEY}`
 
 ## Droid (Factory.ai CLI)
@@ -121,7 +117,6 @@ Interactive: Use `/mcp` command within Droid.
 All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
 
 - **context7**: No authentication
-- **brave-search**: Uses `${BRAVE_API_KEY}`
 - **exa**: Uses `${EXA_API_KEY}`
 
 ### AGENTS.md Integration
@@ -139,7 +134,6 @@ Servers are defined in `~/.config/opencode/opencode.json` (managed by chezmoi).
 All servers use `${VAR}` syntax in the `environment` field to reference environment variables from `~/.config/fish/secrets.fish`:
 
 - **context7**: No authentication (enabled)
-- **brave-search**: Uses `${BRAVE_API_KEY}` (enabled)
 - **exa**: Uses `${EXA_API_KEY}` (enabled)
 
 ### AGENTS.md Integration

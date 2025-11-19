@@ -2,13 +2,6 @@
   "amp.permissions": [],
   "amp.dangerouslyAllowAll": true,
   "amp.mcpServers": {
-    "brave-search": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
-      "env": {
-        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
-      }
-    },
     "exa": {
       "command": "npx",
       "args": ["-y", "exa-mcp-server"],

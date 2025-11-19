@@ -16,8 +16,10 @@ Audit and maintain AI context files following best practices.
 |-------|----------|------|
 | Config | AGENTS.md exists, CLAUDE.md symlink correct | ls -la |
 | ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md, PLAN.md | ls ai/ |
-| Subdirs | research/, design/, decisions/ exist | ls ai/ |
+| Subdirs | research/, design/, decisions/, tmp/ exist | ls ai/ |
+| ai/tmp/.gitignore | Exists and contains '*' | cat ai/tmp/.gitignore |
 | File sizes | Detect bloat (>500 lines session files) | wc -l ai/*.md |
+| TODO.md file links | Tasks include file links [src/file.ts] | grep -c '\[.*\].*\[.*\]' ai/TODO.md |
 | Claude Code | .claude/commands/, MCP servers, hooks documented in AGENTS.md | grep -l "Claude Code" AGENTS.md |
 
 **Action:** Run all checks in parallel. Consolidate findings.
@@ -40,7 +42,16 @@ Audit and maintain AI context files following best practices.
 | Detailed research in RESEARCH.md | Wastes tokens | Move details → ai/research/, keep index |
 | Large DECISIONS.md | Hard to navigate, loads all every session | Split by topic or archive superseded |
 | Design specs in ai/ root | Loads every session | Move → ai/design/ |
-| Missing subdirs | No place for detailed content | Create research/, design/, decisions/ |
+| Missing subdirs | No place for detailed content | Create research/, design/, decisions/, tmp/ |
+| Missing ai/tmp/.gitignore | Temp files tracked in git | Create .gitignore with '*' |
+
+**New pattern adoption:**
+
+| Pattern | Check | Fix |
+|---------|-------|-----|
+| TODO.md file links | Tasks missing context links | Add file links: `- [ ] Fix bug [src/lib/cache.ts]` |
+| ai/KNOWLEDGE.md | Codebase quirks with no home | Create ai/KNOWLEDGE.md for permanent quirks |
+| ai/tmp/ gitignored | Temp files tracked | Create ai/tmp/.gitignore with '*' |
 
 **AGENTS.md issues:**
 
@@ -78,6 +89,12 @@ Audit and maintain AI context files following best practices.
 - Historical content in: [list]
 - Detailed content in session files: [list] (should be in subdirs)
 - Missing subdirs: [list]
+- Missing ai/tmp/.gitignore: [yes/no]
+
+**New patterns:**
+- TODO.md file links: [N tasks with links / M total tasks]
+- ai/KNOWLEDGE.md: [exists / needed / not needed]
+- ai/tmp/: [exists with gitignore / missing / not gitignored]
 
 **AGENTS.md:**
 - Symlink: [correct / missing / wrong]
@@ -145,7 +162,30 @@ Ask: "Apply maintenance to ai/? This will prune historical content (git preserve
 **Ensure subdirs exist:**
 ```bash
 mkdir -p ai/research ai/design ai/decisions ai/tmp
-echo '*' > ai/tmp/.gitignore
+echo '*' > ai/tmp/.gitignore  # Ensure gitignore exists
+```
+
+**Adopt new patterns:**
+
+| Pattern | Action | Commit Message |
+|---------|--------|----------------|
+| ai/tmp/.gitignore | Create if missing: `echo '*' > ai/tmp/.gitignore` | "Add ai/tmp/.gitignore" |
+| TODO.md file links | Review tasks, add file links where helpful: `- [ ] Fix cache bug [src/lib/cache.ts]` | "Add file links to TODO.md" |
+| ai/KNOWLEDGE.md | Create if codebase quirks exist (check STATUS.md learnings for candidates) | "Create ai/KNOWLEDGE.md for codebase quirks" |
+
+**ai/KNOWLEDGE.md template (if creating):**
+```markdown
+# Codebase Knowledge
+
+**Purpose:** Permanent quirks, gotchas, and non-obvious behavior
+
+| Area | Knowledge | Why |
+|------|-----------|-----|
+| Auth | Session cache is 30s | Performance optimization, can cause delay in logout |
+| Database | Migrations must run in order | Foreign key dependencies |
+| [Area] | [Quirk/Gotcha] | [Rationale] |
+
+**Note:** For temporary issues, use STATUS.md. For architecture decisions, use DECISIONS.md.
 ```
 
 **Fix AGENTS.md (see PRACTICES.md lines 494-539):**
@@ -157,6 +197,7 @@ echo '*' > ai/tmp/.gitignore
 | Duplication | Replace duplicated ai/ content with pointers |
 | Structure | Add clear ## sections if missing |
 | ai/ explanation | Add "AI session context" section if missing |
+| ai/ new files | Document ai/KNOWLEDGE.md and ai/tmp/ if they exist |
 | Claude Code | Document .claude/commands/, MCP servers, hooks |
 | Comprehensiveness | Add missing: commands, standards, structure |
 
@@ -225,6 +266,11 @@ wc -l ai/*.md
 - RESEARCH.md: [moved N topics to ai/research/ / kept as-is]
 - PLAN.md: Pruned to current + next phases
 - Created subdirs: research/ ([N] files), design/ ([N] files), decisions/ ([N] files), tmp/ (gitignored)
+
+**New patterns adopted:**
+- ai/tmp/.gitignore: [created / already exists]
+- TODO.md file links: Added to [N] tasks
+- ai/KNOWLEDGE.md: [created with N quirks / not needed / already exists]
 
 **AGENTS.md:**
 - Symlink: CLAUDE.md → AGENTS.md ✓

@@ -40,9 +40,9 @@ Initialize AI agent context management for project.
 
 | Project Complexity | Files | Subdirs | PLAN.md |
 |-------------------|-------|---------|---------|
-| Minimal (<1mo) | STATUS.md, TODO.md | research/, design/, decisions/ | ⊘ Skip |
-| Standard (1-6mo) | +DECISIONS.md, RESEARCH.md | research/, design/, decisions/ | ⊘ Skip |
-| Complex (6+mo) | +PLAN.md | research/, design/, decisions/ | ✓ Create |
+| Minimal (<1mo) | STATUS.md, TODO.md | research/, design/, decisions/, tmp/ | ⊘ Skip |
+| Standard (1-6mo) | +DECISIONS.md, RESEARCH.md | research/, design/, decisions/, tmp/ | ⊘ Skip |
+| Complex (6+mo) | +PLAN.md | research/, design/, decisions/, tmp/ | ✓ Create |
 
 **PLAN.md criteria:** 3+ phases OR critical dependencies OR external deadline
 **Subdirs:** Always create (empty okay - 0 token cost, clear structure)
@@ -50,7 +50,8 @@ Initialize AI agent context management for project.
 ## 4. Create Structure
 
 ```bash
-mkdir -p ai/research ai/design ai/decisions
+mkdir -p ai/research ai/design ai/decisions ai/tmp
+echo '*' > ai/tmp/.gitignore
 ```
 
 **Templates:** See PRACTICES.md lines 277-291 (TODO), 293-314 (STATUS), 316-339 (DECISIONS), 341-353 (RESEARCH), 247-275 (PLAN if needed)
@@ -60,7 +61,7 @@ mkdir -p ai/research ai/design ai/decisions
 **ai/TODO.md:**
 ```markdown
 ## High Priority
-- [ ] [Add tasks from detection: missing tests, TODO comments, etc.]
+- [ ] [Add tasks from detection: missing tests, TODO comments, etc.] [file/path]
 
 ## In Progress
 - [ ]
@@ -68,7 +69,7 @@ mkdir -p ai/research ai/design ai/decisions
 ## Backlog
 - [ ]
 
-**Note:** Keep current work only. Delete completed immediately (no "Done" section).
+**Note:** Include file links [src/lib/cache.ts] for context. Keep current work only. Delete completed immediately (no "Done" section).
 ```
 
 **ai/STATUS.md:**
@@ -143,6 +144,7 @@ Initial AI context setup.
 - ai/research/ — Detailed research
 - ai/design/ — Design specs
 - ai/decisions/ — Archived decisions
+- ai/tmp/ — Temporary artifacts (gitignored)
 
 **Token efficiency:** Session files = current work only. Details in subdirs.
 
@@ -221,7 +223,7 @@ wc -l AGENTS.md ai/*.md
 | AGENTS.md format | Tables/lists, clear ## sections |
 | AGENTS.md content | Comprehensive, no ai/ duplication, explains ai/ purpose |
 | ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md (+ PLAN.md if complex) |
-| ai/ subdirs | research/, design/, decisions/ exist |
+| ai/ subdirs | research/, design/, decisions/, tmp/ exist (tmp/ gitignored) |
 | Claude Code | Documented if .claude/ exists |
 
 **Output:**
@@ -250,7 +252,7 @@ wc -l AGENTS.md ai/*.md
 - DECISIONS.md ✓
 - RESEARCH.md ✓
 - PLAN.md: [✓ created / ⊘ skipped - why]
-- Subdirs: research/, design/, decisions/ ✓
+- Subdirs: research/, design/, decisions/, tmp/ (gitignored) ✓
 
 **Preview AGENTS.md** (first 50 lines):
 [SHOW]

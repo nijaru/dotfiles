@@ -1,4 +1,6 @@
-# Claude Code & Claude Desktop MCP Configuration
+# MCP Configuration Across CLI Tools
+
+This document covers MCP server setup for Claude Code, Claude Desktop, Gemini CLI, and Amp CLI.
 
 ## Claude Code CLI
 
@@ -61,16 +63,53 @@ Each tool prompts for approval when first called.
 ## Updating API Keys
 
 1. Update keys in `~/.config/chezmoi/chezmoi.toml`
-2. Run `chezmoi apply`
+2. Run `chezmoi apply --force`
 3. Open new shell (loads new env vars from `secrets.fish`)
-4. **Claude Code**: Automatically uses new values via `${VAR}` expansion
+4. **CLI tools** (Claude Code, Gemini, Amp): Automatically use new values via `${VAR}` expansion
 5. **Claude Desktop**: Restart app to reload config file
+
+## Gemini CLI
+
+### MCP Server Configuration
+
+Servers are defined in `~/.gemini/settings.json` (managed by chezmoi).
+
+### Current Servers (Gemini CLI)
+
+All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
+
+- **context7**: No authentication
+- **brave-search**: Uses `${BRAVE_API_KEY}`
+- **exa**: Uses `${EXA_API_KEY}`
+
+### Verification
+
+```bash
+gemini mcp list  # Show configured servers and connection status
+```
+
+## Amp CLI
+
+### MCP Server Configuration
+
+Servers are defined in `~/.config/amp/settings.json` (managed by chezmoi).
+
+### Current Servers (Amp CLI)
+
+All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
+
+- **context7**: No authentication
+- **brave-search**: Uses `${BRAVE_API_KEY}`
+- **exa**: Uses `${EXA_API_KEY}`
 
 ## Cross-Machine Setup
 
 ```bash
 chezmoi init --apply https://github.com/nijaru/dotfiles
-# Claude Code MCP servers automatically configured!
-# Claude Desktop stdio servers automatically configured!
-# Reminder: Add remote servers via Desktop UI Settings > Connectors
+# All MCP servers automatically configured:
+# - Claude Code CLI
+# - Claude Desktop (stdio servers)
+# - Gemini CLI
+# - Amp CLI
+# Reminder: Add remote servers to Claude Desktop via UI Settings > Connectors
 ```

@@ -65,7 +65,7 @@ Each tool prompts for approval when first called.
 1. Update keys in `~/.config/chezmoi/chezmoi.toml`
 2. Run `chezmoi apply --force`
 3. Open new shell (loads new env vars from `secrets.fish`)
-4. **CLI tools** (Claude Code, Gemini, Amp): Automatically use new values via `${VAR}` expansion
+4. **CLI tools** (Claude Code, Gemini, Amp, Droid): Automatically use new values via `${VAR}` expansion
 5. **Claude Desktop**: Restart app to reload config file
 
 ## Gemini CLI
@@ -102,6 +102,32 @@ All servers use `${VAR}` syntax to reference environment variables from `~/.conf
 - **brave-search**: Uses `${BRAVE_API_KEY}`
 - **exa**: Uses `${EXA_API_KEY}`
 
+## Droid (Factory.ai CLI)
+
+### MCP Server Configuration
+
+Servers are defined in `~/.factory/mcp.json` (managed by chezmoi).
+
+CLI management:
+```bash
+droid mcp add <name> "<command>" --env KEY=value
+droid mcp remove <name>
+```
+
+Interactive: Use `/mcp` command within Droid.
+
+### Current Servers (Droid)
+
+All servers use `${VAR}` syntax to reference environment variables from `~/.config/fish/secrets.fish`:
+
+- **context7**: No authentication
+- **brave-search**: Uses `${BRAVE_API_KEY}`
+- **exa**: Uses `${EXA_API_KEY}`
+
+### AGENTS.md Integration
+
+Droid automatically loads `~/.factory/AGENTS.md` (symlinked to `~/.claude/CLAUDE.md`) for AI agent instructions.
+
 ## Cross-Machine Setup
 
 ```bash
@@ -111,5 +137,6 @@ chezmoi init --apply https://github.com/nijaru/dotfiles
 # - Claude Desktop (stdio servers)
 # - Gemini CLI
 # - Amp CLI
+# - Droid (Factory.ai CLI)
 # Reminder: Add remote servers to Claude Desktop via UI Settings > Connectors
 ```

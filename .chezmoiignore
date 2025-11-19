@@ -41,3 +41,12 @@ dot_claude/mcp_config.json
 .factory/sessions
 .factory/bin
 .factory/skills
+
+# Opencode runtime files - lock files, node_modules, etc
+.config/opencode/config.json
+.config/opencode/.gitignore
+.config/opencode/bun.lock
+.config/opencode/package.json
+.config/opencode/node_modules
+.config/opencode/providers
+.config/opencode/generate_config.sh

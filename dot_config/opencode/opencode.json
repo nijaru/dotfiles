@@ -12,7 +12,7 @@
       "environment": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
       },
-      "enabled": false
+      "enabled": true
     },
     "exa": {
       "type": "local",

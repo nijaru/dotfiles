@@ -22,5 +22,8 @@
   },
   "context": {
     "fileName": "AGENTS.md"
+  },
+  "general": {
+    "previewFeatures": true
   }
 }

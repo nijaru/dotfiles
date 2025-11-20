@@ -5,7 +5,6 @@
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
 ## Workflow Rules
-- NO AI attribution in commits/PRs (strip manually)
 - Ask before: PRs, publishing packages, force ops, resource deletion
 - Commit frequently, push regularly (no ask needed)
 - Never force push to main/master

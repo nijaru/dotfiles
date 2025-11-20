@@ -185,3 +185,7 @@
 
 [include]
     path         = ~/.gitconfig.local              # Include additional local configuration overrides
+[index]
+	version = 4
+[protocol]
+	version = 2

@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+# Install Fisher plugin manager and essential plugins
+# This runs once per machine when chezmoi is applied
+
+echo "Installing Fisher plugin manager..."
+
+if type -q fisher
+    echo "Fisher already installed, skipping"
+    exit 0
+end
+
+# Install fisher
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+fisher install jorgebucaran/fisher
+
+# Install tide prompt
+echo "Installing Tide prompt..."
+fisher install ilancosman/tide@v6
+
+echo "Fisher and Tide installed successfully!"

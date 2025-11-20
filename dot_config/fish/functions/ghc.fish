@@ -36,18 +36,19 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     # Check if directory already exists
     if test -d $target_dir
         echo "Directory $target_dir already exists"
-        return 1
+        cd $target_dir
+        return 0
     end
-    
+
     # Check if gh is available
     if not command -q gh
         echo "Error: gh CLI not found. Install with: brew install gh"
         return 1
     end
-    
+
     # Create parent directory if needed
     mkdir -p ~/github/$org
-    
+
     # Clone the repository
     echo "Cloning $org/$repo to $target_dir..."
     gh repo clone "$org/$repo" "$target_dir" $extra_args

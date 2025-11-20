@@ -57,7 +57,7 @@
   ],
   "enableCustomDroids": false,
   "enableHooks": false,
-  "includeCoAuthoredByDroid": true,
+  "includeCoAuthoredByDroid": false,
   "enableDroidShield": true,
   "enableReadinessReport": false,
   "todoDisplayMode": "pinned",

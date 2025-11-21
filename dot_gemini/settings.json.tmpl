@@ -1,0 +1,50 @@
+{
+  // "model": "gemini-3-pro-preview",
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "context7-mcp-server"
+      ]
+    },
+    "exa": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "exa-mcp-server"
+      ],
+      "env": {
+        "EXA_API_KEY": "{{ .exa_api_key }}"
+      }
+    }
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "ui": {
+    "theme": "Default",
+    "showMemoryUsage": true,
+    "showLineNumbers": false,
+    "showModelInfoInChat": false,
+    "showCitations": false,
+    "footer": {
+      "hideContextPercentage": false
+    }
+  },
+  "context": {
+    "fileName": "AGENTS.md"
+  },
+  "general": {
+    "previewFeatures": true,
+    "enablePromptCompletion": false
+  },
+  "tools": {
+    "shell": {
+      "showColor": true
+    },
+    "autoAccept": false
+  }
+}

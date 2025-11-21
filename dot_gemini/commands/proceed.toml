@@ -7,6 +7,13 @@ Treat the `ai/` directory as your **Long-Term Memory**.
 Treat the current session context as **Short-Term Memory** (volatile).
 Your job is to **commit** Short-Term Memory to Long-Term Memory.
 
+## Phase 0: Understand Structure
+Refer to the **AI Context Organization** section in `AGENTS.md` (in project root) or `~/.gemini/AGENTS.md` (global) to understand the specific purpose of each `ai/` file.
+- `ai/STATUS.md`: High-level state, metrics, blockers.
+- `ai/TODO.md`: Active tasks (kanban-like).
+- `ai/DECISIONS.md`: Key architectural choices.
+- `ai/RESEARCH.md`: Findings and knowledge.
+
 ## Phase 1: Gather Context (Run these if not already visible)
 !{ git status }
 !{ git diff --stat }

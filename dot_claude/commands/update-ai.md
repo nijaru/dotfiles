@@ -60,6 +60,9 @@ Audit and maintain AI context files following best practices.
 | CLAUDE.md symlink missing or wrong | Create/fix: CLAUDE.md → AGENTS.md |
 | Prose instead of tables | Convert to tables/lists |
 | Duplicates ai/ content | Replace with pointers: "See ai/STATUS.md" |
+| Missing verification steps | Add verification section (build/test/lint commands) |
+| Missing concrete examples | Add examples section if project has patterns |
+| Missing deprecated patterns | Add table if old patterns exist |
 | Missing Claude Code integration | Document .claude/commands/, MCP, hooks |
 | No ai/ purpose explanation | Add "AI session context" description |
 
@@ -198,6 +201,9 @@ echo '*' > ai/tmp/.gitignore  # Ensure gitignore exists
 | Structure | Add clear ## sections if missing |
 | ai/ explanation | Add "AI session context" section if missing |
 | ai/ new files | Document ai/KNOWLEDGE.md and ai/tmp/ if they exist |
+| Verification steps | Add verification section if missing (build/test/lint) |
+| Examples | Add examples section if project has concrete patterns |
+| Deprecated patterns | Add deprecated patterns table if old patterns exist |
 | Claude Code | Document .claude/commands/, MCP servers, hooks |
 | Comprehensiveness | Add missing: commands, standards, structure |
 

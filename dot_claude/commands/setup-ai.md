@@ -110,7 +110,10 @@ Initial AI context setup.
 - AI context organization (session vs reference files - see template)
 - Tech stack table (detected: language, framework, package manager, tools)
 - Commands (detected: build/test/run or TBD)
+- Verification steps (commands that must pass: build/test/lint)
 - Code standards (detect from existing code or empty table)
+- Examples section (concrete code patterns if detectable)
+- Deprecated patterns (if detectable from code: old → new with rationale)
 - Claude Code integration (if .claude/ exists: commands, MCP, hooks)
 - Current focus pointers (ai/STATUS.md, ai/PLAN.md if exists)
 
@@ -173,6 +176,13 @@ Initial AI context setup.
 [DETECTED or TBD]
 ```
 
+## Verification Steps
+
+Commands to verify correctness (must pass):
+- Build: [DETECTED build command] (zero errors)
+- Tests: [DETECTED test command] (all pass)
+- Lint: [DETECTED lint command or TBD] (zero warnings)
+
 ## Code Standards
 
 [DETECT from existing code or provide empty table]
@@ -180,6 +190,18 @@ Initial AI context setup.
 | Aspect | Standard |
 |--------|----------|
 [naming, formatting, imports, error handling if detected]
+
+## Examples
+
+[Concrete code patterns specific to this project - add if detectable]
+
+## Deprecated Patterns
+
+[If detectable from codebase]
+
+| ❌ Don't Use | ✅ Use Instead | Why |
+|-------------|---------------|-----|
+[old pattern] | [new pattern] | [reason if detectable]
 
 ## Claude Code Integration
 

@@ -17,7 +17,7 @@
 
 | File | Purpose |
 |------|---------|
-| `AGENTS.md` | Project overview (symlink: `CLAUDE.md` → `AGENTS.md`) |
+| `AGENTS.md` | Project-specific instructions: commands, conventions, architecture, quirks, examples. Concrete code patterns > descriptions. (symlink: `CLAUDE.md` → `AGENTS.md`) |
 | `ai/STATUS.md` | Current state, blockers (read FIRST) |
 | `ai/TODO.md` | Active tasks only |
 | `ai/PLAN.md` | Architecture, dependencies (if 3+ phases) |

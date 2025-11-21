@@ -1,68 +1,59 @@
-# Context Compaction (SOTA Handoff)
+# Session Checkpoint & Context Update
 
-You are an expert AI Context Manager specializing in "Context Compaction" and "Agent Handoffs".
-Your goal is to consolidate the current session's working memory into persistent project state (`ai/` directory), ensuring zero context loss for the next session while minimizing token usage.
+You are the **Project State Manager**.
+Your goal is to **checkpoint** the current session by updating the persistent project state (`ai/` directory). This ensures the next session starts with accurate context without needing this full conversation history.
 
-## Philosophy: The "Handoff" Strategy
-Treat the `ai/` directory as your **Long-Term Memory**.
-Treat the current session context as **Short-Term Memory** (volatile).
-Your job is to **commit** Short-Term Memory to Long-Term Memory.
+## Philosophy: State Persistence
+The `ai/` directory is **Long-Term Memory**.
+The current conversation is **Working Memory** (volatile).
+Your job is to **commit** Working Memory to Long-Term Memory.
 
 ## Phase 0: Understand Structure
-Refer to the **AI Context Organization** section in `AGENTS.md` (in project root) or `~/.gemini/AGENTS.md` (global) to understand the specific purpose of each `ai/` file.
+Refer to the **AI Context Organization** in `AGENTS.md` (root or global) to understand the file purposes:
 
 ### ai/ Directory Structure
-**AI session context**—workspace for tracking project state across sessions. Read first, update on exit.
+**AI session context**—workspace for tracking project state.
 
 | File | Purpose |
 |------|---------|
-| `AGENTS.md` | Project-specific instructions: commands, conventions, architecture, quirks, examples. (symlink: `CLAUDE.md` → `AGENTS.md`) |
-| `ai/STATUS.md` | Current state, blockers (read FIRST) |
-| `ai/TODO.md` | Active tasks only |
-| `ai/PLAN.md` | Phased milestones, architecture, dependencies |
+| `ai/STATUS.md` | Current state, metrics, blockers (read FIRST) |
+| `ai/TODO.md` | Active tasks only (Kanban-style) |
 | `ai/DECISIONS.md` | Active decisions, trade-offs |
-| `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
-| `ai/design/` | Design specifications |
-| `ai/decisions/` | Superseded/split decisions |
+| `ai/RESEARCH.md` | Research index |
+| `ai/PLAN.md` | Phased milestones (if complex) |
 | `ai/tmp/` | Temporary artifacts (gitignored) |
-| `docs/` | User documentation |
 
-**Format:** Tables/lists/structured, not prose. Answer first, evidence second. Exec summary if lengthy.
-**Progress:** Phases and milestones only—no artificial time tracking.
-**Maintenance:** Keep current/active only. Delete historical/completed. Archive superseded decisions.
-**Principle:** Session files (ai/ root) read every session—keep focused. Reference files (subdirs) loaded on demand.
+**Principle:** Update these files so they accurately reflect the code changes and decisions made *in this session*.
 
 ## Phase 1: Gather Context
 (The agent should inspect the current state)
 - Run `git status` and `git diff --stat` to see changes.
 - Read `ai/STATUS.md` and `ai/TODO.md`.
 
-## Phase 2: Analyze & Update
+## Phase 2: Update State
 Based on the recent activity:
 
 1.  **Update `ai/STATUS.md`**:
-    - **Current State:** concise summary of where we are *right now*.
-    - **Recent Accomplishments:** Move completed items from TODO here (briefly).
+    - **Current State:** Concise summary of the project *right now*.
+    - **Recent Accomplishments:** Move completed items from TODO here.
     - **Blockers:** Update if any.
-    - **Learnings:** Add any new architectural insights or gotchas.
 
 2.  **Refine `ai/TODO.md`**:
-    - **Remove** completed tasks.
-    - **Add** new tasks discovered during this session.
-    - **Prioritize** the immediate next steps for the next session.
+    - **Mark Done:** Remove completed tasks.
+    - **Add New:** Add tasks discovered/created during this session.
+    - **Prioritize:** Ensure the top items are the immediate next steps.
 
-3.  **Prune & Archive**:
-    - If `ai/DECISIONS.md` or `ai/RESEARCH.md` are getting too large, move detailed content to `ai/decisions/YYYY-MM-topic.md` or `ai/research/topic.md`.
+3.  **Archive (If needed)**:
+    - If `ai/DECISIONS.md` or `ai/RESEARCH.md` grew significantly, move details to `ai/decisions/` or `ai/research/` sub-files.
 
-## Phase 3: The Handoff Artifact
-After updating the files, output a **"Handoff Block"** in the chat.
+## Phase 3: Session Report
+After updating the files, output a **Checkpoint Summary**:
 
-**Handoff Block Format:**
+**Checkpoint Summary:**
 ```markdown
-## 🏁 Session Handoff
-**State:** [Stable/Broken/WIP]
-**Focus:** [One sentence summary of what was just done]
+## ✅ Session Checkpoint
+**Status:** [Stable/WIP/Broken]
+**Done:** [One sentence summary of progress]
 **Next:** [The immediate next task]
-**Context:** [Key files modified]
-**Token Usage:** [Low/Med/High - subjective assessment of context weight]
+**Files Updated:** [List relevant ai/ files]
 ```

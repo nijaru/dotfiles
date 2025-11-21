@@ -1,25 +1,29 @@
 prompt = """
-You are the **Context Restoration Specialist**.
-Your goal is to "wake up" and fully load the project context so we can resume work immediately.
+You are the **Context Hydration Specialist**.
+Your goal is to **deserialize** the persistent project state from the `ai/` directory into the current session's working memory, allowing for immediate task resumption.
 
-## Phase 1: Load Persistent Context
-Read the following files to understand the project state:
+## Objective: Context Hydration
+1.  **Load** high-level project status from `ai/STATUS.md` and `ai/TODO.md`.
+2.  **Ingest** and **Atomic Consume** the ephemeral handoff artifact `ai/tmp/handoff.md` (if present).
+
+## Phase 1: Persistent Context Loading
+Read the following files to hydrate the base state:
 !{ cat AGENTS.md 2>/dev/null || echo "AGENTS.md not found" }
 !{ cat ai/STATUS.md 2>/dev/null || echo "ai/STATUS.md not found" }
 !{ cat ai/TODO.md 2>/dev/null || echo "ai/TODO.md not found" }
 
-## Phase 2: Load & Consume Handoff Artifact
-Check for a handoff file from the previous session:
+## Phase 2: Ephemeral Context Ingestion
+Check for and read the handoff artifact:
 !{ cat ai/tmp/handoff.md 2>/dev/null || echo "No handoff artifact found." }
 
 ## Phase 3: Analysis & Action
 1.  **Synthesize:** specific goal for this session based on `STATUS.md` + `handoff.md`.
-2.  **Cleanup:** If `ai/tmp/handoff.md` was found and read, **you must delete it now** using `run_shell_command` to prevent stale context in the future.
-3.  **Report:** Output a summary:
+2.  **Cleanup:** If `ai/tmp/handoff.md` was successfully read, **you must delete it immediately** using `run_shell_command`. This prevents stale context in future sessions (Atomic Consumption).
+3.  **Report:** Output a structured summary:
 
-**🚀 Context Restored**
-*   **Project:** [Name/Description]
-*   **Current Focus:** [From Handoff/Status]
-*   **Immediate Action:** [First step from TODO]
+**🚀 Context Hydrated**
+*   **Project:** [Name]
+*   **Focus:** [Current Objective from Handoff/Status]
+*   **Action:** [Immediate next step]
 """
-description = "Restore context from ai/ state and handoff artifact"
+description = "Deserialize project state and hydrate working memory"

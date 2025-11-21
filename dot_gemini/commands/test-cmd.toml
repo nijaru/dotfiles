@@ -1,5 +1,0 @@
-prompt = """
-Hello from the test command!
-This is a test to verify that custom commands are working.
-"""
-description = "A simple test command"

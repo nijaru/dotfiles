@@ -20,7 +20,7 @@ Audit and maintain AI context files following best practices.
 | Subdirs | research/, design/, decisions/, tmp/ exist | ls ai/ |
 | ai/tmp/.gitignore | Exists and contains '*' | cat ai/tmp/.gitignore |
 | File sizes | Detect bloat (>500 lines session files) | wc -l ai/*.md |
-| TODO.md file links | Tasks include file links [src/file.ts] | grep -c '\[.*\].*\[.*\]' ai/TODO.md |
+| TODO.md file links | Tasks include file links [src/file.ts] | grep -c '\\[.*\\]\\.*\\[.*\\]' ai/TODO.md |
 | Claude Code | .claude/commands/, MCP servers, hooks documented in AGENTS.md | grep -l "Claude Code" AGENTS.md |
 
 **Action:** Run all checks in parallel. Consolidate findings.

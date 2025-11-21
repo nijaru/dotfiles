@@ -13,14 +13,14 @@
   - Delete temp artifacts after use, never commit
 
 ### ai/ Directory
-**AI session context** - workspace for tracking project state across sessions. Read first, update on exit.
+**AI session context**—workspace for tracking project state across sessions. Read first, update on exit.
 
 | File | Purpose |
 |------|---------|
 | `AGENTS.md` | Project-specific instructions: commands, conventions, architecture, quirks, examples. Concrete code patterns > descriptions. (symlink: `CLAUDE.md` → `AGENTS.md`) |
 | `ai/STATUS.md` | Current state, blockers (read FIRST) |
 | `ai/TODO.md` | Active tasks only |
-| `ai/PLAN.md` | Architecture, dependencies (if 3+ phases) |
+| `ai/PLAN.md` | Phased milestones, architecture, dependencies |
 | `ai/DECISIONS.md` | Active decisions, trade-offs |
 | `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
 | `ai/design/` | Design specifications |
@@ -28,13 +28,15 @@
 | `ai/tmp/` | Temporary artifacts (gitignored) |
 | `docs/` | User documentation |
 
-**Format:** All ai/ files - tables/lists/structured (not prose). Answer first, evidence second. Exec summary if lengthy.
+**Format:** Tables/lists/structured, not prose. Answer first, evidence second. Exec summary if lengthy.
 
-**Maintenance:** Keep current/active only. Delete historical/completed content. Archive superseded decisions to `ai/decisions/superseded-YYYY-MM.md`.
+**Progress:** Phases and milestones only—no artificial time tracking (WEEK*_DAY*.md, "Week 2 Day 3"). AI sessions have no time continuity. Real dates okay (ANALYSIS_2025-01-15.md). Use git log for actual timeline.
 
-**Principle:** Session files (ai/ root) read every session - keep focused on current work. Reference files (subdirs) loaded on demand - detailed content with zero token cost unless accessed.
+**Maintenance:** Keep current/active only. Delete historical/completed. Archive superseded decisions to `ai/decisions/superseded-YYYY-MM.md`.
 
-Anti-pattern: Time tracking files (WEEK*_DAY*.md), narrative prose, size-based decisions
+**Principle:** Session files (ai/ root) read every session—keep focused. Reference files (subdirs) loaded on demand—zero token cost unless accessed.
+
+**Anti-patterns:** Artificial time tracking, narrative prose, size-based file decisions
 
 Reference: github.com/nijaru/agent-contexts
 

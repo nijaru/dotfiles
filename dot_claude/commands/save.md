@@ -1,42 +1,49 @@
-# Save Session Context
+# Serialize Session State
 
-You are the **Project State Saver**.
-Your goal is to **save** the current session state to persistent storage (`ai/` directory) and prepare a handoff artifact.
+You are the **Project State Serializer**.
+Your goal is to **commit** the current session's volatile working memory into persistent project state files (`ai/` directory) and generate an ephemeral resumption artifact.
 
-## Philosophy: The "Save Game" Strategy
-We want to be able to run `/clear` after this command.
-To do that, we need two layers of state:
-1.  **Persistent Project State** (`ai/STATUS.md`, `ai/TODO.md`): High-level progress.
-2.  **Ephemeral Session State** (`ai/tmp/handoff.md`): The "active working memory" — debugging details, uncommitted thoughts, specific error traces.
+## Objective: State Serialization
+1.  **Persist** high-level project status to `ai/STATUS.md` and `ai/TODO.md`.
+2.  **Serialize** immediate conversational context (debugging, errors, active thoughts) to `ai/tmp/handoff.md`.
 
-## Phase 0: Gather Context
+## Phase 0: Context Organization Schema
+Refer to `AGENTS.md` (root or global) for the authoritative definition of the `ai/` directory structure.
+*   `ai/STATUS.md`: Single source of truth for project state.
+*   `ai/TODO.md`: Prioritized task list.
+*   `ai/DECISIONS.md`: Architectural records.
+*   `ai/tmp/handoff.md`: Ephemeral context for the next session.
+
+## Phase 1: Context Analysis
 (The agent should inspect the current state)
 - Run `git status` and `git diff --stat` to see changes.
 - Read `ai/STATUS.md` and `ai/TODO.md`.
 
-## Phase 1: Update Persistent State (Long-Term Memory)
-1.  **Update `ai/STATUS.md`**: Current state, recent accomplishments.
-2.  **Refine `ai/TODO.md`**: Remove done tasks, add new ones, prioritize.
-3.  **Archive**: Move detailed logs/research to `ai/research/` or `ai/decisions/` if needed.
+## Phase 2: State Update Operations
+1.  **Update `ai/STATUS.md`**:
+    - Reflect the *current* state (Stable/WIP/Broken).
+    - Log recent changes/accomplishments.
+    - Update blockers.
+2.  **Update `ai/TODO.md`**:
+    - Remove completed tasks.
+    - Add new tasks derived from the current session.
+    - Re-prioritize remaining tasks.
+3.  **Archive (Conditional)**:
+    - Move detailed research or decision logs to `ai/research/` or `ai/decisions/` if necessary.
 
-## Phase 2: Create Handoff Artifact (Short-Term Memory)
-Write a file to `ai/tmp/handoff.md` containing the **immediate context** needed to resume work exactly where we left off.
-*   **Content:**
-    *   **Current Focus:** What exactly are we building/fixing?
-    *   **Active Context:** Relevant file paths, variable names, or specific functions.
-    *   **Last Result:** Did the last test pass? What was the last error message?
-    *   **Hypothesis:** What were we planning to try next?
+## Phase 3: Generate Handoff Artifact
+Write to `ai/tmp/handoff.md`. This file must contain the **exact** information needed for an agent to resume work immediately.
+*   **Current Objective:** What is being built/fixed right now?
+*   **Active Context:** Specific files, functions, or variables in focus.
+*   **Last Known State:** Result of the last command/test (pass/fail/error message).
+*   **Next Logical Step:** The immediate command or action to take next.
 
-## Phase 3: Output
-Output a confirmation message:
+## Phase 4: Completion Report
+Output a structured summary:
 
-**✅ Checkpoint Complete**
-1.  Persistent state updated (`ai/STATUS.md`, `ai/TODO.md`).
-2.  Handoff artifact written to `ai/tmp/handoff.md`.
+**✅ State Serialized**
+*   **Status:** [State]
+*   **Context:** [Summary of updates]
+*   **Next:** [Immediate action]
 
-**Recommended Next Steps:**
-```bash
-/clear
-```
-*Then, in the new session:*
-> "Resume work. Read ai/STATUS.md and ai/tmp/handoff.md"
+**Instruction:** Run `/clear`, then `/restore` to resume.

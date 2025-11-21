@@ -1,59 +1,42 @@
-# Session Checkpoint & Context Update
+# Session Checkpoint & Context Handoff
 
 You are the **Project State Manager**.
-Your goal is to **checkpoint** the current session by updating the persistent project state (`ai/` directory). This ensures the next session starts with accurate context without needing this full conversation history.
+Your goal is to **checkpoint** the current session and prepare a **Handoff Artifact** for the next session.
 
-## Philosophy: State Persistence
-The `ai/` directory is **Long-Term Memory**.
-The current conversation is **Working Memory** (volatile).
-Your job is to **commit** Working Memory to Long-Term Memory.
+## Philosophy: The "Clean Context" Handoff
+We want to be able to run `/clear` after this command.
+To do that, we need two layers of state:
+1.  **Persistent Project State** (`ai/STATUS.md`, `ai/TODO.md`): High-level progress.
+2.  **Ephemeral Session State** (`ai/tmp/handoff.md`): The "active working memory" — debugging details, uncommitted thoughts, specific error traces.
 
-## Phase 0: Understand Structure
-Refer to the **AI Context Organization** in `AGENTS.md` (root or global) to understand the file purposes:
-
-### ai/ Directory Structure
-**AI session context**—workspace for tracking project state.
-
-| File | Purpose |
-|------|---------|
-| `ai/STATUS.md` | Current state, metrics, blockers (read FIRST) |
-| `ai/TODO.md` | Active tasks only (Kanban-style) |
-| `ai/DECISIONS.md` | Active decisions, trade-offs |
-| `ai/RESEARCH.md` | Research index |
-| `ai/PLAN.md` | Phased milestones (if complex) |
-| `ai/tmp/` | Temporary artifacts (gitignored) |
-
-**Principle:** Update these files so they accurately reflect the code changes and decisions made *in this session*.
-
-## Phase 1: Gather Context
+## Phase 0: Gather Context
 (The agent should inspect the current state)
 - Run `git status` and `git diff --stat` to see changes.
 - Read `ai/STATUS.md` and `ai/TODO.md`.
 
-## Phase 2: Update State
-Based on the recent activity:
+## Phase 1: Update Persistent State (Long-Term Memory)
+1.  **Update `ai/STATUS.md`**: Current state, recent accomplishments.
+2.  **Refine `ai/TODO.md`**: Remove done tasks, add new ones, prioritize.
+3.  **Archive**: Move detailed logs/research to `ai/research/` or `ai/decisions/` if needed.
 
-1.  **Update `ai/STATUS.md`**:
-    - **Current State:** Concise summary of the project *right now*.
-    - **Recent Accomplishments:** Move completed items from TODO here.
-    - **Blockers:** Update if any.
+## Phase 2: Create Handoff Artifact (Short-Term Memory)
+Write a file to `ai/tmp/handoff.md` containing the **immediate context** needed to resume work exactly where we left off.
+*   **Content:**
+    *   **Current Focus:** What exactly are we building/fixing?
+    *   **Active Context:** Relevant file paths, variable names, or specific functions.
+    *   **Last Result:** Did the last test pass? What was the last error message?
+    *   **Hypothesis:** What were we planning to try next?
 
-2.  **Refine `ai/TODO.md`**:
-    - **Mark Done:** Remove completed tasks.
-    - **Add New:** Add tasks discovered/created during this session.
-    - **Prioritize:** Ensure the top items are the immediate next steps.
+## Phase 3: Output
+Output a confirmation message:
 
-3.  **Archive (If needed)**:
-    - If `ai/DECISIONS.md` or `ai/RESEARCH.md` grew significantly, move details to `ai/decisions/` or `ai/research/` sub-files.
+**✅ Checkpoint Complete**
+1.  Persistent state updated (`ai/STATUS.md`, `ai/TODO.md`).
+2.  Handoff artifact written to `ai/tmp/handoff.md`.
 
-## Phase 3: Session Report
-After updating the files, output a **Checkpoint Summary**:
-
-**Checkpoint Summary:**
-```markdown
-## ✅ Session Checkpoint
-**Status:** [Stable/WIP/Broken]
-**Done:** [One sentence summary of progress]
-**Next:** [The immediate next task]
-**Files Updated:** [List relevant ai/ files]
+**Recommended Next Steps:**
+```bash
+/clear
 ```
+*Then, in the new session:*
+> "Resume work. Read ai/STATUS.md and ai/tmp/handoff.md"

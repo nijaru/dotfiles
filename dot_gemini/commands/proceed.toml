@@ -9,10 +9,27 @@ Your job is to **commit** Short-Term Memory to Long-Term Memory.
 
 ## Phase 0: Understand Structure
 Refer to the **AI Context Organization** section in `AGENTS.md` (in project root) or `~/.gemini/AGENTS.md` (global) to understand the specific purpose of each `ai/` file.
-- `ai/STATUS.md`: High-level state, metrics, blockers.
-- `ai/TODO.md`: Active tasks (kanban-like).
-- `ai/DECISIONS.md`: Key architectural choices.
-- `ai/RESEARCH.md`: Findings and knowledge.
+
+### ai/ Directory Structure
+**AI session context**—workspace for tracking project state across sessions. Read first, update on exit.
+
+| File | Purpose |
+|------|---------|
+| `AGENTS.md` | Project-specific instructions: commands, conventions, architecture, quirks, examples. (symlink: `CLAUDE.md` → `AGENTS.md`) |
+| `ai/STATUS.md` | Current state, blockers (read FIRST) |
+| `ai/TODO.md` | Active tasks only |
+| `ai/PLAN.md` | Phased milestones, architecture, dependencies |
+| `ai/DECISIONS.md` | Active decisions, trade-offs |
+| `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
+| `ai/design/` | Design specifications |
+| `ai/decisions/` | Superseded/split decisions |
+| `ai/tmp/` | Temporary artifacts (gitignored) |
+| `docs/` | User documentation |
+
+**Format:** Tables/lists/structured, not prose. Answer first, evidence second. Exec summary if lengthy.
+**Progress:** Phases and milestones only—no artificial time tracking.
+**Maintenance:** Keep current/active only. Delete historical/completed. Archive superseded decisions.
+**Principle:** Session files (ai/ root) read every session—keep focused. Reference files (subdirs) loaded on demand.
 
 ## Phase 1: Gather Context (Run these if not already visible)
 !{ git status }

@@ -2,14 +2,22 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "context7-mcp-server"]
+      "args": [
+        "-y",
+        "context7-mcp-server"
+      ]
     },
     "exa": {
       "command": "npx",
-      "args": ["-y", "exa-mcp-server"]
+      "args": [
+        "-y",
+        "exa-mcp-server"
+      ]
     }
   },
-  "model": "gemini-3-pro-preview",
+  "model": {
+    "name": "gemini-3-pro-preview"
+  },
   "security": {
     "auth": {
       "selectedType": "oauth-personal"
@@ -18,7 +26,9 @@
   "ui": {
     "footer": {
       "hideContextPercentage": false
-    }
+    },
+    "showMemoryUsage": true,
+    "theme": "Atom One"
   },
   "context": {
     "fileName": "AGENTS.md"

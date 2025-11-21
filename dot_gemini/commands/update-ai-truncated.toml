@@ -1,0 +1,79 @@
+prompt = """
+Audit and maintain AI context files following best practices.
+
+**Reference:** github.com/nijaru/agent-contexts PRACTICES.md
+**Philosophy:** Session files = current/active only. Reference files = on-demand. Trust git history.
+
+## Execution Guidelines
+
+- Run analysis operations in parallel (file reads, checks)
+- Use extended reasoning for large codebases (many ai/ files, complex structure)
+- Ask before deleting files - show what will be consolidated
+- Commit after each logical change (granular history)
+
+## 1. Analyze Structure (Parallel)
+
+| Check | Look For | Tool |
+|-------|----------|------|
+| Config | AGENTS.md exists, CLAUDE.md symlink correct | ls -la |
+| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md, PLAN.md | ls ai/ |
+| Subdirs | research/, design/, decisions/, tmp/ exist | ls ai/ |
+| ai/tmp/.gitignore | Exists and contains '*' | cat ai/tmp/.gitignore |
+| File sizes | Detect bloat (>500 lines session files) | wc -l ai/*.md |
+| TODO.md file links | Tasks include file links [src/file.ts] | grep -c '\[.*\].*\[.*\]' ai/TODO.md |
+| Claude Code | .claude/commands/, MCP servers, hooks documented in AGENTS.md | grep -l "Claude Code" AGENTS.md |
+
+**Action:** Run all checks in parallel. Consolidate findings.
+
+## 2. Identify Issues
+
+**Time-tracking artifacts:**
+
+| File | Anti-Pattern | Fix |
+|------|-------------|-----|
+| PLAN.md | "Week X Day Y", "~X days", "Q1 2025" (no external deadline) | Remove estimates, keep dependencies |
+| ai/ root | WEEK*_DAY*.md files (artificial time tracking) | Consolidate → STATUS/DECISIONS → Delete |
+| STATUS.md | Progress markers "← YOU ARE HERE", "_Last Updated: Week X_" | Remove markers |
+
+**Token efficiency issues:**
+
+| Issue | Impact | Fix |
+|-------|--------|-----|
+| Session files with historical content | Loads irrelevant context every session | Prune to current/active only |
+| Detailed research in RESEARCH.md | Wastes tokens | Move details → ai/research/, keep index |
+| Large DECISIONS.md | Hard to navigate, loads all every session | Split by topic or archive superseded |
+| Design specs in ai/ root | Loads every session | Move → ai/design/ |
+| Missing subdirs | No place for detailed content | Create research/, design/, decisions/, tmp/ |
+| Missing ai/tmp/.gitignore | Temp files tracked in git | Create .gitignore with '*' |
+
+**New pattern adoption:**
+
+| Pattern | Check | Fix |
+|---------|-------|-----|
+| TODO.md file links | Tasks missing context links | Add file links: `- [ ] Fix bug [src/lib/cache.ts]` |
+| ai/KNOWLEDGE.md | Codebase quirks with no home | Create ai/KNOWLEDGE.md for permanent quirks |
+| ai/tmp/ gitignored | Temp files tracked | Create ai/tmp/.gitignore with '*' |
+
+**AGENTS.md issues:**
+
+| Issue | Fix |
+|-------|-----|
+| CLAUDE.md symlink missing or wrong | Create/fix: CLAUDE.md → AGENTS.md |
+| Prose instead of tables | Convert to tables/lists |
+| Duplicates ai/ content | Replace with pointers: "See ai/STATUS.md" |
+| Missing verification steps | Add verification section (build/test/lint commands) |
+| Missing concrete examples | Add examples section if project has patterns |
+| Missing deprecated patterns | Add table if old patterns exist |
+| Missing Claude Code integration | Document .claude/commands/, MCP, hooks |
+| No ai/ purpose explanation | Add "AI context" description |
+
+**Anti-patterns:**
+
+| Pattern | Problem | Solution |
+|---------|---------|----------|
+| ai/archive/ | Don't archive - use git | Consolidate valuable info → delete dir |
+| Code in ai/ | ai/ is for meta-work only | Move → src/ or delete |
+| Duplicate docs/ and ai/ | Permanent vs working context confused | docs/ = permanent, ai/ = session |
+| Human docs in ai/ | ai/ optimized for AI, not humans | Move → docs/ |
+"""
+description = "Audit and maintain AI agent context"

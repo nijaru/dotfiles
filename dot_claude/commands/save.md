@@ -1,55 +1,57 @@
-# Serialize Session State
+Update ai/ files before /compact or session end.
 
-You are the **Project State Serializer**.
-Your goal is to **commit** the current session's volatile working memory into persistent project state files (`ai/` directory) and generate an ephemeral resumption artifact.
+## 1. Analyze Current State
 
-## Objective: State Serialization
-1.  **Persist** high-level project status to `ai/STATUS.md` and `ai/TODO.md`.
-2.  **Serialize** immediate conversational context (debugging, errors, active thoughts) to `ai/tmp/handoff.md`.
-
-## Phase 0: Context Organization Schema
-Refer to `AGENTS.md` (root or global) for the authoritative definition of the `ai/` directory structure.
-*   `ai/STATUS.md`: Single source of truth for project state.
-*   `ai/TODO.md`: Prioritized task list.
-*   `ai/DECISIONS.md`: Architectural records.
-*   `ai/tmp/handoff.md`: Ephemeral context for the next session.
-
-## Phase 1: Context Analysis
-Run these commands to inspect the current state:
+Run in parallel:
 ```bash
 git status
 git diff --stat
-ls -F ai/
+ls -la ai/
+wc -l ai/*.md 2>/dev/null
 ```
-Then read these files:
-- `ai/STATUS.md` (first 20 lines)
-- `ai/TODO.md` (first 20 non-dash lines)
 
-## Phase 2: State Update Operations
-1.  **Update `ai/STATUS.md`**:
-    - Reflect the *current* state (Stable/WIP/Broken).
-    - Log recent changes/accomplishments.
-    - Update blockers.
-2.  **Update `ai/TODO.md`**:
-    - Remove completed tasks.
-    - Add new tasks derived from the current session.
-    - Re-prioritize remaining tasks.
-3.  **Archive (Conditional)**:
-    - Move detailed research or decision logs to `ai/research/` or `ai/decisions/` if necessary.
+Read ai/STATUS.md and ai/TODO.md.
 
-## Phase 3: Generate Handoff Artifact
-Write to `ai/tmp/handoff.md`. This file must contain the **exact** information needed for an agent to resume work immediately.
-*   **Current Objective:** What is being built/fixed right now?
-*   **Active Context:** Specific files, functions, or variables in focus.
-*   **Last Known State:** Result of the last command/test (pass/fail/error message).
-*   **Next Logical Step:** The immediate command or action to take next.
+## 2. Update ai/ Files
 
-## Phase 4: Completion Report
-Output a structured summary:
+**ai/STATUS.md** — Update to reflect current state:
+- Current metrics (if any)
+- What worked / what didn't
+- Active work summary
+- Blockers
 
-**✅ State Serialized**
-*   **Status:** [State]
-*   **Context:** [Summary of updates]
-*   **Next:** [Immediate action]
+**ai/TODO.md** — Sync with actual progress:
+- Remove completed tasks
+- Add new tasks discovered
+- Update in-progress items
 
-**Instruction:** Run `/clear`, then `/restore` to resume.
+**ai/DECISIONS.md** — Add any new decisions made this session (if applicable).
+
+**ai/KNOWLEDGE.md** — Add any codebase quirks discovered (if applicable).
+
+## 3. Health Check
+
+| Issue | Fix |
+|-------|-----|
+| Session files >500 lines | Prune historical content, move details to subdirs |
+| Completed tasks in TODO.md | Delete them (trust git) |
+| WEEK*.md or time-tracking files | Consolidate to STATUS.md, delete files |
+| Stale content in STATUS.md | Remove old blockers, completed phases |
+
+## 4. Commit
+
+```bash
+git add ai/
+git commit -m "Update ai/ context"
+```
+
+## 5. Report
+
+```
+ai/ updated
+- STATUS.md: [state summary]
+- TODO.md: [N pending, N in-progress]
+- Committed: [yes/no]
+
+Next: /compact to compress conversation
+```

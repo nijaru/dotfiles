@@ -8,18 +8,18 @@ Your goal is to **deserialize** the persistent project state from the `ai/` dire
 2.  **Ingest** and **Atomic Consume** the ephemeral handoff artifact `ai/tmp/handoff.md` (if present).
 
 ## Phase 1: Persistent Context Loading
-(The agent should read these files)
-- `AGENTS.md` (or `CLAUDE.md`)
-- `ai/STATUS.md`
-- `ai/TODO.md`
+Read the following files to hydrate the base state:
+- `AGENTS.md` (or `CLAUDE.md` if AGENTS.md not found)
+- `ai/STATUS.md` (if not found, note it)
+- `ai/TODO.md` (if not found, note it)
 
 ## Phase 2: Ephemeral Context Ingestion
-- Check for `ai/tmp/handoff.md`.
-- If it exists, **READ IT**.
+- Check for and read `ai/tmp/handoff.md`
+- If not found, note "No handoff artifact found."
 
 ## Phase 3: Analysis & Action
 1.  **Synthesize:** specific goal for this session based on `STATUS.md` + `handoff.md`.
-2.  **Cleanup:** If `ai/tmp/handoff.md` was found, **DELETE IT** using `run_shell_command`. This prevents stale context (Atomic Consumption).
+2.  **Cleanup:** If `ai/tmp/handoff.md` was successfully read, **you must delete it immediately** using the Bash tool. This prevents stale context in future sessions (Atomic Consumption).
 3.  **Report:** Output a structured summary:
 
 **🚀 Context Hydrated**

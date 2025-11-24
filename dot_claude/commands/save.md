@@ -14,20 +14,15 @@ Read ai/STATUS.md and ai/TODO.md.
 
 ## 2. Update ai/ Files
 
-**ai/STATUS.md** — Update to reflect current state:
-- Current metrics (if any)
-- What worked / what didn't
-- Active work summary
-- Blockers
+**Always update:**
+- **ai/STATUS.md** — Current state, what worked/didn't, active work, blockers
+- **ai/TODO.md** — Remove completed, add new, update in-progress
 
-**ai/TODO.md** — Sync with actual progress:
-- Remove completed tasks
-- Add new tasks discovered
-- Update in-progress items
-
-**ai/DECISIONS.md** — Add any new decisions made this session (if applicable).
-
-**ai/KNOWLEDGE.md** — Add any codebase quirks discovered (if applicable).
+**If changes this session:**
+- **ai/DECISIONS.md** — New architectural decisions
+- **ai/KNOWLEDGE.md** — Codebase quirks discovered
+- **ai/PLAN.md** — Phase changes, major pivots
+- **ai/RESEARCH.md** — New research findings (index only, details → ai/research/)
 
 ## 3. Health Check
 

@@ -15,9 +15,15 @@ Refer to `AGENTS.md` (root or global) for the authoritative definition of the `a
 *   `ai/tmp/handoff.md`: Ephemeral context for the next session.
 
 ## Phase 1: Context Analysis
-(The agent should inspect the current state)
-- Run `git status` and `git diff --stat` to see changes.
-- Read `ai/STATUS.md` and `ai/TODO.md`.
+Run these commands to inspect the current state:
+```bash
+git status
+git diff --stat
+ls -F ai/
+```
+Then read these files:
+- `ai/STATUS.md` (first 20 lines)
+- `ai/TODO.md` (first 20 non-dash lines)
 
 ## Phase 2: State Update Operations
 1.  **Update `ai/STATUS.md`**:

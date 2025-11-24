@@ -15,7 +15,7 @@ Audit and maintain AI context files following best practices.
 | Check | Look For | Tool |
 |-------|----------|------|
 | Config | AGENTS.md exists, CLAUDE.md symlink correct | ls -la |
-| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md, PLAN.md | ls ai/ |
+| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md, KNOWLEDGE.md, PLAN.md | ls ai/ |
 | Subdirs | research/, design/, decisions/, tmp/ exist | ls ai/ |
 | ai/tmp/.gitignore | Exists and contains '*' | cat ai/tmp/.gitignore |
 | File sizes | Detect bloat (>500 lines session files) | wc -l ai/*.md |
@@ -218,6 +218,7 @@ echo '*' > ai/tmp/.gitignore  # Ensure gitignore exists
 - ai/TODO.md — Active tasks only
 - ai/DECISIONS.md — Architectural decisions
 - ai/RESEARCH.md — Research index
+- ai/KNOWLEDGE.md — Permanent codebase quirks (if exists)
 
 **Reference files** (loaded on demand):
 - ai/research/ — Detailed research
@@ -250,6 +251,7 @@ wc -l ai/*.md
 | AGENTS.md | Tables/lists, clear sections, no duplication, explains ai/ |
 | Session files | <500 lines each, current/active only |
 | Subdirs | research/, design/, decisions/, tmp/ exist (tmp/ gitignored) |
+| KNOWLEDGE.md | Exists if codebase has quirks/gotchas |
 | No time-tracking | No WEEK*.md, no estimates (unless external deadline) |
 | Claude Code | Documented if .claude/ exists |
 

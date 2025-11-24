@@ -22,6 +22,7 @@
 | `ai/TODO.md` | Active tasks only |
 | `ai/PLAN.md` | Phased milestones, architecture, dependencies |
 | `ai/DECISIONS.md` | Active decisions, trade-offs |
+| `ai/KNOWLEDGE.md` | Permanent codebase quirks, gotchas, non-obvious behavior |
 | `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
 | `ai/design/` | Design specifications |
 | `ai/decisions/` | Superseded/split decisions |
@@ -37,6 +38,8 @@
 **Principle:** Session files (ai/ root) read every session—keep focused. Reference files (subdirs) loaded on demand—zero token cost unless accessed.
 
 **Anti-patterns:** Artificial time tracking, narrative prose, size-based file decisions
+
+**Knowledge capture:** When discovering non-obvious codebase behavior (race conditions, implicit dependencies, API quirks), add to `ai/KNOWLEDGE.md`. Format: `| Area | Knowledge | Impact | Discovered |`
 
 Reference: github.com/nijaru/agent-contexts
 
@@ -144,3 +147,6 @@ Never compare different abstraction levels. Requirements:
 - If >50x speedup: verify abstraction, explain WHY
 
 Format: ✅ "X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
+
+## Gemini Added Memories
+- Zenith framework v0.0.11 has a critical race condition in its Service Dependency Injection where singleton services store request context in instance attributes, causing data leaks under concurrency.

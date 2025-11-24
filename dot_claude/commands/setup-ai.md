@@ -141,6 +141,7 @@ Initial AI context setup.
 - ai/TODO.md — Active tasks only
 - ai/DECISIONS.md — Architectural decisions
 - ai/RESEARCH.md — Research index
+- ai/KNOWLEDGE.md — Permanent codebase quirks (if exists)
 [- ai/PLAN.md — Strategic roadmap (only if created)]
 
 **Reference files** (loaded on demand):
@@ -244,7 +245,7 @@ wc -l AGENTS.md ai/*.md
 | Symlink | CLAUDE.md → AGENTS.md |
 | AGENTS.md format | Tables/lists, clear ## sections |
 | AGENTS.md content | Comprehensive, no ai/ duplication, explains ai/ purpose |
-| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md (+ PLAN.md if complex) |
+| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md (+ PLAN.md if complex, + KNOWLEDGE.md if quirks exist) |
 | ai/ subdirs | research/, design/, decisions/, tmp/ exist (tmp/ gitignored) |
 | Claude Code | Documented if .claude/ exists |
 

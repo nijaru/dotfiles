@@ -77,6 +77,16 @@ set -g fish_color_cancel -r
 # Enable modern features
 set -g fish_key_bindings fish_default_key_bindings  # Default key bindings
 
+# Initialize zoxide (smarter cd)
+if command -v zoxide >/dev/null 2>&1
+    zoxide init fish | source
+end
+
+# Initialize fzf key bindings
+if command -v fzf >/dev/null 2>&1
+    fzf --fish | source
+end
+
 # SSH-aware configuration
 if status is-interactive
     # Completely clear universal variable to prevent conflicts

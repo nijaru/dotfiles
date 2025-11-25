@@ -4,88 +4,126 @@
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
-## Workflow Rules
-- Ask before: PRs, publishing packages, force ops, resource deletion
-- Commit frequently, push regularly (no ask needed)
-- Never force push to main/master
-- Delete files directly (no archiving)
-- `/tmp`: ephemeral test artifacts only. `ai/`: context/state across sessions
-  - Delete temp artifacts after use, never commit
+## ai/ Directory
 
-### ai/ Directory
-**AI session context**—workspace for tracking project state across sessions. Read first, update on exit.
+**Purpose:** AI session context - track state/decisions/research across sessions.
 
-| File | Purpose |
-|------|---------|
-| `AGENTS.md` | Project-specific instructions: commands, conventions, architecture, quirks, examples. Concrete code patterns > descriptions. (symlink: `CLAUDE.md` → `AGENTS.md`) |
-| `ai/STATUS.md` | Current state, blockers (read FIRST) |
-| `ai/TODO.md` | Active tasks only |
-| `ai/PLAN.md` | Phased milestones, architecture, dependencies |
-| `ai/DECISIONS.md` | Active decisions, trade-offs |
-| `ai/KNOWLEDGE.md` | Permanent codebase quirks, gotchas, non-obvious behavior |
-| `ai/RESEARCH.md` + `ai/research/` | Research index + detailed findings |
-| `ai/design/` | Design specifications |
-| `ai/decisions/` | Superseded/split decisions |
-| `ai/tmp/` | Temporary artifacts (gitignored) |
-| `docs/` | User documentation |
+**Core Principle:** Session files (ai/ root) read EVERY session - keep minimal (<500 lines each). Reference files (subdirs) read ON DEMAND - zero token cost unless accessed.
 
-**Format:** Tables/lists/structured, not prose. Answer first, evidence second. Exec summary if lengthy.
+### Files
 
-**Progress:** Phases and milestones only—no artificial time tracking (WEEK*_DAY*.md, "Week 2 Day 3"). AI sessions have no time continuity. Real dates okay (ANALYSIS_2025-01-15.md). Use git log for actual timeline.
+| File | When | Purpose | Format |
+|------|------|---------|--------|
+| STATUS.md | ✅ Always | Current state, blockers (read FIRST) | Tables for metrics, bullets for learnings |
+| TODO.md | ✅ Always | Active tasks only | Checkboxes, one-line + file links |
+| DECISIONS.md | ✅ Recommended | Architectural decisions | Context → Decision → Rationale → Tradeoffs (table) |
+| RESEARCH.md | ⚠️ If needed | Research index (summaries + pointers) | Topic → Finding → Link to details |
+| KNOWLEDGE.md | ⚠️ If quirks | Permanent codebase quirks/gotchas | Table: Area → Knowledge → Impact → Discovered |
+| PLAN.md | ⚠️ Optional | Strategic roadmap (ONLY if 3+ phases) | Tables: phases, dependencies, NO time estimates |
 
-**Maintenance:** Keep current/active only. Delete historical/completed. Archive superseded decisions to `ai/decisions/superseded-YYYY-MM.md`.
+### Subdirectories
 
-**Principle:** Session files (ai/ root) read every session—keep focused. Reference files (subdirs) loaded on demand—zero token cost unless accessed.
+Create only when needed:
 
-**Anti-patterns:** Artificial time tracking, narrative prose, size-based file decisions
+| Directory | When to Create | Contents |
+|-----------|----------------|----------|
+| research/ | Research becomes detailed OR multiple topics | Detailed research (exec summary if lengthy) |
+| design/ | Formal specs needed (API, architecture) | Design specs (delete after implemented) |
+| decisions/ | DECISIONS.md hard to navigate OR many superseded | Superseded/topic-split decisions |
+| tmp/ | Always (with `echo '*' > ai/tmp/.gitignore`) | Temporary artifacts (never commit) |
 
-**Knowledge capture:** When discovering non-obvious codebase behavior (race conditions, implicit dependencies, API quirks), add to `ai/KNOWLEDGE.md`. Format: `| Area | Knowledge | Impact | Discovered |`
+### Workflow
+
+**Start:** Read STATUS.md → TODO.md → AGENTS.md
+**During:** Update TODO.md, document decisions, research in research/ if detailed
+**End:** Update STATUS.md (state + learnings + commits) → Update TODO.md → Prune if needed
+
+### Format Rules
+
+**ALL ai/ files:** Tables/lists/structured, NOT prose. Answer first, evidence second.
+
+❌ "After investigating caching, the team feels Redis would be good..."
+✅ `**Decision**: Redis | **Why**: 10x faster, persistence | **Tradeoff**: Service dependency`
+
+### Maintenance
+
+**Prune when accumulating historical/completed content:**
+
+| File | Delete |
+|------|--------|
+| STATUS.md | Old pivots, completed phases, resolved blockers |
+| TODO.md | Completed tasks (no "Done" section) |
+| DECISIONS.md | Move superseded → ai/decisions/superseded-YYYY-MM.md |
+| RESEARCH.md | Move details → research/, keep index only |
+| research/*.md, design/*.md | Delete when no longer relevant |
+
+**Promote learnings:** Permanent rule → AGENTS.md | Permanent quirk → KNOWLEDGE.md | Transient → Delete
+
+### Scaling
+
+Start minimal, grow as needed:
+- **Minimal:** STATUS.md + TODO.md
+- **Standard:** Add DECISIONS.md + RESEARCH.md
+- **Complex:** Add PLAN.md + research/ + design/
+
+### AGENTS.md
+
+**AGENTS.md = primary, CLAUDE.md → AGENTS.md = symlink**
+
+**Belongs:** Build/test/deploy commands, coding standards, architecture, tech stack, verification steps, concrete code examples
+**Doesn't belong:** Current issues (STATUS.md), learnings (STATUS.md), tactical roadmap (PLAN.md), detailed research (ai/research/)
 
 Reference: github.com/nijaru/agent-contexts
 
+## Workflow Rules
+
+### Git
+- Commit frequently, push regularly (no ask)
+- **ASK before:** PRs, publishing packages, force ops, resource deletion
+- Never force push to main/master
+- Commit messages: Concise, focus on WHY not WHAT
+
+### Files
+- Delete directly (no archiving)
+- `/tmp`: ephemeral only (delete after use)
+- `ai/tmp/`: gitignored temporary artifacts
+
 ## Development
 
-**Do it right the first time.** Rushing leads to bugs, tech debt, and rework. Research, understand requirements, plan, implement.
+**Philosophy:** Do it right the first time. Research → understand → plan → implement.
 
 ### Code Quality
-- Research best practices first (state of the art)
-- Fix root cause, no workarounds
-- Production-ready: error handling, logging, validation
-- Follow existing patterns
-- Update docs: README, docs/, ai/, AGENTS.md
-- Ask before breaking existing code
+
+1. Research best practices first (state of the art)
+2. Fix root cause, no workarounds
+3. Production-ready: error handling, logging, validation
+4. Follow existing patterns (read code before changing)
+5. Update docs: README, docs/, ai/, AGENTS.md
+6. Ask before breaking existing code/APIs
+
+**NEVER propose changes to code you haven't read.**
 
 ### Testing & TDD
-TDD provides binary success criteria, prevents drift. AI excels at test generation and rapid iteration.
 
 **Workflow:** Plan → Red → Green → Refactor → Validate
 
 | Use TDD | Skip |
 |---------|------|
-| Systems: DBs, compilers, storage | Docs, configs, typos |
-| Performance: SIMD, algorithms, hot paths | Prototypes, spikes |
-| Services with test infrastructure | Simple scripts, fixes |
-| Complex logic prone to regression | Exploratory code |
+| Systems (DBs, compilers), Performance (SIMD, algorithms), Complex logic | Docs, configs, typos, prototypes, simple scripts |
 
-**Rules:**
-- Declare TDD upfront (prevents mock implementations)
-- Commit tests before coding, don't modify during implementation
-- Iterate until green
+**Rules:** Declare upfront, commit tests before coding, don't modify during implementation
 
 ### Code Style
 
-**Naming:** Concise, context-aware, no redundancy
-- Proportional to scope (local: `count`, package: `userCount`)
-- Omit redundant context (`Cache` not `LRUCache_V2`, `users` not `userSlice`)
-- Omit type info already clear (`count` not `numUsers`, `timeout` not `timeoutInt`)
-- Booleans: `isEnabled`/`hasData`. Constants: `MAX_RETRIES`. Units: `timeoutMs`/`bufferKB`
+**Naming:** Concise, context-aware, proportional to scope
+- Local: `count` | Package: `userCount`
+- Omit redundant context: `Cache` not `LRUCache_V2`
+- Booleans: `isEnabled` | Constants: `MAX_RETRIES` | Units: `timeoutMs`
 
-**Comments:** Only WHY, never WHAT. NO narrating code changes.
-- Write: non-obvious decisions, external requirements, algorithm rationale, workarounds
-- Never: change tracking, obvious behavior, TODOs, what code does
+**Comments:** Only WHY, never WHAT. No change tracking, TODOs, or obvious behavior.
 
 **Rust:**
-- Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`, no `.clone()` shortcuts
+- Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`
 - Errors: `anyhow` (apps), `thiserror` (libs)
 - Async: sync for files, `tokio` for network, `rayon` for CPU
 - Edition: "2024"
@@ -94,59 +132,66 @@ TDD provides binary success criteria, prevents drift. AI excels at test generati
 
 **Versioning:**
 - Use commit hashes for references
-- Bump versions only when instructed
-- 0.1.0+ = production ready. 1.0.0 = proven in production
-- Sequential bumps only: 0.0.1 → 0.0.2 → 0.1.0 → 1.0.0 (not 0.0.1 → 1.0.0)
+- Bump only when instructed
+- Sequential: 0.0.1 → 0.0.2 → 0.1.0 → 1.0.0 (not 0.0.1 → 1.0.0)
+- Semantics: 0.0.x = unstable | 0.1.0+ = production ready | 1.0.0 = proven in production
 
 **Release:** (wait for CI ✅)
 1. Bump version, update docs → commit → push
 2. `gh run watch` (wait for pass)
-3. Tag: `git tag -a vX.Y.Z -m "Description" && git push --tags`
+3. `git tag -a vX.Y.Z -m "Description" && git push --tags`
 4. `gh release create vX.Y.Z --notes-file release_notes.md`
-5. ASK before publishing (can't unpublish)
-
-CI fails: delete tag/release, fix, restart
+5. **ASK before publishing** (can't unpublish)
 
 ## Stack
 
-**Languages:** Python, Rust, Go, Bun preferred. Shell: `nushell` for typed data/JSON/CSV. Mojo: experimental (evaluate first).
+**Languages:** Python, Rust, Go, Bun. Shell: `nushell` for typed data. Mojo: evaluate first.
 
-**Packages:** Let package manager choose versions unless pinning required.
-- `cargo add serde` (not `cargo add serde@1.0`)
-- `uv add requests` (not `uv add requests==2.31.0`)
-- `bun add zod` (not `bun add zod@3.22.0`)
-- Pin only for: reproducibility requirements, known breaking changes, or explicit user request
+**Package versions:** Let manager choose unless pinning required
+- ✅ `cargo add serde`, `uv add requests`, `bun add zod`
+- ❌ `cargo add serde@1.0` (only pin for reproducibility, breaking changes, or explicit request)
 
-**Toolchains:**
-- Python: `uv` (not pip/venv) → `uv init && uv sync`, `uv add [pkg]`, `uv run python script.py`
-  - Lint: `uv run ruff check . --fix`, `uvx ty check .`, `uvx vulture . --min-confidence 80`
-- JS/TS: `bun` → `bun init`, `bun add [pkg]`, `bun run script.ts`, `bun test`, `bun build`
-- Versions: `mise`
-- UI: Icon libraries (lucide, heroicons), never emoji
+**Python (uv):**
+```bash
+uv init && uv sync
+uv add [pkg]
+uv run python script.py
+uv run ruff check . --fix
+uvx ty check .
+```
 
-**CLI Tools:** Prefer structured output, modern alternatives
+**JS/TS (bun):**
+```bash
+bun init
+bun add [pkg]
+bun run script.ts
+bun test && bun build
+```
+
+**Versions:** `mise`
+**UI:** lucide/heroicons, never emoji (unless requested)
+
+**CLI Tools:**
 
 | Instead of | Use | Why |
 |------------|-----|-----|
-| grep | `rg` (ripgrep) | Faster, respects .gitignore |
+| grep | `rg` | Faster, respects .gitignore |
 | find | `fd` | Simpler syntax |
 | sed | `sd` | Safer defaults |
-| awk | `miller` | Proper CSV/TSV/JSON |
+| awk | `miller` | CSV/TSV/JSON handling |
 | curl | `xh`/`httpie` | Structured output |
-| rsync | `sy` | 2-11x faster, parallel (experimental) |
+| rsync | `sy` | 2-11x faster (experimental) |
 
-For jq/yq/ast-grep: use for proper JSON/YAML/AST manipulation.
+Use `jq`/`yq` for JSON/YAML, `ast-grep` for AST manipulation.
 
 ## Standards
 
-**Performance Claims:**
-Never compare different abstraction levels. Requirements:
-- Same features (ACID, durability, etc.)
-- Same workload, realistic data
-- 3+ runs, report median + caveats
-- If >50x speedup: verify abstraction, explain WHY
+**Performance Claims:** Never compare different abstraction levels.
+- Same features (ACID, durability), workload, 3+ runs (median)
+- If >50x: verify abstraction, explain WHY
+- ✅ "X: 20x faster bulk inserts (sequential timestamps, both durable). Random: 2-5x."
+- ❌ "X is 100x faster than Y" (no context)
 
-Format: ✅ "X: 20x faster bulk inserts for sequential timestamps vs Y (both with durability). 10M rows. Random: 2-5x."
+---
 
-## Gemini Added Memories
-- Zenith framework v0.0.11 has a critical race condition in its Service Dependency Injection where singleton services store request context in instance attributes, causing data leaks under concurrency.
+**Version:** 2025-11-24 | **Reference:** github.com/nijaru/agent-contexts

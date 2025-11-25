@@ -1,3 +1,4 @@
+{{- $secrets := include ".chezmoidata.yaml.age" | decrypt | fromYaml -}}
 {
   "globalShortcut": "Alt+Space",
   "mcpServers": {
@@ -15,7 +16,7 @@
         "exa-mcp-server"
       ],
       "env": {
-        "EXA_API_KEY": "{{ .exa_api_key }}"
+        "EXA_API_KEY": "{{ $secrets.exa_api_key }}"
       }
     }
   }

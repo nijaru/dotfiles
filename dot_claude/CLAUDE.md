@@ -168,6 +168,9 @@ bun run script.ts
 bun test && bun build
 ```
 
+**Go:**
+- Formatter: `golines -m gofumpt` (unless project specifies otherwise)
+
 **Versions:** `mise`
 **UI:** lucide/heroicons, never emoji (unless requested)
 

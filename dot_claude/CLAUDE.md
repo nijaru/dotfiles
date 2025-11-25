@@ -119,6 +119,7 @@ Reference: github.com/nijaru/agent-contexts
 - Local: `count` | Package: `userCount`
 - Omit redundant context: `Cache` not `LRUCache_V2`
 - Booleans: `isEnabled` | Constants: `MAX_RETRIES` | Units: `timeoutMs`
+- **Comparison variants:** Use clear, descriptive names (e.g., `process_sequential`, `process_parallel`, `process_simd`) not `process_v2`, `process_new`, `process_optimized`
 
 **Comments:** Only WHY, never WHAT. No change tracking, TODOs, or obvious behavior.
 
@@ -145,7 +146,7 @@ Reference: github.com/nijaru/agent-contexts
 
 ## Stack
 
-**Languages:** Python, Rust, Go, Bun. Shell: `nushell` for typed data. Mojo: evaluate first.
+**Languages:** Python, Rust, Go, Bun. Mojo: evaluate first.
 
 **Package versions:** Let manager choose unless pinning required
 - ✅ `cargo add serde`, `uv add requests`, `bun add zod`
@@ -174,26 +175,14 @@ bun test && bun build
 **Versions:** `mise`
 **UI:** lucide/heroicons, never emoji (unless requested)
 
-**CLI Tools:**
-
-| Instead of | Use | Why |
-|------------|-----|-----|
-| grep | `rg` | Faster, respects .gitignore |
-| find | `fd` | Simpler syntax |
-| sed | `sd` | Safer defaults |
-| awk | `miller` | CSV/TSV/JSON handling |
-| curl | `xh`/`httpie` | Structured output |
-| rsync | `sy` | 2-11x faster (experimental) |
-
-Use `jq`/`yq` for JSON/YAML, `ast-grep` for AST manipulation.
+**CLI Tools:** Prefer `rg`, `fd`, `sd`, `jq`/`yq`. Use `ast-grep` for AST manipulation.
 
 ## Standards
 
-**Performance Claims:** Never compare different abstraction levels.
-- Same features (ACID, durability), workload, 3+ runs (median)
-- If >50x: verify abstraction, explain WHY
-- ✅ "X: 20x faster bulk inserts (sequential timestamps, both durable). Random: 2-5x."
-- ❌ "X is 100x faster than Y" (no context)
+**Benchmarks & Comparisons:**
+- Compare equivalent configs (same features, durability, workload)
+- Report with full context: config, dataset size, environment, methodology
+- Results must be reproducible reference for future sessions
 
 ---
 

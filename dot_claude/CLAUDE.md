@@ -103,8 +103,6 @@ Reference: github.com/nijaru/agent-contexts
 
 **NEVER propose changes to code you haven't read.**
 
-**Avoid over-engineering:** Prefer minimal changes. Ask before adding features or abstractions beyond what's requested.
-
 ### Testing & TDD
 
 **Workflow:** Plan → Red → Green → Refactor → Validate

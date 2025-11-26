@@ -1,0 +1,16 @@
+{{- $secrets := include ".chezmoidata.yaml.age" | decrypt | fromYaml -}}
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "context7-mcp-server"]
+    },
+    "exa": {
+      "command": "npx",
+      "args": ["-y", "exa-mcp-server"],
+      "env": {
+        "EXA_API_KEY": "{{ $secrets.exa_api_key }}"
+      }
+    }
+  }
+}

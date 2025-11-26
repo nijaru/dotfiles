@@ -14,25 +14,14 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_STATE_HOME "$HOME/.local/state"
-switch (uname -s)
+switch $__fish_uname
     case Darwin
         set -gx XDG_RUNTIME_DIR "$HOME/Library/Application Support/Ladybird"
     case '*'
         set -gx XDG_RUNTIME_DIR "/run/user/$UID"
 end
 
-# Ensure critical directories exist
-for dir in \
-    "$XDG_CONFIG_HOME" \
-    "$XDG_CACHE_HOME" \
-    "$XDG_DATA_HOME" \
-    "$XDG_STATE_HOME" \
-    "$XDG_CACHE_HOME/fish" \
-    "$XDG_STATE_HOME/less" \
-    "$XDG_DATA_HOME/gem" \
-    "$XDG_CONFIG_HOME/bundle"
-    mkdir -p $dir
-end
+# XDG directories are created by chezmoi run_once script
 
 # Development Tools Paths
 set -gx MISE_CONFIG_DIR "$XDG_CONFIG_HOME/mise"
@@ -77,7 +66,7 @@ contains "$HOME/.modular/bin" $PATH; or set -gx PATH "$HOME/.modular/bin" $PATH
 set -gx RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 
 # Platform-specific settings
-switch (uname -s)
+switch $__fish_uname
     case Darwin
         # GPG Configuration
         set -gx GPG_TTY (tty)
@@ -87,13 +76,15 @@ switch (uname -s)
         set -gx DOCKER_HOST "unix://$HOME/.orbstack/run/docker.sock"
         set -gx DOCKER_DEFAULT_PLATFORM "linux/arm64"
 
-        # Homebrew setup
-        switch (uname -m)
-            case arm64 aarch64
-                eval (/opt/homebrew/bin/brew shellenv)
-            case '*'
-                eval (/usr/local/bin/brew shellenv)
+        # Homebrew setup (cached, auto-invalidates on brew update)
+        set -l brew_prefix (test $__fish_uname_m = arm64 && echo /opt/homebrew || echo /usr/local)
+        set -l brew_cache "$XDG_CACHE_HOME/fish/brew_shellenv.fish"
+        set -l brew_bin "$brew_prefix/bin/brew"
+        # Invalidate cache if brew binary is newer than cache
+        if not test -f $brew_cache; or test $brew_bin -nt $brew_cache
+            $brew_bin shellenv > $brew_cache
         end
+        source $brew_cache
 
         # Homebrew performance optimizations
         set -gx HOMEBREW_DOWNLOAD_CONCURRENCY "auto"  # Enable parallel downloads (4.6.0+)

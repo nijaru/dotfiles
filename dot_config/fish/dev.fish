@@ -173,103 +173,36 @@ if command -v python3 >/dev/null 2>&1
 end
 
 ###############################################################################
-# Ruby Development
+# Ruby Development (abbrs defined unconditionally - free if unused)
 ###############################################################################
 if command -v ruby >/dev/null 2>&1
-    # Helper function for gem checking
-    function gem_installed
-        # Fish has issues with passing regex to external commands in some cases
-        # So we'll just pass the name and let gem handle it
-        gem list -i $argv[1] >/dev/null 2>&1
-    end
-    
     # Basic Ruby commands
-    abbr --add rb "ruby"     # Ruby shorthand
-    abbr --add rbi "irb"     # Interactive Ruby
-    abbr --add rbv "ruby -v" # Ruby version
-    
-    # Gem commands - only if gem command exists
-    if command -v gem >/dev/null 2>&1
-        abbr --add gemi "gem install"     # Install a gem
-        abbr --add gemu "gem uninstall"   # Uninstall a gem
-        abbr --add geml "gem list"        # List installed gems
-        abbr --add gemr "gem rdoc"        # Generate RDoc
-        abbr --add gemt "gem test"        # Run tests for gem
-        abbr --add gemo "gem outdated"    # Show outdated gems
-        abbr --add gemup "gem update"     # Update all gems
-        abbr --add gems "gem search -r"   # Search for gems
-        abbr --add gemp "gem pristine"    # Reset gems to pristine condition
-        abbr --add gemb "gem build"       # Build gem from gemspec
-        abbr --add gemc "gem cleanup"     # Clean old gem versions
-        abbr --add gemv "gem env version" # Show gem version
-        abbr --add gemh "gem help"        # Show gem help
-    end
-    
-    # Bundle commands - only if bundler is installed
-    if gem_installed bundler
-        abbr --add rbb "bundle"           # Bundle shorthand
-        abbr --add rbbe "bundle exec"     # Bundle exec
-        abbr --add rbbi "bundle install"  # Install dependencies
-        abbr --add rbbu "bundle update"   # Update dependencies
-        abbr --add rbbo "bundle outdated" # Show outdated gems
-        abbr --add rbbc "bundle clean"    # Clean old gems
-        abbr --add rbbp "bundle package"  # Package gems
-        abbr --add rbbck "bundle check"   # Verify dependencies
-        abbr --add rbbl "bundle list"     # List gems
-        abbr --add rbbop "bundle open"    # Open gem source
-        abbr --add rbbin "bundle info"    # Show gem info
-    end
-    
-    # Rails commands - only if rails is installed
-    if gem_installed rails
-        abbr --add rbs "rails server"                # Start Rails server
-        abbr --add rbc "rails console"               # Rails console
-        abbr --add rbg "rails generate"              # Rails generate
-        abbr --add rbgm "rails generate migration"   # Generate migration
-        abbr --add rbr "rails routes"                # Show routes
-        abbr --add rbdb "rails db"                   # Database tasks
-        abbr --add rbdbm "rails db:migrate"          # Run migrations
-        abbr --add rbdbs "rails db:seed"             # Seed database
-        abbr --add rbdbc "rails db:create"           # Create database
-        abbr --add rbdbd "rails db:drop"             # Drop database
-        abbr --add rbdbr "rails db:rollback"         # Rollback migration
-        abbr --add rbdbrb "rails db:rollback STEP=1" # Rollback one step
-        
-        # Testing
-        abbr --add rt "rails test"         # Run tests
-        abbr --add rts "rails test:system" # Run system tests
-    end
-    
-    # RSpec commands - only if rspec is installed
-    if gem_installed rspec
-        abbr --add spec "rspec"                       # Run RSpec tests
-        abbr --add rsf "rspec --format documentation" # Formatted RSpec output
-        abbr --add rsp "rspec --profile"              # Show slow examples
-        abbr --add rsw "rspec --profile --warnings"   # Show warnings
-    end
-    
-    # Development Tools - only if the respective tools are installed
-    if gem_installed rubocop
-        abbr --add rubocop "bundle exec rubocop"  # Ruby linter
-        abbr --add rubo "bundle exec rubocop -a"  # Auto-correct Ruby style
-        abbr --add ruboa "bundle exec rubocop -A" # Auto-correct aggressive
-    end
-    
-    if gem_installed solargraph
-        abbr --add solargraph "bundle exec solargraph" # Ruby language server
-    end
-    
-    if gem_installed fasterer
-        abbr --add fasterer "bundle exec fasterer" # Speed suggestions
-    end
-    
-    if gem_installed brakeman
-        abbr --add brakeman "bundle exec brakeman" # Security scanner
-    end
-    
-    if command -v pry >/dev/null 2>&1
-        abbr --add rbpry "pry -r ./config/environment" # Rails console with Pry
-    end
+    abbr --add rb "ruby"
+    abbr --add rbi "irb"
+    abbr --add rbv "ruby -v"
+
+    # Gem commands
+    abbr --add gemi "gem install"
+    abbr --add gemu "gem uninstall"
+    abbr --add geml "gem list"
+    abbr --add gemo "gem outdated"
+    abbr --add gemup "gem update"
+    abbr --add gems "gem search -r"
+    abbr --add gemc "gem cleanup"
+
+    # Bundle commands
+    abbr --add rbb "bundle"
+    abbr --add rbbe "bundle exec"
+    abbr --add rbbi "bundle install"
+    abbr --add rbbu "bundle update"
+    abbr --add rbbo "bundle outdated"
+
+    # Rails commands
+    abbr --add rbs "rails server"
+    abbr --add rbc "rails console"
+    abbr --add rbg "rails generate"
+    abbr --add rbdbm "rails db:migrate"
+    abbr --add rbdbr "rails db:rollback"
 end
 
 ###############################################################################

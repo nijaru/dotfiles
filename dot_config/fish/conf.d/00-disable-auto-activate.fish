@@ -4,5 +4,9 @@
 # Disable mise auto-activation from vendor_conf.d
 set -gx MISE_FISH_AUTO_ACTIVATE 0
 
-# Note: direnv from vendor_conf.d cannot be disabled via environment variable
-# We'll provide lazy-loaded alternatives in dev.fish
+# Disable direnv (not using .envrc files)
+function _direnv_hook; end
+
+# Cache uname results (called multiple times during startup)
+set -g __fish_uname (command uname -s)
+set -g __fish_uname_m (command uname -m)

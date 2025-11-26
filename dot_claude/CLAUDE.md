@@ -101,7 +101,14 @@ Reference: github.com/nijaru/agent-contexts
 5. Update docs: README, docs/, ai/, AGENTS.md
 6. Ask before breaking existing code/APIs
 
-**NEVER propose changes to code you haven't read.**
+**Code exploration:** Read and understand relevant files before proposing edits. Do not speculate about unread code. If user references a file, inspect it before explaining or fixing.
+
+**Over-engineering prevention:**
+- Only make changes directly requested or clearly necessary
+- Don't add features, refactor, or "improve" beyond what was asked
+- Don't add error handling for impossible scenarios
+- Don't create abstractions for one-time operations
+- Minimum complexity for current task
 
 ### Testing & TDD
 
@@ -186,4 +193,4 @@ bun test && bun build
 
 ---
 
-**Version:** 2025-11-24 | **Reference:** github.com/nijaru/agent-contexts
+**Version:** 2025-11-26 | **Reference:** github.com/nijaru/agent-contexts

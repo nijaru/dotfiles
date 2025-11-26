@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 # Fish completions configuration
 
-# Only run in interactive shells for better startup performance
+# Only run in interactive shells
 if status is-interactive
     # Enable completions
     set -g fish_complete_path $fish_complete_path ~/.config/fish/completions
@@ -13,22 +13,5 @@ if status is-interactive
         end
     end
 
-    # Docker completions
-    if command -v docker >/dev/null 2>&1
-        # Fish handles this automatically in newer versions
-    end
-
-    # mise completions and activation
-    if command -v mise >/dev/null 2>&1
-        # Activate mise for runtime version management
-        mise activate fish | source
-        # Load completions
-        mise completion fish | source
-    end
-
-    # Modern CLI tools
-    if command -v zoxide >/dev/null 2>&1
-        # Initialize zoxide (intelligent cd command)
-        zoxide init fish | source
-    end
+    # mise and zoxide are lazy-loaded in dev.fish or config.fish
 end

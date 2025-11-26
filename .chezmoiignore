@@ -49,3 +49,4 @@ dot_claude/mcp_config.json
 .config/opencode/node_modules
 .config/opencode/providers
 .config/opencode/generate_config.sh
+.claude.json

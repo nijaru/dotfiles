@@ -35,7 +35,7 @@ Key architectural decisions and tool choices for this dotfiles configuration.
 
 **Implementation**:
 - Managed in `dot_config/fish/fish_plugins`
-- Initial setup via `run_once_setup-tide.fish.tmpl`
+- Fisher handles installation (run_once_install-fisher.fish.tmpl)
 - Vendored init disabled in favor of Fisher management
 
 ## Dotfile Management: chezmoi
@@ -176,17 +176,25 @@ end
 
 ## Fish Startup Optimization
 
-**Decision**: Gate expensive operations to interactive shells only
+**Decision**: Aggressive lazy-loading and caching for <30ms startup
 
 **Rationale**:
-- Scripts don't need completions or prompt
-- Measured 30-50% startup improvement
-- Better experience for one-off commands
+- Target: <70ms (industry "good" baseline)
+- Achieved: ~28ms (3.3x faster than initial 92ms)
+- Fast shell = better developer experience across thousands of daily invocations
 
 **Implementation**:
-- Wrap completions/prompt in `if status is-interactive`
-- One-time completion generation via `run_once_*` scripts
-- Lazy loading for expensive tools (GCP, etc.)
+- `dev` function lazy-loads mise, docker, language abbrs on first project cd
+- `__auto_load_dev` triggers on entering directories with .git, Cargo.toml, etc.
+- Cache `uname` results in `__fish_uname` / `__fish_uname_m` (saves ~4ms)
+- Cache `brew shellenv` to file, auto-invalidate when brew binary changes
+- Disable unused vendor hooks (direnv, mise auto-activate)
+- Fisher manages Tide (removed redundant run_once_setup-tide.fish.tmpl)
+
+**Trade-offs**:
+- First `dev` call has ~50ms cost
+- Brew cache needs regeneration after significant brew changes (auto-handled)
+- Slightly more complex config structure
 
 ## Portable SSH Config
 
@@ -214,3 +222,42 @@ end
 - Explicit command (`ssh-fish`) vs automatic (opt-in behavior)
 - Re-syncs every connection (but config is tiny, <5KB)
 - Minimal config only (full dotfiles via chezmoi for owned servers)
+
+## MCP Servers: Exa + Context7
+
+**Decision**: Use Exa (search) and Context7 (docs) as only MCP servers
+
+**Rationale**:
+- Exa 2.1 outperforms other search APIs (Brave, Parallel) on both speed and quality
+- Context7 provides library documentation lookup
+- Fewer servers = less context overhead, simpler toolset
+- Env var expansion buggy in Claude Code (GitHub #10955, #1254) - keys hardcoded at add time
+
+**Implementation**:
+- Claude Code: `claude mcp add` with `--env` flag (copies value at add time)
+- Claude Desktop: chezmoi template with `.chezmoidata.yaml.age` decrypt
+- Gemini CLI: `$EXA_API_KEY` in settings.json (runtime expansion works)
+- `~/.claude.json` in `.chezmoiignore` (contains hardcoded keys)
+
+**Trade-offs**:
+- Claude Code keys need manual refresh after rotation
+- Different key handling per tool (Claude Code bug workaround)
+
+## Secrets Management: Age Encryption
+
+**Decision**: Use chezmoi's age encryption for secrets
+
+**Rationale**:
+- Single encrypted file (`.chezmoidata.yaml.age`) for all secrets
+- Decrypted at `chezmoi apply` time, injected into templates
+- No plaintext secrets in git
+- Works cross-platform
+
+**Implementation**:
+- Secrets in `.chezmoidata.yaml.age`
+- Templates use `{{ $secrets := include ".chezmoidata.yaml.age" | decrypt | fromYaml }}`
+- Fish secrets.fish.tmpl generates env vars at apply time
+
+**Trade-offs**:
+- Need age key on each machine
+- Secrets in memory after apply (fish env vars)

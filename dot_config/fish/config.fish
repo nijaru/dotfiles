@@ -19,7 +19,7 @@ set -l essential_configs \
     $HOME/.config/fish/editor.fish
 
 # Platform-specific configuration
-switch (uname -s)
+switch $__fish_uname
     case Darwin
         set -a essential_configs $HOME/.config/fish/darwin.fish
     case Linux

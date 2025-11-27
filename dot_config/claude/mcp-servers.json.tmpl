@@ -11,6 +11,13 @@
       "env": {
         "EXA_API_KEY": "{{ $secrets.exa_api_key }}"
       }
+    },
+    "parallel": {
+      "type": "http",
+      "url": "https://search-mcp.parallel.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer {{ $secrets.parallel_api_key }}"
+      }
     }
   }
 }

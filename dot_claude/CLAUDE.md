@@ -15,7 +15,7 @@
 | File | When | Purpose | Format |
 |------|------|---------|--------|
 | STATUS.md | ✅ Always | Current state, blockers (read FIRST) | Tables for metrics, bullets for learnings |
-| TODO.md | ✅ Always | Active tasks only | Checkboxes, one-line + file links |
+| TODO.md | ✅ Always | Active tasks with dependencies | Checkboxes, deps inline, ready section first |
 | DECISIONS.md | ✅ Recommended | Architectural decisions | Context → Decision → Rationale → Tradeoffs (table) |
 | RESEARCH.md | ⚠️ If needed | Research index (summaries + pointers) | Topic → Finding → Link to details |
 | KNOWLEDGE.md | ⚠️ If quirks | Permanent codebase quirks/gotchas | Table: Area → Knowledge → Impact → Discovered |
@@ -58,6 +58,13 @@ Create only when needed:
 | research/*.md, design/*.md | Delete when no longer relevant |
 
 **Promote learnings:** Permanent rule → AGENTS.md | Permanent quirk → KNOWLEDGE.md | Transient → Delete
+
+### TODO.md Format
+
+- **Sections:** `## Ready` (no blockers) first, `## Blocked` second
+- **Dependencies:** `(after: x, y)` or `(blocks: x, y)` inline
+- **IDs:** Optional `[a3f8]` prefix for complex projects
+- Delete completed tasks immediately
 
 ### Scaling
 
@@ -186,4 +193,4 @@ bun test && bun build
 
 ---
 
-**Version:** 2025-11-26 | **Reference:** github.com/nijaru/agent-contexts
+**Version:** 2025-11-27 | **Reference:** github.com/nijaru/agent-contexts

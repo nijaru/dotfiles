@@ -95,6 +95,9 @@ Reference: github.com/nijaru/agent-contexts
 - `/tmp`: ephemeral only (delete after use)
 - `ai/tmp/`: gitignored temporary artifacts
 
+### Long-running Commands
+- Avoid rapid polling on background tasks; scale wait time with expected duration
+
 ## Development
 
 **Philosophy:** Do it right the first time. Research → understand → plan → implement.

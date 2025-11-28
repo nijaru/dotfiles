@@ -174,13 +174,13 @@ Reference: github.com/nijaru/agent-contexts
 - ✅ `cargo add serde`, `uv add requests`, `bun add zod`
 - ❌ `cargo add serde@1.0` (only pin for reproducibility, breaking changes, or explicit request)
 
-**Python (uv):**
+**Python:** Use `uv` for any project with dependencies or venv. Bare `python` okay for stdlib-only scripts.
 ```bash
-uv init && uv sync
-uv add [pkg]
-uv run python script.py
+uv init && uv sync       # project setup
+uv add [pkg]             # never pip install
+uv run python script.py  # when in a uv project
 uv run ruff check . --fix
-uvx ty check .
+uvx ty check .           # one-off tools
 ```
 
 **JS/TS (bun):**

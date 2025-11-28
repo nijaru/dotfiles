@@ -30,7 +30,7 @@ bun run script.ts
 bun test && bun build
 ```
 
-**Go:** Formatter: `golines --base-formatter gofumpt`
+**Go:** Formatter: `golines --base-formatter gofumpt` (unless project specifies otherwise)
 
 **Rust:**
 - Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`
@@ -86,7 +86,7 @@ bun test && bun build
 
 ### Git
 
-- Commit frequently, push regularly (no ask)
+- Commit frequently, push regularly (no permission needed)
 - **ASK before:** PRs, publishing packages, force ops, resource deletion
 - Never force push to main/master
 - Commit messages: Concise, focus on WHY not WHAT
@@ -136,7 +136,7 @@ Cross-session project context. Root files read every session—keep minimal. Sub
 | File | When | Purpose |
 |------|------|---------|
 | STATUS.md | Always | Current state, blockers (read FIRST) |
-| TODO.md | No beads | Tasks with deps, `## Ready` section first |
+| TODO.md | No beads | Tasks: `## Ready` first, `## Blocked` second, deps inline `(after: x)` |
 | DECISIONS.md | Recommended | Decisions: Context → Decision → Rationale |
 | RESEARCH.md | If needed | Index only, details in research/ |
 | KNOWLEDGE.md | If quirks | Permanent codebase gotchas |
@@ -150,7 +150,7 @@ Cross-session project context. Root files read every session—keep minimal. Sub
 
 **Maintenance:** Prune completed/resolved content. Promote: permanent rules → AGENTS.md, quirks → KNOWLEDGE.md.
 
-**CLAUDE.md:** Primary file for Claude Code. For other tools, symlink AGENTS.md → CLAUDE.md.
+**Project config:** AGENTS.md as primary. For Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
 
 ## Standards
 

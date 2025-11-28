@@ -4,6 +4,18 @@
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
+## Task Tracking (Beads)
+
+**Use `bd` for task management.** Dependency graphs + multi-session memory. Fallback: ai/TODO.md.
+
+| Phase | Commands |
+|-------|----------|
+| Start | `bd ready` (unblocked) ・ `bd list --status open` |
+| Work | `bd create "desc" -t task -p 2` ・ `bd dep add X blocks Y` ・ `bd update X --status in-progress` |
+| End | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]" |
+
+**Reference:** `bd show X` (details) ・ `bd tree X` (deps) ・ `bd list` (all)
+
 ## ai/ Directory
 
 **Purpose:** AI session context - track state/decisions/research across sessions.
@@ -15,7 +27,7 @@
 | File | When | Purpose | Format |
 |------|------|---------|--------|
 | STATUS.md | ✅ Always | Current state, blockers (read FIRST) | Tables for metrics, bullets for learnings |
-| TODO.md | ✅ Always | Active tasks with dependencies | Checkboxes, deps inline, ready section first |
+| TODO.md | ⚠️ If no beads | Active tasks with dependencies | Checkboxes, deps inline, ready section first |
 | DECISIONS.md | ✅ Recommended | Architectural decisions | Context → Decision → Rationale → Tradeoffs (table) |
 | RESEARCH.md | ⚠️ If needed | Research index (summaries + pointers) | Topic → Finding → Link to details |
 | KNOWLEDGE.md | ⚠️ If quirks | Permanent codebase quirks/gotchas | Table: Area → Knowledge → Impact → Discovered |
@@ -34,9 +46,9 @@ Create only when needed:
 
 ### Workflow
 
-**Start:** Read STATUS.md → TODO.md → AGENTS.md
-**During:** Update TODO.md, document decisions, research in research/ if detailed
-**End:** Update STATUS.md (state + learnings + commits) → Update TODO.md → Prune if needed
+**Start:** Read STATUS.md → `bd ready` (or TODO.md) → AGENTS.md
+**During:** File issues with `bd create`, document decisions, research in research/ if detailed
+**End:** Update STATUS.md → `bd sync` (or update TODO.md) → Prune if needed
 
 ### Format Rules
 
@@ -59,7 +71,7 @@ Create only when needed:
 
 **Promote learnings:** Permanent rule → AGENTS.md | Permanent quirk → KNOWLEDGE.md | Transient → Delete
 
-### TODO.md Format
+### TODO.md Format (fallback when no beads)
 
 - **Sections:** `## Ready` (no blockers) first, `## Blocked` second
 - **Dependencies:** `(after: x, y)` or `(blocks: x, y)` inline
@@ -69,7 +81,7 @@ Create only when needed:
 ### Scaling
 
 Start minimal, grow as needed:
-- **Minimal:** STATUS.md + TODO.md
+- **Minimal:** STATUS.md + beads (or TODO.md)
 - **Standard:** Add DECISIONS.md + RESEARCH.md
 - **Complex:** Add PLAN.md + research/ + design/
 
@@ -196,4 +208,4 @@ bun test && bun build
 
 ---
 
-**Version:** 2025-11-27 | **Reference:** github.com/nijaru/agent-contexts
+**Version:** 2025-11-27 | **Reference:** github.com/nijaru/agent-contexts | github.com/steveyegge/beads

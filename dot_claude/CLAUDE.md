@@ -1,114 +1,46 @@
 # AI Agent Instructions
 
 ## Environment
+
 - Mac: M3 Max, 128GB, Tailscale: `nick@apple`
 - Fedora: i9-13900KF, 32GB DDR5, RTX 4090, Tailscale: `nick@fedora`
 
-## Task Tracking (Beads)
+## Stack
 
-**Use `bd` for task management.** Dependency graphs + multi-session memory. Fallback: ai/TODO.md.
+**Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
-| Phase | Commands |
-|-------|----------|
-| Start | `bd ready` (unblocked) ・ `bd list --status open` |
-| Work | `bd create "desc" -t task -p 2` ・ `bd dep add X blocks Y` ・ `bd update X --status in-progress` |
-| End | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]" |
+**Package versions:** Let manager choose unless pinning required
+- `cargo add serde`, `uv add requests`, `bun add zod`
+- Only pin for reproducibility, breaking changes, or explicit request
 
-**Reference:** `bd show X` (details) ・ `bd tree X` (deps) ・ `bd list` (all)
+**Python:** Use `uv` for any project with dependencies or venv. Bare `python` okay for stdlib-only scripts.
+```bash
+uv init && uv sync       # project setup
+uv add [pkg]             # never pip install
+uv run python script.py  # when in a uv project
+uv run ruff check . --fix
+uvx ty check .           # one-off tools
+```
 
-## ai/ Directory
+**TypeScript (Bun):**
+```bash
+bun init
+bun add [pkg]
+bun run script.ts
+bun test && bun build
+```
 
-**Purpose:** AI session context - track state/decisions/research across sessions.
+**Go:** Formatter: `golines --base-formatter gofumpt`
 
-**Core Principle:** Session files (ai/ root) read EVERY session - keep minimal (<500 lines each). Reference files (subdirs) read ON DEMAND - zero token cost unless accessed.
+**Rust:**
+- Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`
+- Errors: `anyhow` (apps), `thiserror` (libs)
+- Async: sync for files, `tokio` for network, `rayon` for CPU
+- Edition: 2024
 
-### Files
+**Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST)
 
-| File | When | Purpose | Format |
-|------|------|---------|--------|
-| STATUS.md | ✅ Always | Current state, blockers (read FIRST) | Tables for metrics, bullets for learnings |
-| TODO.md | ⚠️ If no beads | Active tasks with dependencies | Checkboxes, deps inline, ready section first |
-| DECISIONS.md | ✅ Recommended | Architectural decisions | Context → Decision → Rationale → Tradeoffs (table) |
-| RESEARCH.md | ⚠️ If needed | Research index (summaries + pointers) | Topic → Finding → Link to details |
-| KNOWLEDGE.md | ⚠️ If quirks | Permanent codebase quirks/gotchas | Table: Area → Knowledge → Impact → Discovered |
-| PLAN.md | ⚠️ Optional | Strategic roadmap (ONLY if 3+ phases) | Tables: phases, dependencies, NO time estimates |
-
-### Subdirectories
-
-Create only when needed:
-
-| Directory | When to Create | Contents |
-|-----------|----------------|----------|
-| research/ | Research becomes detailed OR multiple topics | Detailed research (exec summary if lengthy) |
-| design/ | Formal specs needed (API, architecture) | Design specs (delete after implemented) |
-| decisions/ | DECISIONS.md hard to navigate OR many superseded | Superseded/topic-split decisions |
-| tmp/ | Always (with `echo '*' > ai/tmp/.gitignore`) | Temporary artifacts (never commit) |
-
-### Workflow
-
-**Start:** Read STATUS.md → `bd ready` (or TODO.md) → AGENTS.md
-**During:** File issues with `bd create`, document decisions, research in research/ if detailed
-**End:** Update STATUS.md → `bd sync` (or update TODO.md) → Prune if needed
-
-### Format Rules
-
-**ALL ai/ files:** Tables/lists/structured, NOT prose. Answer first, evidence second.
-
-❌ "After investigating caching, the team feels Redis would be good..."
-✅ `**Decision**: Redis | **Why**: 10x faster, persistence | **Tradeoff**: Service dependency`
-
-### Maintenance
-
-**Prune when accumulating historical/completed content:**
-
-| File | Delete |
-|------|--------|
-| STATUS.md | Old pivots, completed phases, resolved blockers |
-| TODO.md | Completed tasks (no "Done" section) |
-| DECISIONS.md | Move superseded → ai/decisions/superseded-YYYY-MM.md |
-| RESEARCH.md | Move details → research/, keep index only |
-| research/*.md, design/*.md | Delete when no longer relevant |
-
-**Promote learnings:** Permanent rule → AGENTS.md | Permanent quirk → KNOWLEDGE.md | Transient → Delete
-
-### TODO.md Format (fallback when no beads)
-
-- **Sections:** `## Ready` (no blockers) first, `## Blocked` second
-- **Dependencies:** `(after: x, y)` or `(blocks: x, y)` inline
-- **IDs:** Optional `[a3f8]` prefix for complex projects
-- Delete completed tasks immediately
-
-### Scaling
-
-Start minimal, grow as needed:
-- **Minimal:** STATUS.md + beads (or TODO.md)
-- **Standard:** Add DECISIONS.md + RESEARCH.md
-- **Complex:** Add PLAN.md + research/ + design/
-
-### AGENTS.md
-
-**AGENTS.md = primary, CLAUDE.md → AGENTS.md = symlink**
-
-**Belongs:** Build/test/deploy commands, coding standards, architecture, tech stack, verification steps, concrete code examples
-**Doesn't belong:** Current issues (STATUS.md), learnings (STATUS.md), tactical roadmap (PLAN.md), detailed research (ai/research/)
-
-Reference: github.com/nijaru/agent-contexts
-
-## Workflow Rules
-
-### Git
-- Commit frequently, push regularly (no ask)
-- **ASK before:** PRs, publishing packages, force ops, resource deletion
-- Never force push to main/master
-- Commit messages: Concise, focus on WHY not WHAT
-
-### Files
-- Delete directly (no archiving)
-- `/tmp`: ephemeral only (delete after use)
-- `ai/tmp/`: gitignored temporary artifacts
-
-### Long-running Commands
-- Avoid rapid polling on background tasks; scale wait time with expected duration
+**UI:** lucide/heroicons, never emoji (unless requested)
 
 ## Development
 
@@ -125,23 +57,13 @@ Reference: github.com/nijaru/agent-contexts
 
 **NEVER propose changes to code you haven't read.**
 
-### Testing & TDD
-
-**Workflow:** Plan → Red → Green → Refactor → Validate
-
-| Use TDD | Skip |
-|---------|------|
-| Systems (DBs, compilers), Performance (SIMD, algorithms), Complex logic | Docs, configs, typos, prototypes, simple scripts |
-
-**Rules:** Declare upfront, commit tests before coding, don't modify during implementation
-
 ### Code Style
 
 **Naming:** Concise, context-aware, proportional to scope
 - Local: `count` | Package: `userCount`
 - Omit redundant context: `Cache` not `LRUCache_V2`
 - Booleans: `isEnabled` | Constants: `MAX_RETRIES` | Units: `timeoutMs`
-- **Comparison variants:** Use clear, descriptive names (e.g., `process_sequential`, `process_parallel`, `process_simd`) not `process_v2`, `process_new`, `process_optimized`
+- No vague suffixes (`_v2`, `_new`)—use descriptive names (`_sequential`, `_parallel`)
 
 **Comments:** Only WHY, never WHAT. No change tracking, TODOs, or obvious behavior.
 
@@ -150,59 +72,85 @@ Reference: github.com/nijaru/agent-contexts
 - Split when: mixing concerns or hard to navigate
 - Tests: separate files, not inline
 
-**Rust:**
-- Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`
-- Errors: `anyhow` (apps), `thiserror` (libs)
-- Async: sync for files, `tokio` for network, `rayon` for CPU
-- Edition: "2024"
+### Testing
 
-## Git & Releases
+**TDD Workflow:** Plan → Red → Green → Refactor → Validate
+
+| Use TDD | Skip |
+|---------|------|
+| Systems (DBs, compilers), Performance, Complex logic | Docs, configs, typos, prototypes, simple scripts |
+
+**Rules:** Declare upfront, commit tests before coding, don't modify during implementation
+
+## Workflow
+
+### Git
+
+- Commit frequently, push regularly (no ask)
+- **ASK before:** PRs, publishing packages, force ops, resource deletion
+- Never force push to main/master
+- Commit messages: Concise, focus on WHY not WHAT
+
+### Releases
 
 **Versioning:**
 - Use commit hashes for references
 - Bump only when instructed
 - Sequential: 0.0.1 → 0.0.2 → 0.1.0 → 1.0.0 (not 0.0.1 → 1.0.0)
-- Semantics: 0.0.x = unstable | 0.1.0+ = production ready | 1.0.0 = proven in production
+- Semantics: 0.0.x = unstable | 0.1.0+ = production ready | 1.0.0 = proven
 
-**Release:** (wait for CI ✅)
+**Release process:** (wait for CI ✅)
 1. Bump version, update docs → commit → push
 2. `gh run watch` (wait for pass)
 3. `git tag -a vX.Y.Z -m "Description" && git push --tags`
 4. `gh release create vX.Y.Z --notes-file release_notes.md`
 5. **ASK before publishing** (can't unpublish)
 
-## Stack
+### Files
 
-**Languages:** Python, Rust, Go, Bun. Mojo: evaluate first.
+- Delete directly (no archiving)
+- `/tmp`: ephemeral only (delete after use)
+- `ai/tmp/`: gitignored temporary artifacts
 
-**Package versions:** Let manager choose unless pinning required
-- ✅ `cargo add serde`, `uv add requests`, `bun add zod`
-- ❌ `cargo add serde@1.0` (only pin for reproducibility, breaking changes, or explicit request)
+### Long-running Commands
 
-**Python:** Use `uv` for any project with dependencies or venv. Bare `python` okay for stdlib-only scripts.
-```bash
-uv init && uv sync       # project setup
-uv add [pkg]             # never pip install
-uv run python script.py  # when in a uv project
-uv run ruff check . --fix
-uvx ty check .           # one-off tools
-```
+- Avoid rapid polling; scale wait time with expected duration
 
-**JS/TS (bun):**
-```bash
-bun init
-bun add [pkg]
-bun run script.ts
-bun test && bun build
-```
+## Task Tracking (Beads)
 
-**Go:**
-- Formatter: `golines -m gofumpt` (unless project specifies otherwise)
+**Use `bd` for task management.** Dependency graphs + multi-session memory. Fallback: ai/TODO.md.
 
-**Versions:** `mise`
-**UI:** lucide/heroicons, never emoji (unless requested)
+| Phase | Commands |
+|-------|----------|
+| Start | `bd ready` (unblocked) ・ `bd list --status open` |
+| Work | `bd create "title" -t task -p 2` ・ `bd update X --status in-progress` |
+| Depend | `bd dep add <task> <blocker>` (task depends on blocker) |
+| End | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]" |
 
-**CLI Tools:** Prefer `rg`, `fd`, `sd`, `jq`/`yq`. Use `ast-grep` for AST manipulation.
+**Reference:** `bd show X` (details) ・ `bd dep tree X` (deps) ・ `bd list` (all)
+
+## ai/ Directory
+
+Cross-session project context. Root files read every session—keep minimal. Subdirs read on demand.
+
+| File | When | Purpose |
+|------|------|---------|
+| STATUS.md | Always | Current state, blockers (read FIRST) |
+| TODO.md | No beads | Tasks with deps, `## Ready` section first |
+| DECISIONS.md | Recommended | Decisions: Context → Decision → Rationale |
+| RESEARCH.md | If needed | Index only, details in research/ |
+| KNOWLEDGE.md | If quirks | Permanent codebase gotchas |
+| PLAN.md | 3+ phases | Strategic roadmap, no time estimates |
+
+**Subdirs:** Create when needed—research/, design/, decisions/, tmp/ (gitignored)
+
+**Format:** Tables/lists, not prose. Answer first, evidence second.
+- ❌ "After investigating, the team feels Redis would be good..."
+- ✅ `**Decision**: Redis | **Why**: 10x faster | **Tradeoff**: dependency`
+
+**Maintenance:** Prune completed/resolved content. Promote: permanent rules → AGENTS.md, quirks → KNOWLEDGE.md.
+
+**CLAUDE.md:** Primary file for Claude Code. For other tools, symlink AGENTS.md → CLAUDE.md.
 
 ## Standards
 
@@ -213,4 +161,4 @@ bun test && bun build
 
 ---
 
-**Version:** 2025-11-27 | **Reference:** github.com/nijaru/agent-contexts | github.com/steveyegge/beads
+**Version:** 2025-11-28 | **Reference:** github.com/nijaru/agent-contexts | github.com/steveyegge/beads

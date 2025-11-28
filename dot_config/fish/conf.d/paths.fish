@@ -7,6 +7,7 @@ if status is-interactive; or not set -q __paths_initialized
     # Batch add all paths at once to minimize operations
     # Only add paths that actually exist to avoid unnecessary checks
     set -l paths_to_add \
+        $HOME/.local/share/mise/shims \
         $HOME/.local/bin \
         $HOME/bin \
         $HOME/go/bin \

@@ -1,1 +1,1 @@
-../.claude/CLAUDE.md
+/Users/nick/.claude/CLAUDE.md

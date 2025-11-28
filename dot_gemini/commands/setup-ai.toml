@@ -1,8 +1,9 @@
 prompt = """
 Initialize AI agent context management for project.
 
-**Reference:** github.com/nijaru/agent-contexts PRACTICES.md
+**Reference:** github.com/nijaru/agent-contexts PRACTICES.md | github.com/steveyegge/beads
 **Philosophy:** Session files (<500 lines, current only) + Reference subdirs (on-demand) = token efficiency
+**Task tracking:** Beads (`bd`) preferred, TODO.md as fallback
 
 ## Execution Guidelines
 
@@ -23,6 +24,7 @@ Initialize AI agent context management for project.
 | Complexity | README/docs for: "phases", "milestones", "roadmap", "v1/v2" | ✓ |
 | Existing config | AGENTS.md, CLAUDE.md (check symlink target) | ✓ |
 | Claude Code | .claude/commands/, settings.json, settings.local.json | ✓ |
+| Beads | `which bd`, .beads/ directory | ✓ |
 
 **Action:** Read all sources in parallel. Consolidate detected info.
 
@@ -39,9 +41,18 @@ Initialize AI agent context management for project.
 
 ## 3. Determine Structure
 
+### Task Tracking Decision
+
+| Condition | Action |
+|-----------|--------|
+| `bd` available | Initialize beads: `bd init` (skip TODO.md) |
+| `bd` not available | Create ai/TODO.md |
+
+### ai/ Structure
+
 | Project Complexity | Files | Subdirs | PLAN.md |
 |-------------------|-------|---------|---------|
-| Minimal (<1mo) | STATUS.md, TODO.md | research/, design/, decisions/, tmp/ | ⊘ Skip |
+| Minimal (<1mo) | STATUS.md (+TODO.md if no beads) | research/, design/, decisions/, tmp/ | ⊘ Skip |
 | Standard (1-6mo) | +DECISIONS.md, RESEARCH.md | research/, design/, decisions/, tmp/ | ⊘ Skip |
 | Complex (6+mo) | +PLAN.md | research/, design/, decisions/, tmp/ | ✓ Create |
 
@@ -53,13 +64,22 @@ Initialize AI agent context management for project.
 ```bash
 mkdir -p ai/research ai/design ai/decisions ai/tmp
 echo '*' > ai/tmp/.gitignore
+
+# If beads available:
+bd init  # Creates .beads/, installs git hooks
 ```
 
-**Templates:** See PRACTICES.md lines 277-291 (TODO), 293-314 (STATUS), 316-339 (DECISIONS), 341-353 (RESEARCH), 247-275 (PLAN if needed)
+**Templates:** See PRACTICES.md for STATUS, DECISIONS, RESEARCH, PLAN templates
 
 **File initialization:**
 
-**ai/TODO.md:**
+**Beads (if available):**
+```bash
+bd init
+bd create "Initial setup tasks" -t task -p 2  # Add initial tasks
+```
+
+**ai/TODO.md (if no beads):**
 ```markdown
 ## High Priority
 - [ ] [Add tasks from detection: missing tests, TODO comments, etc.] [file/path]
@@ -245,7 +265,8 @@ wc -l AGENTS.md ai/*.md
 | Symlink | CLAUDE.md → AGENTS.md |
 | AGENTS.md format | Tables/lists, clear ## sections |
 | AGENTS.md content | Comprehensive, no ai/ duplication, explains ai/ purpose |
-| ai/ files | STATUS.md, TODO.md, DECISIONS.md, RESEARCH.md (+ PLAN.md if complex) |
+| Task tracking | .beads/ initialized OR ai/TODO.md created |
+| ai/ files | STATUS.md, DECISIONS.md, RESEARCH.md (+ TODO.md if no beads, + PLAN.md if complex) |
 | ai/ subdirs | research/, design/, decisions/, tmp/ exist (tmp/ gitignored) |
 | Claude Code | Documented if .claude/ exists |
 
@@ -269,9 +290,12 @@ wc -l AGENTS.md ai/*.md
 - Format: Tables/lists ✓
 - Claude Code: [commands/MCP/hooks or "none"]
 
+**Task tracking:**
+- Beads: [✓ initialized / ⊘ not available - using TODO.md]
+
 **ai/ structure:**
 - STATUS.md ✓
-- TODO.md ✓
+- TODO.md: [✓ created / ⊘ skipped - using beads]
 - DECISIONS.md ✓
 - RESEARCH.md ✓
 - PLAN.md: [✓ created / ⊘ skipped - why]
@@ -282,7 +306,7 @@ wc -l AGENTS.md ai/*.md
 
 **Next:**
 1. Update ai/STATUS.md with current project state
-2. Add tasks to ai/TODO.md
+2. Add tasks: `bd create "task" -t task -p 2` (or edit TODO.md)
 3. Commit: `git add . && git commit -m "Initialize AI context"`
 ```
 

@@ -145,6 +145,11 @@ Reference: github.com/nijaru/agent-contexts
 
 **Comments:** Only WHY, never WHAT. No change tracking, TODOs, or obvious behavior.
 
+**File organization:** Keep files focused.
+- Before adding code: new module or existing file?
+- Split when: mixing concerns or hard to navigate
+- Tests: separate files, not inline
+
 **Rust:**
 - Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`
 - Errors: `anyhow` (apps), `thiserror` (libs)

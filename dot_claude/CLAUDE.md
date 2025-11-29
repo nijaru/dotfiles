@@ -13,7 +13,7 @@
 - `cargo add serde`, `uv add requests`, `bun add zod`
 - Only pin for reproducibility, breaking changes, or explicit request
 
-**Python:** Use `uv` for any project with dependencies or venv. Bare `python` okay for stdlib-only scripts.
+**Python:** Always use `uv`. Exception: one-off stdlib-only scripts.
 ```bash
 uv init && uv sync       # project setup
 uv add [pkg]             # never pip install

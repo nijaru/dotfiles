@@ -8,7 +8,7 @@ Initialize AI agent context management for project.
 
 - Run independent operations in parallel (file reads, git commands, directory creation)
 - Use extended reasoning for complex projects (>100 files, multi-phase)
-- Research current best practices before implementing (research/ → design/ → code)
+- Research current best practices before implementing (research/ → DESIGN.md → design/ → code)
 - Apply detection rigorously: fill ALL detected info, [TBD] only if truly cannot detect
 
 ## 1. Detect Project Info
@@ -24,6 +24,7 @@ Initialize AI agent context management for project.
 | Existing config | AGENTS.md, CLAUDE.md (check symlink target) | ✓ |
 | Claude Code | .claude/commands/, settings.json, settings.local.json | ✓ |
 | Beads | `which bd`, .beads/ directory | ✓ |
+| Existing ai/ | ai/PLAN.md, ai/RESEARCH.md, ai/KNOWLEDGE.md | ✓ |
 
 **Action:** Read all sources in parallel. Consolidate detected info.
 
@@ -38,7 +39,23 @@ Initialize AI agent context management for project.
 | Both files | Merge → AGENTS.md, remove old CLAUDE.md, create symlink |
 | CLAUDE.md → elsewhere | Ask user before modifying |
 
-## 3. Determine Structure
+## 3. Migrate Existing ai/ Structure
+
+**Check for old patterns and migrate:**
+
+| Old File | Action |
+|----------|--------|
+| ai/PLAN.md | Rename → ai/ROADMAP.md |
+| ai/RESEARCH.md | Keep or delete (research/ preferred) |
+| ai/KNOWLEDGE.md | Merge to AGENTS.md or delete |
+| ai/decisions/ | Keep if needed, otherwise delete |
+
+```bash
+# Migrate PLAN.md → ROADMAP.md
+[ -f ai/PLAN.md ] && mv ai/PLAN.md ai/ROADMAP.md && echo "Migrated PLAN.md → ROADMAP.md"
+```
+
+## 4. Determine Structure
 
 ### Task Tracking Decision
 
@@ -49,26 +66,26 @@ Initialize AI agent context management for project.
 
 ### ai/ Structure
 
-| Project Complexity | Files | Subdirs | PLAN.md |
-|-------------------|-------|---------|---------|
-| Minimal (<1mo) | STATUS.md (+TODO.md if no beads) | research/, design/, decisions/, tmp/ | ⊘ Skip |
-| Standard (1-6mo) | +DECISIONS.md, RESEARCH.md | research/, design/, decisions/, tmp/ | ⊘ Skip |
-| Complex (6+mo) | +PLAN.md | research/, design/, decisions/, tmp/ | ✓ Create |
+| Project Size | Files | Subdirs |
+|--------------|-------|---------|
+| Minimal (scripts, small tools) | STATUS.md (+TODO.md if no beads) | tmp/ |
+| Standard (typical projects) | +DESIGN.md, +DECISIONS.md | research/, design/, tmp/ |
+| Complex (multi-phase, 6+mo) | +ROADMAP.md | research/, design/, tmp/ |
 
-**PLAN.md criteria:** 3+ phases OR critical dependencies OR external deadline
-**Subdirs:** Always create (empty okay - 0 token cost, clear structure)
+**ROADMAP.md criteria:** 3+ phases OR critical dependencies OR external deadline
+**Subdirs:** Create when needed (empty okay - 0 token cost, clear structure)
 
-## 4. Create Structure
+## 5. Create Structure
 
 ```bash
-mkdir -p ai/research ai/design ai/decisions ai/tmp
+mkdir -p ai/research ai/design ai/tmp
 echo '*' > ai/tmp/.gitignore
 
 # If beads available:
 bd init  # Creates .beads/, installs git hooks
 ```
 
-**Templates:** See PRACTICES.md for STATUS, DECISIONS, RESEARCH, PLAN templates
+**Templates:** See PRACTICES.md for STATUS, DESIGN, DECISIONS, ROADMAP templates
 
 **File initialization:**
 
@@ -80,16 +97,16 @@ bd create "Initial setup tasks" -t task -p 2  # Add initial tasks
 
 **ai/TODO.md (if no beads):**
 ```markdown
-## High Priority
+## Ready
 - [ ] [Add tasks from detection: missing tests, TODO comments, etc.] [file/path]
 
 ## In Progress
 - [ ]
 
-## Backlog
+## Blocked
 - [ ]
 
-**Note:** Include file links [src/lib/cache.ts] for context. Keep current work only. Delete completed immediately (no "Done" section).
+**Note:** Include file links [src/lib/cache.ts] for context. Delete completed immediately.
 ```
 
 **ai/STATUS.md:**
@@ -114,13 +131,36 @@ Initial AI context setup.
 **Note:** Update EVERY session. Prune historical content (trust git history).
 ```
 
-**ai/DECISIONS.md:** (Include PRACTICES.md template lines 316-339 as comment)
+**ai/DESIGN.md (if standard+):**
+```markdown
+## System Overview
+[Detected description or TBD]
 
-**ai/RESEARCH.md:** (Include PRACTICES.md template lines 341-353 as comment)
+## Architecture
+[Detect from codebase structure or TBD]
 
-**ai/PLAN.md (if complex):** (Include PRACTICES.md template lines 247-275)
+## Components
+| Component | Purpose | Status |
+|-----------|---------|--------|
+[Detect from src/, lib/, etc.]
 
-## 5. Create AGENTS.md
+## Data Flow
+[TBD - fill in during development]
+
+## Key Design Decisions
+→ See DECISIONS.md for rationale
+
+## Component Details
+→ See ai/design/{component}.md for detailed specs
+
+**Note:** System-level overview. Component specs go in design/.
+```
+
+**ai/DECISIONS.md (if standard+):** Use PRACTICES.md template
+
+**ai/ROADMAP.md (if complex):** Use PRACTICES.md template
+
+## 6. Create AGENTS.md
 
 **Structure:** Tables/lists/code blocks (machine-readable). Comprehensive coverage. NO duplication with ai/ (use pointers).
 
@@ -133,9 +173,8 @@ Initial AI context setup.
 - Verification steps (commands that must pass: build/test/lint)
 - Code standards (detect from existing code or empty table)
 - Examples section (concrete code patterns if detectable)
-- Deprecated patterns (if detectable from code: old → new with rationale)
 - Claude Code integration (if .claude/ exists: commands, MCP, hooks)
-- Current focus pointers (ai/STATUS.md, ai/PLAN.md if exists)
+- Current focus pointers (ai/STATUS.md, ai/DESIGN.md)
 
 **Template:**
 
@@ -158,16 +197,14 @@ Initial AI context setup.
 
 **Session files** (read every session):
 - ai/STATUS.md — Current state, metrics, blockers (read FIRST)
-- ai/TODO.md — Active tasks only
+- ai/DESIGN.md — System architecture, components
 - ai/DECISIONS.md — Architectural decisions
-- ai/RESEARCH.md — Research index
-- ai/KNOWLEDGE.md — Permanent codebase quirks (if exists)
-[- ai/PLAN.md — Strategic roadmap (only if created)]
+[- ai/ROADMAP.md — Phases, milestones (only if created)]
+[- ai/TODO.md — Tasks (only if no beads)]
 
 **Reference files** (loaded on demand):
-- ai/research/ — Detailed research
-- ai/design/ — Design specs
-- ai/decisions/ — Archived decisions
+- ai/research/ — External research
+- ai/design/ — Component specs
 - ai/tmp/ — Temporary artifacts (gitignored)
 
 **Token efficiency:** Session files = current work only. Details in subdirs.
@@ -216,14 +253,6 @@ Commands to verify correctness (must pass):
 
 [Concrete code patterns specific to this project - add if detectable]
 
-## Deprecated Patterns
-
-[If detectable from codebase]
-
-| ❌ Don't Use | ✅ Use Instead | Why |
-|-------------|---------------|-----|
-[old pattern] | [new pattern] | [reason if detectable]
-
 ## Claude Code Integration
 
 [Only if .claude/ exists]
@@ -237,19 +266,19 @@ Commands to verify correctness (must pass):
 
 **Before implementing:**
 1. Research best practices → ai/research/{topic}.md
-2. Document decision → DECISIONS.md
-3. Design if complex → ai/design/{component}.md
+2. Synthesize to DESIGN.md or design/{component}.md
+3. Document decision → DECISIONS.md
 4. Implement → [src dir]
 5. Update STATUS.md with learnings
 
 ## Current Focus
 
-See ai/STATUS.md for current state[, ai/PLAN.md for roadmap]
+See ai/STATUS.md for current state, ai/DESIGN.md for architecture
 ```
 
 **Create symlink:** `ln -s AGENTS.md CLAUDE.md`
 
-## 6. Verify & Report
+## 7. Verify & Report
 
 **Check (parallel):**
 ```bash
@@ -266,8 +295,8 @@ wc -l AGENTS.md ai/*.md
 | AGENTS.md format | Tables/lists, clear ## sections |
 | AGENTS.md content | Comprehensive, no ai/ duplication, explains ai/ purpose |
 | Task tracking | .beads/ initialized OR ai/TODO.md created |
-| ai/ files | STATUS.md, DECISIONS.md, RESEARCH.md (+ TODO.md if no beads, + PLAN.md if complex) |
-| ai/ subdirs | research/, design/, decisions/, tmp/ exist (tmp/ gitignored) |
+| ai/ files | STATUS.md (+DESIGN.md, +DECISIONS.md if standard+, +ROADMAP.md if complex) |
+| ai/ subdirs | research/, design/, tmp/ exist (tmp/ gitignored) |
 | Claude Code | Documented if .claude/ exists |
 
 **Output:**
@@ -283,7 +312,7 @@ wc -l AGENTS.md ai/*.md
 - Framework: [detected]
 - Build: [detected or TBD]
 - Test: [detected or TBD]
-- Complexity: [minimal/standard/complex]
+- Size: [minimal/standard/complex]
 
 **AGENTS.md:** [X] lines
 - Symlink: CLAUDE.md → AGENTS.md ✓
@@ -295,11 +324,11 @@ wc -l AGENTS.md ai/*.md
 
 **ai/ structure:**
 - STATUS.md ✓
+- DESIGN.md: [✓ created / ⊘ skipped - minimal project]
+- DECISIONS.md: [✓ created / ⊘ skipped - minimal project]
+- ROADMAP.md: [✓ created / ⊘ skipped - why]
 - TODO.md: [✓ created / ⊘ skipped - using beads]
-- DECISIONS.md ✓
-- RESEARCH.md ✓
-- PLAN.md: [✓ created / ⊘ skipped - why]
-- Subdirs: research/, design/, decisions/, tmp/ (gitignored) ✓
+- Subdirs: research/, design/, tmp/ (gitignored) ✓
 
 **Preview AGENTS.md** (first 50 lines):
 [SHOW]
@@ -312,5 +341,5 @@ wc -l AGENTS.md ai/*.md
 
 ## Maintenance
 
-**Version:** 2025-11 (review quarterly or when PRACTICES.md changes)
+**Version:** 2025-12 (review quarterly or when PRACTICES.md changes)
 **Self-optimization:** Apply same token efficiency principles to this command

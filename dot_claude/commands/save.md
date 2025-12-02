@@ -31,10 +31,9 @@ bd sync                                     # Flush/commit/push
 - **ai/STATUS.md** — Current state, what worked/didn't, active work, blockers
 
 **If changes this session:**
+- **ai/DESIGN.md** — Architecture changes, new components
 - **ai/DECISIONS.md** — New architectural decisions
-- **ai/KNOWLEDGE.md** — Codebase quirks discovered
-- **ai/PLAN.md** — Phase changes, major pivots
-- **ai/RESEARCH.md** — New research findings (index only, details → ai/research/)
+- **ai/ROADMAP.md** — Phase changes, major pivots
 
 ## 4. Health Check
 
@@ -42,7 +41,8 @@ bd sync                                     # Flush/commit/push
 |-------|-----|
 | Session files >500 lines | Prune historical content, move details to subdirs |
 | Completed tasks in TODO.md | Delete them (trust git) |
-| Stale content in STATUS.md | Remove old blockers, completed phases |
+| Stale content in STATUS.md | Remove old blockers, completed work |
+| Superseded design in DESIGN.md | Update to current architecture |
 
 ## 5. Commit & Sync
 
@@ -57,6 +57,7 @@ bd sync 2>/dev/null  # Sync beads if available
 ```
 Session saved
 - STATUS.md: [state summary]
+- DESIGN.md: [updated/unchanged]
 - Tasks: [N open in beads / N pending in TODO.md]
 - Beads synced: [yes/no/n/a]
 - Committed: [yes/no]

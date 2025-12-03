@@ -14,8 +14,9 @@ When activated, execute the full `/code-review` command checklist.
 ## Activation Triggers
 
 - User says: "is this ready?", "review this", "check the code", "what do you think?"
+- Before push: "ready to push", "before I push", "lgtm?"
 - Before creating a PR or release
-- After significant refactoring
+- After completing work: "done with this", "finished the feature", "that should do it"
 - When user seems uncertain about code quality
 
 ## Execution

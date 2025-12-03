@@ -79,12 +79,14 @@ If no beads configured, fall back to ai/TODO.md.
 
 ## Process
 
+**Prerequisite**: If code was written, run code-review first. Only save context after LGTM.
+
 1. **Check bead status**: `bd ready` — what's the current task?
 2. **Close completed work**: `bd close <id>` if task is done
 3. **Update ai/STATUS.md**: Reflect what's implemented now
 4. **Record decisions**: Add to DECISIONS.md if any were made
 5. **Sync beads**: `bd sync`
-6. **Commit**: `git add ai/ && git commit -m "Update project context"`
+6. **Commit together**: `git add . && git commit -m "..."` (code + context)
 
 ## Output
 

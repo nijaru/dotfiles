@@ -10,7 +10,12 @@ case "$FILE_PATH" in
     uv run ruff format "$FILE_PATH" 2>/dev/null
     uv run ruff check --fix "$FILE_PATH" 2>/dev/null
     ;;
-  *.ts|*.tsx|*.js|*.jsx|*.json|*.md)
+  *.ts|*.tsx|*.js|*.jsx|*.json)
+    # Biome for JS/TS/JSON (faster than prettier)
+    bun x biome format --write "$FILE_PATH" 2>/dev/null
+    ;;
+  *.md)
+    # Prettier for markdown (biome doesn't support it)
     bun x prettier --write "$FILE_PATH" 2>/dev/null
     ;;
   *.go)

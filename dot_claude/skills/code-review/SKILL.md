@@ -4,6 +4,7 @@ description: >
   Automatically performs deep code review when context suggests it's needed.
   Triggers on: "review this", "is this ready", "check the code", before PR
   creation, before releases, or when user asks about code quality.
+allowed-tools: Read, Grep, Glob, Bash(command:git*)
 ---
 
 # Code Review Skill

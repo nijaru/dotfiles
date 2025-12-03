@@ -4,6 +4,7 @@ description: >
   Automatically runs pre-release checks when release intent is detected.
   Triggers on: "release", "publish", "tag v", "bump version", "ship it",
   or commands like gh release, cargo publish, npm publish, pypi upload.
+allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # Pre-Release Skill

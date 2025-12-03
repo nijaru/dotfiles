@@ -3,7 +3,14 @@
 # Runs silently, non-blocking (exit 0 always)
 
 FILE_PATH=$(jq -r '.tool_input.file_path // empty' 2>/dev/null)
-[[ -z "$FILE_PATH" || ! -f "$FILE_PATH" ]] && exit 0
+[[ -z "$FILE_PATH" ]] && exit 0
+
+# Security: reject path traversal and sensitive files
+[[ "$FILE_PATH" == *".."* ]] && exit 0
+[[ "$FILE_PATH" == *".env"* ]] && exit 0
+[[ "$FILE_PATH" == *".git/"* ]] && exit 0
+[[ "$FILE_PATH" == *"node_modules/"* ]] && exit 0
+[[ ! -f "$FILE_PATH" ]] && exit 0
 
 case "$FILE_PATH" in
   *.py)
@@ -11,11 +18,9 @@ case "$FILE_PATH" in
     uv run ruff check --fix "$FILE_PATH" 2>/dev/null
     ;;
   *.ts|*.tsx|*.js|*.jsx|*.json)
-    # Biome for JS/TS/JSON (faster than prettier)
     bun x biome format --write "$FILE_PATH" 2>/dev/null
     ;;
   *.md)
-    # Prettier for markdown (biome doesn't support it)
     bun x prettier --write "$FILE_PATH" 2>/dev/null
     ;;
   *.go)

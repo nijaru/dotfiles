@@ -1,5 +1,7 @@
 ---
 description: Generate PR description - asks permission before creating
+argument-hint: "[target-branch]"
+allowed-tools: Read, Grep, Glob, Bash(command:git*), Bash(command:gh*)
 ---
 
 Generate a pull request for the current branch. Target: $1 (default: main)
@@ -12,15 +14,19 @@ Generate a pull request for the current branch. Target: $1 (default: main)
 
 ```markdown
 ## Summary
+
 [1-3 bullet points on WHY these changes, not WHAT]
 
 ## Changes
+
 [Categorized list: Added/Changed/Fixed/Removed]
 
 ## Testing
+
 [How this was tested, what to verify]
 
 ## Breaking Changes
+
 [If any - migration steps needed]
 ```
 

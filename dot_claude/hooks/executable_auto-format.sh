@@ -10,6 +10,9 @@ FILE_PATH=$(jq -r '.tool_input.file_path // empty' 2>/dev/null)
 [[ "$FILE_PATH" == *".env"* ]] && exit 0
 [[ "$FILE_PATH" == *".git/"* ]] && exit 0
 [[ "$FILE_PATH" == *"node_modules/"* ]] && exit 0
+[[ "$FILE_PATH" == *.tmpl ]] && exit 0  # chezmoi templates
+[[ "$FILE_PATH" == *lock* ]] && exit 0  # lock files
+[[ "$FILE_PATH" == *-lock.* ]] && exit 0
 [[ ! -f "$FILE_PATH" ]] && exit 0
 
 case "$FILE_PATH" in

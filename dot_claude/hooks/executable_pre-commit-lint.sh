@@ -6,15 +6,16 @@
 COMMAND=$(jq -r '.tool_input.command // empty' 2>/dev/null)
 [[ ! "$COMMAND" =~ git[[:space:]]+commit ]] && exit 0
 
-STAGED=$(git diff --cached --name-only 2>/dev/null)
+# Get staged files, excluding sensitive paths
+STAGED=$(git diff --cached --name-only 2>/dev/null | grep -vE '(\.env|\.git/|node_modules/)')
 [[ -z "$STAGED" ]] && exit 0
 
 # Parse staged file types once
-HAS_PY=$(echo "$STAGED" | grep -c '\.py$')
-HAS_RS=$(echo "$STAGED" | grep -c '\.rs$')
-HAS_TS=$(echo "$STAGED" | grep -cE '\.(ts|tsx|js|jsx)$')
-HAS_GO=$(echo "$STAGED" | grep -c '\.go$')
-HAS_MOJO=$(echo "$STAGED" | grep -cE '\.(mojo|🔥)$')
+HAS_PY=$(echo "$STAGED" | grep -c '\.py$' || true)
+HAS_RS=$(echo "$STAGED" | grep -c '\.rs$' || true)
+HAS_TS=$(echo "$STAGED" | grep -cE '\.(ts|tsx|js|jsx)$' || true)
+HAS_GO=$(echo "$STAGED" | grep -c '\.go$' || true)
+HAS_MOJO=$(echo "$STAGED" | grep -cE '\.(mojo|🔥)$' || true)
 
 ERRORS=""
 
@@ -45,7 +46,6 @@ if [[ $HAS_TS -gt 0 ]]; then
     LINT=$(bun x eslint . 2>&1)
     [[ $? -ne 0 ]] && ERRORS+="TypeScript/JS:\n$LINT\n\n"
   else
-    # No config - use biome with defaults
     bun x biome format --write . 2>/dev/null
   fi
 fi

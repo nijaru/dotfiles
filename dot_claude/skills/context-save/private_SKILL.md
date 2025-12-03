@@ -13,10 +13,11 @@ Persist session progress to `ai/` directory files for future sessions.
 
 ## Activation Triggers
 
-- User says: "update ai/", "update ai/ and beads", "save context", "save progress"
-- End of session: "let's wrap up", "that's all for now", "done for today"
-- After completing significant work (major feature, refactor, decision)
-- Before switching to a different task/project
+- Explicit: "update ai/", "update beads", "save context", "sync"
+- Task complete: "close the bead", "mark it done", "that's finished"
+- End of session: "let's wrap up", "done for today", "stopping here"
+- Context switch: "switching to X", "moving on to", "different project"
+- After code-review completes and changes are ready to commit
 
 ## Files to Update
 
@@ -57,18 +58,33 @@ Record significant technical decisions.
 
 Update architecture documentation. No status markers (✅/❌) — that's for STATUS.md.
 
-### 4. TODO.md or Beads (When tasks changed)
+### 4. Beads (When tasks changed)
 
-If using beads: `bd sync`
-If using TODO.md: Update task list
+```bash
+# Check current task
+bd show <current-bead-id>
+
+# If task complete
+bd close <bead-id>
+
+# If new blockers/tasks discovered
+bd create "new task" -t task
+bd dep add <task> <blocker>
+
+# Always sync at end
+bd sync
+```
+
+If no beads configured, fall back to ai/TODO.md.
 
 ## Process
 
-1. **Read current files**: Check what exists in `ai/`
-2. **Identify changes**: What was accomplished this session?
-3. **Update minimally**: Only change what's stale
-4. **Keep it concise**: Tables/lists, not prose
-5. **Commit if appropriate**: `git add ai/ && git commit -m "Update project context"`
+1. **Check bead status**: `bd ready` — what's the current task?
+2. **Close completed work**: `bd close <id>` if task is done
+3. **Update ai/STATUS.md**: Reflect what's implemented now
+4. **Record decisions**: Add to DECISIONS.md if any were made
+5. **Sync beads**: `bd sync`
+6. **Commit**: `git add ai/ && git commit -m "Update project context"`
 
 ## Output
 

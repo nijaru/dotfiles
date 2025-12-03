@@ -75,8 +75,9 @@ Look for these patterns and suggest refactoring:
 
 **Unnecessary Complexity**
 
-- [ ] Variables that don't aid readability → Inline (linters catch obvious cases)
-- [ ] Defensive try/catch wrapping internal calls that already handle errors → Remove
+- [ ] Single-use variable that just restates the expression → Inline it
+- [ ] Single-use variable that names a concept → Keep it (adds clarity)
+- [ ] Defensive try/catch wrapping already-handled internal calls → Remove
 
 **Coupling Issues**
 

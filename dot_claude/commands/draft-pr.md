@@ -4,35 +4,109 @@ argument-hint: "[target-branch]"
 allowed-tools: Read, Grep, Glob, Bash(command:git*), Bash(command:gh*)
 ---
 
-Generate a pull request for the current branch. Target: $1 (default: main)
+Generate a pull request for the current branch.
+
+Target branch: $ARGUMENTS (default: main)
+
+---
 
 ## Steps
 
-1. **Analyze changes**: `git log main..HEAD` and `git diff main...HEAD`
-2. **Run /code-review** first if not already done
-3. **Generate PR content**:
+### 1. Gather Context
+
+```bash
+# Branch info
+git branch --show-current
+git log main..HEAD --oneline
+
+# Full diff
+git diff main...HEAD --stat
+git diff main...HEAD
+```
+
+### 2. Run Code Review
+
+If not already done, run `/code-review` on the changes.
+
+### 3. Find Related Issues
+
+```bash
+# Check commit messages for issue references
+git log main..HEAD --format="%B" | grep -oE '#[0-9]+'
+
+# Check branch name for issue number
+git branch --show-current | grep -oE '[0-9]+'
+```
+
+### 4. Suggest Reviewers
+
+```bash
+# Find who owns the changed files (CODEOWNERS or git blame)
+git diff main...HEAD --name-only | head -5 | xargs -I{} git log -1 --format="%an" -- {}
+```
+
+### 5. Check CI Status
+
+```bash
+gh run list --branch $(git branch --show-current) --limit 3
+```
+
+### 6. Generate PR Content
 
 ```markdown
 ## Summary
 
-[1-3 bullet points on WHY these changes, not WHAT]
+[1-3 bullet points on WHY these changes, not WHAT changed]
+
+Fixes #XXX <!-- if applicable -->
 
 ## Changes
 
-[Categorized list: Added/Changed/Fixed/Removed]
+**Added**
+
+- ...
+
+**Changed**
+
+- ...
+
+**Fixed**
+
+- ...
+
+**Removed**
+
+- ...
 
 ## Testing
 
-[How this was tested, what to verify]
+- [ ] Unit tests pass
+- [ ] Manual testing: [describe what was tested]
+- [ ] Edge cases considered: [list any]
 
 ## Breaking Changes
 
-[If any - migration steps needed]
+[If any - describe migration steps]
+
+<!-- None -->
+
+## Checklist
+
+- [ ] Code review passing (no ERROR/WARN issues)
+- [ ] Tests added/updated
+- [ ] Documentation updated (if needed)
 ```
 
-4. **Present draft** to user for review
-5. **Ask explicitly**: "Create this PR? (yes/no)"
+### 7. Present and Confirm
 
-Do NOT run `gh pr create` without explicit user approval.
+Show the draft to the user, then ask:
 
-$ARGUMENTS
+**"Create this PR? (yes/no)"**
+
+If yes:
+
+```bash
+gh pr create --title "..." --body "..." [--reviewer ...]
+```
+
+**Do NOT run `gh pr create` without explicit user approval.**

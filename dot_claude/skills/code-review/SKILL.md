@@ -1,73 +1,49 @@
 ---
 name: code-review
 description: >
-  Automatically performs deep code review when context suggests it's needed.
-  Triggers on: "review this", "is this ready", "check the code", before PR
-  creation, before releases, or when user asks about code quality.
+  Automatically triggers deep code review when context suggests it's needed.
+  Activates on: "review this", "is this ready", "check the code", before PR/release,
+  or when user asks about code quality.
 allowed-tools: Read, Grep, Glob, Bash(command:git*)
 ---
 
 # Code Review Skill
 
-Perform thorough code review when the context suggests review is appropriate.
+When activated, execute the full `/code-review` command checklist.
 
-## When to Activate
+## Activation Triggers
 
-- User asks "is this ready?", "review this", "check the code"
+- User says: "is this ready?", "review this", "check the code", "what do you think?"
 - Before creating a PR or release
 - After significant refactoring
 - When user seems uncertain about code quality
-- When asked "what do you think?" about code changes
 
-## Review Checklist
+## Execution
 
-### 1. Correctness
+Run the complete code review as defined in `/code-review`, which includes:
 
-- Logic errors, edge cases, off-by-one
-- Error handling coverage
-- Race conditions (if concurrent)
+1. **Design & Architecture** - Pattern fit, dependencies, over-engineering
+2. **Naming** - Optimize all names (variables, functions, types, files)
+3. **Comments** - Remove unnecessary, add WHY where needed
+4. **Code Smells** - Long functions, large files, duplication, dead code
+5. **Correctness** - Edge cases, error handling, concurrency
+6. **Performance** - Allocations, complexity, N+1 queries
+7. **Language Idioms** - Rust/Python/Go/TypeScript best practices
+8. **Security** - Input validation, secrets, injection vectors
+9. **Tests** - Coverage, edge cases, flakiness
+10. **Observability** - Logging, error context
 
-### 2. Code Style (per CLAUDE.md)
+## Scope Detection
 
-- **Naming**: Concise, context-aware, no vague suffixes (\_v2, \_new)
-- **Comments**: Only WHY, never WHAT - remove obvious/redundant comments
-- **File organization**: Single responsibility, no mixed concerns
+- Feature branch → diff vs main/master
+- Staged changes → review staged
+- Recent edits → review modified files
+- Explicit files → review those files
 
-### 3. Performance
+## Output
 
-- Unnecessary allocations (Rust: String vs &str, Vec vs &[T])
-- O(n²) where O(n) possible
-- Missing caching/memoization opportunities
-- Blocking I/O in async contexts
+Use the standard format from `/code-review`:
 
-### 4. Idioms (language-specific)
-
-- **Rust**: Proper error handling (anyhow/thiserror), borrowing, no unwrap in prod
-- **Python**: Type hints, pathlib over os.path, context managers
-- **Go**: Error wrapping, defer cleanup, channel usage
-- **TypeScript**: Strict null checks, proper async/await
-
-### 5. Security
-
-- Input validation at boundaries
-- No hardcoded secrets
-- SQL injection, XSS, command injection vectors
-
-### 6. Tests
-
-- Coverage for new functionality
-- Edge cases tested
-- No flaky tests
-
-## Output Format
-
-For each issue:
-
-```
-[SEVERITY] file:line - Issue description
-  → Suggested fix
-```
-
-Severities: ERROR (must fix), WARN (should fix), INFO (consider)
-
-End with summary: total issues by severity, overall assessment.
+- Severities: ERROR, WARN, REFACTOR, NIT
+- Location: `file:line`
+- Summary with verdict: LGTM / LGTM with nits / Needs work

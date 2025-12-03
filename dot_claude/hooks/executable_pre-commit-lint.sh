@@ -19,15 +19,24 @@ HAS_MOJO=$(echo "$STAGED" | grep -cE '\.(mojo|🔥)$' || true)
 
 ERRORS=""
 
-# Python
+# Python: format + lint + type check
 if [[ $HAS_PY -gt 0 ]]; then
   uv run ruff check --fix . 2>/dev/null
   uv run ruff format . 2>/dev/null
   LINT=$(uv run ruff check . 2>&1)
-  [[ $? -ne 0 ]] && ERRORS+="Python:\n$LINT\n\n"
+  [[ $? -ne 0 ]] && ERRORS+="Python (ruff):\n$LINT\n\n"
+
+  # Type checking with ty (non-blocking warning for now)
+  TYPE_ERRORS=$(uvx ty check . 2>&1)
+  if [[ $? -ne 0 ]]; then
+    # Only block on actual errors, not warnings
+    if echo "$TYPE_ERRORS" | grep -q "error:"; then
+      ERRORS+="Python (types):\n$TYPE_ERRORS\n\n"
+    fi
+  fi
 fi
 
-# Rust
+# Rust: format + clippy
 if [[ $HAS_RS -gt 0 ]]; then
   cargo clippy --fix --allow-dirty --allow-staged 2>/dev/null
   cargo fmt 2>/dev/null
@@ -50,14 +59,20 @@ if [[ $HAS_TS -gt 0 ]]; then
   fi
 fi
 
-# Go
+# Go: format + vet + staticcheck
 if [[ $HAS_GO -gt 0 ]]; then
   golines --base-formatter gofumpt -w . 2>/dev/null
   LINT=$(go vet ./... 2>&1)
-  [[ $? -ne 0 ]] && ERRORS+="Go:\n$LINT\n\n"
+  [[ $? -ne 0 ]] && ERRORS+="Go (vet):\n$LINT\n\n"
+
+  # staticcheck if available
+  if command -v staticcheck &>/dev/null; then
+    STATIC=$(staticcheck ./... 2>&1)
+    [[ $? -ne 0 ]] && ERRORS+="Go (staticcheck):\n$STATIC\n\n"
+  fi
 fi
 
-# Mojo
+# Mojo: format + check
 if [[ $HAS_MOJO -gt 0 ]]; then
   mojo format . 2>/dev/null
   LINT=$(mojo check . 2>&1)

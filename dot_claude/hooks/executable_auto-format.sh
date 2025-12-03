@@ -35,6 +35,12 @@ case "$FILE_PATH" in
   *.mojo|*.🔥)
     mojo format "$FILE_PATH" 2>/dev/null
     ;;
+  *.yaml|*.yml)
+    bun x prettier --write "$FILE_PATH" 2>/dev/null
+    ;;
+  *.toml)
+    taplo format "$FILE_PATH" 2>/dev/null
+    ;;
 esac
 
 exit 0

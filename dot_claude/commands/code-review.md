@@ -72,8 +72,11 @@ Look for these patterns and suggest refactoring:
 - [ ] Duplicate code → Extract shared function
 - [ ] Dead code (unused functions/variables) → Delete
 - [ ] Speculative generality (unused abstractions) → Delete
-- [ ] Single-use variables declared then immediately used → Inline the expression
-- [ ] Unnecessary try/catch in internal code paths → Remove if caller handles errors
+
+**Unnecessary Complexity**
+
+- [ ] Variables that don't aid readability → Inline (linters catch obvious cases)
+- [ ] Defensive try/catch wrapping internal calls that already handle errors → Remove
 
 **Coupling Issues**
 

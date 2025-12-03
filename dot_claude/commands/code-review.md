@@ -42,16 +42,18 @@ Names should be **intention-revealing** and **proportional to scope**.
 
 ### 3. Comments (Remove or Improve)
 
-Comments should explain **WHY**, never **WHAT**.
+Comments should explain **WHY**, never **WHAT**. Remove comments a human wouldn't write.
 
-| Remove                      | Keep/Add                                     |
-| --------------------------- | -------------------------------------------- |
-| `i++ // increment i`        | `// Skip first element: it's the header row` |
-| `// TODO: fix this` (stale) | `// Workaround for Chrome bug #12345`        |
-| `// Added by John 2023`     | Complex regex/algorithm explanation          |
-| Commented-out code          | Non-obvious business rule rationale          |
+| Remove                                     | Keep/Add                                     |
+| ------------------------------------------ | -------------------------------------------- |
+| `i++ // increment i`                       | `// Skip first element: it's the header row` |
+| `// TODO: fix this` (stale)                | `// Workaround for Chrome bug #12345`        |
+| `// Added by John 2023`                    | Complex regex/algorithm explanation          |
+| Commented-out code                         | Non-obvious business rule rationale          |
+| `// Initialize the user service` (obvious) | `// Must init before auth due to dep cycle`  |
+| Inconsistent with file's comment style     |                                              |
 
-**Action**: Remove redundant/stale comments. Add WHY comments where logic is non-obvious.
+**Action**: Remove redundant/stale/obvious comments. Match the file's existing comment style.
 
 ### 4. Code Smells & Refactoring
 
@@ -70,12 +72,20 @@ Look for these patterns and suggest refactoring:
 - [ ] Duplicate code → Extract shared function
 - [ ] Dead code (unused functions/variables) → Delete
 - [ ] Speculative generality (unused abstractions) → Delete
+- [ ] Single-use variables declared then immediately used → Inline the expression
+- [ ] Unnecessary try/catch in internal code paths → Remove if caller handles errors
 
 **Coupling Issues**
 
 - [ ] Feature envy (method uses another class more than its own) → Move method
 - [ ] Inappropriate intimacy (classes know too much about each other) → Refactor
 - [ ] God class/function (does too much) → Split responsibilities
+
+**Style Consistency**
+
+- [ ] New code matches existing file's patterns (naming, structure, error handling)
+- [ ] Defensive checks match the codebase norm (don't over-validate internal calls)
+- [ ] Import organization consistent with file
 
 **Action**: Suggest specific refactorings with before/after examples.
 
@@ -124,6 +134,7 @@ Look for these patterns and suggest refactoring:
 - Strict null checks, proper `undefined` handling
 - `async`/`await` over raw promises
 - Discriminated unions for state
+- No `as any` casts to bypass type errors → Fix the types properly
 
 ### 8. Security
 

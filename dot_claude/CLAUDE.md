@@ -135,11 +135,19 @@ Cross-session project context. Root files read every session—keep minimal. Sub
 
 | File | When | Purpose |
 |------|------|---------|
-| STATUS.md | **Always** | Current state, blockers (read FIRST) |
-| DESIGN.md | **Recommended** | System architecture, components |
+| STATUS.md | **Always** | Current state, what's implemented (read FIRST) |
+| DESIGN.md | **Recommended** | Architecture reference (NO task status markers) |
 | DECISIONS.md | **Recommended** | Decisions: Context → Decision → Rationale |
-| ROADMAP.md | Situational | Phases, milestones (multi-phase only) |
-| TODO.md | Situational | Tasks (if no beads) |
+| ROADMAP.md | Situational | Phase timeline, links to beads |
+| TODO.md | Situational | Tasks (fallback if no beads) |
+
+**Separation of concerns:**
+- **Beads** = task tracking (status, dependencies, individual work items)
+- **DESIGN.md** = architecture reference (what, why, how—NOT status)
+- **ROADMAP.md** = phase milestones (links to beads for task details)
+- **STATUS.md** = current state snapshot (what's done vs not)
+
+**Anti-pattern:** Don't put ✅/❌/In Progress in DESIGN.md. Architecture docs should be stable references, not task trackers.
 
 **Subdirs:** Create when needed—research/, design/, tmp/ (gitignored)
 

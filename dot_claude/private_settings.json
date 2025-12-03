@@ -23,6 +23,30 @@
         ],
         "matcher": ""
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/auto-format.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-commit-lint.sh",
+            "timeout": 120
+          }
+        ]
+      }
     ]
   },
   "includeCoAuthoredBy": false,

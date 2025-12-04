@@ -40,10 +40,11 @@ See `/code-review` for full detection logic. Priority order:
 
 1. User-specified files → those only
 2. Feature branch → diff vs main/master
-3. On main + has tags → diff vs last tag (solo project)
-4. On main + unpushed → diff vs origin/main
-5. Staged changes → review staged
-6. Unstaged changes → review unstaged
+3. On main + upstream remote → diff vs upstream/main (fork)
+4. On main + has tags → diff vs last tag (solo project)
+5. On main + unpushed → diff vs origin/main
+6. Staged changes → review staged
+7. Unstaged changes → review unstaged
 
 ## Output
 

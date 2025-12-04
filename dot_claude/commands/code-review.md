@@ -22,27 +22,35 @@ Detect automatically (in priority order):
 git branch --show-current  # not main/master
 #    → diff vs main/master
 
-# 3. On main, has version tags?
+# 3. On main, has upstream remote? (fork pattern)
+git remote get-url upstream 2>/dev/null
+#    → diff vs upstream/main (or upstream/master)
+
+# 4. On main, has version tags?
 git describe --tags --abbrev=0 2>/dev/null
 #    → diff vs last tag (solo project releasing from main)
 
-# 4. On main, no tags, has unpushed commits?
+# 5. On main, has unpushed commits?
 git log origin/main..HEAD --oneline 2>/dev/null
 #    → diff vs origin/main
 
-# 5. Has staged changes?
+# 6. Has staged changes?
 git diff --cached --stat
 #    → review staged
 
-# 6. Has unstaged changes?
+# 7. Has unstaged changes?
 git diff --stat
 #    → review unstaged
 
-# 7. Nothing to review
+# 8. Nothing to review
 #    → inform user
 ```
 
-**Solo project pattern**: Working on main with version tags → compare against last tag
+**Common patterns:**
+
+- Fork workflow: upstream remote exists → diff vs upstream/main
+- Solo project: on main with tags → diff vs last tag
+- Team project: feature branch → diff vs main
 
 ---
 

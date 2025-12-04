@@ -10,10 +10,12 @@
 **Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
 **Package versions:** Let manager choose unless pinning required
+
 - `cargo add serde`, `uv add requests`, `bun add zod`
 - Only pin for reproducibility, breaking changes, or explicit request
 
 **Python:** Always use `uv`. Exception: one-off stdlib-only scripts.
+
 ```bash
 uv init && uv sync       # project setup
 uv add [pkg]             # never pip install
@@ -23,6 +25,7 @@ uvx ty check .           # one-off tools
 ```
 
 **TypeScript (Bun):**
+
 ```bash
 bun init
 bun add [pkg]
@@ -33,12 +36,26 @@ bun test && bun build
 **Go:** Formatter: `golines --base-formatter gofumpt` (unless project specifies otherwise)
 
 **Rust:**
+
 - Avoid allocations: `&str` not `String`, `&[T]` not `Vec<T>`
 - Errors: `anyhow` (apps), `thiserror` (libs)
 - Async: sync for files, `tokio` for network, `rayon` for CPU
 - Edition: 2024
 
-**Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST)
+**Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST), `hhg` (semantic search)
+
+**Semantic Code Search (hygrep):** Use `hhg` for semantic code search with neural reranking.
+
+```bash
+hhg "auth logic" ./src        # Semantic: "auth" finds login, session, token
+hhg "error handling" . -n 5   # Limit results
+hhg "query" . --fast          # Skip reranking (instant grep)
+hhg "config" . --json         # JSON output for scripts/agents
+```
+
+- Returns full functions/classes, not just lines
+- First run downloads model (~83MB, cached in ~/.cache/huggingface/)
+- Prefer `hhg` over `rg` when searching for concepts rather than exact strings
 
 **UI:** lucide/heroicons, never emoji (unless requested)
 
@@ -60,6 +77,7 @@ bun test && bun build
 ### Code Style
 
 **Naming:** Concise, context-aware, proportional to scope
+
 - Local: `count` | Package: `userCount`
 - Omit redundant context: `Cache` not `LRUCache_V2`
 - Booleans: `isEnabled` | Constants: `MAX_RETRIES` | Units: `timeoutMs`
@@ -68,6 +86,7 @@ bun test && bun build
 **Comments:** Only WHY, never WHAT. No change tracking, TODOs, or obvious behavior.
 
 **File organization:** Keep files focused.
+
 - Before adding code: new module or existing file?
 - Split when: mixing concerns or hard to navigate
 - Tests: separate files, not inline
@@ -76,8 +95,8 @@ bun test && bun build
 
 **TDD Workflow:** Plan → Red → Green → Refactor → Validate
 
-| Use TDD | Skip |
-|---------|------|
+| Use TDD                                              | Skip                                             |
+| ---------------------------------------------------- | ------------------------------------------------ |
 | Systems (DBs, compilers), Performance, Complex logic | Docs, configs, typos, prototypes, simple scripts |
 
 **Rules:** Declare upfront, commit tests before coding, don't modify during implementation
@@ -94,12 +113,14 @@ bun test && bun build
 ### Releases
 
 **Versioning:**
+
 - Use commit hashes for references
 - Bump only when instructed
 - Sequential: 0.0.1 → 0.0.2 → 0.1.0 → 1.0.0 (not 0.0.1 → 1.0.0)
 - Semantics: 0.0.x = unstable | 0.1.0+ = production ready | 1.0.0 = proven
 
 **Release process:** (wait for CI ✅)
+
 1. Bump version, update docs → commit → push
 2. `gh run watch` (wait for pass)
 3. `git tag -a vX.Y.Z -m "Description" && git push --tags`
@@ -120,12 +141,12 @@ bun test && bun build
 
 **Use `bd` for task management.** Dependency graphs + multi-session memory. Fallback: ai/TODO.md.
 
-| Phase | Commands |
-|-------|----------|
-| Start | `bd ready` (unblocked) ・ `bd list --status open` |
-| Work | `bd create "title" -t task -p 2` ・ `bd update X --status in-progress` |
-| Depend | `bd dep add <task> <blocker>` (task depends on blocker) |
-| End | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]" |
+| Phase  | Commands                                                               |
+| ------ | ---------------------------------------------------------------------- |
+| Start  | `bd ready` (unblocked) ・ `bd list --status open`                      |
+| Work   | `bd create "title" -t task -p 2` ・ `bd update X --status in-progress` |
+| Depend | `bd dep add <task> <blocker>` (task depends on blocker)                |
+| End    | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]"    |
 
 **Reference:** `bd show X` (details) ・ `bd dep tree X` (deps) ・ `bd list` (all)
 
@@ -133,15 +154,16 @@ bun test && bun build
 
 Cross-session project context. Root files read every session—keep minimal. Subdirs read on demand.
 
-| File | When | Purpose |
-|------|------|---------|
-| STATUS.md | **Always** | Current state, what's implemented (read FIRST) |
-| DESIGN.md | **Recommended** | Architecture reference (NO task status markers) |
-| DECISIONS.md | **Recommended** | Decisions: Context → Decision → Rationale |
-| ROADMAP.md | Situational | Phase timeline, links to beads |
-| TODO.md | Situational | Tasks (fallback if no beads) |
+| File         | When            | Purpose                                         |
+| ------------ | --------------- | ----------------------------------------------- |
+| STATUS.md    | **Always**      | Current state, what's implemented (read FIRST)  |
+| DESIGN.md    | **Recommended** | Architecture reference (NO task status markers) |
+| DECISIONS.md | **Recommended** | Decisions: Context → Decision → Rationale       |
+| ROADMAP.md   | Situational     | Phase timeline, links to beads                  |
+| TODO.md      | Situational     | Tasks (fallback if no beads)                    |
 
 **Separation of concerns:**
+
 - **Beads** = task tracking (status, dependencies, individual work items)
 - **DESIGN.md** = architecture reference (what, why, how—NOT status)
 - **ROADMAP.md** = phase milestones (links to beads for task details)
@@ -154,6 +176,7 @@ Cross-session project context. Root files read every session—keep minimal. Sub
 **Workflow:** research/ (inputs) → DESIGN.md (synthesis) → design/ (component specs) → code
 
 **Format:** Tables/lists, not prose. Answer first, evidence second.
+
 - ❌ "After investigating, the team feels Redis would be good..."
 - ✅ `**Decision**: Redis | **Why**: 10x faster | **Tradeoff**: dependency`
 
@@ -164,6 +187,7 @@ Cross-session project context. Root files read every session—keep minimal. Sub
 ## Standards
 
 **Benchmarks & Comparisons:**
+
 - Compare equivalent configs (same features, durability, workload)
 - Report with full context: config, dataset size, environment, methodology
 - Results must be reproducible reference for future sessions

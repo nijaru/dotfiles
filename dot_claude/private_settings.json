@@ -6,8 +6,9 @@
 			{
 				"hooks": [
 					{
-						"command": "bd prime",
-						"type": "command"
+						"command": "command -v bd >/dev/null && bd prime || true",
+						"type": "command",
+						"timeout": 10
 					}
 				],
 				"matcher": ""
@@ -17,8 +18,9 @@
 			{
 				"hooks": [
 					{
-						"command": "bd prime",
-						"type": "command"
+						"command": "command -v bd >/dev/null && bd prime || true",
+						"type": "command",
+						"timeout": 10
 					}
 				],
 				"matcher": ""

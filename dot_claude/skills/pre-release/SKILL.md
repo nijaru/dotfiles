@@ -59,7 +59,7 @@ Run language-appropriate linters with strict settings:
 
 ### 5. Code Review
 
-Invoke code-review skill for changes since last release:
+Run `/code-review` for changes since last release:
 
 ```bash
 git diff $(git describe --tags --abbrev=0 2>/dev/null || echo HEAD~10)..HEAD
@@ -67,7 +67,9 @@ git diff $(git describe --tags --abbrev=0 2>/dev/null || echo HEAD~10)..HEAD
 
 ### 6. Version Validation
 
-- Version bumped appropriately? (patch/minor/major)
+- Version bumped appropriately?
+  - Sequential: 0.0.1 → 0.0.2 → 0.1.0 (not 0.0.1 → 1.0.0)
+  - 0.0.x = unstable, 0.1.0+ = production ready, 1.0.0 = proven
 - CHANGELOG updated?
 - Version consistent across files (Cargo.toml, pyproject.toml, package.json)?
 

@@ -36,10 +36,14 @@ Run the complete code review as defined in `/code-review`, which includes:
 
 ## Scope Detection
 
-- Feature branch → diff vs main/master
-- Staged changes → review staged
-- Recent edits → review modified files
-- Explicit files → review those files
+See `/code-review` for full detection logic. Priority order:
+
+1. User-specified files → those only
+2. Feature branch → diff vs main/master
+3. On main + has tags → diff vs last tag (solo project)
+4. On main + unpushed → diff vs origin/main
+5. Staged changes → review staged
+6. Unstaged changes → review unstaged
 
 ## Output
 

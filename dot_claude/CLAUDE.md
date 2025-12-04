@@ -42,20 +42,20 @@ bun test && bun build
 - Async: sync for files, `tokio` for network, `rayon` for CPU
 - Edition: 2024
 
-**Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST), `hhg` (semantic search)
+**Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST), `hhg` (code search)
 
-**Semantic Code Search (hygrep):** Use `hhg` for semantic code search with neural reranking.
+**Code Search (hygrep):** Use `hhg` for code search with neural reranking.
 
 ```bash
-hhg "auth logic" ./src        # Semantic: "auth" finds login, session, token
-hhg "error handling" . -n 5   # Limit results
+hhg "error handling" ./src    # Regex recall → neural rerank
+hhg "config parser" . -n 5    # Limit results
 hhg "query" . --fast          # Skip reranking (instant grep)
 hhg "config" . --json         # JSON output for scripts/agents
 ```
 
+- Regex scan for recall, then semantic reranking to sort by relevance
 - Returns full functions/classes, not just lines
 - First run downloads model (~83MB, cached in ~/.cache/huggingface/)
-- Prefer `hhg` over `rg` when searching for concepts rather than exact strings
 
 **UI:** lucide/heroicons, never emoji (unless requested)
 

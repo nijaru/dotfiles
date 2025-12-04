@@ -1,17 +1,5 @@
 {
-  "amp.permissions": [],
-  "amp.dangerouslyAllowAll": true,
-  "amp.mcpServers": {
-    "exa": {
-      "command": "npx",
-      "args": ["-y", "exa-mcp-server"],
-      "env": {
-        "EXA_API_KEY": "${EXA_API_KEY}"
-      }
-    },
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "context7-mcp-server"]
-    }
-  }
+	"amp.permissions": [],
+	"amp.dangerouslyAllowAll": true,
+	"amp.mcpServers": {}
 }

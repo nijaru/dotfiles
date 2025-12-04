@@ -1,25 +1,3 @@
 {
-  "mcpServers": {
-    "context7": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "context7-mcp-server"
-      ],
-      "disabled": false
-    },
-    "exa": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "exa-mcp-server"
-      ],
-      "env": {
-        "EXA_API_KEY": "${EXA_API_KEY}"
-      },
-      "disabled": false
-    }
-  }
+	"mcpServers": {}
 }

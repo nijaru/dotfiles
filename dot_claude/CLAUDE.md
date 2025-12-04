@@ -42,9 +42,7 @@ bun test && bun build
 - Async: sync for files, `tokio` for network, `rayon` for CPU
 - Edition: 2024
 
-**Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST), `hhg` (code search)
-
-**hhg:** `hhg "query" . --json` - relevance-ranked code search, returns full functions/classes
+**Tools:** `mise` (versions), `hhg "query" . --json` (relevance-ranked code search, returns full functions/classes)
 
 **UI:** lucide/heroicons, never emoji (unless requested)
 

@@ -78,16 +78,6 @@ bun test && bun build
 - Split when: mixing concerns or hard to navigate
 - Tests: separate files, not inline
 
-### Testing
-
-**TDD Workflow:** Plan → Red → Green → Refactor → Validate
-
-| Use TDD                                              | Skip                                             |
-| ---------------------------------------------------- | ------------------------------------------------ |
-| Systems (DBs, compilers), Performance, Complex logic | Docs, configs, typos, prototypes, simple scripts |
-
-**Rules:** Declare upfront, commit tests before coding, don't modify during implementation
-
 ## Workflow
 
 ### Git

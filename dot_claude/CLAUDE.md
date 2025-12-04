@@ -44,19 +44,7 @@ bun test && bun build
 
 **Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST), `hhg` (code search)
 
-**Code Search (hhg):** Regex recall + neural reranking. Returns full functions/classes.
-
-| Use `hhg`                             | Use `rg`                  |
-| ------------------------------------- | ------------------------- |
-| Multi-word queries ("error handling") | Exact patterns, regex     |
-| Finding relevant code by concept      | Specific strings/symbols  |
-| When relevance ranking matters        | When you need all matches |
-
-```bash
-hhg "query" . --json          # Structured output: file, name, type, score, content
-hhg "query" . -n 5            # Limit results
-hhg "query" . --fast          # Skip reranking (grep only)
-```
+**hhg:** `hhg "query" . --json` - relevance-ranked code search, returns full functions/classes
 
 **UI:** lucide/heroicons, never emoji (unless requested)
 

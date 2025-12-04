@@ -44,18 +44,19 @@ bun test && bun build
 
 **Tools:** `mise` (versions), `rg`/`fd`/`sd`/`jq`/`yq` (CLI), `ast-grep` (AST), `hhg` (code search)
 
-**Code Search (hygrep):** Use `hhg` for code search with neural reranking.
+**Code Search (hhg):** Regex recall + neural reranking. Returns full functions/classes.
+
+| Use `hhg`                             | Use `rg`                  |
+| ------------------------------------- | ------------------------- |
+| Multi-word queries ("error handling") | Exact patterns, regex     |
+| Finding relevant code by concept      | Specific strings/symbols  |
+| When relevance ranking matters        | When you need all matches |
 
 ```bash
-hhg "error handling" ./src    # Regex recall → neural rerank
-hhg "config parser" . -n 5    # Limit results
-hhg "query" . --fast          # Skip reranking (instant grep)
-hhg "config" . --json         # JSON output for scripts/agents
+hhg "query" . --json          # Structured output: file, name, type, score, content
+hhg "query" . -n 5            # Limit results
+hhg "query" . --fast          # Skip reranking (grep only)
 ```
-
-- Regex scan for recall, then semantic reranking to sort by relevance
-- Returns full functions/classes, not just lines
-- First run downloads model (~83MB, cached in ~/.cache/huggingface/)
 
 **UI:** lucide/heroicons, never emoji (unless requested)
 

@@ -23,12 +23,15 @@ Auto-triggers research when context suggests user needs information before proce
 
 ## Execution
 
-Run the full `/research` command process:
+Scale depth to topic complexity (see `/research`):
 
-1. **Parallel search** all sources (web, exa, context7, local)
-2. **Filter** for recent, authoritative content
-3. **Synthesize** into actionable recommendation
-4. **Cite sources**
+| Question                | Depth                          |
+| ----------------------- | ------------------------------ |
+| "which JSON lib?"       | Quick — 1-2 searches, pick one |
+| "how to handle auth?"   | Medium — options table         |
+| "architect this system" | Deep — full analysis           |
+
+**Assess first**: How consequential? How many options? Then scale effort.
 
 ## When NOT to Auto-Trigger
 

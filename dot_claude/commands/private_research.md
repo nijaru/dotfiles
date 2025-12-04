@@ -4,9 +4,21 @@ argument-hint: "<topic>"
 allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__exa__web_search_exa, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs, mcp__parallel__web_search_preview, mcp__parallel__web_fetch
 ---
 
-Research the given topic thoroughly using all available sources.
+Research the given topic, scaling depth to complexity.
 
 $ARGUMENTS
+
+---
+
+## Depth Scaling
+
+| Complexity | Example                           | Sources                             | Output                             |
+| ---------- | --------------------------------- | ----------------------------------- | ---------------------------------- |
+| **Quick**  | "best JSON library for rust"      | 1-2 searches, context7              | 2-3 options, pick one              |
+| **Medium** | "auth patterns for API"           | All sources, 1 pass                 | Options table, recommendation      |
+| **Deep**   | "distributed system architecture" | Multiple passes, compare approaches | Full analysis, tradeoffs, diagrams |
+
+**Assess first**: How consequential is this decision? How many viable options exist? Scale accordingly.
 
 ---
 

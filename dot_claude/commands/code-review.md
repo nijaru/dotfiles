@@ -4,13 +4,45 @@ argument-hint: "[path or branch]"
 allowed-tools: Read, Grep, Glob, Bash(command:git*)
 ---
 
-Perform a thorough code review. Scope:
-
-- If on a feature branch: review all changes vs main/master
-- If specific files provided: review those files
-- Otherwise: review staged/unstaged changes
+Perform a thorough code review. Scope determined by context:
 
 $ARGUMENTS
+
+---
+
+## Scope Detection
+
+Detect automatically (in priority order):
+
+```bash
+# 1. User provided specific files/paths?
+#    → Review those only
+
+# 2. On feature branch?
+git branch --show-current  # not main/master
+#    → diff vs main/master
+
+# 3. On main, has version tags?
+git describe --tags --abbrev=0 2>/dev/null
+#    → diff vs last tag (solo project releasing from main)
+
+# 4. On main, no tags, has unpushed commits?
+git log origin/main..HEAD --oneline 2>/dev/null
+#    → diff vs origin/main
+
+# 5. Has staged changes?
+git diff --cached --stat
+#    → review staged
+
+# 6. Has unstaged changes?
+git diff --stat
+#    → review unstaged
+
+# 7. Nothing to review
+#    → inform user
+```
+
+**Solo project pattern**: Working on main with version tags → compare against last tag
 
 ---
 

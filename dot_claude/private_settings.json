@@ -1,60 +1,48 @@
 {
-  "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "alwaysThinkingEnabled": true,
-  "hooks": {
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "command": "bd prime",
-            "type": "command"
-          }
-        ],
-        "matcher": ""
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "bd prime",
-            "type": "command"
-          }
-        ],
-        "matcher": ""
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/auto-format.sh",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/pre-commit-lint.sh",
-            "timeout": 120
-          }
-        ]
-      }
-    ]
-  },
-  "includeCoAuthoredBy": false,
-  "permissions": {
-    "defaultMode": "bypassPermissions"
-  },
-  "statusLine": {
-    "command": "bash ~/.claude/statusline-command.sh",
-    "type": "command"
-  }
+	"$schema": "https://json.schemastore.org/claude-code-settings.json",
+	"alwaysThinkingEnabled": true,
+	"hooks": {
+		"PreCompact": [
+			{
+				"hooks": [
+					{
+						"command": "bd prime",
+						"type": "command"
+					}
+				],
+				"matcher": ""
+			}
+		],
+		"SessionStart": [
+			{
+				"hooks": [
+					{
+						"command": "bd prime",
+						"type": "command"
+					}
+				],
+				"matcher": ""
+			}
+		],
+		"PostToolUse": [
+			{
+				"matcher": "Write|Edit",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "~/.claude/hooks/auto-format.sh",
+						"timeout": 30
+					}
+				]
+			}
+		]
+	},
+	"includeCoAuthoredBy": false,
+	"permissions": {
+		"defaultMode": "bypassPermissions"
+	},
+	"statusLine": {
+		"command": "bash ~/.claude/statusline-command.sh",
+		"type": "command"
+	}
 }

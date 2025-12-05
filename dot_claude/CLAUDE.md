@@ -13,19 +13,13 @@
 
 **Packages:** Let manager choose. Pin only for reproducibility or breaking changes.
 
-| Lang       | Setup                | Run                  | Format                             |
-| ---------- | -------------------- | -------------------- | ---------------------------------- |
-| Python     | `uv init && uv sync` | `uv run python x.py` | `uv run ruff check --fix .`        |
-| TypeScript | `bun init`           | `bun run x.ts`       | `bun x biome format --write .`     |
-| Go         | `go mod init`        | `go run .`           | `golines --base-formatter gofumpt` |
-| Rust       | `cargo init`         | `cargo run`          | `cargo fmt`                        |
-| Mojo       | —                    | `mojo run x.mojo`    | `mojo format`                      |
-
 **Python:** Always `uv`. Never `pip install`. Exception: one-off stdlib-only scripts.
+
+**Go:** Formatter: `golines --base-formatter gofumpt`
 
 **Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024.
 
-**Tools:** `mise` (versions), `hhg "query" . --json` (semantic grep)
+**Tools:** `mise` (versions), `hhg "query" . --json` (semantic code search—returns ranked functions/classes)
 
 **UI:** lucide/heroicons. No emoji unless requested.
 
@@ -46,7 +40,7 @@
 
 - **Naming:** Proportional to scope. Local: `count`. Exported: `userCount`. No `_v2`/`_new`—use descriptive: `_batched`, `_async`.
 - **Comments:** WHY only. No WHAT, no TODOs, no change tracking.
-- **Files:** Keep focused. Split when mixing concerns.
+- **Files:** Keep focused. Split when mixing concerns. Tests: separate files.
 
 ## Workflow
 
@@ -57,19 +51,11 @@
 - No force push to main/master
 - Messages: concise, focus on WHY
 
-**Releases:** Wait for CI ✅
+**Releases:** Wait for CI. Confirm before publishing—can't unpublish.
 
-| Step           | Command                                                  |
-| -------------- | -------------------------------------------------------- |
-| 1. Bump + docs | commit → push                                            |
-| 2. Verify      | `gh run watch`                                           |
-| 3. Tag         | `git tag -a vX.Y.Z -m "desc" && git push --tags`         |
-| 4. Release     | `gh release create vX.Y.Z --notes-file release_notes.md` |
-| 5. Publish     | **Confirm first**—can't unpublish                        |
+**Versioning:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2, not 0.0.1 → 1.0.0). Use commit hashes for references.
 
-**Versioning:** Sequential only. 0.0.x = unstable, 0.1.0+ = production, 1.0.0 = proven.
-
-**Files:** Delete directly. `/tmp` ephemeral. `ai/tmp/` gitignored.
+**Long-running commands:** Avoid rapid polling. Scale wait time with expected duration.
 
 ## Task Tracking (Beads)
 
@@ -94,7 +80,9 @@ Cross-session context. Root files every session—keep minimal.
 | ROADMAP.md   | Phase timeline, links to beads   |
 | TODO.md      | Tasks (fallback if no beads)     |
 
-**Subdirs:** research/, design/, tmp/ (gitignored). Create when needed.
+**Workflow:** research/ (inputs) → DESIGN.md (synthesis) → design/ (specs) → code
+
+**Anti-pattern:** No ✅/❌/In Progress in DESIGN.md—architecture docs are stable references, not task trackers.
 
 **Format:** Tables/lists, not prose. Answer first, evidence second.
 
@@ -106,4 +94,4 @@ Cross-session context. Root files every session—keep minimal.
 
 ---
 
-**Version:** 2025-12 | github.com/nijaru/agent-contexts
+**Updated:** 2025-12-04 | github.com/nijaru/agent-contexts

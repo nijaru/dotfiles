@@ -72,13 +72,13 @@ Use `bd` for tasks. Fallback: ai/TODO.md.
 
 Cross-session context. Root files every session—keep minimal.
 
-| File         | Purpose                          |
-| ------------ | -------------------------------- |
-| STATUS.md    | Current state (read first)       |
-| DESIGN.md    | Architecture (no status markers) |
-| DECISIONS.md | Context → Decision → Rationale   |
-| ROADMAP.md   | Phase timeline, links to beads   |
-| TODO.md      | Tasks (fallback if no beads)     |
+| File         | When        | Purpose                          |
+| ------------ | ----------- | -------------------------------- |
+| STATUS.md    | Always      | Current state (read first)       |
+| DESIGN.md    | Recommended | Architecture (no status markers) |
+| DECISIONS.md | Recommended | Context → Decision → Rationale   |
+| ROADMAP.md   | Situational | Phase timeline, links to beads   |
+| TODO.md      | Situational | Tasks (fallback if no beads)     |
 
 **Workflow:** research/ (inputs) → DESIGN.md (synthesis) → design/ (specs) → code
 

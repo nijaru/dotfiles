@@ -53,7 +53,7 @@
 
 **Releases:** Wait for CI. Confirm before publishing—can't unpublish.
 
-**Versioning:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2, not 0.0.1 → 1.0.0). Use commit hashes for references.
+**Versioning:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2, not 0.0.1 → 1.0.0). Reference exact code state by commit hash (tasks, benchmarks, comparisons).
 
 **Long-running commands:** Avoid rapid polling. Scale wait time with expected duration.
 

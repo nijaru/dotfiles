@@ -19,7 +19,7 @@
 
 **Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024.
 
-**Tools:** `mise` (versions), `hhg "query"` (for concepts/questions—Grep only for exact strings)
+**Tools:** `mise` (versions), `hhg` (semantic—finds implementations). Grep for exact text.
 
 **UI:** lucide/heroicons. No emoji unless requested.
 

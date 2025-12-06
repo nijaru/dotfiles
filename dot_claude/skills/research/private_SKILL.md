@@ -3,7 +3,7 @@ name: research
 description: >
   Auto-triggers deep research when user needs to understand best practices,
   evaluate options, or learn about unfamiliar technology before implementing.
-allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__exa__web_search_exa, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs, mcp__parallel__web_search_preview, mcp__parallel__web_fetch
+allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
 ---
 
 # Research Skill

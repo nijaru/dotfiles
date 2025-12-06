@@ -1,7 +1,7 @@
 ---
 description: Deep research on a topic using web, docs, and code search
 argument-hint: "<topic>"
-allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__exa__web_search_exa, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs, mcp__parallel__web_search_preview, mcp__parallel__web_fetch
+allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
 ---
 
 Research the given topic, scaling depth to complexity.
@@ -12,11 +12,11 @@ $ARGUMENTS
 
 ## Depth Scaling
 
-| Complexity | Example                           | Sources                             | Output                             |
-| ---------- | --------------------------------- | ----------------------------------- | ---------------------------------- |
-| **Quick**  | "best JSON library for rust"      | 1-2 searches, context7              | 2-3 options, pick one              |
-| **Medium** | "auth patterns for API"           | All sources, 1 pass                 | Options table, recommendation      |
-| **Deep**   | "distributed system architecture" | Multiple passes, compare approaches | Full analysis, tradeoffs, diagrams |
+| Complexity | Example                           | Sources                      | Output                             |
+| ---------- | --------------------------------- | ---------------------------- | ---------------------------------- |
+| **Quick**  | "best JSON library for rust"      | 1-2 searches, Context7       | 2-3 options, pick one              |
+| **Medium** | "auth patterns for API"           | Web + Context7, 1 pass       | Options table, recommendation      |
+| **Deep**   | "distributed system architecture" | Multiple passes, all sources | Full analysis, tradeoffs, diagrams |
 
 **Assess first**: How consequential is this decision? How many viable options exist? Scale accordingly.
 
@@ -30,19 +30,13 @@ $ARGUMENTS
 - Recent articles/discussions (2024-2025)
 - Official announcements
 
-### 2. Code Context (Exa)
+### 2. Library Docs (Context7)
 
-- Library/SDK documentation
-- API examples
-- Implementation patterns
+- Resolve library ID first (`resolve-library-id`)
+- Fetch focused documentation (`get-library-docs`)
+- LLM-optimized code snippets
 
-### 3. Library Docs (Context7)
-
-- Resolve library ID first
-- Fetch focused documentation
-- Code snippets
-
-### 4. Codebase (Local)
+### 3. Codebase (Local)
 
 - How does this project currently handle it?
 - Existing patterns to follow

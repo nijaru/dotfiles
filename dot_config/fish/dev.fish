@@ -9,6 +9,11 @@ if command -v magic >/dev/null 2>&1
     abbr --add m "magic"
 end
 
+# hhg (semantic code search)
+if command -v hhg >/dev/null 2>&1
+    abbr --add hhgb "hhg build"
+end
+
 ###############################################################################
 # mise
 ###############################################################################

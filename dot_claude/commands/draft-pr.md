@@ -26,7 +26,7 @@ git diff main...HEAD
 
 ### 2. Run Code Review
 
-If not already done, run `/review` on the changes.
+If not already done, run `/code-review` on the changes.
 
 ### 3. Find Related Issues
 

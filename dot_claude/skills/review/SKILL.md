@@ -9,7 +9,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Review Skill
 
-When activated, run `/review` command.
+When activated, run `/code-review` command.
 
 ## Triggers
 
@@ -21,7 +21,7 @@ When activated, run `/review` command.
 
 ## Execution
 
-Run `/review` with detected scope (feature branch diff, staged changes, etc.)
+Run `/code-review` with detected scope (feature branch diff, staged changes, etc.)
 
-See `/review` for full checklist: design, naming, comments, debug cleanup,
+See `/code-review` for full checklist: design, naming, comments, debug cleanup,
 code smells, correctness, performance, idioms, security, tests.

@@ -14,13 +14,12 @@ if command -v hhg >/dev/null 2>&1
     abbr --add hhgb "hhg build"
 
     # Sync .hhg index between machines via rsync
-    # Usage: sync-hhg <src-host> <dest-host> [path]
-    # Example: sync-hhg fedora apple ~/github/myproject
+    # Usage: sync-hhg <src> <dest> [path]
+    # Hosts can include user: sync-hhg user@fedora user@apple
     # If path omitted, syncs current directory's .hhg
-    # Uses $USER for remote username, or set HHG_SYNC_USER to override
     function sync-hhg
         if test (count $argv) -lt 2
-            echo "Usage: sync-hhg <src-host> <dest-host> [path]"
+            echo "Usage: sync-hhg <src> <dest> [path]"
             echo "Example: sync-hhg fedora apple ~/github/project"
             return 1
         end
@@ -28,51 +27,36 @@ if command -v hhg >/dev/null 2>&1
         set -l src $argv[1]
         set -l dest $argv[2]
         set -l dir (test (count $argv) -ge 3; and echo $argv[3]; or pwd)
-        set -l user (set -q HHG_SYNC_USER; and echo $HHG_SYNC_USER; or echo $USER)
         set -l localhost (hostname -s)
 
         # Convert to path relative to home
         set -l rel_path (string replace -r "^$HOME/?" "" (realpath $dir 2>/dev/null; or echo $dir))
         set -l rel_path (string replace -r "^~/" "" $rel_path)
 
-        echo "Syncing .hhg: $src:~/$rel_path/.hhg → $dest:~/$rel_path/.hhg"
+        # Extract hostname (strip user@ if present) for localhost check
+        set -l src_host (string replace -r '^.*@' '' $src)
+        set -l dest_host (string replace -r '^.*@' '' $dest)
+        set -l src_local (string match -qi $src_host $localhost; and echo 1; or echo 0)
+        set -l dest_local (string match -qi $dest_host $localhost; and echo 1; or echo 0)
 
-        # Use temp dir as intermediary
-        set -l tmp_dir (mktemp -d)
+        set -l src_path (test $src_local -eq 1; and echo "$HOME/$rel_path/.hhg/"; or echo "$src:$rel_path/.hhg/")
+        set -l dest_path (test $dest_local -eq 1; and echo "$HOME/$rel_path/.hhg/"; or echo "$dest:$rel_path/.hhg/")
 
-        # Pull from source (local or remote)
-        if string match -qi $src $localhost
-            if not rsync -az "$HOME/$rel_path/.hhg/" "$tmp_dir/"
-                echo "Failed to read local .hhg"
-                rm -rf $tmp_dir
-                return 1
-            end
+        echo "Syncing .hhg: $src:~/$rel_path → $dest:~/$rel_path"
+
+        # Direct sync if at least one side is local
+        if test $src_local -eq 1 -o $dest_local -eq 1
+            test $dest_local -eq 1; and mkdir -p "$HOME/$rel_path"
+            rsync -az --info=progress2 $src_path $dest_path
         else
-            if not rsync -az --info=progress2 "$user@$src:$rel_path/.hhg/" "$tmp_dir/"
-                echo "Failed to fetch .hhg from $src"
-                rm -rf $tmp_dir
-                return 1
-            end
+            # Both remote: need temp intermediary
+            set -l tmp_dir (mktemp -d)
+            rsync -az --info=progress2 $src_path "$tmp_dir/" \
+                && rsync -az --info=progress2 "$tmp_dir/" $dest_path
+            set -l ret $status
+            rm -rf $tmp_dir
+            return $ret
         end
-
-        # Push to destination (local or remote)
-        if string match -qi $dest $localhost
-            mkdir -p "$HOME/$rel_path"
-            if not rsync -az "$tmp_dir/" "$HOME/$rel_path/.hhg/"
-                echo "Failed to write local .hhg"
-                rm -rf $tmp_dir
-                return 1
-            end
-        else
-            if not rsync -az --info=progress2 "$tmp_dir/" "$user@$dest:$rel_path/.hhg/"
-                echo "Failed to push .hhg to $dest"
-                rm -rf $tmp_dir
-                return 1
-            end
-        end
-
-        rm -rf $tmp_dir
-        echo "Done"
     end
 end
 

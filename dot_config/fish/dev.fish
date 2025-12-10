@@ -34,10 +34,11 @@ if command -v hhg >/dev/null 2>&1
         set -l rel_path (string replace -r "^~/" "" $rel_path)
 
         # Extract hostname (strip user@ if present) for localhost check
-        set -l src_host (string replace -r '^.*@' '' $src)
-        set -l dest_host (string replace -r '^.*@' '' $dest)
-        set -l src_local (string match -qi $src_host $localhost; and echo 1; or echo 0)
-        set -l dest_local (string match -qi $dest_host $localhost; and echo 1; or echo 0)
+        set -l src_host (string lower (string replace -r '^.*@' '' $src))
+        set -l dest_host (string lower (string replace -r '^.*@' '' $dest))
+        set -l localhost_lower (string lower $localhost)
+        set -l src_local (test "$src_host" = "$localhost_lower"; and echo 1; or echo 0)
+        set -l dest_local (test "$dest_host" = "$localhost_lower"; and echo 1; or echo 0)
 
         set -l src_path (test $src_local -eq 1; and echo "$HOME/$rel_path/.hhg/"; or echo "$src:$rel_path/.hhg/")
         set -l dest_path (test $dest_local -eq 1; and echo "$HOME/$rel_path/.hhg/"; or echo "$dest:$rel_path/.hhg/")

@@ -17,6 +17,7 @@ if command -v hhg >/dev/null 2>&1
     # Usage: sync-hhg <src-host> <dest-host> [path]
     # Example: sync-hhg fedora apple ~/github/myproject
     # If path omitted, syncs current directory's .hhg
+    # Uses $USER for remote username, or set HHG_SYNC_USER to override
     function sync-hhg
         if test (count $argv) -lt 2
             echo "Usage: sync-hhg <src-host> <dest-host> [path]"
@@ -27,32 +28,47 @@ if command -v hhg >/dev/null 2>&1
         set -l src $argv[1]
         set -l dest $argv[2]
         set -l dir (test (count $argv) -ge 3; and echo $argv[3]; or pwd)
+        set -l user (set -q HHG_SYNC_USER; and echo $HHG_SYNC_USER; or echo $USER)
+        set -l localhost (hostname -s)
 
         # Convert to path relative to home
         set -l rel_path (string replace -r "^$HOME/?" "" (realpath $dir 2>/dev/null; or echo $dir))
         set -l rel_path (string replace -r "^~/" "" $rel_path)
 
-        # Map hostnames to tailscale names
-        set -l src_host "nick@$src"
-        set -l dest_host "nick@$dest"
-
         echo "Syncing .hhg: $src:~/$rel_path/.hhg → $dest:~/$rel_path/.hhg"
 
-        # Use temp dir to handle cross-machine rsync
+        # Use temp dir as intermediary
         set -l tmp_dir (mktemp -d)
 
-        # Pull from source
-        if not rsync -az --info=progress2 "$src_host:$rel_path/.hhg/" "$tmp_dir/"
-            echo "Failed to fetch .hhg from $src"
-            rm -rf $tmp_dir
-            return 1
+        # Pull from source (local or remote)
+        if string match -qi $src $localhost
+            if not rsync -az "$HOME/$rel_path/.hhg/" "$tmp_dir/"
+                echo "Failed to read local .hhg"
+                rm -rf $tmp_dir
+                return 1
+            end
+        else
+            if not rsync -az --info=progress2 "$user@$src:$rel_path/.hhg/" "$tmp_dir/"
+                echo "Failed to fetch .hhg from $src"
+                rm -rf $tmp_dir
+                return 1
+            end
         end
 
-        # Push to destination
-        if not rsync -az --info=progress2 "$tmp_dir/" "$dest_host:$rel_path/.hhg/"
-            echo "Failed to push .hhg to $dest"
-            rm -rf $tmp_dir
-            return 1
+        # Push to destination (local or remote)
+        if string match -qi $dest $localhost
+            mkdir -p "$HOME/$rel_path"
+            if not rsync -az "$tmp_dir/" "$HOME/$rel_path/.hhg/"
+                echo "Failed to write local .hhg"
+                rm -rf $tmp_dir
+                return 1
+            end
+        else
+            if not rsync -az --info=progress2 "$tmp_dir/" "$user@$dest:$rel_path/.hhg/"
+                echo "Failed to push .hhg to $dest"
+                rm -rf $tmp_dir
+                return 1
+            end
         end
 
         rm -rf $tmp_dir

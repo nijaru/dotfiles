@@ -8,12 +8,9 @@ function claude
         return
     end
 
-    # Build args - interleaved thinking is on by default but explicit for API key users
-    set -l args --betas interleaved-thinking-2025-05-14
-
     if test -f $mcp_config
-        set -a args --mcp-config $mcp_config
+        command claude --mcp-config $mcp_config $argv
+    else
+        command claude $argv
     end
-
-    command claude $args $argv
 end

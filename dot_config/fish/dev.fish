@@ -12,6 +12,52 @@ end
 # hhg (semantic code search)
 if command -v hhg >/dev/null 2>&1
     abbr --add hhgb "hhg build"
+
+    # Sync .hhg index between machines via rsync
+    # Usage: sync-hhg <src-host> <dest-host> [path]
+    # Example: sync-hhg fedora apple ~/github/myproject
+    # If path omitted, syncs current directory's .hhg
+    function sync-hhg
+        if test (count $argv) -lt 2
+            echo "Usage: sync-hhg <src-host> <dest-host> [path]"
+            echo "Example: sync-hhg fedora apple ~/github/project"
+            return 1
+        end
+
+        set -l src $argv[1]
+        set -l dest $argv[2]
+        set -l dir (test (count $argv) -ge 3; and echo $argv[3]; or pwd)
+
+        # Convert to path relative to home
+        set -l rel_path (string replace -r "^$HOME/?" "" (realpath $dir 2>/dev/null; or echo $dir))
+        set -l rel_path (string replace -r "^~/" "" $rel_path)
+
+        # Map hostnames to tailscale names
+        set -l src_host "nick@$src"
+        set -l dest_host "nick@$dest"
+
+        echo "Syncing .hhg: $src:~/$rel_path/.hhg → $dest:~/$rel_path/.hhg"
+
+        # Use temp dir to handle cross-machine rsync
+        set -l tmp_dir (mktemp -d)
+
+        # Pull from source
+        if not rsync -az --info=progress2 "$src_host:$rel_path/.hhg/" "$tmp_dir/"
+            echo "Failed to fetch .hhg from $src"
+            rm -rf $tmp_dir
+            return 1
+        end
+
+        # Push to destination
+        if not rsync -az --info=progress2 "$tmp_dir/" "$dest_host:$rel_path/.hhg/"
+            echo "Failed to push .hhg to $dest"
+            rm -rf $tmp_dir
+            return 1
+        end
+
+        rm -rf $tmp_dir
+        echo "Done"
+    end
 end
 
 ###############################################################################

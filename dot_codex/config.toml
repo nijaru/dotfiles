@@ -40,18 +40,6 @@ persistence = "save-all"
 notifications = true
 animations = false
 
-# Trusted projects
-[projects."/Users/nick/github/aircher"]
-trust_level = "trusted"
-
-[projects."/Users/nick/github/omendb/core"]
-trust_level = "trusted"
-
-[projects."/Users/nick/github/nijaru/kombrucha"]
-trust_level = "trusted"
-
-[projects."/Users/nick/github/omendb/seerdb"]
-trust_level = "trusted"
-
-[notice]
-"hide_gpt-5.1-codex-max_migration_prompt" = true
+# Trusted projects - add per-machine via `codex /approvals`
+# [projects."/path/to/project"]
+# trust_level = "trusted"

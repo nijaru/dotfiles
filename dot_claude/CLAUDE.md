@@ -80,6 +80,16 @@ Cross-session context. Root files every session—keep minimal.
 | ROADMAP.md   | Situational | Phase timeline, links to beads   |
 | TODO.md      | Situational | Tasks (fallback if no beads)     |
 
+**Update Rules (always follow):**
+
+| Trigger                  | Action                                               |
+| ------------------------ | ---------------------------------------------------- |
+| Architecture change      | Update DESIGN.md immediately                         |
+| Made a tradeoff decision | Append to DECISIONS.md with date, context, rationale |
+| Task completed/blocked   | Update STATUS.md                                     |
+| Before `/compact`        | Update STATUS.md with current state                  |
+| Session ending           | Run `/save`                                          |
+
 **Workflow:** research/ (inputs) → DESIGN.md (synthesis) → design/ (specs) → code
 
 **Anti-pattern:** No ✅/❌/In Progress in DESIGN.md—architecture docs are stable references, not task trackers.
@@ -94,4 +104,4 @@ Cross-session context. Root files every session—keep minimal.
 
 ---
 
-**Updated:** 2025-12-04 | github.com/nijaru/agent-contexts
+**Updated:** 2025-12-11 | github.com/nijaru/agent-contexts

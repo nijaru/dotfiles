@@ -1,45 +1,13 @@
 # Codex CLI Configuration
-# Mirrors Claude Code setup where possible
 
-model = "gpt-5.1-codex-max"
-model_reasoning_effort = "medium"
-
-# Approval/sandbox - similar to Claude's bypassPermissions
-approval_policy = "on-failure"
-sandbox_mode = "workspace-write"
-
-[sandbox_workspace_write]
-network_access = true
-
-# Project doc settings - read AGENTS.md or fallback to CLAUDE.md
-project_doc_max_bytes = 65536
+# Project doc fallback - read AGENTS.md or CLAUDE.md
 project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]
 
 # MCP Servers
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp"]
-enabled = true
 
 [mcp_servers.exa]
 command = "npx"
 args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
-enabled = true
-
-# Feature flags
-[features]
-web_search_request = true
-view_image_tool = true
-
-# History
-[history]
-persistence = "save-all"
-
-# UI
-[tui]
-notifications = true
-animations = false
-
-# Trusted projects - add per-machine via `codex /approvals`
-# [projects."/path/to/project"]
-# trust_level = "trusted"

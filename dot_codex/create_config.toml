@@ -1,16 +1,14 @@
 # Codex CLI Configuration
+# Initial setup - Codex will add to this file as you use it
 
-# Project doc fallback - read AGENTS.md or CLAUDE.md
 project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]
 model = "gpt-5.1-codex-max"
 model_reasoning_effort = "high"
 
-# Sandbox - allow writing to omendb parent (for cross-project work)
 sandbox_mode = "workspace-write"
 [sandbox_workspace_write]
 writable_roots = ["~/github/omendb"]
 
-# MCP Servers
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp"]

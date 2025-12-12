@@ -2,6 +2,8 @@
 
 # Project doc fallback - read AGENTS.md or CLAUDE.md
 project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]
+model = "gpt-5.1-codex-max"
+model_reasoning_effort = "high"
 
 # MCP Servers
 [mcp_servers.context7]
@@ -11,3 +13,6 @@ args = ["-y", "@upstash/context7-mcp"]
 [mcp_servers.exa]
 command = "npx"
 args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
+
+[projects."/Users/nick/github/omendb/cloud"]
+trust_level = "trusted"

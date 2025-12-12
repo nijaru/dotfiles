@@ -10,15 +10,33 @@ input=$(cat)
 
 # Extract values using jq
 model_id=$(echo "$input" | jq -r '.model.id')
+model_display=$(echo "$input" | jq -r '.model.display_name // empty')
 cwd=$(echo "$input" | jq -r '.workspace.current_dir')
+
+# Context window size from JSON (handles extended context models)
+context_window=$(echo "$input" | jq -r '.context_window.context_window_size // 200000')
 transcript_path=$(echo "$input" | jq -r '.transcript_path')
 
-# Format model name: claude-sonnet-4-5-20250929 -> sonnet-4.5
-# Extract the model part after "claude-" and before the timestamp
-model_name=$(echo "$model_id" | sed 's/^claude-//; s/-[0-9]\{8\}$//')
-# Convert version format: replace hyphens between digits with dots
-# sonnet-4-5 -> sonnet-4.5, haiku-5-10 -> haiku-5.10
-model_name=$(echo "$model_name" | sed 's/\([0-9]\)-\([0-9]\)/\1.\2/g')
+# Get current context usage from most recent API response
+current_tokens=0
+if [ -f "$transcript_path" ]; then
+    last_usage=$(tail -50 "$transcript_path" | jq -c 'select(.type == "assistant" and .message.usage)' 2>/dev/null | tail -1)
+    if [ -n "$last_usage" ]; then
+        in_tok=$(echo "$last_usage" | jq -r '.message.usage.input_tokens // 0')
+        cache_read=$(echo "$last_usage" | jq -r '.message.usage.cache_read_input_tokens // 0')
+        cache_create=$(echo "$last_usage" | jq -r '.message.usage.cache_creation_input_tokens // 0')
+        current_tokens=$((in_tok + cache_read + cache_create))
+    fi
+fi
+
+# Use display_name if available, otherwise format from id
+if [ -n "$model_display" ]; then
+    model_name="$model_display"
+else
+    # Fallback: claude-sonnet-4-5-20250929 -> sonnet-4.5
+    model_name=$(echo "$model_id" | sed 's/^claude-//; s/-[0-9]\{8\}$//')
+    model_name=$(echo "$model_name" | sed 's/\([0-9]\)-\([0-9]\)/\1.\2/g')
+fi
 
 # Get git branch if enabled and in a git repository
 git_branch=""
@@ -39,37 +57,19 @@ if [[ "$cwd" == "$HOME"* ]]; then
     display_cwd="~${cwd#$HOME}"
 fi
 
-# Calculate token usage from transcript
-estimated_tokens=0
-if [ -f "$transcript_path" ]; then
-    # Parse actual token usage from the last assistant message
-    # Total context = input_tokens + cache_read + cache_creation (all count toward 200k limit)
-    last_message=$(tail -20 "$transcript_path" | jq -c 'select(.type == "assistant" and .message.usage)' 2>/dev/null | tail -1)
-    if [ -n "$last_message" ]; then
-        input_tokens=$(echo "$last_message" | jq -r '.message.usage.input_tokens // 0' 2>/dev/null)
-        cache_read=$(echo "$last_message" | jq -r '.message.usage.cache_read_input_tokens // 0' 2>/dev/null)
-        cache_creation=$(echo "$last_message" | jq -r '.message.usage.cache_creation_input_tokens // 0' 2>/dev/null)
-        estimated_tokens=$((input_tokens + cache_read + cache_creation))
-    fi
-fi
+# Calculate token usage from transcript (actual current context)
+token_percentage=$((current_tokens * 100 / context_window))
+current_k=$((current_tokens / 1000))
+context_k=$((context_window / 1000))
 
 # Build token info based on flags
 token_info=""
-if [ -n "$transcript_path" ] && { [ "$SHOW_PERCENTAGE" = true ] || [ "$SHOW_RAW_TOKENS" = true ]; }; then
-    # 200k context window for current models
-    context_window=200000
-    token_percentage=$((estimated_tokens * 100 / context_window))
-    estimated_k=$((estimated_tokens / 1000))
-    context_k=$((context_window / 1000))
-
-    # Build token info based on what's enabled
-    if [ "$SHOW_PERCENTAGE" = true ] && [ "$SHOW_RAW_TOKENS" = true ]; then
-        token_info="${token_percentage}% (${estimated_k}k/${context_k}k)"
-    elif [ "$SHOW_PERCENTAGE" = true ]; then
-        token_info="${token_percentage}%"
-    elif [ "$SHOW_RAW_TOKENS" = true ]; then
-        token_info="(${estimated_k}k/${context_k}k)"
-    fi
+if [ "$SHOW_PERCENTAGE" = true ] && [ "$SHOW_RAW_TOKENS" = true ]; then
+    token_info="${token_percentage}% (${current_k}k/${context_k}k)"
+elif [ "$SHOW_PERCENTAGE" = true ]; then
+    token_info="${token_percentage}%"
+elif [ "$SHOW_RAW_TOKENS" = true ]; then
+    token_info="(${current_k}k/${context_k}k)"
 fi
 
 # Build left side: model and token info

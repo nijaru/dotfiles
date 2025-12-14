@@ -21,6 +21,8 @@
 
 **Tools:** `mise` (versions), `hhg` (semantic—finds implementations). Grep for exact text.
 
+**CLIs:** `gh` (GitHub), `hf` (Hugging Face).
+
 **UI:** lucide/heroicons. No emoji unless requested.
 
 ## Development

@@ -52,8 +52,24 @@ abbr --add clip pbcopy
 abbr --add paste pbpaste
 
 ###################
-# SSH Session Setup
+# SSH Agent Setup
 ###################
+
+# Ensure SSH_AUTH_SOCK is set from launchd (local sessions)
+if not set -q SSH_AUTH_SOCK
+    set -l sock (launchctl getenv SSH_AUTH_SOCK 2>/dev/null)
+    if test -n "$sock" -a -S "$sock"
+        set -gx SSH_AUTH_SOCK $sock
+    else
+        # Socket missing (e.g., after mac-cleaner-cli) - restart launchd agent
+        launchctl kickstart -k gui/(id -u)/com.openssh.ssh-agent 2>/dev/null
+        sleep 0.5
+        set -l new_sock (launchctl getenv SSH_AUTH_SOCK 2>/dev/null)
+        if test -n "$new_sock" -a -S "$new_sock"
+            set -gx SSH_AUTH_SOCK $new_sock
+        end
+    end
+end
 
 # Unlock keychain and load SSH keys when connecting via SSH
 # This enables git signing and Claude Code OAuth access

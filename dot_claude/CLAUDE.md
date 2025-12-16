@@ -21,6 +21,8 @@
 
 **Tools:** `mise` (versions), `hhg` (semantic—finds implementations). Grep for exact text.
 
+**Background Jobs:** `jb run "cmd"` for persistent processes (dev servers, builds, watchers). Survives disconnects. `list`, `logs|stop|wait|status|retry <id>`, `clean`.
+
 **CLIs:** `gh` (GitHub), `hf` (Hugging Face).
 
 **UI:** lucide/heroicons. No emoji unless requested.
@@ -65,7 +67,7 @@
 
 **Versioning:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2, not 0.0.1 → 1.0.0). Reference code by commit hash.
 
-**Long-running commands:** Avoid rapid polling. Scale wait time with expected duration.
+**Long-running commands:** Use `jb` for persistent processes. Avoid rapid polling; scale wait time with expected duration.
 
 ## Task Tracking (Beads)
 

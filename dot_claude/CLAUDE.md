@@ -25,6 +25,14 @@
 
 **UI:** lucide/heroicons. No emoji unless requested.
 
+**Search:**
+
+| Tool     | Use for                               |
+| -------- | ------------------------------------- |
+| Context7 | Library/framework docs (first choice) |
+| Exa      | Code examples, quick web search       |
+| Parallel | Complex research, multi-hop queries   |
+
 ## Development
 
 **Philosophy:** Do it right the first time—workarounds become permanent. Research → understand → plan → implement.

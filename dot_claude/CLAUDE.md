@@ -13,7 +13,7 @@
 
 **Packages:** Let manager choose. Pin only for reproducibility or breaking changes.
 
-**Python:** Always `uv`. Never `pip install`. Exception: one-off stdlib-only scripts.
+**Python:** Always `uv` for dependencies. `uvx` for one-off CLI tools, `uv tool install` for daily drivers. Never `pip install`.
 
 **Go:** Formatter: `golines --base-formatter gofumpt`
 
@@ -106,4 +106,4 @@ Cross-session context. Root files every session—keep minimal.
 
 ---
 
-**Updated:** 2025-12-11 | github.com/nijaru/agent-contexts
+**Updated:** 2025-12-16 | github.com/nijaru/agent-contexts

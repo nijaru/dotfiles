@@ -63,7 +63,7 @@
 - No force push to main/master
 - Messages: concise, focus on WHY
 
-**Releases:** Wait for CI. Confirm before publishing—can't unpublish.
+**Releases:** NEVER trigger release/publish workflows without explicit user approval. Wait for CI. Can't unpublish.
 
 **Versioning:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2, not 0.0.1 → 1.0.0). Reference code by commit hash.
 

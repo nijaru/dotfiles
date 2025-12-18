@@ -23,6 +23,7 @@ Background job manager. Use instead of raw bash for commands >30s.
 ## Decision
 
 Use `jb run` when:
+
 - Command takes >30 seconds
 - Process should survive session disconnect
 - Running multiple tasks in parallel
@@ -34,7 +35,8 @@ Do NOT use for: quick commands (<10s), interactive/TTY, stdin-dependent.
 
 ```bash
 jb run "cmd"                    # Start, returns ID immediately
-jb run "cmd" --wait             # Start and block
+jb run "cmd" --follow           # Start + stream output (resilient foreground)
+jb run "cmd" --wait             # Start and wait silently
 jb run "cmd" --name build       # Named reference
 jb run "cmd" --timeout 30m      # With timeout
 jb run "cmd" --key "unique"     # Idempotent (won't duplicate)

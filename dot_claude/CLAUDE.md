@@ -21,7 +21,7 @@
 
 **Tools:** `mise` (versions), `hhg` (semantic—finds implementations). Grep for exact text.
 
-**Background Jobs:** `jb run "cmd"` for persistent processes (dev servers, builds, watchers). Survives disconnects. `list`, `logs|stop|wait|status|retry <id>`, `clean`.
+**Background Jobs:** `jb run "cmd"` for persistent processes (dev servers, builds, watchers). Survives disconnects. `--follow` streams output. `list`, `logs [--follow]|stop|wait|status|retry <id>`, `clean`.
 
 **CLIs:** `gh` (GitHub), `hf` (Hugging Face).
 

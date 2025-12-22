@@ -4,7 +4,7 @@
 	"mcp": {
 		"context7": {
 			"type": "local",
-			"command": ["npx", "-y", "context7-mcp-server"],
+			"command": ["npx", "-y", "@upstash/context7-mcp"],
 			"enabled": true
 		},
 		"exa": {

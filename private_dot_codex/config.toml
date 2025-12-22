@@ -1,0 +1,31 @@
+# Codex CLI Configuration
+
+# Project doc fallback - read AGENTS.md or CLAUDE.md
+project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]
+
+# Sandbox - allow writing to omendb parent (for cross-project work)
+sandbox_mode = "workspace-write"
+[sandbox_workspace_write]
+writable_roots = ["~/github/omendb"]
+
+# MCP Servers
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+
+[mcp_servers.exa]
+command = "npx"
+args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
+
+# Model Providers - BYOK
+[model_providers.gemini]
+name = "Google Gemini"
+base_url = "https://generativelanguage.googleapis.com/v1beta/openai"
+env_key = "GEMINI_API_KEY"
+wire_api = "chat"
+
+[model_providers.openrouter]
+name = "OpenRouter"
+base_url = "https://openrouter.ai/api/v1"
+env_key = "OPENROUTER_API_KEY"
+wire_api = "chat"

@@ -1,10 +1,11 @@
+{{- $secrets := include ".chezmoidata.yaml.age" | decrypt | fromYaml -}}
 {
   "custom_models": [
     {
       "model_display_name": "Grok 4.1 Fast (OpenRouter)",
       "model": "x-ai/grok-4.1-fast",
       "base_url": "https://openrouter.ai/api/v1",
-      "api_key": "{{ env "OPENROUTER_API_KEY" }}",
+      "api_key": "{{ $secrets.openrouter_api_key }}",
       "provider": "generic-chat-completion-api",
       "max_tokens": 8192
     },
@@ -12,7 +13,7 @@
       "model_display_name": "Gemini 3 Pro Preview [Google]",
       "model": "gemini-3.0-pro-preview",
       "base_url": "https://generativelanguage.googleapis.com/v1beta/",
-      "api_key": "{{ env "GEMINI_API_KEY" }}",
+      "api_key": "{{ $secrets.google_api_key }}",
       "provider": "generic-chat-completion-api",
       "max_tokens": 32000
     }

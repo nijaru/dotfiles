@@ -10,6 +10,12 @@
 			"env": {
 				"EXA_API_KEY": "$EXA_API_KEY"
 			}
+		},
+		"parallel": {
+			"httpUrl": "https://task-mcp.parallel.ai/mcp",
+			"headers": {
+				"Authorization": "Bearer $PARALLEL_API_KEY"
+			}
 		}
 	},
 	"model": {

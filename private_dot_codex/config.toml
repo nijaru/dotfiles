@@ -8,7 +8,7 @@ sandbox_mode = "workspace-write"
 [sandbox_workspace_write]
 writable_roots = ["~/github/omendb"]
 
-# MCP Servers
+# MCP Servers (stdio)
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp"]
@@ -17,15 +17,7 @@ args = ["-y", "@upstash/context7-mcp"]
 command = "npx"
 args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
 
-# Model Providers - BYOK
-[model_providers.gemini]
-name = "Google Gemini"
-base_url = "https://generativelanguage.googleapis.com/v1beta/openai"
-env_key = "GEMINI_API_KEY"
-wire_api = "chat"
-
-[model_providers.openrouter]
-name = "OpenRouter"
-base_url = "https://openrouter.ai/api/v1"
-env_key = "OPENROUTER_API_KEY"
-wire_api = "chat"
+# MCP Servers (HTTP)
+[mcp_servers.parallel]
+url = "https://task-mcp.parallel.ai/mcp"
+bearer_token_env_var = "PARALLEL_API_KEY"

@@ -1,6 +1,13 @@
 {
 	"$schema": "https://opencode.ai/config.json",
 	"model": "google/gemini-3-flash-preview",
+	"permission": {
+		"edit": "allow",
+		"bash": "allow",
+		"webfetch": "allow",
+		"doom_loop": "ask",
+		"external_directory": "ask"
+	},
 	"mcp": {
 		"context7": {
 			"type": "local",

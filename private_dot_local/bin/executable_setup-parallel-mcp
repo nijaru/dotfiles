@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Setup Parallel MCP server for Claude Code
+# Run once per machine from shell where PARALLEL_API_KEY is set
+
+set -euo pipefail
+
+if ! command -v claude &>/dev/null; then
+    echo "Error: claude not found"
+    exit 1
+fi
+
+if [[ -z "${PARALLEL_API_KEY:-}" ]]; then
+    echo "Error: PARALLEL_API_KEY not set"
+    exit 1
+fi
+
+if claude mcp list 2>/dev/null | grep -q "parallel.*Connected"; then
+    echo "Parallel MCP already configured and connected"
+    exit 0
+fi
+
+# Remove existing if broken
+if claude mcp list 2>/dev/null | grep -q "parallel"; then
+    claude mcp remove -s user parallel
+    echo "Removed broken parallel config"
+fi
+
+claude mcp add -s user -t http -H "Authorization: Bearer $PARALLEL_API_KEY" -- parallel https://search-mcp.parallel.ai/mcp
+echo "Added Parallel MCP server"

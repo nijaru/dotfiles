@@ -41,16 +41,18 @@ jb run "cmd" --name build       # Named reference
 jb run "cmd" --timeout 30m      # With timeout
 jb run "cmd" --key "unique"     # Idempotent (won't duplicate)
 
-jb list                         # Current project jobs
-jb list --all                   # All projects
+jb list                         # Last 10 jobs (alias: jb ls)
+jb list -n 20                   # Last 20 jobs
+jb list -a                      # All jobs
+jb list --failed                # Failed jobs only
 jb list --status running        # Filter: pending|running|completed|failed|stopped
 
 jb status <id>                  # Job details
 jb status                       # Daemon status
 
 jb logs <id>                    # Full output
-jb logs <id> --tail             # Last 50 lines
-jb logs <id> --follow           # Stream live
+jb logs <id> --tail [N]         # Last N lines (default: 50)
+jb logs <id> --follow           # Stream live (uses context, prefer --tail for polling)
 
 jb stop <id>                    # Graceful (SIGTERM)
 jb stop <id> --force            # Kill (SIGKILL)
@@ -61,7 +63,8 @@ jb wait <id> --timeout 5m       # Exit: 0=success, 1=failed, 124=timeout
 jb retry <id>                   # Re-run failed job
 
 jb clean                        # Remove >7 days old
-jb clean --older-than 1d
+jb clean -t 1d                  # Remove older than 1d
+jb clean -a                     # Remove all non-running
 ```
 
 ## Patterns

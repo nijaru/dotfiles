@@ -16,3 +16,6 @@ if ! claude mcp list 2>/dev/null | grep -q "exa"; then
     claude mcp add -s user exa -- npx -y exa-mcp-server -e EXA_API_KEY
     echo "Added Exa MCP server"
 fi
+
+# Parallel requires manual setup (HTTP transport needs key in header, stored in config)
+# Run: setup-parallel-mcp (requires PARALLEL_API_KEY in env)

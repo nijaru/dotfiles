@@ -24,13 +24,17 @@ Use the right tool for the query type:
 | --------------------------- | ----------------------------------- | ---------------------------------- |
 | Local patterns              | `Glob/Read`                         | Always check codebase first        |
 | Library/framework docs      | `mcp__context7__*`                  | Resolve ID first, curated official |
-| Code examples, API patterns | `mcp__exa__get_code_context_exa`    | Best for SDK/API usage patterns    |
-| Complex research, multi-hop | `mcp__parallel__web_search_preview` | Multi-source synthesis             |
-| Semantic search             | `mcp__exa__web_search_exa`          | "Find similar", entity discovery   |
+| Code examples, SDK usage    | `mcp__exa__get_code_context_exa`    | Purpose-built for code snippets    |
+| Complex research, multi-hop | `mcp__parallel__web_search_preview` | 2x accuracy on complex queries     |
+| RAG, factual grounding      | `mcp__exa__web_search_exa`          | Built for LLM consumption          |
+| Semantic "find similar"     | `mcp__exa__web_search_exa`          | Entity discovery, similar content  |
 | Simple factual lookup       | `WebSearch`                         | Fast, current events               |
 | Fetch specific URL          | `WebFetch`                          | Reliable for known URLs            |
 
-**Parallel vs Exa:** Parallel excels at complex multi-source synthesis. Exa excels at code-specific queries and semantic search. Use both as appropriate.
+**Parallel vs Exa:**
+
+- **Parallel** — Complex research, multi-hop queries, broad synthesis (47% vs 24% benchmark accuracy)
+- **Exa** — RAG applications, code examples, semantic search (purpose-built for LLM consumption)
 
 ## Source Quality
 

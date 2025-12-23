@@ -1,6 +1,5 @@
 {
 	"$schema": "https://opencode.ai/config.json",
-	"model": "google/gemini-3-flash-preview",
 	"permission": {
 		"edit": "allow",
 		"bash": "allow",
@@ -30,6 +29,5 @@
 				"Authorization": "Bearer {env:PARALLEL_API_KEY}"
 			}
 		}
-	},
-	"provider": {}
+	}
 }

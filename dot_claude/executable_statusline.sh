@@ -3,27 +3,25 @@
 input=$(cat)
 
 # Single jq call for all JSON fields
-IFS=$'\t' read -r model_display cwd context_window transcript_path < <(
+IFS=$'\t' read -r model_display cwd context_window current_usage < <(
     echo "$input" | jq -r '[
         .model.display_name // .model.id,
         .workspace.current_dir,
         .context_window.context_window_size // 200000,
-        .transcript_path
+        (.context_window.current_usage | if . then (.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens) else 0 end)
     ] | @tsv'
 )
 
-# Current context from transcript
-current_tokens=0
-if [ -f "$transcript_path" ]; then
-    current_tokens=$(tail -50 "$transcript_path" | jq -s '
-        [.[] | select(.type == "assistant" and .message.usage)][-1].message.usage |
-        (.input_tokens // 0) + (.cache_read_input_tokens // 0) + (.cache_creation_input_tokens // 0)
-    ' 2>/dev/null || echo 0)
-fi
+current_tokens=${current_usage:-0}
 
 # Git branch (fast path first)
 git_branch=""
-[ -f "$cwd/.git/HEAD" ] && git_branch=$(sed 's|^ref: refs/heads/||' "$cwd/.git/HEAD" 2>/dev/null)
+if [ -f "$cwd/.git/HEAD" ]; then
+    head_content=$(cat "$cwd/.git/HEAD" 2>/dev/null)
+    if [[ "$head_content" == ref:* ]]; then
+        git_branch="${head_content#ref: refs/heads/}"
+    fi
+fi
 [ -z "$git_branch" ] && git_branch=$(git -C "$cwd" rev-parse --abbrev-ref HEAD 2>/dev/null)
 
 # Format

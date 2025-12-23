@@ -1,8 +1,31 @@
 {
-  "options": {
-    "attribution": {
-      "trailer_style": "none",
-      "generated_with": false
-    }
-  }
+	"$schema": "https://charm.land/crush.json",
+	"mcp": {
+		"context7": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@upstash/context7-mcp"]
+		},
+		"exa": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "exa-mcp-server"],
+			"env": {
+				"EXA_API_KEY": "$(echo $EXA_API_KEY)"
+			}
+		},
+		"parallel": {
+			"type": "http",
+			"url": "https://task-mcp.parallel.ai/mcp",
+			"headers": {
+				"Authorization": "Bearer $(echo $PARALLEL_API_KEY)"
+			}
+		}
+	},
+	"options": {
+		"attribution": {
+			"trailer_style": "none",
+			"generated_with": false
+		}
+	}
 }

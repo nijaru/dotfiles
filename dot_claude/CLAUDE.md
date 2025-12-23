@@ -29,11 +29,12 @@
 
 **Search:**
 
-| Tool     | Use for                               |
-| -------- | ------------------------------------- |
-| Context7 | Library/framework docs (first choice) |
-| Exa      | Code examples, quick web search       |
-| Parallel | Complex research, multi-hop queries   |
+| Tool      | Use for                                     |
+| --------- | ------------------------------------------- |
+| Context7  | Library/framework docs (first choice)       |
+| Exa       | Code examples, RAG, semantic "find similar" |
+| Parallel  | Complex research, multi-hop (2x accuracy)   |
+| WebSearch | Simple lookups, current events              |
 
 ## Development
 

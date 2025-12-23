@@ -36,11 +36,14 @@ Research topics using web, docs, and code search. Scale depth to complexity.
 | --------------------------- | ----------------------------------- | ---------------------------------- |
 | Local patterns              | `Read/Grep/Glob`                    | Always check codebase first        |
 | Library/framework docs      | `Context7`                          | Resolve ID first, curated official |
-| Code examples, API patterns | `mcp__exa__get_code_context_exa`    | Best for SDK/API usage patterns    |
-| Complex research, multi-hop | `mcp__parallel__web_search_preview` | Multi-source synthesis             |
-| Semantic search             | `mcp__exa__web_search_exa`          | "Find similar", entity discovery   |
+| Code examples, SDK usage    | `mcp__exa__get_code_context_exa`    | Purpose-built for code snippets    |
+| Complex research, multi-hop | `mcp__parallel__web_search_preview` | 2x accuracy on complex queries     |
+| RAG, factual grounding      | `mcp__exa__web_search_exa`          | Built for LLM consumption          |
+| Semantic "find similar"     | `mcp__exa__web_search_exa`          | Entity discovery, similar content  |
 | Simple factual lookup       | `WebSearch`                         | Fast, current events               |
 | Fetch specific URL          | `WebFetch`                          | Reliable for known URLs            |
+
+**Parallel vs Exa:** Parallel excels at complex multi-hop research (2x benchmark accuracy). Exa excels at code examples and RAG (purpose-built for LLM consumption).
 
 ## Process
 

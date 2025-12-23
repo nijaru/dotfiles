@@ -1,7 +1,7 @@
 ---
 name: research-web
 description: Web research specialist. Use proactively when evaluating libraries, learning best practices, or researching unfamiliar technologies before implementation.
-tools: Read, Write, Glob, Bash, mcp__parallel__web_search_preview, mcp__parallel__web_fetch, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
+tools: Read, Write, Glob, Bash, WebSearch, WebFetch, mcp__parallel__web_search_preview, mcp__parallel__web_fetch, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
 model: sonnet
 ---
 

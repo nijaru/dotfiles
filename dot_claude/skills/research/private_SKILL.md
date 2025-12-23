@@ -4,7 +4,7 @@ description: >
   Deep research using web, docs, and code search.
   Triggers on: "research", "look into", "what's the best", "how should I",
   evaluating libraries, unfamiliar patterns, state of the art.
-allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__parallel__web_search_preview, mcp__parallel__web_fetch, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
+allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__parallel__web_search_preview, mcp__parallel__web_fetch, mcp__exa__web_search_exa, mcp__exa__get_code_context_exa, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
 ---
 
 # Research
@@ -32,15 +32,15 @@ Research topics using web, docs, and code search. Scale depth to complexity.
 
 ## Sources (Use Best Tool for Task)
 
-| Query Type                  | Tool                                | Notes                           |
-| --------------------------- | ----------------------------------- | ------------------------------- |
-| Complex research, multi-hop | `mcp__parallel__web_search_preview` | Primary for deep research       |
-| Quick web lookup            | `WebSearch`                         | Simple queries, current events  |
-| Fetch specific URL (deep)   | `mcp__parallel__web_fetch`          | Extract content in depth        |
-| Fetch specific URL (quick)  | `WebFetch`                          | Simple URL fetch                |
-| Library/framework docs      | `Context7`                          | Resolve ID first, LLM-optimized |
-| Code examples, API patterns | `mcp__exa__get_code_context_exa`    | SDK usage, implementation       |
-| Local patterns              | `Read/Grep/Glob`                    | Check codebase first            |
+| Query Type                  | Tool                                | Notes                              |
+| --------------------------- | ----------------------------------- | ---------------------------------- |
+| Local patterns              | `Read/Grep/Glob`                    | Always check codebase first        |
+| Library/framework docs      | `Context7`                          | Resolve ID first, curated official |
+| Code examples, API patterns | `mcp__exa__get_code_context_exa`    | Best for SDK/API usage patterns    |
+| Complex research, multi-hop | `mcp__parallel__web_search_preview` | Multi-source synthesis             |
+| Semantic search             | `mcp__exa__web_search_exa`          | "Find similar", entity discovery   |
+| Simple factual lookup       | `WebSearch`                         | Fast, current events               |
+| Fetch specific URL          | `WebFetch`                          | Reliable for known URLs            |
 
 ## Process
 

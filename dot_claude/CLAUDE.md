@@ -11,13 +11,21 @@
 
 **Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
+**Packages:** Use CLI tools (`cargo add`, `uv add`, `go get`, `bun add`), not manual manifest edits. Pin versions only for reproducibility or known breaking changes.
+
 **Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Never pip.
 
 **Go:** `golines --base-formatter gofumpt`
 
 **Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024.
 
-**Tools:** `mise` (versions), `hhg` (semantic search), `jb` (background jobs), `gh` (GitHub), `hf` (Hugging Face)
+**Tools:**
+
+- `mise` — runtime versions
+- `hhg` — semantic code search (finds implementations, definitions). Use for "where is X implemented?" Grep for exact text.
+- `jb` — background jobs that survive disconnects. `jb run "cmd"` starts, `--follow` streams output. Subcommands: `list`, `logs [--follow]`, `stop`, `wait`, `status`, `retry <id>`, `clean`.
+- `gh` — GitHub CLI
+- `hf` — Hugging Face CLI
 
 **UI:** lucide/heroicons. No emoji unless requested.
 
@@ -53,11 +61,9 @@
 
 **Versions:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2).
 
-**Background:** `jb run "cmd"` for persistent processes. `list`, `logs`, `stop`, `wait`, `status`, `retry`, `clean`.
-
 ## Task Tracking
 
-`bd` for tasks. Fallback: ai/TODO.md.
+`bd` (beads) for task management across sessions. Fallback: ai/TODO.md.
 
 | Phase | Commands                                                               |
 | ----- | ---------------------------------------------------------------------- |

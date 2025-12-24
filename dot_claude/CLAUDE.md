@@ -117,10 +117,33 @@ Cross-session context. Root files every session—keep minimal.
 
 **Project config:** AGENTS.md primary. Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
 
+## Context Management
+
+**Main agent does most work**—user has visibility, can course-correct.
+
+**Prompt user to compact at:**
+
+- Feature/milestone complete
+- Before switching codebase areas
+- After research synthesized
+- Approaching ~100k tokens
+
+**Before compact:** Update ai/STATUS.md with current state.
+
+**Subagents only for autonomous work:**
+
+| Use Case       | Subagent       | Why                                      |
+| -------------- | -------------- | ---------------------------------------- |
+| Deep research  | `research-web` | Returns summary, persists to ai/research |
+| Code review    | `code-review`  | Returns findings, unbiased fresh eyes    |
+| Isolated fixes | `general`      | Well-defined, low-risk, no user input    |
+
+**Don't use subagents for:** Features needing user input, exploratory work, interdependent tasks.
+
 ## Standards
 
 **Benchmarks:** Compare equivalent configs. Report: config, dataset, environment, methodology. Reproducible.
 
 ---
 
-**Updated:** 2025-12-16 | github.com/nijaru/agent-contexts
+**Updated:** 2025-12-23 | github.com/nijaru/agent-contexts

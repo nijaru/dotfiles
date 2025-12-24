@@ -51,7 +51,9 @@ Default to WebSearch. Use `research-web` agent when findings should persist or q
 4. Read code before changing—understand existing patterns
 5. Update docs when relevant (README, ai/, AGENTS.md)
 6. Ask before breaking APIs
-7. Review after each feature/refactor—`/review` while context is fresh
+7. Review after features/refactors:
+   - Auto: spawn `code-review` subagent with context summary
+   - Manual: `/review` for comprehensive check before commits
 
 **Style:**
 

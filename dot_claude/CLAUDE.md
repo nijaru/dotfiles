@@ -29,12 +29,15 @@
 
 **Search:**
 
-| Tool      | Use for                                     |
-| --------- | ------------------------------------------- |
-| Context7  | Library/framework docs (first choice)       |
-| Exa       | Code examples, RAG, semantic "find similar" |
-| Parallel  | Complex research, multi-hop (2x accuracy)   |
-| WebSearch | Simple lookups, current events              |
+| Tool         | When                                             |
+| ------------ | ------------------------------------------------ |
+| WebSearch    | Quick facts, current events, simple lookups      |
+| Context7     | Library/framework docs (first choice)            |
+| Exa          | Code examples, RAG, semantic "find similar"      |
+| Parallel     | Complex research, multi-hop (2x accuracy)        |
+| research-web | Deep research → agent persists to `ai/research/` |
+
+Default to WebSearch. Use `research-web` agent when findings should persist or query is complex.
 
 ## Development
 
@@ -48,6 +51,7 @@
 4. Read code before changing—understand existing patterns
 5. Update docs when relevant (README, ai/, AGENTS.md)
 6. Ask before breaking APIs
+7. Review after each feature/refactor—`/review` while context is fresh
 
 **Style:**
 

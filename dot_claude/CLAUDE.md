@@ -22,10 +22,27 @@
 **Tools:**
 
 - `mise` — runtime versions
-- `hhg` — semantic code search (finds implementations, definitions). Use for "where is X implemented?" Grep for exact text.
-- `jb` — background jobs that survive disconnects. `jb run "cmd"` starts, `--follow` streams output. Subcommands: `list`, `logs [--follow]`, `stop`, `wait`, `status`, `retry <id>`, `clean`.
 - `gh` — GitHub CLI
 - `hf` — Hugging Face CLI
+
+**hhg** (semantic code search) — finds implementations by concept, not just text. Use for "where is X implemented?", "find auth code", "how does Y work". Grep/ripgrep for exact strings. `/hhg` for full reference.
+
+```bash
+hhg build ./src              # Index first (auto-updates on search)
+hhg "auth flow" ./src        # Semantic search
+hhg file.py#function         # Find similar code by name
+hhg file.py:42               # Find similar code by line
+```
+
+**jb** (background jobs) — long-running commands that survive disconnects. Use for builds >30s, test suites, dev servers. `/jb` for full reference.
+
+```bash
+jb run "cmd"                 # Start, returns ID
+jb run "cmd" --follow        # Stream output (resilient)
+jb list                      # Show jobs
+jb logs <id> --tail          # Recent output
+jb stop/wait/retry <id>      # Control jobs
+```
 
 **UI:** lucide/heroicons. No emoji unless requested.
 

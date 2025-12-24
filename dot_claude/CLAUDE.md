@@ -11,85 +11,63 @@
 
 **Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
-**Packages:** Let manager choose. Pin only for reproducibility or breaking changes.
+**Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Never pip.
 
-**Python:** Always `uv` for dependencies. `uvx` for one-off CLI tools, `uv tool install` for daily drivers. Never `pip install`.
-
-**Go:** Formatter: `golines --base-formatter gofumpt`
+**Go:** `golines --base-formatter gofumpt`
 
 **Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024.
 
-**Tools:** `mise` (versions), `hhg` (semantic—finds implementations). Grep for exact text.
-
-**Background Jobs:** `jb run "cmd"` for persistent processes (dev servers, builds, watchers). Survives disconnects. `--follow` streams output. `list`, `logs [--follow]|stop|wait|status|retry <id>`, `clean`.
-
-**CLIs:** `gh` (GitHub), `hf` (Hugging Face).
+**Tools:** `mise` (versions), `hhg` (semantic search), `jb` (background jobs), `gh` (GitHub), `hf` (Hugging Face)
 
 **UI:** lucide/heroicons. No emoji unless requested.
 
 **Search:**
 
-| Tool         | When                                             |
-| ------------ | ------------------------------------------------ |
-| WebSearch    | Quick facts, current events, simple lookups      |
-| Context7     | Library/framework docs (first choice)            |
-| Exa          | Code examples, RAG, semantic "find similar"      |
-| Parallel     | Complex research, multi-hop (2x accuracy)        |
-| research-web | Deep research → agent persists to `ai/research/` |
-
-Default to WebSearch. Use `research-web` agent when findings should persist or query is complex.
+| Tool         | Use                                        |
+| ------------ | ------------------------------------------ |
+| WebSearch    | Quick facts, current events (default)      |
+| Context7     | Library/framework docs                     |
+| Exa          | Code examples, RAG, semantic search        |
+| Parallel     | Complex multi-hop research (2x accuracy)   |
+| research-web | Deep research → persists to `ai/research/` |
 
 ## Development
 
-**Philosophy:** Do it right the first time—workarounds become permanent. Research → understand → plan → implement.
+**Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
 
-**Quality:**
+**Quality:** Research first · Fix root cause · Production-ready (errors, logging, validation) · Read before changing · Update docs (README, ai/, AGENTS.md) · Ask before breaking APIs
 
-1. Research best practices first
-2. Fix root cause, no workarounds
-3. Production-ready: error handling, logging, validation
-4. Read code before changing—understand existing patterns
-5. Update docs when relevant (README, ai/, AGENTS.md)
-6. Ask before breaking APIs
-7. Review after features/refactors:
-   - Auto: spawn `code-review` subagent with context summary
-   - Manual: `/review` for comprehensive check before commits
+**Review:** Auto-spawn `code-review` after features. Manual `/review` before commits.
 
 **Style:**
 
-- **Naming:** Proportional to scope. Local: `count`. Exported: `userCount`. No `_v2`/`_new`—use descriptive: `_batched`, `_async`.
-- **Comments:** WHY only. No WHAT, no TODOs, no change tracking.
-- **Files:** Keep focused. Split when mixing concerns. Tests: separate files.
+- **Naming:** Proportional to scope. No `_v2`/`_new`—use `_batched`, `_async`.
+- **Comments:** WHY only. No WHAT, no TODOs.
+- **Files:** Single concern. Tests separate.
 
 ## Workflow
 
-**Git:**
+**Git:** Commit often, push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
 
-- Commit frequently, push regularly
-- Confirm before: PRs, publishing, force ops, resource deletion
-- No force push to main/master
-- Messages: concise, focus on WHY
+**Releases:** NEVER trigger without explicit approval. Wait for CI.
 
-**Releases:** NEVER trigger release/publish workflows without explicit user approval. Wait for CI. Can't unpublish.
+**Versions:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2).
 
-**Versioning:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2, not 0.0.1 → 1.0.0). Reference code by commit hash.
+**Background:** `jb run "cmd"` for persistent processes. `list`, `logs`, `stop`, `wait`, `status`, `retry`, `clean`.
 
-**Long-running commands:** Use `jb` for persistent processes. Avoid rapid polling; scale wait time with expected duration.
+## Task Tracking
 
-## Task Tracking (Beads)
+`bd` for tasks. Fallback: ai/TODO.md.
 
-Use `bd` for tasks. Fallback: ai/TODO.md.
-
-| Phase  | Commands                                                               |
-| ------ | ---------------------------------------------------------------------- |
-| Start  | `bd ready` ・ `bd list --status open`                                  |
-| Work   | `bd create "title" -t task -p 2` ・ `bd update X --status in-progress` |
-| Depend | `bd dep add <task> <blocker>`                                          |
-| End    | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]"    |
+| Phase | Commands                                                               |
+| ----- | ---------------------------------------------------------------------- |
+| Start | `bd ready` ・ `bd list --status open`                                  |
+| Work  | `bd create "title" -t task -p 2` ・ `bd update X --status in-progress` |
+| End   | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]"    |
 
 ## ai/ Directory
 
-Cross-session context. Root files every session—keep minimal.
+Cross-session context. Read root files every session.
 
 | File         | When        | Purpose                          |
 | ------------ | ----------- | -------------------------------- |
@@ -99,51 +77,44 @@ Cross-session context. Root files every session—keep minimal.
 | ROADMAP.md   | Situational | Phase timeline, links to beads   |
 | TODO.md      | Situational | Tasks (fallback if no beads)     |
 
-**Update Rules (always follow):**
+**Update triggers:**
 
-| Trigger                  | Action                                               |
-| ------------------------ | ---------------------------------------------------- |
-| Architecture change      | Update DESIGN.md immediately                         |
-| Made a tradeoff decision | Append to DECISIONS.md with date, context, rationale |
-| Task completed/blocked   | Update STATUS.md                                     |
-| Before `/compact`        | Update STATUS.md with current state                  |
-| Session ending           | Run `/save`                                          |
+| Event                  | Action                              |
+| ---------------------- | ----------------------------------- |
+| Architecture change    | Update DESIGN.md                    |
+| Tradeoff decision      | Append DECISIONS.md (date, context) |
+| Task completed/blocked | Update STATUS.md                    |
+| Before `/compact`      | Update STATUS.md                    |
+| Session ending         | Run `/save`                         |
 
-**Workflow:** research/ (inputs) → DESIGN.md (synthesis) → design/ (specs) → code
+**Flow:** research/ → DESIGN.md → design/ → code
 
-**Anti-pattern:** No ✅/❌/In Progress in DESIGN.md—architecture docs are stable references, not task trackers.
+**Anti-pattern:** No ✅/❌ in DESIGN.md—architecture is stable, not a tracker.
 
-**Format:** Tables/lists, not prose. Answer first, evidence second.
+**Format:** Tables/lists over prose. Answer first, evidence second.
 
 **Project config:** AGENTS.md primary. Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
 
 ## Context Management
 
-**Main agent does most work**—user has visibility, can course-correct.
+Main agent does most work—user has visibility, can course-correct.
 
-**Prompt user to compact at:**
+**Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
-- Feature/milestone complete
-- Before switching codebase areas
-- After research synthesized
-- Approaching ~100k tokens
+**Before compact:** Update ai/STATUS.md.
 
-**Before compact:** Update ai/STATUS.md with current state.
+**Subagents for autonomous work only:**
 
-**Subagents only for autonomous work:**
+| Use Case       | Agent          | Why                                   |
+| -------------- | -------------- | ------------------------------------- |
+| Deep research  | `research-web` | Persists findings to ai/research/     |
+| Code review    | `code-review`  | Unbiased, fresh eyes                  |
+| Isolated fixes | `general`      | Well-defined, low-risk, no user input |
 
-| Use Case       | Subagent       | Why                                      |
-| -------------- | -------------- | ---------------------------------------- |
-| Deep research  | `research-web` | Returns summary, persists to ai/research |
-| Code review    | `code-review`  | Returns findings, unbiased fresh eyes    |
-| Isolated fixes | `general`      | Well-defined, low-risk, no user input    |
-
-**Don't use subagents for:** Features needing user input, exploratory work, interdependent tasks.
-
-## Standards
-
-**Benchmarks:** Compare equivalent configs. Report: config, dataset, environment, methodology. Reproducible.
+**Not for subagents:** Features needing input, exploratory work, interdependent tasks.
 
 ---
+
+**Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
 **Updated:** 2025-12-23 | github.com/nijaru/agent-contexts

@@ -1,6 +1,6 @@
 Initialize AI agent context management for project.
 
-**Reference:** github.com/nijaru/agent-contexts PRACTICES.md | github.com/steveyegge/beads
+**Reference:** github.com/nijaru/agent-contexts PATTERNS.md | github.com/steveyegge/beads
 **Philosophy:** Session files (<500 lines, current only) + Reference subdirs (on-demand) = token efficiency
 **Task tracking:** Beads (`bd`) preferred, TODO.md as fallback
 
@@ -85,7 +85,7 @@ echo '*' > ai/tmp/.gitignore
 bd init  # Creates .beads/, installs git hooks
 ```
 
-**Templates:** See PRACTICES.md for STATUS, DESIGN, DECISIONS, ROADMAP templates
+**Templates:** See PATTERNS.md for file content guidance
 
 **File initialization:**
 
@@ -156,9 +156,9 @@ Initial AI context setup.
 **Note:** System-level overview. Component specs go in design/.
 ```
 
-**ai/DECISIONS.md (if standard+):** Use PRACTICES.md template
+**ai/DECISIONS.md (if standard+):** Date, context, decision, rationale, tradeoffs. Append-only.
 
-**ai/ROADMAP.md (if complex):** Use PRACTICES.md template
+**ai/ROADMAP.md (if complex):** Phases table, dependencies, out-of-scope. No time estimates.
 
 ## 6. Create AGENTS.md
 

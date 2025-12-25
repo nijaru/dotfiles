@@ -48,13 +48,12 @@ jb stop/wait/retry <id>      # Control jobs
 
 **Search:**
 
-| Tool         | Use                                        |
-| ------------ | ------------------------------------------ |
-| WebSearch    | Quick facts, current events (default)      |
-| Context7     | Library/framework docs                     |
-| Exa          | Code examples, RAG, semantic search        |
-| Parallel     | Complex multi-hop research (2x accuracy)   |
-| research-web | Deep research → persists to `ai/research/` |
+| Tool      | Use                                      |
+| --------- | ---------------------------------------- |
+| WebSearch | Quick facts, current events (default)    |
+| Context7  | Library/framework docs                   |
+| Exa       | Code examples, RAG, semantic search      |
+| Parallel  | Complex multi-hop research (2x accuracy) |
 
 ## Development
 
@@ -62,7 +61,7 @@ jb stop/wait/retry <id>      # Control jobs
 
 **Quality:** Research first · Fix root cause · Production-ready (errors, logging, validation) · Read before changing · Update docs (README, ai/, AGENTS.md) · Ask before breaking APIs
 
-**Review:** Auto-spawn `code-review` after features. Manual `/review` before commits.
+**Review:** Consider `reviewer` for significant changes. `/review` before major commits.
 
 **Style:**
 
@@ -90,7 +89,7 @@ jb stop/wait/retry <id>      # Control jobs
 
 ## ai/ Directory
 
-Cross-session context. Read root files every session.
+Cross-session context. Root files read every session—keep minimal. Subdirs read on demand.
 
 | File         | When        | Purpose                          |
 | ------------ | ----------- | -------------------------------- |
@@ -100,44 +99,35 @@ Cross-session context. Read root files every session.
 | ROADMAP.md   | Situational | Phase timeline, links to beads   |
 | TODO.md      | Situational | Tasks (fallback if no beads)     |
 
-**Update triggers:**
+**Subdirs:** research/, design/, review/, tmp/ (gitignored) — loaded on demand
 
-| Event                  | Action                              |
-| ---------------------- | ----------------------------------- |
-| Architecture change    | Update DESIGN.md                    |
-| Tradeoff decision      | Append DECISIONS.md (date, context) |
-| Task completed/blocked | Update STATUS.md                    |
-| Before `/compact`      | Update STATUS.md                    |
-| Session ending         | Run `/save`                         |
-
-**Flow:** research/ → DESIGN.md → design/ → code
-
-**Anti-pattern:** No ✅/❌ in DESIGN.md—architecture is stable, not a tracker.
+**Flow:** research/ → DESIGN.md → design/ → code → review/
 
 **Format:** Tables/lists over prose. Answer first, evidence second.
 
 **Project config:** AGENTS.md primary. Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
 
-## Context Management
+## Subagents
 
-Main agent does most work—user has visibility, can course-correct.
+For context isolation, parallelism, fresh perspective. ai/ files are shared memory.
+
+| Agent        | Purpose                          | Persists to  |
+| ------------ | -------------------------------- | ------------ |
+| `researcher` | External knowledge, synthesis    | ai/research/ |
+| `designer`   | Architecture, planning           | ai/design/   |
+| `developer`  | Well-scoped implementation       | —            |
+| `reviewer`   | Full validation (build/run/test) | ai/review/   |
+
+**Context handoff:** Curate relevant context, don't dump history. Put objectives at END (recency bias).
+
+## Context Management
 
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
 **Before compact:** Update ai/STATUS.md.
 
-**Subagents for autonomous work only:**
-
-| Use Case       | Agent          | Why                                   |
-| -------------- | -------------- | ------------------------------------- |
-| Deep research  | `research-web` | Persists findings to ai/research/     |
-| Code review    | `code-review`  | Unbiased, fresh eyes                  |
-| Isolated fixes | `general`      | Well-defined, low-risk, no user input |
-
-**Not for subagents:** Features needing input, exploratory work, interdependent tasks.
-
 ---
 
 **Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
-**Updated:** 2025-12-23 | github.com/nijaru/agent-contexts
+**Updated:** 2025-12-25 | github.com/nijaru/agent-contexts

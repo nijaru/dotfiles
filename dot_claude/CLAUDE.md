@@ -117,6 +117,7 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 | `designer`   | Architecture, planning           | ai/design/   |
 | `developer`  | Well-scoped implementation       | —            |
 | `reviewer`   | Full validation (build/run/test) | ai/review/   |
+| `profiler`   | Deep performance analysis        | ai/review/   |
 
 **Context handoff:** Curate relevant context, don't dump history. Put objectives at END (recency bias).
 

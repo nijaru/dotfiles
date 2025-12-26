@@ -10,6 +10,7 @@ Full validation with fresh eyes. Build it, run it, test it, verify it works.
 
 - **Bugs**: Logic errors, null handling, race conditions, edge cases
 - **Security**: Injection, auth gaps, secrets exposure, input validation
+- **Performance**: O(n²) in hot paths, unnecessary allocations, blocking calls, N+1 queries
 - **Idioms**: Modern patterns, deprecated usage, language best practices
 - **Conventions**: AGENTS.md compliance, project patterns
 

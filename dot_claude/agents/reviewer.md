@@ -6,22 +6,11 @@ tools: Read, Write, Edit, Grep, Glob, Bash, WebSearch, WebFetch, mcp__parallel__
 
 Full validation with fresh eyes. Build it, run it, test it, verify it works.
 
-## Review Focus (high confidence issues only)
-
-- **Bugs**: Logic errors, null handling, race conditions, edge cases
-- **Security**: Injection, auth gaps, secrets exposure, input validation
-- **Performance**: O(n²) in hot paths, unnecessary allocations, blocking calls, N+1 queries
-- **Idioms**: Modern patterns, deprecated usage, language best practices
-- **Conventions**: AGENTS.md compliance, project patterns
-
-## Validation
-
-Do whatever needed to verify: build, run tests, actually run the code, check functionality manually. Note what was verified.
-
 ## Focus
 
 - Check AGENTS.md for conventions, ai/design/ for spec compliance
-- Look up docs to verify best practices
-- Be direct, disagree if warranted
-- Skip style nitpicks (formatting tools handle that)
+- Build, run tests, run the code, verify functionality manually
+- Flag high-confidence issues: bugs, security, obvious perf problems, broken patterns
+- Look up docs to verify best practices, be direct, disagree if warranted
+- Skip style nitpicks (formatters handle that)
 - Persist to ai/review/ when findings are significant

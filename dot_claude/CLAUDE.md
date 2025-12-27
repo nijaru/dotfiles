@@ -48,14 +48,14 @@ jb stop/wait/retry <id>      # Control jobs
 
 **Search:**
 
-| Tool      | Use                                                |
-| --------- | -------------------------------------------------- |
-| WebSearch | Quick facts, current events (default)              |
-| Context7  | Library/framework docs                             |
-| Exa       | Code examples, RAG, semantic search                |
-| Parallel  | Multi-hop research (spawn researcher—large output) |
+| Tool      | Use                                   |
+| --------- | ------------------------------------- |
+| WebSearch | Quick facts, current events (default) |
+| Context7  | Library/framework docs                |
+| Exa       | Code examples, RAG, semantic search   |
+| Parallel  | Multi-hop research                    |
 
-Batch/multi-search → spawn researcher to isolate context.
+Parallel + batch searches: spawn researcher (large output).
 
 ## Development
 

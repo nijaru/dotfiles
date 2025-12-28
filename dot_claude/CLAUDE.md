@@ -53,9 +53,9 @@ jb stop/wait/retry <id>      # Control jobs
 | WebSearch    | Quick facts, current events (default) |
 | Context7     | Library/framework docs                |
 | Exa          | Code examples, RAG, semantic search   |
-| Parallel web search | Multi-hop research              |
+| Parallel MCP search | Multi-hop research              |
 
-Parallel web search + batch searches: spawn researcher (large output).
+Parallel MCP search + batch searches: spawn researcher (large output).
 
 ## Development
 

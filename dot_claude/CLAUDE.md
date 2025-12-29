@@ -26,11 +26,11 @@
 - `hf` — Hugging Face CLI
 
 **Code search:** `hhg` (semantic) for concepts, Grep for exact strings.
-- "where is X?", "how does Y work?", exploring unfamiliar code → hhg
-- `hhg "query" ./path` · `hhg file.py#func` (similar) · `hhg file.py:42`
+- "where is X?", "how does Y work?", exploring unfamiliar code
+- `hhg "query" ./path` | `hhg file#func` (by name) | `hhg file:42` (by line)
 
 **Background jobs:** `jb` for long-running (>30s, test suites, dev servers).
-- `jb run "cmd" --follow` · `jb list` · `jb logs <id> --tail` · `jb stop <id>`
+- `jb run "cmd" --follow` | `jb list` | `jb logs <id> --tail` | `jb stop <id>`
 
 **UI:** lucide/heroicons. No emoji unless requested.
 

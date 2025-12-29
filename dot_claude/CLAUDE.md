@@ -25,14 +25,12 @@
 - `gh` — GitHub CLI
 - `hf` — Hugging Face CLI
 
-**Code search:** `hhg` for concepts, Grep for exact strings.
+**Code search:** `hhg` (semantic) for concepts, Grep for exact strings.
+- "where is X?", "how does Y work?", exploring unfamiliar code → hhg
+- `hhg "query" ./path` · `hhg file.py#func` (similar) · `hhg file.py:42`
 
-- "where is X?", "how does Y work?", exploring unfamiliar code → `hhg "query" ./path`
-- Exact pattern, known string → Grep
-
-**Background jobs:** `jb` for long-running, Bash for quick.
-
-- > 30s, test suites, builds, dev servers → `jb run "cmd" --follow`
+**Background jobs:** `jb` for long-running (>30s, test suites, dev servers).
+- `jb run "cmd" --follow` · `jb list` · `jb logs <id> --tail` · `jb stop <id>`
 
 **UI:** lucide/heroicons. No emoji unless requested.
 

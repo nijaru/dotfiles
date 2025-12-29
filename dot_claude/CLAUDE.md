@@ -25,35 +25,25 @@
 - `gh` — GitHub CLI
 - `hf` — Hugging Face CLI
 
-**hhg** (semantic code search) — finds implementations by concept, not just text. Use for "where is X implemented?", "find auth code", "how does Y work". Grep/ripgrep for exact strings. `/hhg` for full reference.
+**Code search:** `hhg` for concepts, Grep for exact strings.
 
-```bash
-hhg build ./src              # Index first (auto-updates on search)
-hhg "auth flow" ./src        # Semantic search
-hhg file.py#function         # Find similar code by name
-hhg file.py:42               # Find similar code by line
-```
+- "where is X?", "how does Y work?", exploring unfamiliar code → `hhg "query" ./path`
+- Exact pattern, known string → Grep
 
-**jb** (background jobs) — long-running commands that survive disconnects. Use for builds >30s, test suites, dev servers. `/jb` for full reference.
+**Background jobs:** `jb` for long-running, Bash for quick.
 
-```bash
-jb run "cmd"                 # Start, returns ID
-jb run "cmd" --follow        # Stream output (resilient)
-jb list                      # Show jobs
-jb logs <id> --tail          # Recent output
-jb stop/wait/retry <id>      # Control jobs
-```
+- > 30s, test suites, builds, dev servers → `jb run "cmd" --follow`
 
 **UI:** lucide/heroicons. No emoji unless requested.
 
 **Search:**
 
-| Tool         | Use                                   |
-| ------------ | ------------------------------------- |
-| WebSearch    | Quick facts, current events (default) |
-| Context7     | Library/framework docs                |
-| Exa          | Code examples, RAG, semantic search   |
-| Parallel MCP search | Multi-hop research              |
+| Tool                | Use                                   |
+| ------------------- | ------------------------------------- |
+| WebSearch           | Quick facts, current events (default) |
+| Context7            | Library/framework docs                |
+| Exa                 | Code examples, RAG, semantic search   |
+| Parallel MCP search | Multi-hop research                    |
 
 Parallel MCP search + batch searches: spawn researcher (large output).
 
@@ -62,6 +52,8 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 **Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
 
 **Quality:** Research first · Fix root cause · Production-ready (errors, logging, validation) · Read before changing · Update docs (README, ai/, AGENTS.md) · Ask before breaking APIs
+
+**Corrections:** Update AGENTS.md when corrected on non-obvious project patterns—prevents repeat mistakes.
 
 **Review:** Consider `reviewer` for significant changes. `/review` before major commits.
 

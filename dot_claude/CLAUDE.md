@@ -127,4 +127,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
-**Updated:** 2025-12-25 | github.com/nijaru/agent-contexts
+**Updated:** 2025-12-29 | github.com/nijaru/agent-contexts

@@ -13,7 +13,9 @@
 
 **Packages:** Use CLI tools (`cargo add`, `uv add`, `go get`, `bun add`), not manual manifest edits. Pin versions only for reproducibility or known breaking changes.
 
-**Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Never pip.
+**Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Lint/format: `ruff`. Types: `ty`. Never pip.
+
+**TypeScript:** `bun` always. Lint: `oxlint`. Format: `oxfmt`. Test: `vitest` or `bun test`.
 
 **Go:** `golines --base-formatter gofumpt`
 
@@ -26,10 +28,12 @@
 - `hf` — Hugging Face CLI
 
 **Code search:** `hhg` (semantic) for concepts, Grep for exact strings.
+
 - "where is X?", "how does Y work?", exploring unfamiliar code
 - `hhg "query" ./path` | `hhg file#func` (by name) | `hhg file:42` (by line)
 
 **Background jobs:** `jb` for long-running (>30s, test suites, dev servers).
+
 - `jb run "cmd" --follow` | `jb list` | `jb logs <id> --tail` | `jb stop <id>`
 
 **UI:** lucide/heroicons. No emoji unless requested.

@@ -43,6 +43,9 @@
 [branch]
     sort          = -committerdate                 # Sort branches by latest commit
 
+[column]
+    ui            = auto                           # Better branch/tag listing
+
 [checkout]
     defaultRemote = origin                         # Default remote when checking out
     workers       = 0                              # Use all available CPU cores
@@ -50,6 +53,9 @@
 ##############################
 # Diff & Merge Configuration
 ##############################
+[log]
+    date             = relative                    # "2 days ago" instead of dates
+
 [diff]
     algorithm        = histogram                   # Optimized diff algorithm
     colorMoved       = zebra                       # Alternate colors for moved code

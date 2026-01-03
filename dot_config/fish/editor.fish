@@ -1,5 +1,5 @@
 #!/usr/bin/env fish
-# Editor abbreviations - only load after env.fish ensures $EDITOR is set
+# Editor and AI tool abbreviations
 
 if status is-interactive
     # Editor abbreviations
@@ -11,4 +11,8 @@ if status is-interactive
     abbr --add c. 'code .'
     abbr --add v. 'nvim .'
     abbr --add hx. 'helix .'
+
+    # Claude Code
+    abbr --add cl 'claude'
+    abbr --add clc 'claude --continue'
 end

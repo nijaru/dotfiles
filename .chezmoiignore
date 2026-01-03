@@ -17,9 +17,18 @@ Brewfile_darwin
 .config/fish/**/*cache*
 .config/fish/**/*.local
 .config/fish/functions/tide/configure/functions/_fake_tide_cache_variables.fish
+.local/share/fish/fish_history
+
+# Zed runtime files
+.config/zed/local-settings.json
+.config/zed/conversations
+.config/zed/embeddings
+.config/zed/extensions
 
 # Claude Code runtime files
 .claude/**/*.local
+.claude/statsig
+.claude/todos
 
 # Build artifacts and dependencies
 .config/**/*.lock

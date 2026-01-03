@@ -55,6 +55,8 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 
 **Quality:** Research first · Fix root cause · Production-ready (errors, logging, validation) · Read before changing · Update docs (README, ai/, AGENTS.md) · Ask before breaking APIs
 
+**Upgrades:** No deprecation—remove old code and update all usages in the same change. Only deprecate if explicitly instructed.
+
 **Corrections:** Update AGENTS.md when corrected on non-obvious project patterns—prevents repeat mistakes.
 
 **Review:** Consider `reviewer` for significant changes. `/review` before major commits.

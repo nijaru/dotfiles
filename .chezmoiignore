@@ -59,3 +59,5 @@ dot_claude/mcp_config.json
 .config/opencode/providers
 .config/opencode/generate_config.sh
 .claude.json
+.config/nvim/lazy-lock.json
+.config/nvim/lazyvim.json

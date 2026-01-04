@@ -77,13 +77,14 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 
 ## Task Tracking
 
-`bd` (beads) for task management across sessions. Fallback: ai/TODO.md.
+Use `ai/TODO.md` for task tracking across sessions.
 
-| Phase | Commands                                                               |
-| ----- | ---------------------------------------------------------------------- |
-| Start | `bd ready` ・ `bd list --status open`                                  |
-| Work  | `bd create "title" -t task -p 2` ・ `bd update X --status in-progress` |
-| End   | `bd close X` ・ `bd sync` ・ Provide: "Continue bd-xxxx: [context]"    |
+**Workflow:**
+
+- Start: Read TODO.md, pick highest priority unblocked task
+- Work: Update subtasks as you go, mark blocked if stuck
+- End: Update STATUS.md, commit TODO.md changes
+- Resume: "Continue [task name]: [context]"
 
 ## ai/ Directory
 
@@ -94,8 +95,8 @@ Cross-session context. Root files read every session—keep minimal. Subdirs rea
 | STATUS.md    | Always      | Current state (read first)       |
 | DESIGN.md    | Recommended | Architecture (no status markers) |
 | DECISIONS.md | Recommended | Context → Decision → Rationale   |
-| ROADMAP.md   | Situational | Phase timeline, links to beads   |
-| TODO.md      | Situational | Tasks (fallback if no beads)     |
+| ROADMAP.md   | Situational | Phase timeline                   |
+| TODO.md      | Situational | Task tracking                    |
 
 **Subdirs:** research/, design/, review/, tmp/ (gitignored) — loaded on demand
 

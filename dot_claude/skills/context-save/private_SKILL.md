@@ -1,19 +1,19 @@
 ---
 name: context-save
 description: >
-  Update ai/ and sync beads. Triggers on: "save", "update ai/", "sync",
+  Update ai/ files. Triggers on: "save", "update ai/", "sync",
   task completion, session end, context switch, before /compact.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Context Save
 
-Update ai/ and sync beads before /compact or session end.
+Update ai/ files before /compact or session end.
 
 ## Triggers
 
-- Explicit: "save", "update ai/", "sync beads", "save context"
-- Task complete: "close the bead", "mark it done", "that's finished"
+- Explicit: "save", "update ai/", "save context"
+- Task complete: "mark it done", "that's finished"
 - Session end: "wrap up", "done for today", "stopping here"
 - Context switch: "switching to X", "moving on", "different project"
 - After code-review LGTM and ready to commit
@@ -34,24 +34,17 @@ git status
 git diff --stat
 ls -la ai/
 wc -l ai/*.md 2>/dev/null
-bd list --status open 2>/dev/null  # If beads available
 ```
 
-Read ai/STATUS.md. Check `bd ready` or ai/TODO.md.
+Read ai/STATUS.md and ai/TODO.md.
 
 ## 2. Update Task Tracking
 
-**If beads available:**
+Update ai/TODO.md:
 
-```bash
-bd close <completed-ids>                    # Close completed work
-bd create "remaining work" -t task -p 2     # File new issues
-bd sync                                     # Flush/commit/push
-```
-
-**If using TODO.md:**
-
-- Remove completed tasks, add new, update in-progress
+- Remove completed tasks
+- Add new tasks discovered
+- Update in-progress items
 
 ## 3. Update ai/ Files
 
@@ -79,7 +72,6 @@ bd sync                                     # Flush/commit/push
 ```bash
 git add ai/
 git commit -m "Update ai/ context"
-bd sync 2>/dev/null  # Sync beads if available
 ```
 
 ## 6. Report
@@ -88,8 +80,7 @@ bd sync 2>/dev/null  # Sync beads if available
 Session saved
 - STATUS.md: [state summary]
 - DESIGN.md: [updated/unchanged]
-- Tasks: [N open in beads / N pending in TODO.md]
-- Beads synced: [yes/no/n/a]
+- TODO.md: [N pending tasks]
 - Committed: [yes/no]
 
 Next: /compact or provide follow-up prompt

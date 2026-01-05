@@ -75,20 +75,18 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 
 **Versions:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2).
 
-## Task Tracking
-
-Use `ai/TODO.md` for task tracking across sessions.
-
-**Workflow:**
-
-- Start: Read TODO.md, pick highest priority unblocked task
-- Work: Update subtasks as you go, mark blocked if stuck
-- End: Update STATUS.md, commit TODO.md changes
-- Resume: "Continue [task name]: [context]"
-
 ## ai/ Directory
 
-Cross-session context. Root files read every session—keep minimal. Subdirs read on demand.
+**Persistent memory across compactions.** Update ai/ BEFORE implementing—conversation context is lost, ai/ survives.
+
+| Action               | Update First       |
+| -------------------- | ------------------ |
+| New task             | STATUS.md, TODO.md |
+| Architecture change  | DESIGN.md          |
+| Non-obvious decision | DECISIONS.md       |
+| Task complete        | STATUS.md          |
+
+Root files read every session—keep minimal. Subdirs read on demand.
 
 | File         | When        | Purpose                          |
 | ------------ | ----------- | -------------------------------- |
@@ -124,10 +122,8 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
-**Before compact:** Update ai/STATUS.md.
-
 ---
 
 **Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
-**Updated:** 2025-12-29 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-05 | github.com/nijaru/agent-contexts

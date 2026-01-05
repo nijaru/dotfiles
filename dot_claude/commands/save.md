@@ -1,5 +1,5 @@
 ---
-description: Update ai/ and sync beads
+description: Update ai/ files
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

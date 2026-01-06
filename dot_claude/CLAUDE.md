@@ -55,13 +55,19 @@
 
 **Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
 
-**Quality:** Research first · Fix root cause · Production-ready (errors, logging, validation) · Read before changing · Update docs (README, ai/, AGENTS.md) · Ask before breaking APIs
+**Quality:**
+
+- Research before implementing
+- Fix root cause, not symptoms
+- Read code before changing it
+- Update docs (README, ai/, AGENTS.md)
+- Ask before breaking APIs
 
 **Upgrades:** No deprecation—remove old code and update all usages in the same change. Only deprecate if explicitly instructed.
 
 **Corrections:** Update AGENTS.md when corrected on non-obvious project patterns—prevents repeat mistakes.
 
-**Review:** Consider `reviewer` for significant changes. `/review` before major commits.
+**Review:** `/review` before major commits.
 
 **Style:**
 
@@ -85,6 +91,8 @@
 ## ai/ Directory
 
 Persistent memory—survives compaction. Update BEFORE implementing.
+
+**Session start:** Read STATUS.md → `tk ready` → `tk start <id>`.
 
 **Todos/tasks:** Use `tk`, never STATUS.md.
 **Blockers/session notes:** STATUS.md

@@ -19,22 +19,26 @@
 
 **Go:** `golines --base-formatter gofumpt`
 
-**Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024.
+**Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024. `crate::` over `super::`. No `pub use` unless re-exporting for downstream. No global state (`lazy_static!`, `OnceCell`), prefer explicit context. Strong types over strings (enums, newtypes).
 
 **Tools:**
 
 - `mise` — runtime versions
 - `gh` — GitHub CLI
 - `hf` — Hugging Face CLI
+- `sg` / `ast-grep` — tree-safe refactors (prefer over regex for structural edits)
 
-**Code search:** `hhg` (semantic) for concepts, Grep for exact strings.
+**Code search:** Use `hhg` (semantic) for concepts, Grep for exact strings.
 
-- "where is X?", "how does Y work?", exploring unfamiliar code
 - `hhg "query" ./path` | `hhg file#func` (by name) | `hhg file:42` (by line)
 
-**Background jobs:** `jb` for long-running (>30s, test suites, dev servers).
+**Background jobs:** Use `jb` for commands expected to run >30s (builds, test suites, benchmarks, dev servers).
 
 - `jb run "cmd" --follow` | `jb list` | `jb logs <id> --tail` | `jb stop <id>`
+
+**Task tracking:** Use `tk` for project tasks. Uses `.tasks/` directory, git-friendly.
+
+- `tk add "title"` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>`
 
 **UI:** lucide/heroicons. No emoji unless requested.
 
@@ -66,10 +70,15 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 - **Naming:** Proportional to scope. No `_v2`/`_new`—use `_batched`, `_async`.
 - **Comments:** WHY only. No WHAT, no TODOs.
 - **Files:** Single concern. Tests separate.
+- **No breadcrumbs:** When deleting/moving code, just remove it. No `// moved to X`, `// removed`, `// deprecated`.
+
+**Testing:** Unit or e2e only. No mocks—they invent behaviors that hide real bugs.
+
+**Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
 ## Workflow
 
-**Git:** Commit often, push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
+**Git:** Proactively commit after completing logical units of work—don't wait to be asked. Push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
 
 **Releases:** NEVER trigger without explicit approval. Wait for CI.
 
@@ -79,22 +88,23 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 
 **Persistent memory across compactions.** Update ai/ BEFORE implementing—conversation context is lost, ai/ survives.
 
-| Action               | Update First       |
-| -------------------- | ------------------ |
-| New task             | STATUS.md, TODO.md |
-| Architecture change  | DESIGN.md          |
-| Non-obvious decision | DECISIONS.md       |
-| Task complete        | STATUS.md          |
+| Action               | Update First |
+| -------------------- | ------------ |
+| New task             | `tk add`     |
+| Architecture change  | DESIGN.md    |
+| Non-obvious decision | DECISIONS.md |
+| Task complete        | `tk done`    |
 
 Root files read every session—keep minimal. Subdirs read on demand.
 
 | File         | When        | Purpose                          |
 | ------------ | ----------- | -------------------------------- |
-| STATUS.md    | Always      | Current state (read first)       |
+| STATUS.md    | Always      | Session state, blockers, notes   |
 | DESIGN.md    | Recommended | Architecture (no status markers) |
 | DECISIONS.md | Recommended | Context → Decision → Rationale   |
 | ROADMAP.md   | Situational | Phase timeline                   |
-| TODO.md      | Situational | Task tracking                    |
+
+**tk vs STATUS.md:** tk tracks discrete tasks. STATUS.md tracks blockers and session notes.
 
 **Subdirs:** research/, design/, review/, tmp/ (gitignored) — loaded on demand
 
@@ -123,7 +133,5 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
 ---
-
-**Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
 **Updated:** 2026-01-05 | github.com/nijaru/agent-contexts

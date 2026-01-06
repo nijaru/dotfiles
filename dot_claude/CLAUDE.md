@@ -36,7 +36,7 @@
 
 - `jb run "cmd" --follow` | `jb list` | `jb logs <id> --tail` | `jb stop <id>`
 
-**Task tracking:** Use `tk` for project tasks. Uses `.tasks/` directory, git-friendly.
+**Task tracking:** Use `tk` for multi-step or cross-session work—persists across compaction.
 
 - `tk add "title"` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>`
 
@@ -50,8 +50,6 @@
 | Context7            | Library/framework docs                |
 | Exa                 | Code examples, RAG, semantic search   |
 | Parallel MCP search | Multi-hop research                    |
-
-Parallel MCP search + batch searches: spawn researcher (large output).
 
 ## Development
 
@@ -86,27 +84,14 @@ Parallel MCP search + batch searches: spawn researcher (large output).
 
 ## ai/ Directory
 
-**Persistent memory across compactions.** Update ai/ BEFORE implementing—conversation context is lost, ai/ survives.
+Persistent memory—survives compaction. Update BEFORE implementing.
 
-| Action               | Update First |
-| -------------------- | ------------ |
-| New task             | `tk add`     |
-| Architecture change  | DESIGN.md    |
-| Non-obvious decision | DECISIONS.md |
-| Task complete        | `tk done`    |
+**Todos/tasks:** Use `tk`, never STATUS.md.
+**Blockers/session notes:** STATUS.md
+**Architecture:** DESIGN.md
+**Decisions:** DECISIONS.md (context → decision → rationale)
 
-Root files read every session—keep minimal. Subdirs read on demand.
-
-| File         | When        | Purpose                          |
-| ------------ | ----------- | -------------------------------- |
-| STATUS.md    | Always      | Session state, blockers, notes   |
-| DESIGN.md    | Recommended | Architecture (no status markers) |
-| DECISIONS.md | Recommended | Context → Decision → Rationale   |
-| ROADMAP.md   | Situational | Phase timeline                   |
-
-**tk vs STATUS.md:** tk tracks discrete tasks. STATUS.md tracks blockers and session notes.
-
-**Subdirs:** research/, design/, review/, tmp/ (gitignored) — loaded on demand
+Root files read every session—keep minimal. Subdirs (research/, design/, review/, tmp/) on demand.
 
 **Flow:** research/ → DESIGN.md → design/ → code → review/
 
@@ -126,12 +111,16 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 | `reviewer`   | Full validation (build/run/test) | ai/review/   |
 | `profiler`   | Deep performance analysis        | ai/review/   |
 
-**Context handoff:** Curate relevant context, don't dump history. Put objectives at END (recency bias).
+**When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
+
+**Context handoff:** Curate relevant context, don't dump history. Objectives at END (recency bias).
 
 ## Context Management
 
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
+**Before compact:** Update STATUS.md, `tk done` completed tasks.
+
 ---
 
-**Updated:** 2026-01-05 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-06 | github.com/nijaru/agent-contexts

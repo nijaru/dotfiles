@@ -123,16 +123,6 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **Context handoff:** Curate relevant context, don't dump history. Objectives at END (recency bias).
 
-## Skills & Commands
-
-| Command          | Skill          | Use                                                        |
-| ---------------- | -------------- | ---------------------------------------------------------- |
-| `/code-review`   | `run-review`   | 3 parallel reviewer agents (correctness, safety, quality)  |
-| `/code-refactor` | `run-refactor` | Refactoring suggestions, spawns designer for large changes |
-| `/code-profile`  | `run-profile`  | Deep performance analysis via profiler                     |
-
-Commands for explicit invocation. Skills auto-trigger on natural language ("review this", "why is this slow", etc.).
-
 ## Context Management
 
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens

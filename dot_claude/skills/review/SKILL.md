@@ -1,186 +1,151 @@
 ---
 name: review
 description: >
-  Code review for quality, style, security, performance.
-  Triggers on: "review", "check this", "is this ready", "LGTM?", "before I push",
-  before PR/commit, or when code quality is uncertain.
-allowed-tools: Read, Grep, Glob, Bash(command:git*)
+  Code review using parallel subagents for correctness, safety, and quality.
+  Triggers on: "review", "review this", "check this", "look this over", "is this ready",
+  "ready to push", "LGTM?", "before I push", "before I commit", "before the PR",
+  "can you check", "does this look right", "anything wrong with this",
+  "sanity check", "code check", "review my changes", "what do you think".
+  Use when code quality is uncertain or after implementing features.
+allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 
 # Code Review
 
-Thorough code review. Scope detected automatically.
+Code review using 3 parallel subagents. Scope detected automatically.
 
-## Triggers
+## Workflow
 
-- "review this", "check this code", "look this over"
-- "is this ready?", "ready to push?", "LGTM?"
-- "before I commit", "before the PR"
-- User uncertain about code quality
-- After implementing a feature
+1. **Detect scope** (see below)
+2. **Launch 3 parallel reviewer subagents**
+3. **Aggregate findings** by severity, deduplicate
+4. **Report summary** with actionable items
 
 ## Scope Detection
 
-Detect automatically (priority order):
-
 ```bash
-# 1. User provided specific files/paths? -> Review those only
-
-# 2. On feature branch?
-git branch --show-current  # not main/master -> diff vs main
-
-# 3. On main, has upstream remote? (fork pattern)
-git remote get-url upstream 2>/dev/null  # -> diff vs upstream/main
-
-# 4. On main, has version tags? (solo project)
-git describe --tags --abbrev=0 2>/dev/null  # -> diff vs last tag
-
-# 5. On main, has unpushed commits?
-git log origin/main..HEAD --oneline  # -> diff vs origin/main
-
-# 6. Has staged changes? -> review staged
-git diff --cached --stat
-
-# 7. Has unstaged changes? -> review unstaged
-git diff --stat
-
-# 8. Nothing to review -> inform user
+# Priority order:
+# 1. User provided specific files/paths? -> Review those
+# 2. Feature branch? -> diff vs main
+# 3. Upstream remote? -> diff vs upstream/main
+# 4. Version tags? -> diff vs last tag
+# 5. Unpushed commits? -> diff vs origin/main
+# 6. Staged changes? -> git diff --cached
+# 7. Unstaged changes? -> git diff
+# 8. Nothing -> inform user
 ```
 
-## Review Checklist
+## Parallel Subagents
 
-### 1. Design & Architecture
+Launch all 3 in parallel using Task tool with `subagent_type: reviewer`:
 
-- **Fit**: Integrates with existing patterns?
-- **Location**: Belongs here or in library/separate module?
-- **Over-engineering**: More generic than needed? Solving future problems?
-- **Single responsibility**: Each file/class/function does one thing?
-- **Dependencies**: New deps justified? Maintained? License compatible?
+### Agent 1: Correctness
 
-### 2. Naming
+Logic and functional correctness.
 
-Names: **intention-revealing**, **proportional to scope**.
-
-| Check             | Bad                       | Good                     |
-| ----------------- | ------------------------- | ------------------------ |
-| Reveals intent    | `d`, `data`, `tmp`        | `daysSinceLastLogin`     |
-| No disinformation | `accountList` (but Map)   | `accountsById`           |
-| Searchable        | `7`, `4`                  | `MAX_RETRIES`            |
-| No vague suffixes | `_new`, `_v2`             | `_batched`, `_async`     |
-| Proportional      | `userAuthService` (local) | `auth` (local)           |
-| Booleans          | `flag`, `status`          | `isEnabled`, `hasAccess` |
-
-### 3. Comments
-
-Comments explain **WHY**, never **WHAT**.
-
-| Remove                 | Keep                         |
-| ---------------------- | ---------------------------- |
-| `i++ // increment i`   | `// Skip header row`         |
-| `// TODO: fix` (stale) | `// Workaround for bug #123` |
-| Commented-out code     | Complex algorithm rationale  |
-| Obvious explanations   | Non-obvious business rules   |
-
-### 4. Debug & Cleanup
-
-Check for leftover artifacts:
-
-```bash
-# Debug statements
-grep -rn "console\.log\|println!\|print(\|dbg!\|debugger" --include="*.ts" --include="*.rs" --include="*.py"
-
-# Stale TODOs (check if still relevant)
-grep -rn "TODO\|FIXME\|XXX\|HACK" --include="*.ts" --include="*.rs" --include="*.py"
-```
-
-- [ ] No debug statements in production code
-- [ ] TODOs are tracked or removed
-- [ ] No commented-out code blocks
-
-### 5. Code Smells
-
-**Bloaters**
-
-- [ ] Long functions (>40 lines) -> Extract
-- [ ] Large files (>400 lines) -> Split
-- [ ] Long param lists (>4) -> Use objects
-- [ ] Primitive obsession -> Domain types
-
-**Dead Code**
-
-- [ ] Unused functions/variables -> Delete
-- [ ] Speculative generality -> Delete
-- [ ] Duplicate code -> Extract
-
-**Coupling**
-
-- [ ] Feature envy -> Move method
-- [ ] God class -> Split responsibilities
-
-**Consistency**
-
-- [ ] Matches file's existing patterns
-- [ ] Import organization consistent
-
-### 6. Correctness
-
-- Logic errors, off-by-one
+- Logic errors, off-by-one, boundary conditions
 - Null/undefined handling
-- Error handling coverage
-- Race conditions (if concurrent)
-- Boundary conditions (empty, max, negative)
 - State consistency (partial failures)
+- Race conditions (if concurrent)
+- Edge cases: empty, max, negative, zero
+- Control flow correctness
+- Algorithm correctness
 
-### 7. Performance
+### Agent 2: Safety
 
-- Unnecessary allocations (`String` vs `&str`, `Vec` vs `&[T]`)
-- O(n^2) where O(n) possible
-- Missing caching
-- Blocking I/O in async
-- N+1 queries
-- Unbounded growth
-
-### 8. Language Idioms
-
-**Rust**: `anyhow`/`thiserror`, no `unwrap()` in prod, borrowing over cloning
-**Python**: Type hints, `pathlib`, context managers, comprehensions
-**Go**: Error wrapping, `defer`, no naked returns
-**TypeScript**: Strict nulls, `async`/`await`, no `as any` casts
-
-### 9. Security
+Security and error handling (defensive thinking).
 
 - Input validation at boundaries
-- No hardcoded secrets
-- Injection vectors (SQL, XSS, command, path traversal)
+- Hardcoded secrets, credentials
+- Injection: SQL, XSS, command, path traversal
 - Auth/authz checks
-- Sensitive data not logged
-- Timing attacks (constant-time comparison)
+- Sensitive data in logs
+- Silent failures, empty catch blocks
+- Error propagation (swallowed vs bubbled)
+- Fallback behavior hiding problems
+- Resource cleanup on error
 
-### 10. Tests
+### Agent 3: Quality
 
-- Coverage for changes
-- Edge cases (empty, null, boundary)
-- No flaky tests
-- Test names describe behavior
-- Not over-mocked
+Design, performance, and idioms.
+
+- Fits existing patterns?
+- Single responsibility
+- Over-engineering (future problems?)
+- Code smells: long functions (>40 lines), large files (>400 lines)
+- Dead code, unused variables
+- Naming: intention-revealing, proportional to scope
+- No `_v2`, `_new` suffixes
+- Unnecessary allocations (`String` vs `&str`, `Vec` vs `&[T]`)
+- O(n²) where O(n) possible
+- Blocking I/O in async, N+1 queries
+- Language idioms (Rust/Python/Go/TS)
+
+## Subagent Prompt
+
+```
+Review code changes for [FOCUS: Correctness | Safety | Quality].
+
+Scope: [diff or files]
+
+Report issues with confidence >= 80%. Format:
+
+[SEVERITY] file:line - Issue
+  -> Fix
+
+Severities:
+- ERROR: Must fix (bugs, security, silent failures)
+- WARN: Should fix (smells, performance)
+- NIT: Optional (style, minor)
+
+Be thorough. No false positives. Only flag what you're confident about.
+```
+
+## Aggregation
+
+1. Deduplicate (same issue from multiple agents = 1 issue)
+2. Sort: ERROR → WARN → NIT
+3. Group by file
 
 ## Output Format
 
 ```
-[SEVERITY] file:line - Issue
-  -> Suggested fix
+## Review Summary
+
+Scope: [X files, Y lines]
+Issues: ERROR: X, WARN: X, NIT: X
+
+## Critical (must fix)
+
+[ERROR] file:line - Issue
+  -> Fix
+
+## Important (should fix)
+
+[WARN] file:line - Issue
+  -> Fix
+
+## Minor
+
+[NIT] file:line - Issue
+  -> Fix
+
+## Strengths
+
+- What's done well
+
+## Verdict
+
+LGTM / LGTM with nits / Needs work
 ```
 
-**Severities:**
+## Quick Review (small changes)
 
-- **ERROR**: Must fix (bugs, security)
-- **WARN**: Should fix (smells, performance)
-- **REFACTOR**: Improvement (naming, structure)
-- **NIT**: Optional (style)
+For < 50 lines, review directly without subagents:
 
-## Summary
-
-1. **Issues**: ERROR: X, WARN: X, REFACTOR: X, NIT: X
-2. **Key concerns**: Top 2-3 issues
-3. **Positives**: What's done well
-4. **Verdict**: LGTM / LGTM with nits / Needs work
+- [ ] Logic correct, edge cases handled
+- [ ] Errors handled, not swallowed
+- [ ] No security issues
+- [ ] No debug statements
+- [ ] Naming clear
+- [ ] Fits existing patterns

@@ -1,100 +1,103 @@
 ---
 name: refactor
 description: >
-  Automatically suggests refactorings when context indicates code improvement needed.
-  Triggers on: "refactor this", "clean up", "simplify", "this is messy",
-  "too long", "too complex", or when reviewing code with obvious smells.
-allowed-tools: Read, Grep, Glob, Bash(command:git*)
+  Analyze code and suggest concrete refactorings with before/after examples.
+  Triggers on: "refactor", "refactor this", "clean up", "clean this up",
+  "simplify", "this is messy", "too long", "too complex", "hard to read",
+  "ugly code", "improve this", "how can I improve", "make this better",
+  "extract", "rename", "split this".
+  Use when code works but needs cleanup.
+allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 
-# Refactor Skill
+# Refactor
 
-Analyze code and suggest concrete refactorings when the context suggests improvement is needed.
+Analyze code and suggest concrete refactorings. For large architectural changes, spawn designer subagent.
 
-## Activation Triggers
+## Workflow
 
-- User says: "refactor this", "clean up", "simplify", "too complex"
-- User mentions: "messy", "ugly", "hard to read", "confusing"
-- During code review when smells are detected
-- When user asks "how can I improve this?"
-- After implementing a feature (optional cleanup pass)
+1. **Identify scope** - file, function, or module
+2. **Analyze** - check against refactoring checklist
+3. **For large refactors** - spawn `designer` subagent for architectural planning
+4. **Propose changes** - specific before/after with priority order
+5. **Offer to implement** - if user approves
 
-## Analysis Checklist
+## When to Use Designer Subagent
 
-### 1. Naming
+Spawn designer via Task tool when:
 
-| Issue                          | Action                          |
-| ------------------------------ | ------------------------------- |
-| Unclear names                  | Suggest specific renames        |
-| Inconsistent naming            | Align with codebase conventions |
-| Vague suffixes (`_v2`, `_new`) | Replace with descriptive names  |
-| Magic numbers                  | Extract to named constants      |
+- Splitting a module into multiple files
+- Changing class/type hierarchy
+- Restructuring dependencies
+- Anything touching 3+ files
 
-### 2. Function/Method Size
+For single-file refactors, analyze directly.
 
-| Metric                | Threshold | Action                       |
-| --------------------- | --------- | ---------------------------- |
-| Lines                 | >40       | Extract helper functions     |
-| Parameters            | >4        | Use parameter object         |
-| Nesting depth         | >3        | Extract or early return      |
-| Cyclomatic complexity | >10       | Split into smaller functions |
+## Refactoring Checklist
 
-### 3. Class/Module Size
+### Naming
 
-| Metric           | Threshold | Action                                |
-| ---------------- | --------- | ------------------------------------- |
-| Lines            | >400      | Split into focused modules            |
-| Methods          | >15       | Extract related methods to new class  |
-| Responsibilities | >1        | Apply Single Responsibility Principle |
+| Issue                  | Action                   |
+| ---------------------- | ------------------------ |
+| Unclear names          | Rename with intent       |
+| `_v2`, `_new` suffixes | Replace with descriptive |
+| Magic numbers          | Extract to constants     |
+| Inconsistent style     | Align with codebase      |
 
-### 4. Duplication
+### Size
 
-- Identify repeated code blocks (3+ lines appearing 2+ times)
-- Suggest extraction into shared function
-- Show before/after
+| Metric         | Threshold | Action                 |
+| -------------- | --------- | ---------------------- |
+| Function lines | >40       | Extract helpers        |
+| Parameters     | >4        | Parameter object       |
+| Nesting depth  | >3        | Early return / extract |
+| File lines     | >400      | Split module           |
 
-### 5. Code Smells
+### Smells
 
-| Smell                  | Detection                                   | Refactoring                |
-| ---------------------- | ------------------------------------------- | -------------------------- |
-| Feature Envy           | Method uses another class more than its own | Move to that class         |
-| Long Parameter List    | >4 params                                   | Introduce Parameter Object |
-| Data Clumps            | Same params appear together                 | Extract class              |
-| Primitive Obsession    | Strings/ints for domain concepts            | Create value types         |
-| Switch Statements      | Type-based switching                        | Polymorphism               |
-| Speculative Generality | Unused abstractions                         | Delete                     |
-| Dead Code              | Unused functions/variables                  | Delete                     |
+| Smell                            | Action           |
+| -------------------------------- | ---------------- |
+| Duplication (3+ lines, 2+ times) | Extract function |
+| Feature envy                     | Move method      |
+| Long param list                  | Parameter object |
+| Primitive obsession              | Value types      |
+| Dead code                        | Delete           |
+| Speculative generality           | Delete           |
 
-### 6. Structure
+### Structure
 
-- Functions doing multiple things → Split
-- Deep nesting → Early returns, extract
-- God objects → Decompose by responsibility
+- Multiple responsibilities → Split
+- Deep nesting → Early returns
+- God object → Decompose
 
 ## Output Format
 
-For each refactoring:
-
 ```
-## [Refactoring Name]
+## Refactoring: [Name]
 
-**Location:** `file:line`
+Location: file:line
+Problem: [Why it matters]
 
-**Problem:** [What's wrong and why it matters]
+Before:
+[code]
 
-**Before:**
-[current code]
+After:
+[code]
 
-**After:**
-[refactored code]
-
-**Benefits:** [Why this improves the code]
+Benefit: [Improvement]
 ```
 
 ## Summary
 
-End with:
+```
+## Refactoring Plan
 
-1. **Priority order**: Which refactorings to do first (quick wins → larger efforts)
-2. **Risk assessment**: Safe changes vs. need tests first
-3. **Verdict**: Offer to implement the refactorings if user approves
+Priority:
+1. [Quick win] - file:line
+2. [Medium effort] - file:line
+3. [Larger change] - file:line
+
+Risk: [Safe / Needs tests first]
+
+Implement these changes?
+```

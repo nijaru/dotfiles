@@ -1,5 +1,5 @@
 ---
-name: code-profile
+name: run-profile
 description: >
   Deep performance analysis using profiler subagent.
   Triggers on: "profile", "profile this", "performance", "why is this slow",

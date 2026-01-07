@@ -2,9 +2,7 @@
 name: orcx-consult
 description: >
   Get second opinion from other models via orcx.
-  Triggers on: "ask deepseek", "ask gemini", "orcx", "what does deepseek think",
-  "what does gemini think".
-  Use when explicitly requesting another model's opinion.
+  Triggers on: "ask deepseek", "ask gemini", "orcx".
 allowed-tools: Read, Bash
 ---
 

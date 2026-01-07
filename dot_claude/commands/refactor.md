@@ -1,6 +1,6 @@
 ---
 description: Analyze code and suggest refactorings
-allowed-tools: Read, Grep, Glob, Bash, Task
+allowed-tools: Read, Grep, Glob, Bash
 ---
 
 Analyze code and suggest concrete refactorings with before/after examples.

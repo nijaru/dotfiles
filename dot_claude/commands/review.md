@@ -1,6 +1,6 @@
 ---
 description: Code review using parallel subagents
-allowed-tools: Read, Grep, Glob, Bash, Task
+allowed-tools: Read, Grep, Glob, Bash
 ---
 
 Run code review with 3 parallel reviewer subagents:

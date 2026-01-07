@@ -72,7 +72,7 @@
 **Style:**
 
 - **Naming:** Proportional to scope. No `_v2`/`_new`—use `_batched`, `_async`.
-- **Comments:** WHY only. No WHAT, no TODOs.
+- **Comments:** Non-obvious context only. Never comment your edits. No TODOs.
 - **Files:** Single concern. Tests separate.
 - **No breadcrumbs:** When deleting/moving code, just remove it. No `// moved to X`, `// removed`, `// deprecated`.
 

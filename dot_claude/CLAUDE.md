@@ -67,7 +67,7 @@
 
 **Corrections:** Update AGENTS.md when corrected on non-obvious project patterns—prevents repeat mistakes.
 
-**Review:** `/review` before major commits.
+**Review:** `/code-review` before major commits.
 
 **Style:**
 
@@ -122,6 +122,16 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 **When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
 
 **Context handoff:** Curate relevant context, don't dump history. Objectives at END (recency bias).
+
+## Skills & Commands
+
+| Command          | Skill          | Use                                                        |
+| ---------------- | -------------- | ---------------------------------------------------------- |
+| `/code-review`   | `run-review`   | 3 parallel reviewer agents (correctness, safety, quality)  |
+| `/code-refactor` | `run-refactor` | Refactoring suggestions, spawns designer for large changes |
+| `/code-profile`  | `run-profile`  | Deep performance analysis via profiler                     |
+
+Commands for explicit invocation. Skills auto-trigger on natural language ("review this", "why is this slow", etc.).
 
 ## Context Management
 

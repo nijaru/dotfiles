@@ -1,0 +1,11 @@
+agents:
+  fast:
+    model: openrouter/deepseek/deepseek-v3.2
+    description: Fast, cheap reasoning
+    provider_prefs:
+      min_bits: 8
+      ignore: [DeepInfra, Chutes]
+      prefer: [AtlasCloud, NovitaAI, Phala]
+  gemini:
+    model: google/gemini-3-flash-preview
+    description: Google Gemini 3 Flash Preview

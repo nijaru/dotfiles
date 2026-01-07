@@ -2,9 +2,9 @@
 name: orcx-consult
 description: >
   Get second opinion from other models via orcx.
-  Triggers on: "ask deepseek", "second opinion", "what does deepseek think",
-  "consult another model", "check with another model", "different perspective",
-  "ask another llm", "compare models".
+  Triggers on: "ask deepseek", "ask gemini", "second opinion", "what does deepseek think",
+  "what does gemini think", "consult another model", "check with another model",
+  "different perspective", "ask another llm", "compare models".
   Use when wanting a second opinion or different model perspective.
 allowed-tools: Read, Bash
 ---
@@ -15,9 +15,8 @@ Consult other models for second opinions.
 
 ## Available Agents
 
-```bash
-orcx agents  # List configured agents
-```
+- `fast` → DeepSeek v3.2 (via OpenRouter)
+- `gemini` → Gemini 3 Flash Preview
 
 ## Usage
 

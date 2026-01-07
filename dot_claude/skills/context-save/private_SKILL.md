@@ -34,17 +34,17 @@ git status
 git diff --stat
 ls -la ai/
 wc -l ai/*.md 2>/dev/null
+tk ls
 ```
 
-Read ai/STATUS.md and ai/TODO.md.
+Read ai/STATUS.md.
 
 ## 2. Update Task Tracking
 
-Update ai/TODO.md:
+Update tasks via `tk`:
 
-- Remove completed tasks
-- Add new tasks discovered
-- Update in-progress items
+- `tk done <id>` for completed tasks
+- `tk add "title"` for new tasks discovered
 
 ## 3. Update ai/ Files
 
@@ -63,7 +63,6 @@ Update ai/TODO.md:
 | Issue                          | Fix                                               |
 | ------------------------------ | ------------------------------------------------- |
 | Session files >500 lines       | Prune historical content, move details to subdirs |
-| Completed tasks in TODO.md     | Delete them (trust git)                           |
 | Stale content in STATUS.md     | Remove old blockers, completed work               |
 | Superseded design in DESIGN.md | Update to current architecture                    |
 
@@ -80,7 +79,7 @@ git commit -m "Update ai/ context"
 Session saved
 - STATUS.md: [state summary]
 - DESIGN.md: [updated/unchanged]
-- TODO.md: [N pending tasks]
+- Tasks: [N pending in tk]
 - Committed: [yes/no]
 
 Next: /compact or provide follow-up prompt

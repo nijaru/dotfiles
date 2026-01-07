@@ -1,86 +1,110 @@
 ---
 name: context-save
 description: >
-  Update ai/ files. Triggers on: "save", "update ai/", "sync",
+  Update ai/ files and tk tasks. Triggers on: "save", "update ai/", "sync",
   task completion, session end, context switch, before /compact.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Context Save
 
-Update ai/ files before /compact or session end.
+Checkpoint session state to ai/ and tk. Goal: everything needed to resume is persisted.
 
-## Triggers
+## When to Trigger
 
-- Explicit: "save", "update ai/", "save context"
-- Task complete: "mark it done", "that's finished"
-- Session end: "wrap up", "done for today", "stopping here"
-- Context switch: "switching to X", "moving on", "different project"
-- After code-review LGTM and ready to commit
-- Before /compact
+- Before `/compact`
+- Session end ("done for today", "wrap up")
+- Context switch ("switching to X", "different project")
+- After significant work completes
+- Explicit: "/save", "save context"
 
 ## When NOT to Trigger
 
-- Mid-task (save at completion, not during)
+- Mid-task (save at completion)
 - Quick fixes that don't change project state
 - User says "skip" or "don't save"
 
-## 1. Analyze Current State
+## 1. Review Session
 
-Run in parallel:
+What was accomplished? Run in parallel:
 
 ```bash
-git status
 git diff --stat
-ls -la ai/
-wc -l ai/*.md 2>/dev/null
+git log --oneline -5
 tk ls
 ```
 
-Read ai/STATUS.md.
+Read ai/STATUS.md to compare against current state.
 
-## 2. Update Task Tracking
+## 2. Update tk Tasks (be thorough)
 
-Update tasks via `tk`:
+Review ALL tasks against what was done:
 
-- `tk done <id>` for completed tasks
-- `tk add "title"` for new tasks discovered
+```bash
+tk ls  # Current state
+```
+
+For EACH task:
+
+- **Completed** → `tk done <id>`
+- **New work discovered** → `tk add "title"`
+- **Blocked** → Note in STATUS.md
+
+Don't leave stale tasks. If done, mark done. If new, add it.
 
 ## 3. Update ai/ Files
 
-**Always update:**
+**ai/STATUS.md** (always):
 
-- **ai/STATUS.md** — Current state, what worked/didn't, active work, blockers
+- Current state, metrics
+- What worked / didn't
+- Active work
+- Blockers
+- Prune old content
 
-**If changes this session:**
+**ai/DESIGN.md** (if architecture changed):
 
-- **ai/DESIGN.md** — Architecture changes, new components
-- **ai/DECISIONS.md** — New architectural decisions
-- **ai/ROADMAP.md** — Phase changes, major pivots
+- New components, patterns
+- Updated interfaces
+
+**ai/DECISIONS.md** (if decisions made):
+
+- Context → Decision → Rationale (append)
+
+**ai/ROADMAP.md** (if phases changed):
+
+- Phase updates, scope changes
 
 ## 4. Health Check
 
-| Issue                          | Fix                                               |
-| ------------------------------ | ------------------------------------------------- |
-| Session files >500 lines       | Prune historical content, move details to subdirs |
-| Stale content in STATUS.md     | Remove old blockers, completed work               |
-| Superseded design in DESIGN.md | Update to current architecture                    |
+| Issue              | Fix                      |
+| ------------------ | ------------------------ |
+| Files >500 lines   | Prune, move to subdirs   |
+| Stale STATUS.md    | Remove old blockers/work |
+| Outdated DESIGN.md | Update to current        |
 
-## 5. Commit & Sync
+## 5. Commit
 
 ```bash
-git add ai/
-git commit -m "Update ai/ context"
+git add ai/ .tasks/
+git commit -m "Update session context"
 ```
 
 ## 6. Report
 
 ```
-Session saved
-- STATUS.md: [state summary]
-- DESIGN.md: [updated/unchanged]
-- Tasks: [N pending in tk]
-- Committed: [yes/no]
+## Session Saved
 
-Next: /compact or provide follow-up prompt
+Tasks:
+- Done: [list marked complete]
+- Added: [list new]
+- Pending: [N remaining]
+
+ai/:
+- STATUS.md: [summary]
+- DESIGN.md: [updated/unchanged]
+
+Committed: [yes/no]
+
+Ready for /compact or new session.
 ```

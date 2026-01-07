@@ -4,7 +4,7 @@ agents:
     description: Fast, cheap reasoning
     provider_prefs:
       min_bits: 8
-      ignore: [DeepInfra, Chutes, SiliconFlow, fp8]
+      ignore: [DeepInfra, Chutes, SiliconFlow]
       prefer: [AtlasCloud, NovitaAI, Phala]
   gemini:
     model: google/gemini-3-flash-preview

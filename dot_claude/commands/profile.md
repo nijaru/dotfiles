@@ -1,6 +1,5 @@
 ---
 description: Deep performance analysis using profiler subagent
-allowed-tools: Read, Grep, Glob, Bash
 ---
 
 Launch profiler subagent for deep performance analysis.

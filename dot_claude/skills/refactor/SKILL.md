@@ -1,5 +1,5 @@
 ---
-name: code-refactor
+name: refactor
 description: >
   Analyze code and suggest concrete refactorings with before/after examples.
   Triggers on: "refactor", "refactor this", "clean up", "clean this up",

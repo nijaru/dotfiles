@@ -8,7 +8,7 @@ allowed-tools: Read, Bash
 
 # orcx - LLM Orchestrator
 
-Consult other models for second opinions.
+Consult other models for second opinions. Version 0.0.3.
 
 ## Available Agents
 
@@ -26,6 +26,36 @@ orcx run -a fast "Your prompt here"
 
 # Pipe context
 cat file.py | orcx run "Review this code"
+
+# Include file context
+orcx run -f file.py "Review this code"
+
+# Save response to file
+orcx run -o response.md "Explain this concept"
+```
+
+## Conversations
+
+orcx stores conversations in SQLite (~/.config/orcx/conversations.db).
+
+```bash
+# Continue last conversation
+orcx run -c "Follow-up question"
+
+# Resume specific conversation by ID
+orcx run --resume abc1 "More context"
+
+# Don't save this exchange
+orcx run --no-save "Quick question"
+
+# List recent conversations
+orcx conversations list
+
+# Show conversation history
+orcx conversations show abc1
+
+# Clean old conversations (30+ days)
+orcx conversations clean
 ```
 
 ## When to Use
@@ -34,12 +64,14 @@ cat file.py | orcx run "Review this code"
 - Comparing model perspectives
 - Leveraging model-specific strengths
 - Fresh eyes on a problem
+- Multi-turn discussions with cheaper models
 
 ## Workflow
 
 1. Identify the specific question or code to review
 2. Formulate clear, focused prompt
-3. Include relevant context
+3. Include relevant context (pipe or `-f`)
 4. Run via orcx
-5. Compare response with your analysis
-6. Synthesize insights
+5. Continue conversation with `-c` if needed
+6. Compare response with your analysis
+7. Synthesize insights

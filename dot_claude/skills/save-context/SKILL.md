@@ -1,5 +1,5 @@
 ---
-name: context-save
+name: save-context
 description: >
   Update ai/ files and tk tasks. Triggers on: "save", "update ai/", "sync",
   task completion, session end, context switch, before /compact.

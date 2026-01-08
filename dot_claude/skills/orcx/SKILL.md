@@ -1,5 +1,4 @@
 ---
-name: orcx-consult
 description: >
   Get second opinion from other models via orcx.
   Triggers on: "ask deepseek", "ask gemini", "orcx".

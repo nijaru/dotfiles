@@ -67,7 +67,7 @@
 
 **Corrections:** Update AGENTS.md when corrected on non-obvious project patterns—prevents repeat mistakes.
 
-**Review:** `/code-review` before major commits.
+**Review:** `/review` before major commits.
 
 **Style:**
 

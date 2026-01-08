@@ -1,8 +1,6 @@
 ---
 name: save
-description: >
-  Update ai/ files and tk tasks. Triggers on: "save", "update ai/", "sync",
-  task completion, session end, context switch, before /compact.
+description: Update ai/ files and tk tasks.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

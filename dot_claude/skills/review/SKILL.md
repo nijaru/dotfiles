@@ -1,12 +1,6 @@
 ---
 name: review
-description: >
-  Code review using parallel subagents for correctness, safety, and quality.
-  Triggers on: "review", "review this", "check this", "look this over", "is this ready",
-  "ready to push", "LGTM?", "before I push", "before I commit", "before the PR",
-  "can you check", "does this look right", "anything wrong with this",
-  "sanity check", "code check", "review my changes", "what do you think".
-  Use when code quality is uncertain or after implementing features.
+description: Code review using parallel subagents.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 

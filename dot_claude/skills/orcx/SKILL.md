@@ -1,7 +1,5 @@
 ---
-description: >
-  Get second opinion from other models via orcx.
-  Triggers on: "ask deepseek", "ask gemini", "orcx".
+description: Get second opinion from other models via orcx. Triggers on: "ask deepseek", "ask gemini", "orcx".
 allowed-tools: Read, Bash
 ---
 

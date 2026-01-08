@@ -1,11 +1,6 @@
 ---
 name: profile
-description: >
-  Deep performance analysis using profiler subagent.
-  Triggers on: "profile", "profile this", "performance", "why is this slow",
-  "bottleneck", "optimize this", "benchmark", "hot path", "speed up",
-  "too slow", "perf issue", "memory usage", "allocation", "latency".
-  Use when performance matters or something feels slow.
+description: Deep performance analysis using profiler subagent.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 

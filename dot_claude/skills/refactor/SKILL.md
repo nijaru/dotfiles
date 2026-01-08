@@ -1,12 +1,6 @@
 ---
 name: refactor
-description: >
-  Analyze code and suggest concrete refactorings with before/after examples.
-  Triggers on: "refactor", "refactor this", "clean up", "clean this up",
-  "simplify", "this is messy", "too long", "too complex", "hard to read",
-  "ugly code", "improve this", "how can I improve", "make this better",
-  "extract", "rename", "split this".
-  Use when code works but needs cleanup.
+description: Analyze code and suggest concrete refactorings with before/after examples.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 

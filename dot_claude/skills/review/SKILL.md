@@ -1,5 +1,5 @@
 ---
-name: run-review
+name: review
 description: >
   Code review using parallel subagents for correctness, safety, and quality.
   Triggers on: "review", "review this", "check this", "look this over", "is this ready",

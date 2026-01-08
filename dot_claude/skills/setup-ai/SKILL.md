@@ -1,3 +1,10 @@
+---
+name: setup-ai
+description: >
+  Initialize AI agent context management for project.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 Initialize AI agent context management for project.
 
 **Reference:** github.com/nijaru/agent-contexts PATTERNS.md

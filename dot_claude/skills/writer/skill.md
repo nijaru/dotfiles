@@ -6,133 +6,197 @@ allowed-tools: Read, Edit, Bash, AskUserQuestion
 
 # Writer
 
-Review any text for AI-generated patterns, awkward grammar, and suggest improvements. Works for cover letters, blog posts, tweets, documentation, or any writing.
+Review any text for weak writing and AI patterns. Works for cover letters, blog posts, tweets, documentation, or any prose.
 
 ## Usage
 
 ```
 /writer [text or file path]
-/writer "Check this paragraph for AI language"
+/writer "Check this paragraph"
 /writer path/to/draft.md
 ```
 
-## Workflow
+## Review Process
 
-1. **Identify format** - tweet, blog, cover letter, docs, etc.
-2. **Scan for anti-patterns** - check against lists below
-3. **Flag issues** - specific phrases with why they're problematic
-4. **Suggest fixes** - concrete before/after replacements
-5. **Optional: External review** - offer to run through Grok/Gemini via orcx
+Run 4 passes, flag issues with specific fixes.
 
-## Anti-Patterns
+### Pass 1: Structure
 
-### Phrases to Flag
+- **Buried lead?** → Put the point first, evidence second
+- **Treadmill?** → Motion without progress; each paragraph must advance
+- **Too long?** → Could this be half as long?
+- **No thesis?** → Know your destination
 
-| Phrase                           | Why Bad                       |
-| -------------------------------- | ----------------------------- |
-| "at the intersection of X and Y" | Classic GPT-ism               |
-| "the right abstraction"          | Sycophantic, consultant-speak |
-| "resonates"                      | Overused AI word              |
-| "delve into"                     | AI tell                       |
-| "leverage" (as verb)             | Corporate AI speak            |
-| "it's worth noting that"         | Filler                        |
-| "in terms of"                    | Weak connector                |
-| "I'd like to" / "I'd love to"    | Passive, hedging              |
-| "That's where I want to be"      | Filler closer                 |
-| "this isn't theoretical"         | Trying too hard               |
-| "is what I do"                   | AI phrase                     |
-| "the problem clicked"            | AI phrase                     |
-| "comprehensive"                  | Overused AI word              |
-| "robust"                         | Overused AI word              |
-| "seamlessly"                     | Overused AI word              |
-| "cutting-edge"                   | Buzzword                      |
-| "game-changer"                   | Buzzword                      |
-| "deep dive"                      | Overused                      |
-| "unpack"                         | Overused                      |
-| "landscape"                      | AI word for "field"           |
-| "ecosystem" (unless literal)     | Overused                      |
-| "synergy"                        | Corporate cringe              |
-| "holistic"                       | AI word                       |
-| "utilize"                        | Just say "use"                |
+### Pass 2: Sentences
 
-### Structural Issues
+- **Same length?** → Vary: long builds, short punches
+- **Weak verb + adverb?** → "walked slowly" → "shuffled"
+- **Passive voice?** → "was completed by" → "completed"
+- **Filter words?** → Cut "I think," "I feel," "I believe"
+- **Weasel qualifiers?** → Cut "sort of," "a bit," "rather," "quite"
 
-| Pattern              | Problem                                 | Fix                           |
-| -------------------- | --------------------------------------- | ----------------------------- |
-| Em dashes everywhere | AI tell                                 | Use periods or commas         |
-| Run-on sentences     | Cramming too much                       | Split into separate sentences |
-| Abstract noun pairs  | "flexibility and robustness"            | Use concrete examples         |
-| Colon + list         | Template-like                           | Integrate naturally           |
-| Starting with "So,"  | Filler                                  | Cut                           |
-| Starting with "But"  | Weak                                    | Restructure                   |
-| Ending with "!"      | Try-hard (usually)                      | Use sparingly                 |
-| Passive voice excess | Weak, indirect                          | Active voice                  |
-| Weasel words         | "somewhat", "fairly", "quite"           | Be direct                     |
-| Hedge phrases        | "I think", "I believe", "in my opinion" | State directly                |
+### Pass 3: Words
 
-### Format-Specific
+- **Abstract?** → Ground in specifics (see Concrete section)
+- **Latinate bloat?** → utilize→use, facilitate→help, implement→do
+- **AI tells?** → See Red Flags below
+- **Redundant?** → "tall skyscraper," "yellow daffodils" → cut modifier
+- **Nominalizations?** → "made a decision" → "decided"
 
-**Tweets:**
+### Pass 4: Voice
 
-- Cut filler ruthlessly
-- No "Thread:" or "1/" unless actually threading
-- Avoid "hot take:" or "unpopular opinion:"
+- **Template or person?** → Does this sound like someone wrote it?
+- **All hedge, no stance?** → Commit to something
+- **Vague gestures?** → Replace with named people, places, numbers
+- **No personality?** → Where's the humor, irony, or risk?
+- **Explains everything?** → Trust the reader
 
-**Blog posts:**
+---
 
-- Lead with the point, not the setup
-- Avoid "In this post, I will..."
-- Don't end with "In conclusion"
+## Core Principles
 
-**Cover letters:**
+### Concrete vs Abstract
 
-- Lead with personal experience, not product praise
-- Concrete metrics over vague claims
-- Strong closers ("I'm eager to..." not "I'd like to...")
+> "You don't write about the horrors of war. You write about a kid's burnt socks lying in the road." - Richard Price
 
-**Documentation:**
+| Abstract (weak)              | Concrete (strong)                                            |
+| ---------------------------- | ------------------------------------------------------------ |
+| "He was weird"               | "He wore his shirt inside-out and called everyone 'captain'" |
+| "The city was beautiful"     | "Pink bougainvillea spilled over terracotta walls"           |
+| "She felt sad"               | "She stared at the cold coffee, untouched for an hour"       |
+| "It was a big success"       | "Revenue doubled in six months"                              |
+| "The meeting was productive" | "We cut three features and shipped two weeks early"          |
 
-- Direct imperatives ("Run X" not "You should run X")
-- No "simply" or "just" (implies it's easy when it might not be)
+**Test:** Can you picture it? If not, make it specific.
 
-## What Works
+### What Gives Writing Voice
 
-- Short, punchy sentences
-- Concrete specifics over abstractions
-- Active voice
-- Natural speech patterns
-- Numbers and metrics
-- Named things (projects, tools, people)
-- Let statements stand alone without filler
+**Present in good writing:**
+
+- Specific named details, not vague generalities
+- Varied sentence length, not metronomic sameness
+- Strong opinions willing to offend, not hedged safety
+- Unusual word choices, not "business casual"
+- Subtext (what's unsaid), not everything spelled out
+- Humor, irony, self-awareness
+
+**Voice killers:**
+
+- Hedging every statement
+- Removing personality for "professionalism"
+- Using only safe, tested phrases
+- Explaining jokes
+- Smoothing all rough edges
+
+### Strong Verbs
+
+| Weak   | Strong                               |
+| ------ | ------------------------------------ |
+| walked | strode, shuffled, ambled, trudged    |
+| said   | snapped, muttered, admitted, claimed |
+| looked | glared, squinted, scanned, studied   |
+| went   | bolted, wandered, crept, charged     |
+
+---
+
+## Red Flags
+
+### AI Phrases (flag immediately)
+
+| Phrase                           | Frequency vs Human |
+| -------------------------------- | ------------------ |
+| "play a crucial role in shaping" | 182x more common   |
+| "notable works include"          | 120x               |
+| "in today's fast-paced world"    | 107x               |
+| "aims to explore"                | 50x                |
+| "at the intersection of X and Y" | GPT-ism            |
+| "delve into"                     | AI tell            |
+| "navigate the landscape"         | AI tell            |
+| "unlock the potential"           | AI tell            |
+| "seamless integration"           | AI tell            |
+| "robust solution"                | AI tell            |
+
+### AI Words (overused)
+
+delve, tapestry, landscape, nuanced, comprehensive, crucial, pivotal, vital, paramount, seamless, robust, cutting-edge, showcasing, leveraging, harnessing, resonates, aligns, elevates, unlock, unleash, embark, foster, enhance
+
+### AI Sentence Patterns
+
+- "It's not about X, it's about Y"
+- "No X. No Y. Just Z."
+- "And the X? Y."
+- Three dramatic adjectives in a row
+- Every sentence starts with "However" or "That said"
+
+### Structural Red Flags
+
+- Every sentence same length
+- No periods - all complex sentences
+- Passive voice throughout
+- Abstract nouns dominating (success, efficiency, quality)
+- No named people, places, or numbers
+- Length without substance
+
+---
+
+## Format-Specific
+
+**Tweets:** Cut ruthlessly. No "Thread:" or "hot take:"
+
+**Blog posts:** Lead with the point. No "In this post, I will..." No "In conclusion"
+
+**Cover letters:** Lead with experience, not praise. Metrics over claims. Strong closers.
+
+**Docs:** Direct imperatives. No "simply" or "just"
+
+---
+
+## Quick Diagnostic
+
+Ask these questions:
+
+1. Can I picture this in my mind?
+2. Would a normal person say this out loud?
+3. What's being left unsaid? (Nothing = problem)
+4. Where is this going? (Nowhere = treadmill)
+5. Does the writer believe this or is it hedged?
+6. Is there anything weird, personal, or risky?
+
+---
 
 ## Output Format
 
 ```
-## Issues Found
+## Review: [Format detected]
 
-1. **[Phrase]** (line X)
-   Problem: [Why]
-   Suggestion: [Fix]
+### Structure
+[Issues or "Clean"]
 
-2. ...
+### Sentences
+[Issues with line refs]
+
+### Words
+[Flagged phrases]
+
+### Voice
+[Assessment]
 
 ## Summary
-
-- X issues flagged
+- X issues found
 - Biggest problems: [list]
-- Overall tone: [assessment]
+- Strength: [what works]
 
 Fix these issues?
 ```
 
-## External Model Review
+---
 
-To get a second opinion from other models:
+## External Review (Optional)
+
+Second opinion via other models:
 
 ```bash
-orcx run -m openrouter/x-ai/grok-4.1-fast --no-save "Review this text for AI-sounding language, awkward grammar, and anything that sounds off. Be specific: [text]"
+orcx run -m openrouter/x-ai/grok-4.1-fast --no-save "Review for AI language and weak writing. Be specific: [text]"
 
-orcx run -m openrouter/google/gemini-3-flash-preview --no-save "Review this text for AI-sounding language, awkward grammar, and anything that sounds off. Be specific: [text]"
+orcx run -m openrouter/google/gemini-3-flash-preview --no-save "Review for AI language and weak writing. Be specific: [text]"
 ```
-
-Offer this as an optional step after initial review.

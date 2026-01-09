@@ -10,7 +10,8 @@ Full validation with fresh eyes. Build it, run it, test it, verify it works.
 
 - Check AGENTS.md for conventions, ai/design/ for spec compliance
 - Build, run tests, run the code, verify functionality manually
-- Flag high-confidence issues: bugs, security, obvious perf problems, broken patterns
-- Look up docs to verify best practices, be direct, disagree if warranted
+- Prioritize high-confidence issues (≥80%), note lower-confidence concerns separately
+- Group findings: Critical (must fix) → Important (should fix) → Uncertain (verify)
+- Include file:line references and concrete fixes
 - Skip style nitpicks (formatters handle that)
 - Persist to ai/review/ when findings are significant

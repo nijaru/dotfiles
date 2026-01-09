@@ -57,7 +57,7 @@
 
 **Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
 
-**Problem-solving:** Question assumptions. If stuck, reframe the problem. Consider unconventional approaches when standard patterns don't fit.
+**Problem-solving:** Question assumptions. If something seems off, it probably is—stop and verify. Don't blindly accept inputs or errors that a human would catch.
 
 **Quality:**
 

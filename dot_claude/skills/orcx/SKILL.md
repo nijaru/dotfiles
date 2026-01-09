@@ -5,12 +5,11 @@ allowed-tools: Read, Bash
 
 # orcx - LLM Orchestrator
 
-Consult other models for second opinions. Version 0.0.3.
+Consult other models for second opinions. Version 0.0.4.
 
 ## Available Agents
 
-- `fast` → DeepSeek v3.2 (via OpenRouter)
-- `gemini` → Gemini 3 Flash Preview
+Run `orcx agents` to see configured agents. Default: `fast` (DeepSeek).
 
 ## Usage
 

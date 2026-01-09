@@ -125,8 +125,14 @@ delve, tapestry, landscape, nuanced, comprehensive, crucial, pivotal, vital, par
 - "It's not about X, it's about Y"
 - "No X. No Y. Just Z."
 - "And the X? Y."
+- "That's exactly what X solves"
+- "That's the kind of X I want to build"
+- "Taught me what matters: X, Y, Z" (colon + list)
+- "I'm eager to bring X to Y"
+- "I want to build that infrastructure"
 - Three dramatic adjectives in a row
 - Every sentence starts with "However" or "That said"
+- Choppy "I did X. I did Y. I did Z." cadence without flow
 
 ### Structural Red Flags
 
@@ -136,6 +142,9 @@ delve, tapestry, landscape, nuanced, comprehensive, crucial, pivotal, vital, par
 - Abstract nouns dominating (success, efficiency, quality)
 - No named people, places, or numbers
 - Length without substance
+- Tech list dumps without story ("vLLM for X, Ollama for Y, ONNX for Z")
+- Cramming unrelated achievements with "and" ("I built X and also did Y")
+- Separate accomplishments connected as if one task
 
 ---
 
@@ -145,7 +154,14 @@ delve, tapestry, landscape, nuanced, comprehensive, crucial, pivotal, vital, par
 
 **Blog posts:** Lead with the point. No "In this post, I will..." No "In conclusion"
 
-**Cover letters:** Lead with experience, not praise. Metrics over claims. Strong closers.
+**Cover letters:**
+
+- Lead with experience, not praise
+- Metrics over claims (45 min → 5 min)
+- One project with detail beats five projects listed
+- Be vague on technical details, save for interview
+- End with what you want, not template closer
+- "I'd rather be building it" > "I'm eager to bring X to Y"
 
 **Docs:** Direct imperatives. No "simply" or "just"
 

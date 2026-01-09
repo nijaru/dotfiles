@@ -9,7 +9,7 @@ Consult other models for second opinions. Version 0.0.4.
 
 ## Available Agents
 
-Run `orcx agents` to see configured agents. Default: `fast` (DeepSeek).
+Run `orcx agents` to see configured agents.
 
 ## Usage
 

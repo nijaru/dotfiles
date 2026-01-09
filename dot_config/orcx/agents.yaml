@@ -1,7 +1,7 @@
 agents:
-  fast:
+  deepseek:
     model: openrouter/deepseek/deepseek-v3.2
-    description: Fast, cheap reasoning
+    description: DeepSeek v3.2 via OpenRouter
     provider_prefs:
       min_bits: 8
       ignore: [DeepInfra, Chutes, SiliconFlow]

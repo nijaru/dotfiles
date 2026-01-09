@@ -57,6 +57,8 @@
 
 **Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
 
+**Problem-solving:** Question assumptions. If stuck, reframe the problem. Consider unconventional approaches when standard patterns don't fit.
+
 **Quality:**
 
 - Research before implementing

@@ -5,6 +5,7 @@ if status is-interactive
     # Editor abbreviations
     abbr --add z. 'zed .'
     abbr --add nv. 'nvim .'
+    abbr --add hx. 'hx .'
 
     # Claude Code
     abbr --add cl 'claude'

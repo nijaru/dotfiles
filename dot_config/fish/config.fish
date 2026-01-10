@@ -13,42 +13,22 @@ else
     echo "Warning: Could not read file: $HOME/.config/fish/env.fish" >&2
 end
 
-# Source only essential configuration files at startup
-# Heavy development tools are lazy-loaded
-set -l essential_configs \
-    $HOME/.config/fish/editor.fish
+# Source configuration files
+set -l configs \
+    $HOME/.config/fish/editor.fish \
+    $HOME/.config/fish/dev.fish \
+    $HOME/.config/fish/docker.fish
 
 # Platform-specific configuration
 switch $__fish_uname
     case Darwin
-        set -a essential_configs $HOME/.config/fish/darwin.fish
+        set -a configs $HOME/.config/fish/darwin.fish
     case Linux
-        set -a essential_configs $HOME/.config/fish/linux.fish
+        set -a configs $HOME/.config/fish/linux.fish
 end
 
-# Source essential configs only
-for file in $essential_configs
+for file in $configs
     test -r $file && source $file
-end
-
-# Lazy-load development environment on demand
-function dev
-    if not set -q __dev_loaded
-        test -r $HOME/.config/fish/dev.fish && source $HOME/.config/fish/dev.fish
-        test -r $HOME/.config/fish/docker.fish && source $HOME/.config/fish/docker.fish
-        set -g __dev_loaded 1
-        echo "Development environment loaded"
-    end
-end
-
-# Auto-load dev tools when entering project directories
-function __auto_load_dev --on-variable PWD
-    # Common project indicators
-    if test -f package.json -o -f go.mod -o -f Cargo.toml -o -f Gemfile -o -f pyproject.toml -o -f requirements.txt -o -d .git
-        if not set -q __dev_loaded
-            dev >/dev/null 2>&1
-        end
-    end
 end
 
 # Setup Fish shell features (equivalent to some Z4H features)

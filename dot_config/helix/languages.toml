@@ -1,0 +1,46 @@
+# Language server configurations
+
+[language-server.ty]
+command = "ty"
+args = ["server"]
+
+[[language]]
+name = "rust"
+auto-format = true
+
+[[language]]
+name = "go"
+auto-format = true
+formatter = { command = "golines", args = ["--base-formatter", "gofumpt"] }
+
+[[language]]
+name = "python"
+auto-format = true
+language-servers = ["ruff", "ty"]
+
+[[language]]
+name = "typescript"
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "file.ts"] }
+
+[[language]]
+name = "javascript"
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "file.js"] }
+
+[[language]]
+name = "toml"
+auto-format = true
+
+[[language]]
+name = "json"
+auto-format = true
+
+[[language]]
+name = "yaml"
+auto-format = true
+
+[[language]]
+name = "markdown"
+auto-format = false
+soft-wrap.enable = true

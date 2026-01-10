@@ -1,0 +1,7 @@
+[providers.age]
+type = "age"
+key_file = "~/.config/fnox/key.txt"
+recipients = [
+    "age1umfcz96s6pde9ry0f20vl9f0q5grkfgvz9puctlawu9pg430yflq7v784s",  # mac
+    "age1f03m6xkc4lx7k84xrnzan2yd2ktsmvxc0fxuj55vap7alvzm35ks2ekfcv",  # fedora
+]

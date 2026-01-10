@@ -1,0 +1,65 @@
+theme = "catppuccin_mocha"
+
+[editor]
+line-number = "relative"
+cursorline = true
+color-modes = true
+bufferline = "multiple"
+auto-save = true
+completion-trigger-len = 1
+idle-timeout = 50
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name", "file-modification-indicator"]
+center = []
+right = ["diagnostics", "selections", "register", "position", "file-encoding"]
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.indent-guides]
+render = true
+character = "│"
+
+[editor.soft-wrap]
+enable = true
+
+[editor.file-picker]
+hidden = true
+git-ignore = true
+
+# Vim-like keybindings
+[keys.normal]
+# Quick escape alternative
+"C-c" = "normal_mode"
+# Window navigation (like vim C-w hjkl)
+"C-h" = "jump_view_left"
+"C-j" = "jump_view_down"
+"C-k" = "jump_view_up"
+"C-l" = "jump_view_right"
+# Center after jumps
+"C-d" = ["half_page_down", "align_view_center"]
+"C-u" = ["half_page_up", "align_view_center"]
+n = ["search_next", "align_view_center"]
+N = ["search_prev", "align_view_center"]
+# Quick save
+"C-s" = ":write"
+# Buffer navigation
+"tab" = "goto_next_buffer"
+"S-tab" = "goto_previous_buffer"
+
+[keys.insert]
+# Quick escape
+"j" = { "k" = "normal_mode" }
+"C-c" = "normal_mode"
+# Quick save from insert
+"C-s" = ["normal_mode", ":write"]
+
+[keys.select]
+"C-c" = "normal_mode"

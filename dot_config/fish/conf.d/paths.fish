@@ -15,7 +15,8 @@ if status is-interactive; or not set -q __paths_initialized
         $HOME/.mise/bin \
         $HOME/.modular/bin \
         $HOME/.pixi/bin \
-        $HOME/.local/share/gem/bin
+        $HOME/.local/share/gem/bin \
+        $HOME/.cache/.bun/bin
 
     for path in $paths_to_add
         test -d $path && fish_add_path -g $path

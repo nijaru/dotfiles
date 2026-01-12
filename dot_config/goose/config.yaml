@@ -1,0 +1,24 @@
+# Goose configuration
+# Provider: use OpenRouter for multi-model access
+GOOSE_PROVIDER: openrouter
+
+# Default model
+GOOSE_MODEL: anthropic/claude-sonnet-4
+
+# Approval mode: smart_approve, approve, or auto
+GOOSE_MODE: auto
+
+# Built-in extensions
+extensions:
+  developer:
+    enabled: true
+    name: developer
+    type: builtin
+  memory:
+    enabled: true
+    name: memory
+    type: builtin
+  computercontroller:
+    enabled: false
+    name: computercontroller
+    type: builtin

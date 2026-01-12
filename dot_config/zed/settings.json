@@ -1,0 +1,141 @@
+{
+  "theme": {
+    "mode": "dark",
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Frappé"
+  },
+  "icon_theme": "Colored Zed Icons Theme Dark",
+  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_fallbacks": ["JetBrainsMono Nerd Font"],
+  "buffer_font_size": 14,
+  "ui_font_size": 14,
+  "agent_buffer_font_size": 14,
+
+  "cursor_blink": false,
+  "autosave": "on_focus_change",
+
+  "preferred_line_length": 88,
+  "wrap_guides": [88],
+
+  "inlay_hints": {
+    "enabled": true
+  },
+  "auto_signature_help": true,
+
+  "tabs": {
+    "git_status": true,
+    "file_icons": true
+  },
+
+  "file_finder": {
+    "modal_max_width": "medium"
+  },
+
+  "active_pane_modifiers": {
+    "inactive_opacity": 0.9
+  },
+
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+
+  "session": {
+    "trust_all_worktrees": true
+  },
+
+  "agent": {
+    "always_allow_tool_actions": true,
+    "play_sound_when_agent_done": true,
+    "single_file_review": false
+  },
+
+  "agent_servers": {
+    "claude": {
+      "default_mode": "bypassPermissions"
+    }
+  },
+
+  "languages": {
+    "Go": {
+      "hard_tabs": true,
+      "formatter": {
+        "external": {
+          "command": "golines",
+          "arguments": ["--base-formatter", "gofumpt"]
+        }
+      },
+      "code_actions_on_format": {
+        "source.organizeImports": true
+      }
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "TSX": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "JSON": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "JSONC": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "Python": {
+      "language_servers": ["ruff", "ty"],
+      "formatter": [
+        { "code_action": "source.organizeImports.ruff" },
+        { "code_action": "source.fixAll.ruff" },
+        { "language_server": { "name": "ruff" } }
+      ]
+    }
+  },
+
+  "lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "lint": {
+            "ignore": ["E501"]
+          }
+        }
+      }
+    }
+  },
+
+  "context_servers": {
+    "mcp-server-context7": {
+      "settings": {
+        "default_minimum_tokens": "10000"
+      }
+    }
+  }
+}

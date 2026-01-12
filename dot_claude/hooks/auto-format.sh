@@ -20,14 +20,8 @@ case "$FILE_PATH" in
   uv run ruff format "$FILE_PATH" 2>/dev/null
   uv run ruff check --fix "$FILE_PATH" 2>/dev/null
   ;;
-*.ts | *.tsx | *.js | *.jsx)
+*.ts | *.tsx | *.js | *.jsx | *.json)
   oxfmt "$FILE_PATH" --write 2>/dev/null
-  ;;
-*.json)
-  oxfmt "$FILE_PATH" --write 2>/dev/null
-  ;;
-*.md)
-  bun x prettier --write "$FILE_PATH" 2>/dev/null
   ;;
 *.go)
   golines --base-formatter gofumpt -w "$FILE_PATH" 2>/dev/null
@@ -35,23 +29,23 @@ case "$FILE_PATH" in
 *.rs)
   rustfmt "$FILE_PATH" 2>/dev/null
   ;;
-*.mojo | *.🔥)
-  mojo format "$FILE_PATH" 2>/dev/null
+*.rb)
+  standardrb --fix "$FILE_PATH" 2>/dev/null
   ;;
-*.yaml | *.yml)
+*.sh | *.bash)
+  shfmt -i 2 -w "$FILE_PATH" 2>/dev/null
+  ;;
+*.fish)
+  fish_indent --write "$FILE_PATH" 2>/dev/null
+  ;;
+*.yaml | *.yml | *.md)
   bun x prettier --write "$FILE_PATH" 2>/dev/null
   ;;
 *.toml)
   taplo format "$FILE_PATH" 2>/dev/null
   ;;
-*.fish)
-  fish_indent --write "$FILE_PATH" 2>/dev/null
-  ;;
-*.sh | *.bash)
-  shfmt -i 2 -w "$FILE_PATH" 2>/dev/null
-  ;;
-*.rb)
-  standardrb --fix "$FILE_PATH" 2>/dev/null
+*.mojo | *.🔥)
+  mojo format "$FILE_PATH" 2>/dev/null
   ;;
 esac
 

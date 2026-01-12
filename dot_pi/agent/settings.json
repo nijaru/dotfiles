@@ -1,0 +1,6 @@
+{
+  "defaultProvider": "openrouter",
+  "defaultModel": "anthropic/claude-sonnet-4",
+  "theme": "dark",
+  "autoSave": true
+}

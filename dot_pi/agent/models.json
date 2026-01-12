@@ -1,0 +1,14 @@
+{
+  "providers": {
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "apiKey": "$OPENROUTER_API_KEY",
+      "api": "openai"
+    },
+    "anthropic": {
+      "baseUrl": "https://api.anthropic.com/v1",
+      "apiKey": "$ANTHROPIC_API_KEY",
+      "api": "anthropic"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 prompt = """
-Get second opinion from other models via orcx.
+Get second opinion from other models via orcx. Version 0.0.4.
 
 $ARGUMENTS
 

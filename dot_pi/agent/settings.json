@@ -2,5 +2,6 @@
   "defaultProvider": "openrouter",
   "defaultModel": "anthropic/claude-sonnet-4",
   "theme": "dark",
-  "autoSave": true
+  "autoSave": true,
+  "lastChangelogVersion": "0.45.7"
 }

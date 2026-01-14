@@ -7,6 +7,7 @@
 if command -v brew >/dev/null 2>&1
     abbr --add brews "brew search"
     abbr --add brewi "brew install"
+    abbr --add brewx "brew uninstall"
     abbr --add brewu "brew update && brew upgrade"
 end
 

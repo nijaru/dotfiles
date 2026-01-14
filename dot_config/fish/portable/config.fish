@@ -45,9 +45,6 @@ alias ga='git add'
 alias gc='git commit'
 alias gp='git push'
 
-# AI tools
-alias droid='droid exec --auto high'
-
 # Essential functions
 function mkcd -d "Create directory and cd into it"
     mkdir -p $argv[1] && cd $argv[1]

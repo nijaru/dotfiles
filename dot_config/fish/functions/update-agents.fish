@@ -11,12 +11,6 @@ function update-agents --description "Update AI coding agents"
         echo ""
     end
 
-    if command -q opencode
-        echo "OpenCode..."
-        opencode upgrade
-        echo ""
-    end
-
     # npm packages - batch check and install
     if not command -q npm
         echo "Done!"
@@ -25,6 +19,7 @@ function update-agents --description "Update AI coding agents"
 
     # Package definitions: "name|npm_package|version_cmd"
     set -l packages \
+        "Opencode|opencode-ai|opencode --version" \
         "Amp|@sourcegraph/amp|amp --version" \
         "Codex|@openai/codex|codex --version" \
         "Pi|@mariozechner/pi-coding-agent|pi --version" \

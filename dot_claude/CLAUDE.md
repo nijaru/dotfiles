@@ -57,6 +57,8 @@
 
 **Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
 
+**Performance:** Idiomatic > clever. Profile before optimizing.
+
 **Problem-solving:** Question assumptions. If something seems off, it probably is—stop and verify. If stuck, reframe the problem.
 
 **Quality:**
@@ -67,9 +69,11 @@
 - Update docs (README, ai/, AGENTS.md)
 - Ask before breaking APIs
 
+**Errors:** Let errors propagate. Catch only to recover.
+
 **Upgrades:** No deprecation—remove old code and update all usages in the same change. Only deprecate if explicitly instructed.
 
-**Corrections:** Update AGENTS.md when corrected on non-obvious project patterns—prevents repeat mistakes.
+**Corrections:** Update AGENTS.md when corrected—prevents repeat mistakes.
 
 **Review:** `/review` before major commits.
 
@@ -79,8 +83,9 @@
 - **Comments:** Non-obvious context only. Never comment your edits. No TODOs.
 - **Files:** Single concern. Tests separate.
 - **No breadcrumbs:** When deleting/moving code, just remove it. No `// moved to X`, `// removed`, `// deprecated`.
+- **Maintenance:** Fix what you touch. Technical debt compounds.
 
-**Testing:** Unit or e2e only. No mocks—they invent behaviors that hide real bugs.
+**Testing:** Unit or e2e only. No mocks—they invent behaviors. Flaky tests are bugs. Verify tests actually ran.
 
 **Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
@@ -135,4 +140,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ---
 
-**Updated:** 2026-01-06 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-14 | github.com/nijaru/agent-contexts

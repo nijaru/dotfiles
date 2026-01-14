@@ -5,6 +5,10 @@ $ARGUMENTS
 
 ---
 
+## Available Agents
+
+Run `orcx agents` to see configured agents.
+
 ## Usage
 
 ```bash
@@ -26,6 +30,8 @@ orcx run -o response.md "Explain this concept"
 
 ## Conversations
 
+orcx stores conversations in SQLite (~/.config/orcx/conversations.db).
+
 ```bash
 # Continue last conversation
 orcx run -c "Follow-up question"
@@ -39,6 +45,9 @@ orcx run --no-save "Quick question"
 # List recent conversations
 orcx conversations list
 
+# Show conversation history
+orcx conversations show abc1
+
 # Clean old conversations (30+ days)
 orcx conversations clean
 ```
@@ -51,6 +60,14 @@ orcx conversations clean
 - Fresh eyes on a problem
 - Multi-turn discussions with cheaper models
 
-Run `orcx agents` to see configured agents.
+## Workflow
+
+1. Identify the specific question or code to review
+2. Formulate clear, focused prompt
+3. Include relevant context (pipe or `-f`)
+4. Run via orcx
+5. Continue conversation with `-c` if needed
+6. Compare response with your analysis
+7. Synthesize insights
 """
 description = "Get second opinion from other models via orcx"

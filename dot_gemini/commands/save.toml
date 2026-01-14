@@ -1,62 +1,77 @@
 prompt = """
-Update ai/ and sync beads before session end.
+Update ai/ files and tk tasks before session end.
 
-## 1. Analyze Current State
+## 1. Review Session
 
-Run in parallel:
-!{ git status }
+What was accomplished? Run in parallel:
 !{ git diff --stat }
+!{ git log --oneline -5 }
+!{ tk ls }
 !{ ls -la ai/ }
-!{ wc -l ai/*.md 2>/dev/null }
-!{ bd list --status open 2>/dev/null }
 
-Read ai/STATUS.md. Check `bd ready` or ai/TODO.md.
+Read ai/STATUS.md to compare against current state.
 
-## 2. Update Task Tracking
+## 2. Update tk Tasks (be thorough)
 
-**If beads available:**
-!{ bd close <completed-ids> }
-!{ bd create "remaining work" -t task -p 2 }
-!{ bd sync }
+Review ALL tasks against what was done:
 
-**If using TODO.md:**
-- Remove completed tasks, add new, update in-progress
+!{ tk ls }
+
+For EACH task:
+- **Completed** → `tk done <id>`
+- **New work discovered** → `tk add "title"`
+- **Blocked** → Note in STATUS.md
+
+Don't leave stale tasks. If done, mark done. If new, add it.
 
 ## 3. Update ai/ Files
 
-**Always update:**
-- **ai/STATUS.md** — Current state, what worked/didn't, active work, blockers
+**ai/STATUS.md** (always):
+- Current state, metrics
+- What worked / didn't
+- Active work
+- Blockers
+- Prune old content
 
-**If changes this session:**
-- **ai/DESIGN.md** — Architecture changes, new components
-- **ai/DECISIONS.md** — New architectural decisions
-- **ai/ROADMAP.md** — Phase changes, major pivots
+**ai/DESIGN.md** (if architecture changed):
+- New components, patterns
+- Updated interfaces
+
+**ai/DECISIONS.md** (if decisions made):
+- Context → Decision → Rationale (append)
+
+**ai/ROADMAP.md** (if phases changed):
+- Phase updates, scope changes
 
 ## 4. Health Check
 
 | Issue | Fix |
 |-------|-----|
-| Session files >500 lines | Prune historical content, move details to subdirs |
-| Completed tasks in TODO.md | Delete them (trust git) |
-| Stale content in STATUS.md | Remove old blockers, completed work |
-| Superseded design in DESIGN.md | Update to current architecture |
+| Files >500 lines | Prune, move to subdirs |
+| Stale STATUS.md | Remove old blockers/work |
+| Outdated DESIGN.md | Update to current |
 
-## 5. Commit & Sync
+## 5. Commit
 
-!{ git add ai/ && git commit -m "Update ai/ context" }
-!{ bd sync 2>/dev/null }
+!{ git add ai/ .tasks/ && git commit -m "Update session context" }
 
 ## 6. Report
 
 ```
-Session saved
-- STATUS.md: [state summary]
-- DESIGN.md: [updated/unchanged]
-- Tasks: [N open in beads / N pending in TODO.md]
-- Beads synced: [yes/no/n/a]
-- Committed: [yes/no]
+## Session Saved
 
-Next: provide follow-up prompt
+Tasks:
+- Done: [list marked complete]
+- Added: [list new]
+- Pending: [N remaining]
+
+ai/:
+- STATUS.md: [summary]
+- DESIGN.md: [updated/unchanged]
+
+Committed: [yes/no]
+
+Ready for new session.
 ```
 """
-description = "Update ai/ and sync beads before session end"
+description = "Update ai/ files and tk tasks before session end"

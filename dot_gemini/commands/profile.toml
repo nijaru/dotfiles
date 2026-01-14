@@ -5,15 +5,27 @@ $ARGUMENTS
 
 ---
 
-## Analysis Focus
+## Workflow
 
-1. Measure baseline first (don't guess)
-2. Identify hot paths from profiling data
-3. Analyze: complexity, allocations, I/O, concurrency, caching
-4. Recommend optimizations with expected impact
-5. Persist findings to ai/review/ with before/after measurements
+1. **Identify target** - specific code, function, or general slowness
+2. **Measure baseline first** - don't guess
+3. **Identify hot paths** from profiling data
+4. **Analyze** - complexity, allocations, I/O, concurrency, caching
+5. **Recommend optimizations** with expected impact
+6. **Persist findings** to ai/review/ with before/after measurements
 
 Evidence-based only. No assumptions.
+
+## Analysis Focus
+
+| Category | Check |
+|----------|-------|
+| Complexity | O(n^2) where O(n) possible |
+| Allocations | Unnecessary copies, `String` vs `&str` |
+| I/O | Blocking in async, unbuffered reads |
+| Concurrency | Lock contention, false sharing |
+| Caching | Missing cache, cache invalidation |
+| Queries | N+1, missing indexes |
 
 ## Output Format
 

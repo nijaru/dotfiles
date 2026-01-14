@@ -1,4 +1,7 @@
 {
+	"experimental": {
+		"enableAgents": true
+	},
 	"mcpServers": {
 		"context7": {
 			"command": "npx",

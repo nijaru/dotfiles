@@ -71,7 +71,13 @@
 
 **Errors:** Let errors propagate. Catch only to recover.
 
-**Upgrades:** No deprecation—remove old code and update all usages in the same change. Only deprecate if explicitly instructed.
+**Refactoring:** Clean breaks, not gradual migrations. When changing interfaces, signatures, or patterns:
+
+- Replace completely in one commit—old code and all callers
+- No version suffixes (V2, V3), no "old"/"legacy"/"new" markers
+- No shims, adapters, or re-exports "for compatibility"
+- No deprecation unless explicitly instructed
+- If callers exist outside the repo, ask before breaking
 
 **Corrections:** Update AGENTS.md when corrected—prevents repeat mistakes.
 
@@ -79,7 +85,7 @@
 
 **Style:**
 
-- **Naming:** Proportional to scope. No `_v2`/`_new`—use `_batched`, `_async`.
+- **Naming:** Proportional to scope. Descriptive suffixes (`_batched`, `_async`) over version markers.
 - **Comments:** Non-obvious context only. Never comment your edits. No TODOs.
 - **Files:** Single concern. Tests separate.
 - **No breadcrumbs:** When deleting/moving code, just remove it. No `// moved to X`, `// removed`, `// deprecated`.
@@ -140,4 +146,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ---
 
-**Updated:** 2026-01-14 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-16 | github.com/nijaru/agent-contexts

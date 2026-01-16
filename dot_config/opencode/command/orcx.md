@@ -4,7 +4,7 @@ description: Get second opinion from other models via orcx or gemini CLI.
 
 # Second Opinions from Other Models
 
-Consult other models for second opinions.
+Consult other models for second opinions. Version 0.0.5.
 
 ## Gemini (Preferred for Google Models)
 
@@ -20,6 +20,12 @@ gemini "Your prompt here" > response.md 2>/dev/null
 
 # Pipe file context
 cat file.py | gemini "Review this code" > review.md 2>/dev/null
+
+# JSON output with stats
+gemini -o json "Your prompt here" 2>/dev/null | jq -r .response
+
+# Continue interactively after prompt
+gemini -i "Start with this question"
 ```
 
 ## orcx (Other Models)

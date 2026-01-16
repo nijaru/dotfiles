@@ -8,17 +8,18 @@ Consult other models for second opinions.
 
 ## Gemini (Preferred for Google Models)
 
-Use the native `gemini` CLI for Gemini models (authenticated with subscription):
+Use the native `gemini` CLI for Gemini models (authenticated with subscription).
+Output goes to stdout; save to file to capture results.
 
 ```bash
-# One-shot query
+# One-shot query (output to stdout)
 gemini "Your prompt here"
 
-# With file context
-gemini -f file.py "Review this code"
+# Save response to file
+gemini "Your prompt here" > response.md 2>/dev/null
 
-# Pipe context
-cat file.py | gemini "Review this code"
+# Pipe file context
+cat file.py | gemini "Review this code" > review.md 2>/dev/null
 ```
 
 ## orcx (Other Models)

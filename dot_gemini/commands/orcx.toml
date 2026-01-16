@@ -1,13 +1,13 @@
 prompt = """
-Get second opinion from other models via orcx. Version 0.0.4.
+Get second opinion from other models via orcx. Version 0.0.5.
 
 $ARGUMENTS
 
 ---
 
-## Available Agents
+## orcx (Other Models)
 
-Run `orcx agents` to see configured agents.
+Run `orcx agents` to see configured agents (DeepSeek, Grok, etc.).
 
 ## Usage
 

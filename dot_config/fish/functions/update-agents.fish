@@ -37,11 +37,11 @@ function update-agents --description "Update AI coding agents"
 
     # Package definitions: "name|npm_package|version_cmd"
     set -l packages \
+        "Gemini CLI|@google/gemini-cli|gemini --version" \
         "Opencode|opencode-ai|opencode --version" \
-        "Amp|@sourcegraph/amp|amp --version" \
-        "Codex|@openai/codex|codex --version" \
         "Pi|@mariozechner/pi-coding-agent|pi --version" \
-        "Gemini CLI|@google/gemini-cli|gemini --version"
+        "Codex|@openai/codex|codex --version" \
+        "Amp|@sourcegraph/amp|amp --version"
 
     set -l to_update
     set -l package_names
@@ -57,7 +57,7 @@ function update-agents --description "Update AI coding agents"
         end
 
         _status blue "$name" "Checking..."
-        
+
         if set -q _flag_force
             set -a to_update $npm_pkg
             set -a package_names $name

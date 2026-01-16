@@ -1,14 +1,29 @@
 ---
-description: Get second opinion from other models via orcx.
+description: Get second opinion from other models via orcx or gemini CLI.
 ---
 
-# orcx - LLM Orchestrator
+# Second Opinions from Other Models
 
 Consult other models for second opinions.
 
-## Available Agents
+## Gemini (Preferred for Google Models)
 
-Run `orcx agents` to see configured agents.
+Use the native `gemini` CLI for Gemini models (authenticated with subscription):
+
+```bash
+# One-shot query
+gemini "Your prompt here"
+
+# With file context
+gemini -f file.py "Review this code"
+
+# Pipe context
+cat file.py | gemini "Review this code"
+```
+
+## orcx (Other Models)
+
+Run `orcx agents` to see configured agents (DeepSeek, Grok, etc.).
 
 ## Usage
 

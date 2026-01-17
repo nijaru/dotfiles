@@ -78,18 +78,22 @@ orcx conversations clean
 
 ## When to Use
 
-- Want a second opinion on logic or approach
+| Tool     | Use for                                         |
+| -------- | ----------------------------------------------- |
+| `gemini` | Google models (authenticated with subscription) |
+| `orcx`   | DeepSeek, Grok, other OpenRouter models         |
+
+- Second opinion on logic or approach
 - Comparing model perspectives
 - Leveraging model-specific strengths
 - Fresh eyes on a problem
-- Multi-turn discussions with cheaper models
 
 ## Workflow
 
 1. Identify the specific question or code to review
 2. Formulate clear, focused prompt
-3. Include relevant context (pipe or `-f`)
-4. Run via orcx
-5. Continue conversation with `-c` if needed
+3. Include relevant context (pipe or `-f` for orcx, pipe or stdin for gemini)
+4. Run via `gemini` or `orcx`
+5. Save output to file if needed for reference
 6. Compare response with your analysis
 7. Synthesize insights

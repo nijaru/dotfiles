@@ -1,5 +1,5 @@
 prompt = """
-Get second opinion from other models via orcx. Version 0.0.5.
+Get second opinion from other models via orcx.
 
 $ARGUMENTS
 
@@ -73,4 +73,4 @@ orcx conversations clean
 6. Compare response with your analysis
 7. Synthesize insights
 """
-description = "Get second opinion from other models via orcx"
+description = "Get second opinion from other models"

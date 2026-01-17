@@ -1,11 +1,12 @@
 ---
-description: Get second opinion from other models via orcx or gemini CLI. Triggers on: "ask deepseek", "ask gemini", "orcx".
+name: ask
+description: Get second opinion from other models via gemini CLI or orcx.
 allowed-tools: Read, Bash
 ---
 
 # Second Opinions from Other Models
 
-Consult other models for second opinions. Version 0.0.5.
+Consult other models for second opinions.
 
 ## Gemini (Preferred for Google Models)
 

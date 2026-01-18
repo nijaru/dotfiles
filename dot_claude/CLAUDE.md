@@ -11,7 +11,7 @@
 
 **Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
-**Packages:** Use CLI tools (`cargo add`, `uv add`, `go get`, `bun add`), not manual manifest edits. Pin versions only for reproducibility or known breaking changes.
+**Packages:** NEVER edit manifests (Cargo.toml, pyproject.toml, package.json, go.mod) directly. Use CLI: `cargo add`, `uv add`, `bun add`, `go get`. CLI resolves latest compatible versions—manual edits risk stale/nonexistent versions.
 
 **Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Lint/format: `ruff`. Types: `ty`. Never pip.
 
@@ -52,6 +52,8 @@
 | Context7            | Library/framework docs                |
 | Exa                 | Code examples, RAG, semantic search   |
 | Parallel MCP search | Multi-hop research                    |
+
+**Never use:** `parallel_createDeepResearch` - expensive, prefer manual search + synthesis.
 
 ## Development
 

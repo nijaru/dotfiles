@@ -3,3 +3,4 @@ font-family = "JetBrainsMono Nerd Font"
 font-size = 15
 keybind = shift+enter=text:\x1b\r
 macos-titlebar-style = tabs
+auto-update-channel = tip

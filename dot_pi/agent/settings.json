@@ -1,7 +1,13 @@
 {
-  "defaultProvider": "openrouter",
-  "defaultModel": "anthropic/claude-sonnet-4",
+  "defaultProvider": "local",
+  "defaultModel": "mlx-community/Qwen3-Next-80B-A3B-Thinking-4bit",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.45.7"
+  "lastChangelogVersion": "0.49.0",
+  "editorPaddingX": 1,
+  "steeringMode": "all",
+  "followUpMode": "all",
+  "hideThinkingBlock": true,
+  "collapseChangelog": true,
+  "defaultThinkingLevel": "high"
 }

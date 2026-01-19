@@ -53,6 +53,14 @@ Run 4 passes, flag issues with specific fixes.
 
 ---
 
+## Why AI Writing Sounds AI
+
+> "LLMs use statistical algorithms to guess what comes next. The result tends toward the most statistically likely result applicable to the widest variety of cases."
+
+AI sands down specific, unusual, nuanced facts (statistically rare) and replaces them with generic, positive descriptions (statistically common). The fix isn't removing AI patterns—it's adding what AI can't: opinions, varied rhythm, acknowledged complexity, specific details.
+
+---
+
 ## Core Principles
 
 ### Concrete vs Abstract
@@ -101,6 +109,28 @@ Run 4 passes, flag issues with specific fixes.
 
 ## Red Flags
 
+### Content Patterns
+
+| Pattern                  | Example                                                    | Fix                              |
+| ------------------------ | ---------------------------------------------------------- | -------------------------------- |
+| Significance inflation   | "pivotal moment," "broader trends," "profound impact"      | Cut or be specific               |
+| Vague attributions       | "experts argue," "industry reports suggest"                | Name source or cut               |
+| Superficial -ing clauses | "emphasizing the significance," "reflecting the relevance" | Delete entirely                  |
+| Formulaic sections       | "Challenges and Future Prospects"                          | Write what you actually know     |
+| Promotional language     | "breathtaking," "vibrant," "nestled," "state-of-the-art"   | Cut or replace with fact         |
+| Name-dropping notability | Excessive claims about coverage/awards                     | Only include if directly sourced |
+
+### Language Patterns
+
+| Pattern           | Example                                     | Fix                                    |
+| ----------------- | ------------------------------------------- | -------------------------------------- |
+| Copula avoidance  | "serves as a" → "is", "features" → "has"    | Use "is"/"are"/"has"                   |
+| Negative parallel | "not just X but Y," "not only X but also Y" | Pick one: X or Y                       |
+| Rule of three     | "innovative, dynamic, and transformative"   | One good adjective beats three generic |
+| Synonym cycling   | protagonist → key player → eponymous figure | Repeat the noun                        |
+| False ranges      | "from X to Y" when range is meaningless     | Be specific or cut                     |
+| Hedging stacks    | "may potentially be able to possibly"       | Commit or cut                          |
+
 ### AI Phrases (flag immediately)
 
 | Phrase                           | Frequency vs Human |
@@ -118,7 +148,10 @@ Run 4 passes, flag issues with specific fixes.
 
 ### AI Words (overused)
 
-delve, tapestry, landscape, nuanced, comprehensive, crucial, pivotal, vital, paramount, seamless, robust, cutting-edge, showcasing, leveraging, harnessing, resonates, aligns, elevates, unlock, unleash, embark, foster, enhance
+**Transitions:** Additionally, Furthermore, Moreover
+**Adjectives:** nuanced, comprehensive, crucial, pivotal, vital, paramount, seamless, robust, cutting-edge, multifaceted, intricate, ever-evolving
+**Verbs:** delve, showcase, leverage, harness, resonate, align, elevate, unlock, unleash, embark, foster, enhance, underscore, bolster, spearhead
+**Nouns:** tapestry, landscape, realm, era, testament, cornerstone, myriad
 
 ### AI Sentence Patterns
 
@@ -133,6 +166,27 @@ delve, tapestry, landscape, nuanced, comprehensive, crucial, pivotal, vital, par
 - Three dramatic adjectives in a row
 - Every sentence starts with "However" or "That said"
 - Choppy "I did X. I did Y. I did Z." cadence without flow
+
+### Style Patterns (Formatting Tells)
+
+| Pattern             | Example                                   | Fix                                |
+| ------------------- | ----------------------------------------- | ---------------------------------- |
+| Em dash overuse     | Multiple em dashes per paragraph          | Use commas, parentheses, or colons |
+| Boldface abuse      | **Key point:** followed by explanation    | Remove bold or use sparingly       |
+| Inline header lists | Bullet points with **bolded titles**      | Use prose or simple bullets        |
+| Title Case Headings | "The Future Of Artificial Intelligence"   | Sentence case: "The future of AI"  |
+| Decorative emoji    | Any emoji in professional writing         | Remove                             |
+| Curly quotes        | "smart quotes" in code/technical contexts | Use straight quotes                |
+
+### Communication Patterns (Left-in Prompts)
+
+| Pattern               | Example                                  | Fix           |
+| --------------------- | ---------------------------------------- | ------------- |
+| Chatbot pleasantries  | "Great question!" "Happy to help!"       | Delete        |
+| Cutoff disclaimers    | "As of my knowledge cutoff..."           | Delete        |
+| Sycophantic tone      | "Absolutely!" "That's a fantastic idea!" | State facts   |
+| Meta-commentary       | "I'll break this down into sections"     | Just write it |
+| Eager-to-please close | "Let me know if you need anything else!" | End when done |
 
 ### Structural Red Flags
 
@@ -216,3 +270,12 @@ orcx run -m openrouter/x-ai/grok-4.1-fast --no-save "Review for AI language and 
 
 orcx run -m openrouter/google/gemini-3-flash-preview --no-save "Review for AI language and weak writing. Be specific: [text]"
 ```
+
+---
+
+## Sources
+
+Patterns drawn from:
+
+- [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) (WikiProject AI Cleanup)
+- [blader/humanizer](https://github.com/blader/humanizer)

@@ -10,4 +10,5 @@ if status is-interactive
     # Claude Code
     abbr --add cl 'claude'
     abbr --add clc 'claude --continue'
+    abbr --add codexy 'codex --yolo'
 end

@@ -7,8 +7,9 @@ if status is-interactive
     abbr --add nv. 'nvim .'
     abbr --add hx. 'hx .'
 
-    # Claude Code
+    # agents
     abbr --add cl 'claude'
     abbr --add clc 'claude --continue'
+    abbr --add gemy 'gemini --yolo'
     abbr --add codexy 'codex --yolo'
 end

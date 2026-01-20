@@ -49,6 +49,7 @@ Review ALL tasks against what was done:
 **ai/DESIGN.md** (if architecture changed)
 **ai/DECISIONS.md** (if decisions made)
 **ai/ROADMAP.md** (if phases changed)
+**ai/SPRINTS.md** (if sprint progress)
 
 ### 4. Commit
 
@@ -70,6 +71,7 @@ Tasks:
 ai/:
 - STATUS.md: [summary]
 - DESIGN.md: [updated/unchanged]
+- SPRINTS.md: [updated/unchanged]
 
 Committed: [yes/no]
 

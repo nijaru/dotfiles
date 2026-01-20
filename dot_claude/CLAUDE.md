@@ -115,10 +115,11 @@ Persistent memory—survives compaction. Update BEFORE implementing.
 **Blockers/session notes:** STATUS.md
 **Architecture:** DESIGN.md
 **Decisions:** DECISIONS.md (context → decision → rationale)
+**Sprint plans:** SPRINTS.md (use `/spec` to generate from specs)
 
 Root files read every session—keep minimal. Subdirs (research/, design/, review/, tmp/) on demand.
 
-**Flow:** research/ → DESIGN.md → design/ → code → review/
+**Flow:** research/ → DESIGN.md → `/spec` → SPRINTS.md → code → review/
 
 **Format:** Tables/lists over prose. Answer first, evidence second.
 

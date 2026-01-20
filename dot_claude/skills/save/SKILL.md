@@ -73,6 +73,11 @@ Don't leave stale tasks. If done, mark done. If new, add it.
 
 - Phase updates, scope changes
 
+**ai/SPRINTS.md** (if sprint progress):
+
+- Mark completed tasks
+- Update current sprint status
+
 ## 4. Health Check
 
 | Issue              | Fix                      |
@@ -101,6 +106,7 @@ Tasks:
 ai/:
 - STATUS.md: [summary]
 - DESIGN.md: [updated/unchanged]
+- SPRINTS.md: [updated/unchanged]
 
 Committed: [yes/no]
 

@@ -19,7 +19,12 @@
 		}
 	},
 	"model": {
-		"name": "gemini-3-flash-preview"
+		"name": "gemini-3-flash-preview",
+		"generateContentConfig": {
+			"thinkingConfig": {
+				"thinkingLevel": "HIGH"
+			}
+		}
 	},
 	"security": {
 		"auth": {
@@ -40,8 +45,13 @@
 		"previewFeatures": true
 	},
 	"tools": {
+		"useRipgrep": true,
 		"shell": {
-			"showColor": true
+			"showColor": true,
+			"inactivityTimeout": 0
 		}
+	},
+	"privacy": {
+		"usageStatisticsEnabled": false
 	}
 }

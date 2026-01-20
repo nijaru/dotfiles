@@ -1,31 +1,55 @@
 {
-  "providers": {
-    "openrouter": {
-      "type": "openai-compat",
-      "base_url": "https://openrouter.ai/api/v1",
-      "api_key": "$OPENROUTER_API_KEY"
-    }
-  },
-  "mcp": {
-    "context7": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
-    },
-    "exa": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "exa-mcp-server"],
-      "env": {
-        "EXA_API_KEY": "$EXA_API_KEY"
-      }
-    },
-    "parallel": {
-      "type": "http",
-      "url": "https://task-mcp.parallel.ai/mcp",
-      "headers": {
-        "Authorization": "Bearer $PARALLEL_API_KEY"
-      }
-    }
-  }
+	"options": {
+		"initialize_as": "AGENTS.md"
+	},
+	"providers": {
+		"fedora": {
+			"type": "openai",
+			"base_url": "http://fedora:8080/v1",
+			"api_key": "none",
+			"models": [
+				{
+					"id": "cyankiwi/Devstral-Small-2-24B-Instruct-2512-AWQ-4bit",
+					"name": "Devstral Small 2 AWQ"
+				}
+			]
+		},
+		"local": {
+			"type": "openai",
+			"base_url": "http://localhost:8080/v1",
+			"api_key": "none",
+			"models": [
+				{
+					"id": "mlx-community/Qwen3-Next-80B-A3B-Thinking-4bit",
+					"name": "Qwen3-Next-80B Thinking"
+				}
+			]
+		}
+	},
+	"default_provider": "fedora",
+	"permissions": {
+		"allowed_tools": ["view", "ls", "glob", "grep", "bash"]
+	},
+	"mcp": {
+		"context7": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@upstash/context7-mcp"]
+		},
+		"exa": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "exa-mcp-server"],
+			"env": {
+				"EXA_API_KEY": "$EXA_API_KEY"
+			}
+		},
+		"parallel": {
+			"type": "http",
+			"url": "https://task-mcp.parallel.ai/mcp",
+			"headers": {
+				"Authorization": "Bearer $PARALLEL_API_KEY"
+			}
+		}
+	}
 }

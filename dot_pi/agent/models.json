@@ -9,6 +9,38 @@
 			"baseUrl": "https://api.anthropic.com/v1",
 			"apiKey": "$ANTHROPIC_API_KEY",
 			"api": "anthropic-messages"
+		},
+		"local": {
+			"baseUrl": "http://localhost:8080/v1",
+			"apiKey": "none",
+			"api": "openai-completions",
+			"models": [
+				{
+					"id": "mlx-community/Qwen3-Next-80B-A3B-Thinking-4bit",
+					"name": "Qwen3-Next-80B (Local)",
+					"contextWindow": 256000,
+					"maxTokens": 32768,
+					"reasoning": true,
+					"input": ["text"],
+					"cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+				}
+			]
+		},
+		"fedora": {
+			"baseUrl": "http://fedora:8080/v1",
+			"apiKey": "none",
+			"api": "openai-completions",
+			"models": [
+				{
+					"id": "cyankiwi/Devstral-Small-2-24B-Instruct-2512-AWQ-4bit",
+					"name": "Devstral-24B (Fedora)",
+					"contextWindow": 384000,
+					"maxTokens": 32768,
+					"reasoning": false,
+					"input": ["text"],
+					"cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+				}
+			]
 		}
 	}
 }

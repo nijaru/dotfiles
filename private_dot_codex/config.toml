@@ -3,10 +3,11 @@
 # Project doc fallback - read AGENTS.md or CLAUDE.md
 project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]
 
-# Sandbox - allow writing to omendb parent (for cross-project work)
-sandbox_mode = "workspace-write"
-[sandbox_workspace_write]
-writable_roots = ["~/github/omendb"]
+# Approval prompts - never ask before running commands
+approval_policy = "never"
+
+# Sandbox - full access
+sandbox_mode = "danger-full-access"
 
 # MCP Servers (stdio)
 [mcp_servers.context7]

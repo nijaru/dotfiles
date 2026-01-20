@@ -9,6 +9,9 @@ approval_policy = "never"
 # Sandbox - full access
 sandbox_mode = "danger-full-access"
 
+# Model reasoning effort: higher = more accurate, slower
+model_reasoning_effort = "high"
+
 # MCP Servers (stdio)
 [mcp_servers.context7]
 command = "npx"

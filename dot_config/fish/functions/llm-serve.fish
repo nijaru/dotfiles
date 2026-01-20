@@ -21,7 +21,7 @@ function llm-serve
     end
 
     if test (uname) = "Darwin"
-        python -c "import mlx_lm" 2>/dev/null
+        python -c "import mlx_lm.models.glm4_moe_lite" 2>/dev/null
         or uv pip install --system git+https://github.com/ml-explore/mlx-lm.git
         python -m mlx_lm server --model mlx-community/GLM-4.7-Flash-4bit --port 8080 &
         set _llm_pid $last_pid

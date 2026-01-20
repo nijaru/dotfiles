@@ -11,7 +11,7 @@
 
 **Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
-**Packages:** NEVER edit manifests (Cargo.toml, pyproject.toml, package.json, go.mod) directly. Use CLI: `cargo add`, `uv add`, `bun add`, `go get`. CLI resolves latest compatible versions—manual edits risk stale/nonexistent versions.
+**Dependencies:** Add via CLI only (`cargo add`, `uv add`, `bun add`, `go get`)—CLI resolves latest compatible versions. Manual edits risk stale/nonexistent versions. Other manifest sections (build config, features, scripts, metadata) are fine to edit directly.
 
 **Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Lint/format: `ruff`. Types: `ty`. Never pip.
 
@@ -115,11 +115,11 @@ Persistent memory—survives compaction. Update BEFORE implementing.
 **Blockers/session notes:** STATUS.md
 **Architecture:** DESIGN.md
 **Decisions:** DECISIONS.md (context → decision → rationale)
-**Sprint plans:** SPRINTS.md (use `/spec` to generate from specs)
+**Sprint plans:** SPRINTS.md (use `/sprint` to generate from specs)
 
 Root files read every session—keep minimal. Subdirs (research/, design/, review/, tmp/) on demand.
 
-**Flow:** research/ → DESIGN.md → `/spec` → SPRINTS.md → code → review/
+**Flow:** research/ → DESIGN.md → `/sprint` → SPRINTS.md → code → review/
 
 **Format:** Tables/lists over prose. Answer first, evidence second.
 

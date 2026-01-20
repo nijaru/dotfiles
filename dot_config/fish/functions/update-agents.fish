@@ -38,6 +38,7 @@ function update-agents --description "Update AI coding agents"
     # Package definitions: "name|npm_package|version_cmd"
     set -l packages \
         "Gemini CLI|@google/gemini-cli|gemini --version" \
+        "Crush|@charmland/crush|crush --version" \
         "Opencode|opencode-ai|opencode --version" \
         "Pi|@mariozechner/pi-coding-agent|pi --version" \
         "Codex|@openai/codex|codex --version" \
@@ -51,10 +52,7 @@ function update-agents --description "Update AI coding agents"
         set -l name $parts[1]
         set -l npm_pkg $parts[2]
         set -l version_cmd $parts[3]
-
-        if not command -q (string split " " $version_cmd)[1]
-            continue
-        end
+        set -l cmd (string split " " $version_cmd)[1]
 
         _status blue "$name" "Checking..."
 
@@ -62,6 +60,18 @@ function update-agents --description "Update AI coding agents"
             set -a to_update $npm_pkg
             set -a package_names $name
             _status yellow "$name" "Forcing update"
+            continue
+        end
+
+        if not command -q $cmd
+            set -l latest (npm view $npm_pkg version 2>/dev/null | string trim)
+            if test -z "$latest"
+                _status yellow "$name" "Not installed (installing)"
+            else
+                _status yellow "$name" "Not installed -> $latest"
+            end
+            set -a to_update $npm_pkg
+            set -a package_names $name
             continue
         end
 

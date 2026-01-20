@@ -1,6 +1,6 @@
 # Local LLM inference server - OpenAI-compatible API on port 8080
-# macOS: MLX backend (GLM-4.7-Flash 4-bit, ~19GB)
-# Linux: vLLM backend (GLM-4.7-Flash AWQ 4-bit, ~19GB)
+# macOS: MLX backend (GLM-4.7-Flash 4-bit, ~19GB) via mlx-lm main (glm4_moe_lite)
+# Linux: vLLM backend (GLM-4.7-Flash AWQ 4-bit, ~19GB) via nightly vLLM
 # Auto-installs dependencies on first run. Ctrl+C to stop.
 #
 # Endpoints:

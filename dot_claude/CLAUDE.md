@@ -39,7 +39,7 @@
 
 **Task tracking:** Use `tk` for multi-step or cross-session work—persists across compaction. Priority: `-p [0-4]` (1=urgent, 2=high, 3=med, 4=low).
 
-- `tk add "title" -p 2` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>`
+- `tk add "title" -p 3` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>`
 - `tk show <id>` | `tk log <id> "msg"` | `tk block <id> <blocker>` | `tk reopen <id>`
 
 **UI:** lucide/heroicons. No emoji unless requested.

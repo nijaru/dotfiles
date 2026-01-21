@@ -99,6 +99,8 @@
 
 ## Workflow
 
+**Stopping Points:** Proactively advise the user when to compact context or start a new session (e.g., after feature completion, major milestones, or significant context shifts).
+
 **Git:** Never ask to commit—just commit after each fix, feature, or milestone. Push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
 
 **Releases:** NEVER trigger without explicit approval. Wait for CI.
@@ -149,4 +151,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ---
 
-**Updated:** 2026-01-16 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-21 | github.com/nijaru/agent-contexts

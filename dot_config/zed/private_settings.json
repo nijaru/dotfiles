@@ -1,8 +1,8 @@
 {
   "theme": {
     "mode": "dark",
-    "light": "Catppuccin Frappé",
-    "dark": "Catppuccin Frappé"
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Frappé",
   },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "buffer_font_family": "JetBrains Mono",
@@ -10,53 +10,32 @@
   "buffer_font_size": 14,
   "agent_buffer_font_size": 14,
   "active_pane_modifiers": {
-    "inactive_opacity": 0.9
+    "inactive_opacity": 0.9,
   },
-  "cursor_blink": false,
-  "auto_signature_help": true,
+  // "auto_signature_help": true,
   "wrap_guides": [80],
-  "inlay_hints": {
-    "enabled": true
-  },
-  "tabs": {
-    "git_status": true,
-    "file_icons": true
-  },
-  "file_finder": {
-    "modal_max_width": "medium"
-  },
+  // "inlay_hints": {
+  //   "enabled": true,
+  // },
+  // "tabs": {
+  //   "git_status": true,
+  //   "file_icons": true,
+  // },
+  // "file_finder": {
+  //   "modal_max_width": "medium",
+  // },
   "preferred_line_length": 88,
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "autosave": "on_focus_change",
-  "agent": {
-    "always_allow_tool_actions": true,
-    "play_sound_when_agent_done": true,
-    "default_model": {
-      "provider": "anthropic",
-      "model": "claude-sonnet-4-latest"
-    }
-  },
-  "language_models": {
-    "ollama": {
-      "api_url": "http://fedora:11434"
-    }
-  },
   "languages": {
     "C++": {
-      "language_servers": ["clangd"],
-      "formatter": "language_server",
       "code_actions_on_format": {
         "source.organizeImports.clangd": true,
-        "source.fixAll.clangd": true
+        "source.fixAll.clangd": true,
       },
-      "format_on_save": "on",
-      "use_on_type_format": false,
-      "prettier": {
-        "allowed": false
-      }
     },
     "Go": {
       "hard_tabs": true,
@@ -64,113 +43,66 @@
       "formatter": {
         "external": {
           "command": "golines",
-          "arguments": ["-m", "gofumpt"]
-        }
+          "arguments": ["-m", "gofumpt"],
+        },
       },
       "code_actions_on_format": {
-        "source.organizeImports": true
-      }
+        "source.organizeImports": true,
+      },
     },
     "JavaScript": {
       "formatter": {
         "external": {
           "command": "oxfmt",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
     },
     "JSON": {
-      "language_servers": ["..."]
+      "language_servers": ["..."],
     },
     "JSONC": {
-      "language_servers": ["..."]
-    },
-    "Mojo": {
-      "language_servers": ["mojo-lsp"]
+      "language_servers": ["..."],
     },
     "Python": {
-      "language_servers": ["ruff", "ty"],
       "code_actions_on_format": {
         "source.fixAll": true,
-        "source.organizeImports": true
+        "source.organizeImports": true,
       },
-      "formatter": []
     },
     "Rust": {
-      "hard_tabs": false
+      "hard_tabs": false,
+      "code_actions_on_format": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+      },
     },
     "TSX": {
       "formatter": {
         "external": {
           "command": "oxfmt",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
     },
     "TypeScript": {
       "formatter": {
         "external": {
           "command": "oxfmt",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
-    }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
+    },
   },
   "lsp": {
     "ruff": {
       "initialization_options": {
         "settings": {
           "lint": {
-            "ignore": ["E501"]
-          }
-        }
-      }
+            "ignore": ["E501"],
+          },
+        },
+      },
     },
-    "mojo-lsp": {
-      "binary": {
-        "path": "pixi",
-        "arguments": ["run", "mojo-lsp-server"]
-      }
-    }
   },
-  "ssh_connections": [
-    {
-      "host": "100.93.39.25",
-      "username": "nick",
-      "projects": [
-        {
-          "paths": ["/home/nick/github/max-whisper"]
-        }
-      ]
-    }
-  ],
-  "context_servers": {
-    "mcp-server-exa-search": {
-      "source": "extension",
-      "enabled": true,
-      "settings": {
-        "exa_api_key": "$EXA_API_KEY"
-      }
-    },
-    "mcp-server-brave-search": {
-      "source": "extension",
-      "enabled": true,
-      "settings": {
-        "brave_api_key": "$BRAVE_API_KEY"
-      }
-    },
-    "mcp-server-github": {
-      "source": "extension",
-      "enabled": true,
-      "settings": {
-        "github_personal_access_token": "$GITHUB_TOKEN"
-      }
-    },
-    "mcp-server-context7": {
-      "source": "extension",
-      "settings": {
-        "default_minimum_tokens": "10000"
-      }
-    }
-  }
 }

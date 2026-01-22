@@ -54,4 +54,7 @@ if status is-interactive
 
     # Claude Code installation
     abbr --add install-claude 'npm i -g @anthropic-ai/claude-code'
+
+    # Bun global installation
+    abbr --add bungi 'bun install -g'
 end

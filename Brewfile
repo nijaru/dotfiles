@@ -12,6 +12,7 @@ brew "curl", link: true
 brew "difftastic"
 brew "direnv"
 brew "dos2unix"
+brew "duti"
 brew "duf"
 brew "dust"
 brew "eza"

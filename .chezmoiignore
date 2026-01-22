@@ -5,7 +5,6 @@ CLAUDE.md
 ai/
 
 # Homebrew files - keep in repo but don't install to home directory
-Brewfile
 Brewfile_darwin
 
 # LazyVim template files - not personal config
@@ -61,3 +60,4 @@ dot_claude/mcp_config.json
 .claude.json
 .config/nvim/lazy-lock.json
 .config/nvim/lazyvim.json
+# Factory/Droid runtime files - auth, sessions, logs

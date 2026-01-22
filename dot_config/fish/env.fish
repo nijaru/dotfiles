@@ -4,7 +4,6 @@
 # Core environment variables
 set -gx EDITOR "zed"
 set -gx VISUAL "zed --wait"
-set -gx ALTERNATE_EDITOR "nvim"
 set -gx MOAR "--style=catppuccin-macchiato --quit-if-one-screen --no-statusbar --wrap"
 set -gx BAT_THEME "Catppuccin Macchiato"
 

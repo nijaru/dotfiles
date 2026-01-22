@@ -4,53 +4,37 @@ README.md
 CLAUDE.md
 ai/
 
-# Homebrew files - keep in repo but don't install to home directory
+# Homebrew files
 Brewfile
-Brewfile_darwin
 
-# LazyVim template files - not personal config
+# LazyVim/Nvim runtime
 .config/nvim/LICENSE
 .config/nvim/README.md
+.config/nvim/lazy-lock.json
+.config/nvim/lazyvim.json
 
-# Fish shell runtime files that change frequently
+# Fish shell runtime
 .config/fish/fish_variables
 .config/fish/**/*cache*
 .config/fish/**/*.local
 .config/fish/functions/tide/configure/functions/_fake_tide_cache_variables.fish
 .local/share/fish/fish_history
 
-# Zed runtime files
+# Zed runtime
 .config/zed/local-settings.json
 .config/zed/conversations
 .config/zed/embeddings
 .config/zed/extensions
 
-# Claude Code runtime files
+# Claude Code runtime
 .claude/**/*.local
 .claude/statsig
 .claude/todos
+.claude.json
 
-# Build artifacts and dependencies
+# Tooling and dependencies
 .config/**/*.lock
 .config/**/node_modules
-
-# macOS-specific files - ignore on Linux
-{{ if ne .chezmoi.os "darwin" }}
-Library
-{{ end }}
-
-# MCP config with API keys - managed manually, not synced
-dot_claude/mcp_config.json
-
-# Factory/Droid runtime files - auth, sessions, logs
-.factory/auth.json
-.factory/history.json
-.factory/logs
-.factory/sessions
-.factory/bin
-.factory/skills
-
-# Opencode runtime files - lock files, node_modules, etc
 .config/opencode/config.json
 .config/opencode/.gitignore
 .config/opencode/bun.lock
@@ -58,7 +42,19 @@ dot_claude/mcp_config.json
 .config/opencode/node_modules
 .config/opencode/providers
 .config/opencode/generate_config.sh
-.claude.json
-.config/nvim/lazy-lock.json
-.config/nvim/lazyvim.json
-# Factory/Droid runtime files - auth, sessions, logs
+
+# Factory/Droid runtime
+.factory/auth.json
+.factory/history.json
+.factory/logs
+.factory/sessions
+.factory/bin
+.factory/skills
+
+# macOS-specific files
+{{ if ne .chezmoi.os "darwin" }}
+Library
+{{ end }}
+
+# Local config overrides
+dot_claude/mcp_config.json

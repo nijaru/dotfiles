@@ -7,10 +7,10 @@
 - **Homebrew:** Whitelisted `Brewfile` applied; system "zapped" of non-whitelisted packages.
 - **Rust:** `rustup` installed and initialized.
 - **Ghostty:** Source config applied (Font: JetBrainsMono NF 15, Theme: Catppuccin Macchiato).
+- **Zed:** Lean config applied (Font: JetBrains Mono 14, Oxc & Ruff integration).
 
 ## Active Work
-- Reconstructing secrets via `.chezmoidata.yaml.placeholder`.
+- Re-encrypting secrets with new key (`age1evnys3...`).
 
 ## Blockers
-- **Lost Age Key:** Original `.chezmoidata.yaml.age` is unrecoverable. 
-- **Action Required:** Re-encrypt secrets with new key (`age1evnys3...`) once placeholders are filled.
+- None.

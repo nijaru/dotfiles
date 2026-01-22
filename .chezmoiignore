@@ -43,13 +43,6 @@ Brewfile
 .config/opencode/providers
 .config/opencode/generate_config.sh
 
-# Factory/Droid runtime
-.factory/auth.json
-.factory/history.json
-.factory/logs
-.factory/sessions
-.factory/bin
-.factory/skills
 
 # macOS-specific files
 {{ if ne .chezmoi.os "darwin" }}

@@ -72,80 +72,48 @@
       }
     },
     "JavaScript": {
-      "language_servers": ["biome"],
-      "formatter": [
-        {
-          "code_action": "source.organizeImports.biome"
-        },
-        {
-          "code_action": "source.fixAll.biome"
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
         }
-      ]
+      }
     },
     "JSON": {
-      "language_servers": ["...", "!biome"]
+      "language_servers": ["..."]
     },
     "JSONC": {
-      "language_servers": ["...", "!biome"]
+      "language_servers": ["..."]
     },
     "Mojo": {
       "language_servers": ["mojo-lsp"]
     },
     "Python": {
       "language_servers": ["ruff", "ty"],
-      "formatter": [
-        {
-          "code_action": "source.organizeImports.ruff"
-        },
-        {
-          "code_action": "source.fixAll.ruff"
-        },
-        {
-          "language_server": {
-            "name": "ruff"
-          }
-        }
-      ]
+      "code_actions_on_format": {
+        "source.fixAll": true,
+        "source.organizeImports": true
+      },
+      "formatter": []
     },
     "Rust": {
       "hard_tabs": false
     },
     "TSX": {
-      "language_servers": ["biome"],
-      "formatter": [
-        {
-          "code_action": "source.organizeImports.biome"
-        },
-        {
-          "code_action": "source.fixAll.biome"
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
         }
-      ]
+      }
     },
     "TypeScript": {
-      "language_servers": ["biome"],
-      "formatter": [
-        {
-          "code_action": "source.organizeImports.biome"
-        },
-        {
-          "code_action": "source.fixAll.biome"
-        },
-        {
-          "language_server": {
-            "name": "biome"
-          }
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
         }
-      ]
+      }
     }
   },
   "lsp": {

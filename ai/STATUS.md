@@ -1,11 +1,16 @@
 # Dotfiles Status
 
-## Current State: Stable
+## Current State: Recovery/Migration
 
-- Fish startup: 28ms (optimized 2025-11-26)
-- MCP servers: exa, context7 (Claude Code, Claude Desktop, Gemini CLI)
-- Secrets: age-encrypted via `.chezmoidata.yaml.age`
+- **OS:** Fresh macOS install (Tahoe)
+- **Shell:** Fish (set as default, `tide` prompt reconfigured)
+- **Homebrew:** Whitelisted `Brewfile` applied; system "zapped" of non-whitelisted packages.
+- **Rust:** `rustup` installed and initialized.
+- **Ghostty:** Source config applied (Font: JetBrainsMono NF 15, Theme: Catppuccin Macchiato).
+
+## Active Work
+- Reconstructing secrets via `.chezmoidata.yaml.placeholder`.
 
 ## Blockers
-
-None.
+- **Lost Age Key:** Original `.chezmoidata.yaml.age` is unrecoverable. 
+- **Action Required:** Re-encrypt secrets with new key (`age1evnys3...`) once placeholders are filled.

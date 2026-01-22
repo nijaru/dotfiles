@@ -261,3 +261,20 @@ end
 **Trade-offs**:
 - Need age key on each machine
 - Secrets in memory after apply (fish env vars)
+
+## 2026-01-22: System Recovery
+
+### Decision: Whitelisted Brewfile Cleanup
+- **Context:** Fresh macOS install with many stale dependencies in `Brewfile_darwin`.
+- **Decision:** Use a clean `Brewfile` as a whitelist and run `brew bundle cleanup --force`.
+- **Rationale:** Minimize system bloat and ensure a reproducible, minimal environment.
+
+### Decision: Rustup vs Mise
+- **Context:** Evaluating Rust toolchain management.
+- **Decision:** Stick with `rustup-init` for Rust specifically.
+- **Rationale:** User preference for native Rustup management over Mise.
+
+### Decision: New Age Key Generation
+- **Context:** Original age key was lost in the system wipe.
+- **Decision:** Generate a new key pair and re-encrypt secrets.
+- **Rationale:** No backup of the original key existed; manual reconstruction of API keys is required.

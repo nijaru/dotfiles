@@ -37,6 +37,7 @@ brew "hyperfine"
 brew "jj"
 brew "jq"
 brew "make"
+brew "mas"
 brew "mise"
 brew "moor"
 brew "neovim"
@@ -79,3 +80,5 @@ cask "kushalpandya/tap/petrichor"
 cask "spotify"
 cask "unnaturalscrollwheels"
 cask "zed"
+mas "Bitwarden", id: 1352778147
+mas "Tailscale", id: 1475387142

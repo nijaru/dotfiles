@@ -22,7 +22,6 @@
 # Core Settings & Performance
 ##############################
 [core]
-    editor         = $EDITOR --wait                # Use your system editor (with --wait)
     excludesFile   = ~/.gitignore                  # Global ignore file
     autocrlf       = input                         # Convert CRLF to LF on commit
     safecrlf       = true                          # Prevent dangerous line-ending mix-ups

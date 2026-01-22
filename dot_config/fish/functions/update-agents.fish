@@ -25,6 +25,14 @@ function update-agents --description "Update AI coding agents"
             _status red "Claude" "Failed to update"
             echo $claude_out
         end
+    else
+        _status yellow "Claude" "Not installed (installing...)"
+        curl -fsSL https://claude.ai/install.sh | bash
+        if test $status -eq 0
+            _status green "Claude" "Successfully installed"
+        else
+            _status red "Claude" "Installation failed"
+        end
     end
 
     # 2. npm packages

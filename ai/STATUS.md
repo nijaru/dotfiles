@@ -1,16 +1,15 @@
 # Dotfiles Status
 
-## Current State: Recovery/Migration
+## Current State: Fully Restored & Hardened
 
-- **OS:** Fresh macOS install (Tahoe)
-- **Shell:** Fish (set as default, `tide` prompt reconfigured)
-- **Homebrew:** Whitelisted `Brewfile` applied; system "zapped" of non-whitelisted packages.
-- **Rust:** `rustup` installed and initialized.
-- **Ghostty:** Source config applied (Font: JetBrainsMono NF 15, Theme: Catppuccin Macchiato).
-- **Zed:** Lean config applied (Font: JetBrains Mono 14, Oxc & Ruff integration).
+- **OS:** Fresh macOS install (Tahoe) + Fedora 41
+- **Secrets:** Re-populated and encrypted via `age`.
+- **Backup:** Master `age` key symlinked from iCloud Drive (`Developer/age-keys.txt`).
+- **Fedora:** Secure Boot enabled, NVIDIA signed, TPM2 auto-unlock active.
+- **Mac:** Fish/Zed/Ghostty optimized and associated via `duti`.
 
 ## Active Work
-- Re-encrypting secrets with new key (`age1evnys3...`).
+- None. System is in a stable, managed state.
 
 ## Blockers
 - None.

@@ -262,7 +262,7 @@ end
 - Need age key on each machine
 - Secrets in memory after apply (fish env vars)
 
-## 2026-01-22: System Recovery
+## 2026-01-22: System Recovery & Optimization
 
 ### Decision: Whitelisted Brewfile Cleanup
 - **Context:** Fresh macOS install with many stale dependencies in `Brewfile_darwin`.
@@ -274,7 +274,27 @@ end
 - **Decision:** Stick with `rustup-init` for Rust specifically.
 - **Rationale:** User preference for native Rustup management over Mise.
 
-### Decision: New Age Key Generation
+### Decision: New Age Key Generation & Hardening
 - **Context:** Original age key was lost in the system wipe.
-- **Decision:** Generate a new key pair and re-encrypt secrets.
-- **Rationale:** No backup of the original key existed; manual reconstruction of API keys is required.
+- **Decision:** Generate a new key pair and store the master key in iCloud Drive (`Developer/age-keys.txt`) as a symlink.
+- **Rationale:** No backup of the original key existed; manual reconstruction of API keys was required. Cloud-backed symlink ensures durability.
+
+### Decision: Platform-Native Ghostty Config
+- **Context:** Ghostty UI shortcuts (`command+,`) on macOS favor `~/Library/Application Support` while terminal processes can use `~/.config`.
+- **Decision:** Move configuration to `private_Library/private_Application Support/com.mitchellh.ghostty/config`.
+- **Rationale:** Unifies terminal behavior and UI shortcuts to a single source of truth.
+
+### Decision: System-Wide Editor Associations
+- **Context:** CLI tools (Ghostty, Gemini) opening extensionless files in TextEdit.
+- **Decision:** Use `duti` to set `dev.zed.Zed` as the default handler for `public.plain-text` and `public.data`.
+- **Rationale:** Robust, non-brittle way to ensure Zed is the default editor for all code-like files.
+
+### Decision: Unified EDITOR/VISUAL Logic
+- **Context:** Redundant `GIT_EDITOR` and `core.editor` settings.
+- **Decision:** Set `EDITOR="zed"` and `VISUAL="zed --wait"` in Fish; remove manual Git overrides.
+- **Rationale:** Standard Unix convention allows tools to automatically pick the correct (blocking vs non-blocking) mode.
+
+### Decision: Fedora Secure Boot & TPM Recovery
+- **Context:** BIOS update disabled Secure Boot and broke TPM auto-unlock.
+- **Decision:** Re-enroll NVIDIA MOK and re-bind LUKS to TPM2 (PCRs 0+1+4+5+7).
+- **Rationale:** Restores hardware-backed security and automatic decryption with NVIDIA driver compatibility.

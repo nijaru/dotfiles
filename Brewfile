@@ -1,5 +1,3 @@
-tap "nijaru/tap"
-tap "oven-sh/bun"
 brew "age"
 brew "ast-grep"
 brew "atuin"

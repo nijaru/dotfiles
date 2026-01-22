@@ -33,7 +33,7 @@ function ghc --description "Clone GitHub repo to ~/github/org/repo structure"
     if test (count $parts) -eq 1
         set org $default_org
         set repo $parts[1]
-    else
+    else if test (count $parts) -eq 2
         set org $parts[1]
         set repo $parts[2]
     else

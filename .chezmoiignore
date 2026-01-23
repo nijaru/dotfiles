@@ -1,6 +1,7 @@
 # Repository documentation files - should not be installed to home directory
 LICENSE
 README.md
+AGENTS.md
 CLAUDE.md
 ai/
 

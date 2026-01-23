@@ -29,8 +29,13 @@
 - **Bun Global:** Global binaries at `~/.cache/.bun/bin` (added to path via `paths.fish`).
 - **Structure:** Repos at `~/github/<owner>/<repo>`. Use `ghc <repo>` to clone.
 
-## Active Work
-- None. Recovery and optimization complete.
+---
 
-## Blockers
-- None.
+## Managing API Keys
+
+To update API keys, follow these steps in the repo root:
+
+1. **Create the plaintext secrets file:** `zed .chezmoidata.yaml`
+2. **Paste and update your keys**
+3. **Encrypt and Apply:**
+   `age --encrypt -r <public-key> .chezmoidata.yaml > .chezmoidata.yaml.age && chezmoi apply --force && rm .chezmoidata.yaml`

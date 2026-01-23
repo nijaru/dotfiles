@@ -4,11 +4,14 @@
 
 if status is-interactive; or not set -q __paths_initialized
     set -l paths_to_add \
-        $HOME/.local/share/mise/shims \
         $HOME/.local/bin \
-        $HOME/.cargo/bin \
+        $HOME/.modular/bin \
         $HOME/.pixi/bin \
-        $HOME/.cache/.bun/bin
+        $HOME/.local/share/gem/bin \
+        $HOME/go/bin \
+        $HOME/.cargo/bin \
+        $HOME/.cache/.bun/bin \
+        $HOME/.local/share/mise/shims
 
     for path in $paths_to_add
         test -d $path && fish_add_path -g $path

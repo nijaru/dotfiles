@@ -30,8 +30,7 @@ function update-agents --description "Update AI coding agents"
         # Safer curl | bash
         set -l installer (curl -fsSL https://claude.ai/install.sh)
         if test -n "$installer"
-            echo "$installer" | bash
-            if test $status -eq 0
+            if echo "$installer" | bash
                 _status green "Claude" "Successfully installed"
             else
                 _status red "Claude" "Installation failed"
@@ -49,14 +48,14 @@ function update-agents --description "Update AI coding agents"
         return
     end
 
-    # Package definitions: "name|npm_package|version_cmd"
+    # Package definitions: "name|npm_package|cmd"
     set -l packages \
-        "Gemini CLI|@google/gemini-cli|gemini --version" \
-        "Crush|@charmland/crush|crush --version" \
-        "Opencode|opencode-ai|opencode --version" \
-        "Pi|@mariozechner/pi-coding-agent|pi --version" \
-        "Codex|@openai/codex|codex --version" \
-        "Amp|@sourcegraph/amp|amp --version"
+        "Gemini CLI|@google/gemini-cli|gemini" \
+        "Crush|@charmland/crush|crush" \
+        "Opencode|opencode-ai|opencode" \
+        "Pi|@mariozechner/pi-coding-agent|pi" \
+        "Codex|@openai/codex|codex" \
+        "Amp|@sourcegraph/amp|amp"
 
     set -l to_update
     set -l package_names
@@ -65,15 +64,12 @@ function update-agents --description "Update AI coding agents"
         set -l parts (string split "|" $pkg)
         set -l name $parts[1]
         set -l npm_pkg $parts[2]
-        set -l version_cmd $parts[3]
-        set -l cmd (string split " " $version_cmd)[1]
-
-        _status blue "$name" "Checking..."
+        set -l cmd $parts[3]
 
         if set -q _flag_force
+            _status blue "$name" "Forcing update..."
             set -a to_update $npm_pkg
             set -a package_names $name
-            _status yellow "$name" "Forcing update"
             continue
         end
 
@@ -81,17 +77,13 @@ function update-agents --description "Update AI coding agents"
             _status yellow "$name" "Not installed (queuing)"
             set -a to_update $npm_pkg
             set -a package_names $name
-            continue
+        else
+            # We skip current version calculation to save time (~500ms)
+            # Bun handles the "up-to-date" check extremely fast in the batch install.
+            _status blue "$name" "Queued for sync..."
+            set -a to_update $npm_pkg
+            set -a package_names $name
         end
-
-        # Performance: Use bun pm info for faster lookups if needed, 
-        # but for simplicity we'll just queue them for 'bun add -g' 
-        # which is fast enough to handle the 'already up to date' check locally.
-        set -l current (eval $version_cmd 2>/dev/null | string trim | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-        
-        # We'll let bun handle the network heavy lifting in the batch step
-        set -a to_update $npm_pkg
-        set -a package_names $name
     end
 
     # Batch install via Bun (much faster than npm)
@@ -100,9 +92,7 @@ function update-agents --description "Update AI coding agents"
         _status magenta "Syncing" (string join ", " $package_names)
         
         # bun add -g is idempotent and extremely fast
-        bun add -g $to_update >/dev/null 2>&1
-        
-        if test $status -eq 0
+        if bun add -g $to_update >/dev/null 2>&1
             _status green "Success" "Agents synced via Bun"
         else
             _status red "Error" "Failed to sync packages"

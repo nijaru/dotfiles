@@ -78,16 +78,9 @@ function up --description "Update all package managers and tools"
     echo "🥟 Updating Bun..."
     if command -q bun
         bun upgrade
+        and bun update -g
     else
         echo "⚠️  bun not found, skipping"
-    end
-
-    # npm global packages
-    echo "📦 Updating npm global packages..."
-    if command -q npm
-        npm update -g
-    else
-        echo "⚠️  npm not found, skipping"
     end
 
     # fisher (Fish plugin manager)

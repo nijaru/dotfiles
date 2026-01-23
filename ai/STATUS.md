@@ -2,7 +2,7 @@
 
 ## Current State
 - **OS:** macOS (Tahoe) + Fedora 41 (Dual-boot)
-- **Status:** Fully restored, optimized, and hardened.
+- **Status:** Fully restored, optimized, and hardened. Repo set to **Private**.
 
 ## Core Setup (For Future Reference)
 
@@ -23,10 +23,14 @@
 - **Disk:** Auto-unlocks via TPM2 (PCRs 0,1,4,5,7).
 - **Setup Script:** `~/restore_secure_boot.sh` (Staged on Fedora).
 
-### 4. Development
+### 4. Development & Tooling
+- **Task Tracking:** Use `tk` CLI (installed via `bun add -g @nijaru/tk`). Tasks in `.tasks/`.
+- **Agent Management:** `update-agents` function optimized with Bun for fast, high-signal batch updates.
+- **Bun Global:** Global binaries at `~/.cache/.bun/bin` (added to path via `paths.fish`).
 - **Structure:** Repos at `~/github/<owner>/<repo>`. Use `ghc <repo>` to clone.
-- **Runtimes:** Managed via `mise`.
-- **Rust:** Managed via `rustup` with custom `~/.cargo/config.toml` optimizations.
 
 ## Active Work
-- None. System is stable.
+- None. Recovery and optimization complete.
+
+## Blockers
+- None.

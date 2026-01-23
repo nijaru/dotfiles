@@ -27,17 +27,23 @@ function update-agents --description "Update AI coding agents"
         end
     else
         _status yellow "Claude" "Not installed (installing...)"
-        curl -fsSL https://claude.ai/install.sh | bash
-        if test $status -eq 0
-            _status green "Claude" "Successfully installed"
+        # Safer curl | bash
+        set -l installer (curl -fsSL https://claude.ai/install.sh)
+        if test -n "$installer"
+            echo "$installer" | bash
+            if test $status -eq 0
+                _status green "Claude" "Successfully installed"
+            else
+                _status red "Claude" "Installation failed"
+            end
         else
-            _status red "Claude" "Installation failed"
+            _status red "Claude" "Failed to download installer"
         end
     end
 
-    # 2. npm packages
-    if not command -q npm
-        _status yellow "NPM" "Not found, skipping batch updates"
+    # 2. JS/TS Packages via Bun
+    if not command -q bun
+        _status yellow "Bun" "Not found, skipping JS agent updates"
         echo ""
         _status green "Done" "All tasks complete"
         return
@@ -72,40 +78,34 @@ function update-agents --description "Update AI coding agents"
         end
 
         if not command -q $cmd
-            set -l latest (npm view $npm_pkg version 2>/dev/null | string trim)
-            if test -z "$latest"
-                _status yellow "$name" "Not installed (installing)"
-            else
-                _status yellow "$name" "Not installed -> $latest"
-            end
+            _status yellow "$name" "Not installed (queuing)"
             set -a to_update $npm_pkg
             set -a package_names $name
             continue
         end
 
-        set -l current (eval $version_cmd 2>/dev/null | string trim | grep -oE '[0-9]+(\.[0-9]+)*(-[a-zA-Z0-9]+)?' | head -n 1)
-        set -l latest (npm view $npm_pkg version 2>/dev/null | string trim)
-
-        if test -z "$latest"
-            _status red "$name" "Failed to check version"
-        else if test "$current" != "$latest"; and not string match -q "$current*" "$latest"
-            _status yellow "$name" "$current -> $latest"
-            set -a to_update $npm_pkg
-            set -a package_names $name
-        else
-            _status green "$name" "Up to date ($current)"
-        end
+        # Performance: Use bun pm info for faster lookups if needed, 
+        # but for simplicity we'll just queue them for 'bun add -g' 
+        # which is fast enough to handle the 'already up to date' check locally.
+        set -l current (eval $version_cmd 2>/dev/null | string trim | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+        
+        # We'll let bun handle the network heavy lifting in the batch step
+        set -a to_update $npm_pkg
+        set -a package_names $name
     end
 
-    # Batch install
+    # Batch install via Bun (much faster than npm)
     if test (count $to_update) -gt 0
         echo ""
-        _status magenta "Installing" (string join ", " $package_names)
-        npm install -g $to_update --quiet --no-fund --no-audit >/dev/null 2>&1
+        _status magenta "Syncing" (string join ", " $package_names)
+        
+        # bun add -g is idempotent and extremely fast
+        bun add -g $to_update >/dev/null 2>&1
+        
         if test $status -eq 0
-            _status green "Success" "Packages updated"
+            _status green "Success" "Agents synced via Bun"
         else
-            _status red "Error" "Failed to install updates"
+            _status red "Error" "Failed to sync packages"
         end
     end
 

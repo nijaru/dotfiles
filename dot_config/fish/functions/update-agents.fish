@@ -37,38 +37,30 @@ function update-agents --description "Update AI coding agents"
         return
     end
 
-    # Package definitions: "name|npm_package|cmd"
     set -l packages \
-        "Gemini CLI|@google/gemini-cli|gemini" \
-        "Crush|@charmland/crush|crush" \
-        "Opencode|opencode-ai|opencode" \
-        "Pi|@mariozechner/pi-coding-agent|pi" \
-        "Codex|@openai/codex|codex" \
-        "Amp|@sourcegraph/amp|amp"
+        "@google/gemini-cli" \
+        "@charmland/crush" \
+        "opencode-ai" \
+        "@mariozechner/pi-coding-agent" \
+        "@openai/codex" \
+        "@sourcegraph/amp"
 
-    set -l to_sync
-    for pkg in $packages
-        set -l parts (string split "|" $pkg)
-        set -l name $parts[1]
-        set -l npm_pkg $parts[2]
-        set -l cmd $parts[3]
-
-        if not command -q $cmd
-            _status yellow "$name" "installing..."
-            set -a to_sync $npm_pkg
-        else if set -q _flag_force
-            _status blue "$name" "forcing update..."
-            set -a to_sync $npm_pkg
-        else
-            set -a to_sync $npm_pkg
-        end
-    end
-
-    if test (count $to_sync) -gt 0
-        if bun add -g $to_sync >/dev/null 2>&1
-            _status green "JS Agents" "synced"
+    if test (count $packages) -gt 0
+        set -l bun_out (bun add -g $packages 2>&1)
+        if test $status -eq 0
+            # Look for "installed" or package version additions (+)
+            set -l changes (echo $bun_out | grep -E "installed| \+" | grep -v "bun add" | string trim)
+            if test -n "$changes"
+                _status green "JS Agents" "updated"
+                echo "$changes" | while read -l line
+                    echo "  $line"
+                end
+            else
+                _status green "JS Agents" "up to date"
+            end
         else
             _status red "JS Agents" "sync failed"
+            echo $bun_out
         end
     end
 

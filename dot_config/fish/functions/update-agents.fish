@@ -27,7 +27,6 @@ function update-agents --description "Update AI coding agents"
         end
     else
         _status yellow "Claude" "Not installed (installing...)"
-        # Safer curl | bash
         set -l installer (curl -fsSL https://claude.ai/install.sh)
         if test -n "$installer"
             if echo "$installer" | bash
@@ -57,8 +56,8 @@ function update-agents --description "Update AI coding agents"
         "Codex|@openai/codex|codex" \
         "Amp|@sourcegraph/amp|amp"
 
-    set -l to_update
-    set -l package_names
+    set -l to_sync
+    set -l new_installs
 
     for pkg in $packages
         set -l parts (string split "|" $pkg)
@@ -66,36 +65,26 @@ function update-agents --description "Update AI coding agents"
         set -l npm_pkg $parts[2]
         set -l cmd $parts[3]
 
-        if set -q _flag_force
-            _status blue "$name" "Forcing update..."
-            set -a to_update $npm_pkg
-            set -a package_names $name
-            continue
-        end
-
         if not command -q $cmd
-            _status yellow "$name" "Not installed (queuing)"
-            set -a to_update $npm_pkg
-            set -a package_names $name
+            _status yellow "$name" "Installing..."
+            set -a new_installs $name
+            set -a to_sync $npm_pkg
+        else if set -q _flag_force
+            _status blue "$name" "Forcing update..."
+            set -a to_sync $npm_pkg
         else
-            # We skip current version calculation to save time (~500ms)
-            # Bun handles the "up-to-date" check extremely fast in the batch install.
-            _status blue "$name" "Queued for sync..."
-            set -a to_update $npm_pkg
-            set -a package_names $name
+            # Silently add to the sync list
+            set -a to_sync $npm_pkg
         end
     end
 
-    # Batch install via Bun (much faster than npm)
-    if test (count $to_update) -gt 0
-        echo ""
-        _status magenta "Syncing" (string join ", " $package_names)
-        
-        # bun add -g is idempotent and extremely fast
-        if bun add -g $to_update >/dev/null 2>&1
-            _status green "Success" "Agents synced via Bun"
+    # Batch sync via Bun
+    if test (count $to_sync) -gt 0
+        _status blue "JS Agents" "Syncing for updates..."
+        if bun add -g $to_sync >/dev/null 2>&1
+            _status green "JS Agents" "All agents up to date"
         else
-            _status red "Error" "Failed to sync packages"
+            _status red "JS Agents" "Failed to sync packages"
         end
     end
 

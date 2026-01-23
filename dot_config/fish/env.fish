@@ -60,9 +60,6 @@ set -gx GEM_HOME "$XDG_DATA_HOME/gem"
 set -gx GEM_PATH "$GEM_HOME:$XDG_DATA_HOME/gem"
 set -gx BUNDLE_USER_HOME "$XDG_CONFIG_HOME/bundle"
 
-# Modular
-contains "$HOME/.modular/bin" $PATH; or set -gx PATH "$HOME/.modular/bin" $PATH
-
 # Ripgrep configuration
 set -gx RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 

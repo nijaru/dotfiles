@@ -110,5 +110,13 @@ ai/:
 
 Committed: [yes/no]
 
+## Next Steps
+
+[2-4 bullet points of immediate next actions for the next session, based on:
+- Pending tasks from tk
+- Blockers noted in STATUS.md
+- Incomplete sprint items
+- Natural continuation of current work]
+
 Ready for /compact or new session.
 ```

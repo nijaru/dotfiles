@@ -37,14 +37,14 @@ function update-agents --description "Update AI coding agents"
         return
     end
 
-    # Map: package -> display name
+    # Map: package -> display name (alphabetical)
     set -l packages \
-        "@google/gemini-cli:Gemini" \
-        "@charmland/crush:Crush" \
-        "opencode-ai:OpenCode" \
-        "@mariozechner/pi-coding-agent:Pi" \
+        "@sourcegraph/amp:Amp" \
         "@openai/codex:Codex" \
-        "@sourcegraph/amp:Amp"
+        "@charmland/crush:Crush" \
+        "@google/gemini-cli:Gemini" \
+        "opencode-ai:OpenCode" \
+        "@mariozechner/pi-coding-agent:Pi"
 
     # Helper to get version for a package
     function _get_ver -a pkg listing

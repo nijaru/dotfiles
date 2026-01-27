@@ -1,0 +1,54 @@
+prompt = """
+Clean up project cruft. Run when things feel cluttered.
+
+## 1. Survey the Mess
+
+!{ ls -la }
+!{ ls -la ai/ ai/**/* 2>/dev/null }
+!{ tk ls }
+
+Look for:
+- Test/debug scripts (test.py, debug.sh, scratch.*, try_*)
+- Temp files (*.tmp, *.bak, *~, .DS_Store)
+- One-off experiments that served their purpose
+- Logs, dumps, artifacts not in .gitignore
+- Files that don't belong in root
+
+## 2. Clean Files
+
+For each suspicious file: is it still needed? If not, delete it.
+
+Ask user if unsure about anything that looks intentional.
+
+Don't delete: `.git/`, config files, actual source code
+
+## 3. Clean Tasks
+
+- Mark completed tasks done
+- Delete stale/abandoned tasks (ask if unsure)
+- Consolidate duplicates
+
+## 4. Clean ai/
+
+Read each file, then:
+
+- Remove info that no longer applies (old blockers, completed work, outdated designs)
+- Merge overlapping files
+- Delete files that serve no purpose
+- Move historical content to ai/archive/ if worth keeping
+
+## 5. Commit
+
+!{ git add -A && git commit -m "Prune: clean up temp files and organize ai/" }
+
+## 6. Report
+
+```
+## Pruned
+
+Files: [what was removed]
+Tasks: [closed/deleted]
+ai/: [what changed]
+```
+"""
+description = "Clean up temp files, stale tasks, and organize ai/ directory"

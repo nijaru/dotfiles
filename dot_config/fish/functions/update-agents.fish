@@ -3,7 +3,7 @@ function update-agents --description "Update AI coding agents"
 
     function _status -a color label message
         set_color --bold $color
-        printf "$label: "
+        printf "%-8s " "$label"
         set_color normal
         echo "$message"
     end

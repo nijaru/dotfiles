@@ -46,7 +46,15 @@ function update-agents --description "Update AI coding agents"
         "@openai/codex:Codex" \
         "@sourcegraph/amp:Amp"
 
-    # Update all packages silently
+    # Helper to get version for a package
+    function _get_ver -a pkg listing
+        printf '%s\n' $listing | grep -F "$pkg@" | string replace -r '.*@' ''
+    end
+
+    # Capture versions before update
+    set -l before_list (bun pm ls -g 2>/dev/null | string collect)
+
+    # Build package list and update
     set -l pkg_names
     for entry in $packages
         set -l pkg (string split ":" $entry)[1]
@@ -54,20 +62,29 @@ function update-agents --description "Update AI coding agents"
     end
     bun add -g $pkg_names >/dev/null 2>&1
 
-    # Report each package with version
-    set -l global_list (bun pm ls -g 2>/dev/null | string collect)
+    # Capture versions after update
+    set -l after_list (bun pm ls -g 2>/dev/null | string collect)
+
+    # Report each package
     for entry in $packages
         set -l parts (string split ":" $entry)
         set -l pkg $parts[1]
         set -l name $parts[2]
-        # Extract version: find line with "pkg@version", get the version part
-        set -l ver (printf '%s\n' $global_list | grep -F "$pkg@" | string replace -r '.*@' '')
-        if test -n "$ver"
-            _status green $name $ver
-        else
+        set -l old_ver (_get_ver $pkg $before_list)
+        set -l new_ver (_get_ver $pkg $after_list)
+
+        if test -z "$new_ver"
             _status yellow $name "not found"
+        else if test -z "$old_ver"
+            _status green $name "installed ($new_ver)"
+        else if test "$old_ver" != "$new_ver"
+            _status green $name "updated ($old_ver → $new_ver)"
+        else
+            _status green $name "up to date ($new_ver)"
         end
     end
+
+    functions -e _get_ver
 
     if command -q mise
         mise reshim >/dev/null 2>&1

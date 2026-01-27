@@ -23,7 +23,7 @@ tk ls
 
 Look for:
 
-- Test/debug scripts (test.py, debug.sh, scratch._, try\__)
+- Test/debug scripts (test.py, debug.sh, scratch.\_, try\_\_)
 - Temp files (_.tmp, _.bak, \*~, .DS_Store)
 - One-off experiments that served their purpose
 - Logs, dumps, artifacts not in .gitignore
@@ -45,12 +45,24 @@ Don't delete: `.git/`, config files, actual source code
 
 ## 4. Clean ai/
 
-Read each file, then:
+Read each file. Different content has different lifespans:
 
-- Remove info that no longer applies (old blockers, completed work, outdated designs)
-- Merge overlapping files
-- Delete files that serve no purpose
-- Move historical content to ai/archive/ if worth keeping
+**Prune aggressively:**
+
+- STATUS.md - remove resolved blockers, completed work, outdated state
+- tmp/ - delete everything
+
+**Consolidate, don't archive:**
+
+- research/ - reference material stays relevant; merge overlapping files, remove duplicates
+- design/ - consolidate scattered notes into fewer files
+
+**Update if stale:**
+
+- DESIGN.md - remove descriptions of code that no longer exists
+- DECISIONS.md - keep all entries (it's a log), just fix formatting
+
+**Only archive** content that's truly historical (old sprint records, superseded designs)
 
 ## 5. Commit
 

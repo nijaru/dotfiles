@@ -1,11 +1,15 @@
 function update-agents --description "Update AI coding agents"
     argparse f/force -- $argv
 
-    function _status -a color label message
+    function _status -a color label state detail
         set_color --bold $color
         printf "%-8s " "$label"
         set_color normal
-        echo "$message"
+        if test -n "$detail"
+            printf "%-10s %s\n" "$state" "$detail"
+        else
+            echo "$state"
+        end
     end
 
     set_color --bold cyan
@@ -17,7 +21,7 @@ function update-agents --description "Update AI coding agents"
         set -l claude_out (claude update 2>&1)
         if test $status -eq 0
             set -l v_str (echo $claude_out | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-            _status green "Claude" "up to date ($v_str)"
+            _status green "Claude" "up to date" "$v_str"
         else
             _status red "Claude" "update failed"
         end
@@ -76,11 +80,11 @@ function update-agents --description "Update AI coding agents"
         if test -z "$new_ver"
             _status yellow $name "not found"
         else if test -z "$old_ver"
-            _status green $name "installed ($new_ver)"
+            _status green $name "installed" "$new_ver"
         else if test "$old_ver" != "$new_ver"
-            _status green $name "updated ($old_ver → $new_ver)"
+            _status green $name "updated" "$old_ver → $new_ver"
         else
-            _status green $name "up to date ($new_ver)"
+            _status green $name "up to date" "$new_ver"
         end
     end
 

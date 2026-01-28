@@ -50,7 +50,6 @@ Every task/ticket must be:
 ```markdown
 ## Task: [Short descriptive title]
 
-**Sprint:** N
 **Depends on:** [task IDs or "none"]
 
 ### Description
@@ -83,9 +82,11 @@ Review this sprint plan for:
 
 Incorporate feedback, then write final plan.
 
-### 6. Output
+### 6. Output Structure
 
-Write to `ai/SPRINTS.md` or project-specific location:
+Create two things:
+
+**Index file** `ai/SPRINTS.md`:
 
 ```markdown
 # Sprint Plan: [Project Name]
@@ -93,17 +94,44 @@ Write to `ai/SPRINTS.md` or project-specific location:
 Source: [spec file path]
 Generated: [date]
 
-## Sprint 1: [Goal - what's demoable]
-
-### Tasks
-
-- [ ] TASK-1: ...
-- [ ] TASK-2: ...
-
-## Sprint 2: [Goal]
-
-...
+| Sprint                        | Goal                | Status  |
+| ----------------------------- | ------------------- | ------- |
+| [01-auth](sprints/01-auth.md) | User authentication | active  |
+| [02-api](sprints/02-api.md)   | Core API endpoints  | pending |
+| [03-ui](sprints/03-ui.md)     | Frontend components | pending |
 ```
+
+**Individual sprint files** `ai/sprints/NN-name.md`:
+
+```markdown
+# Sprint 01: Auth
+
+Goal: User authentication working end-to-end
+
+## Tasks
+
+### Task 1: Add JWT middleware
+
+**Depends on:** none
+
+**Description:** Add JWT validation middleware to /api routes
+
+**Acceptance Criteria:**
+
+- [ ] Middleware rejects invalid tokens
+- [ ] Middleware extracts user ID
+- [ ] Tests pass
+
+### Task 2: ...
+```
+
+### 7. Updating Sprints
+
+When a sprint completes:
+
+1. Update status in `ai/SPRINTS.md` index
+2. Mark tasks complete in the sprint file
+3. Set next sprint to `active`
 
 ## Common Mistakes
 

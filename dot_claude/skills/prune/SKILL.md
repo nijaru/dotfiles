@@ -8,34 +8,33 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 Clean up project cruft. Run when things feel cluttered.
 
-## 1. Survey the Mess
+## 1. Survey
 
 ```bash
-# What's in root that might be cruft?
 ls -la
-
-# What's in ai/?
 ls -la ai/ ai/**/* 2>/dev/null
-
-# Task state
 tk ls
 ```
 
-Look for:
-
-- Test/debug scripts (test.py, debug.sh, scratch.\_, try\_\_)
-- Temp files (_.tmp, _.bak, \*~, .DS_Store)
-- One-off experiments that served their purpose
-- Logs, dumps, artifacts not in .gitignore
-- Files that don't belong in root
-
 ## 2. Clean Files
 
-For each suspicious file: is it still needed? If not, delete it.
+For each file in root and other unexpected places: does it serve an ongoing purpose? If not, delete it.
 
-Ask user if unsure about anything that looks intentional.
+**Cruft** (no ongoing purpose):
 
-Don't delete: `.git/`, config files, actual source code
+- `test.py` in root - one-off experiment, not part of test suite
+- `api_backup.rs` - snapshot from debugging session
+- `output.json` - generated artifact, not checked in
+
+**Not cruft** (intentional):
+
+- `test_api.py` in tests/ - part of test suite
+- `benchmark.py` with imports and structure - ongoing tooling
+- `notes.md` in ai/ - working documentation
+
+The difference is purpose, not name or location. Ask when uncertain.
+
+Don't delete: `.git/`, config files, source code
 
 ## 3. Clean Tasks
 
@@ -45,12 +44,9 @@ Don't delete: `.git/`, config files, actual source code
 
 ## 4. Clean ai/
 
-Read each file. Different content has different lifespans:
-
 **Prune aggressively:**
 
 - STATUS.md - remove resolved blockers, completed work, outdated state
-- tmp/ - delete everything
 
 **Update if stale:**
 
@@ -63,31 +59,19 @@ Read each file. Different content has different lifespans:
 
 Goal: modular files that agents can easily find and use.
 
-Read research/, design/, and other subdirs. For each file, decide:
+**Merge** scattered related content into one file
 
-**Merge** - scattered related content into one file
+**Split** multi-topic files into focused modules
 
-- Multiple files covering the same topic
-- Small fragments that belong together
+**Leave alone** files that are already well-organized
 
-**Split** - multi-topic files into focused modules
-
-- Files covering unrelated topics
-- Long files mixing different concerns
-
-**Leave alone** - already well-organized files
-
-- Unique, focused content
-- Clear single purpose
-- Easy for agents to locate
-
-If files are already modular and organized, say so and move on.
+If files are already modular, say so and move on.
 
 ## 6. Commit
 
 ```bash
 git add -A
-git commit -m "Prune: clean up temp files and organize ai/"
+git commit -m "Prune: clean up and organize"
 ```
 
 ## 7. Report

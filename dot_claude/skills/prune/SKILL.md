@@ -19,16 +19,20 @@ git status --short
 
 ## 2. Clean
 
-**Files:** For each file in root and other unexpected places—does it serve an ongoing purpose? If not, delete it.
+**Files:** For each file in root and other unexpected places—does it serve an ongoing purpose?
+
+- **No purpose** → delete it
+- **Has purpose, wrong location** → move to proper place (tests/, scripts/, etc.)
+- **Has purpose, right location** → keep
 
 Examples:
 
-- `test.py` in root → cruft (one-off experiment)
-- `test_api.py` in tests/ → keep (part of test suite)
-- `api_backup.rs` → cruft (debug snapshot)
+- `test.py` in root, throwaway → delete
+- `test.py` in root, useful test → move to tests/
+- `debug.sh` worth keeping → move to scripts/
 - `benchmark.py` with structure → keep (ongoing tooling)
 
-The difference is purpose, not name or location. Ask when uncertain.
+The difference is purpose, not name. Ask when uncertain.
 
 Don't touch: `.git/`, config files, source code
 

@@ -36,23 +36,28 @@ Don't touch: `.git/`, config files, source code
 
 ## 3. Organize ai/
 
+Goal: hierarchical organization where agents can find any topic easily.
+
+- **Overview docs** at top level for high-level context
+- **Detailed docs** split out by specific topic
+- **One doc per topic** - no scattered duplicates
+
 Read each file to understand its content before acting.
 
-**STATUS.md** - prune aggressively: remove resolved blockers, completed work, outdated state
+**Root files:**
 
-**DESIGN.md** - update if stale: remove descriptions of code that no longer exists
+- STATUS.md - prune aggressively (resolved blockers, completed work, outdated state)
+- DESIGN.md - update if stale (remove descriptions of deleted code)
+- DECISIONS.md - keep all entries (it's a log)
+- SPRINTS.md - update sprint status
 
-**DECISIONS.md** - keep all entries (it's a log), fix formatting only
+**Subdirs (research/, design/, sprints/, etc.):**
 
-**Subdirs (research/, design/, etc.):**
+- Consolidate scattered content on same topic into one file
+- Split multi-topic files into focused single-topic docs
+- Leave alone if already well-organized
 
-- **Merge** scattered related content into one file
-- **Split** multi-topic files into focused modules
-- **Leave alone** files already well-organized
-
-Preserve all important content when reorganizing. Delete old files only after content is safely moved.
-
-If already modular, say so and move on.
+Preserve all important content. Delete old files only after content is safely moved. If already well-organized, say so and move on.
 
 ## 4. Finish
 

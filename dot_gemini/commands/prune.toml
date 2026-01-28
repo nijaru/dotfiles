@@ -36,21 +36,38 @@ Read each file. Different content has different lifespans:
 - STATUS.md - remove resolved blockers, completed work, outdated state
 - tmp/ - delete everything
 
-**Consolidate, don't archive:**
-- research/ - reference material stays relevant; merge overlapping files, remove duplicates
-- design/ - consolidate scattered notes into fewer files
-
 **Update if stale:**
 - DESIGN.md - remove descriptions of code that no longer exists
 - DECISIONS.md - keep all entries (it's a log), just fix formatting
 
 **Only archive** content that's truly historical (old sprint records, superseded designs)
 
-## 5. Commit
+## 5. Organize ai/
+
+Goal: modular files that agents can easily find and use.
+
+Read research/, design/, and other subdirs. For each file, decide:
+
+**Merge** - scattered related content into one file
+- Multiple files covering the same topic
+- Small fragments that belong together
+
+**Split** - multi-topic files into focused modules
+- Files covering unrelated topics
+- Long files mixing different concerns
+
+**Leave alone** - already well-organized files
+- Unique, focused content
+- Clear single purpose
+- Easy for agents to locate
+
+If files are already modular and organized, say so and move on.
+
+## 6. Commit
 
 !{ git add -A && git commit -m "Prune: clean up temp files and organize ai/" }
 
-## 6. Report
+## 7. Report
 
 ```
 ## Pruned

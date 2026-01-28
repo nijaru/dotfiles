@@ -14,72 +14,48 @@ Clean up project cruft. Run when things feel cluttered.
 ls -la
 ls -la ai/ ai/**/* 2>/dev/null
 tk ls
+git status --short
 ```
 
-## 2. Clean Files
+## 2. Clean
 
-For each file in root and other unexpected places: does it serve an ongoing purpose? If not, delete it.
+**Files:** For each file in root and other unexpected places—does it serve an ongoing purpose? If not, delete it.
 
-**Cruft** (no ongoing purpose):
+Examples:
 
-- `test.py` in root - one-off experiment, not part of test suite
-- `api_backup.rs` - snapshot from debugging session
-- `output.json` - generated artifact, not checked in
-
-**Not cruft** (intentional):
-
-- `test_api.py` in tests/ - part of test suite
-- `benchmark.py` with imports and structure - ongoing tooling
-- `notes.md` in ai/ - working documentation
+- `test.py` in root → cruft (one-off experiment)
+- `test_api.py` in tests/ → keep (part of test suite)
+- `api_backup.rs` → cruft (debug snapshot)
+- `benchmark.py` with structure → keep (ongoing tooling)
 
 The difference is purpose, not name or location. Ask when uncertain.
 
-Don't delete: `.git/`, config files, source code
+Don't touch: `.git/`, config files, source code
 
-## 3. Clean Tasks
+**Tasks:** Mark completed done, delete stale ones, consolidate duplicates.
 
-- Mark completed tasks done
-- Delete stale/abandoned tasks (ask if unsure)
-- Consolidate duplicates
+## 3. Organize ai/
 
-## 4. Clean ai/
+**STATUS.md** - prune aggressively: remove resolved blockers, completed work, outdated state
 
-**Prune aggressively:**
+**DESIGN.md** - update if stale: remove descriptions of code that no longer exists
 
-- STATUS.md - remove resolved blockers, completed work, outdated state
+**DECISIONS.md** - keep all entries (it's a log), fix formatting only
 
-**Update if stale:**
+**Subdirs (research/, design/, etc.):**
 
-- DESIGN.md - remove descriptions of code that no longer exists
-- DECISIONS.md - keep all entries (it's a log), just fix formatting
+- **Merge** scattered related content into one file
+- **Split** multi-topic files into focused modules
+- **Leave alone** files already well-organized
 
-**Only archive** content that's truly historical (old sprint records, superseded designs)
+If already modular, say so and move on.
 
-## 5. Organize ai/
-
-Goal: modular files that agents can easily find and use.
-
-**Merge** scattered related content into one file
-
-**Split** multi-topic files into focused modules
-
-**Leave alone** files that are already well-organized
-
-If files are already modular, say so and move on.
-
-## 6. Commit
+## 4. Finish
 
 ```bash
 git add -A
+git diff --cached --stat  # review what changed
 git commit -m "Prune: clean up and organize"
 ```
 
-## 7. Report
-
-```
-## Pruned
-
-Files: [what was removed]
-Tasks: [closed/deleted]
-ai/: [what changed]
-```
+Report what was removed, reorganized, or left alone.

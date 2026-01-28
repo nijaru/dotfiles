@@ -1,15 +1,32 @@
 function update-agents --description "Update AI coding agents"
     argparse f/force -- $argv
 
-    function _status -a color label state detail
-        set_color --bold $color
-        printf "%-8s " "$label"
+    function _agent -a name ver
+        set_color --bold white
+        printf "  %-10s" "$name"
+        set_color normal green
+        echo "$ver"
         set_color normal
-        if test -n "$detail"
-            printf "%-10s %s\n" "$state" "$detail"
-        else
-            echo "$state"
-        end
+    end
+
+    function _agent_updated -a name old_ver new_ver
+        set_color --bold white
+        printf "  %-10s" "$name"
+        set_color normal brblack
+        printf "%s " "$old_ver"
+        set_color normal white
+        printf "→ "
+        set_color normal green
+        echo "$new_ver"
+        set_color normal
+    end
+
+    function _agent_err -a name color msg
+        set_color --bold white
+        printf "  %-10s" "$name"
+        set_color normal $color
+        echo "$msg"
+        set_color normal
     end
 
     set_color --bold cyan
@@ -21,23 +38,22 @@ function update-agents --description "Update AI coding agents"
         set -l claude_out (claude update 2>&1)
         if test $status -eq 0
             set -l v_str (echo $claude_out | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-            _status green "Claude" "up to date" "$v_str"
+            _agent "Claude" "$v_str"
         else
-            _status red "Claude" "update failed"
+            _agent_err "Claude" red "update failed"
         end
     else
-        _status yellow "Claude" "installing..."
         set -l installer (curl -fsSL https://claude.ai/install.sh)
         if test -n "$installer"; and echo "$installer" | bash
-            _status green "Claude" "installed"
+            _agent_err "Claude" green "installed"
         else
-            _status red "Claude" "install failed"
+            _agent_err "Claude" red "install failed"
         end
     end
 
     # 2. JS/TS Packages via Bun
     if not command -q bun
-        _status yellow "Bun" "not found, skipping JS agents"
+        _agent_err "Bun" yellow "not found"
         return
     end
 
@@ -50,7 +66,6 @@ function update-agents --description "Update AI coding agents"
         "opencode-ai:OpenCode" \
         "@mariozechner/pi-coding-agent:Pi"
 
-    # Helper to get version for a package
     function _get_ver -a pkg listing
         printf '%s\n' $listing | grep -F "$pkg@" | string replace -r '.*@' ''
     end
@@ -78,22 +93,17 @@ function update-agents --description "Update AI coding agents"
         set -l new_ver (_get_ver $pkg $after_list)
 
         if test -z "$new_ver"
-            _status yellow $name "not found"
+            _agent_err $name yellow "not found"
         else if test -z "$old_ver"
-            _status green $name "installed" "$new_ver"
+            _agent_updated $name "new" $new_ver
         else if test "$old_ver" != "$new_ver"
-            _status green $name "updated" "$old_ver → $new_ver"
+            _agent_updated $name $old_ver $new_ver
         else
-            _status green $name "up to date" "$new_ver"
+            _agent $name $new_ver
         end
     end
 
-    functions -e _get_ver
+    functions -e _get_ver _agent _agent_updated _agent_err
 
-    if command -q mise
-        mise reshim >/dev/null 2>&1
-        _status blue "Mise" "reshimmed"
-    end
-
-    _status green "Done" "all agents updated"
+    command -q mise; and mise reshim >/dev/null 2>&1
 end

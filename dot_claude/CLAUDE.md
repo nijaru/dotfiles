@@ -113,7 +113,11 @@ Persistent memory—survives compaction. Update BEFORE implementing.
 
 **Session start:** Read STATUS.md → `tk ready` → `tk start <id>`.
 
-**Todos/tasks:** Use `tk`, never STATUS.md.
+**Before investigating:** Check what's already known—`tk show <id>` for logs, ai/ for analysis, git history for context. Never start fresh without checking.
+
+**During work:** Log findings immediately with `tk log <id> "finding"`. Include error messages, root cause, files involved. Reference file paths so future sessions can find details.
+
+**Todos/tasks:** Use `tk`, never STATUS.md. Keep status current—`tk start` when beginning, `tk done` when complete, not later.
 **Blockers/session notes:** STATUS.md
 **Architecture:** DESIGN.md
 **Decisions:** DECISIONS.md (context → decision → rationale)
@@ -147,8 +151,10 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
-**Before compact:** Update STATUS.md, `tk done` completed tasks.
+**Before compact:** Update STATUS.md, `tk done` completed tasks, `tk log` any uncommitted findings.
+
+**Task hygiene:** Stale tasks cause confusion. Mark done immediately when complete. If a task reveals multiple distinct issues, create separate tasks—don't conflate.
 
 ---
 
-**Updated:** 2026-01-21 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-29 | github.com/nijaru/agent-contexts

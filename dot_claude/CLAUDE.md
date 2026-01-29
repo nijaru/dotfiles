@@ -111,17 +111,12 @@
 
 Persistent memory—survives compaction. Update BEFORE implementing.
 
-**Session start:** Read STATUS.md → `tk ready` → `tk start <id>`.
-
-**Before investigating:** Check what's already known—`tk show <id>` for logs, ai/ for analysis, git history for context. Never start fresh without checking.
-
-**During work:** Log findings immediately with `tk log <id> "finding"`. Include error messages, root cause, files involved. Reference file paths so future sessions can find details.
-
-**Todos/tasks:** Use `tk`, never STATUS.md. Add `-d "description"` for context. Keep status current—`tk start` when beginning, `tk done` when complete, not later.
-**Blockers/session notes:** STATUS.md
-**Architecture:** DESIGN.md
-**Decisions:** DECISIONS.md (context → decision → rationale)
-**Sprint plans:** SPRINTS.md (use `/sprint` to generate from specs)
+| File         | Purpose                                                                                |
+| ------------ | -------------------------------------------------------------------------------------- |
+| STATUS.md    | Session state: current focus, external blockers, handoff notes. Pointers, not details. |
+| DESIGN.md    | Architecture decisions and system design                                               |
+| DECISIONS.md | Context → decision → rationale                                                         |
+| SPRINTS.md   | Sprint plans (use `/sprint` to generate)                                               |
 
 Root files read every session—keep minimal. Subdirs (research/, design/, review/, tmp/) on demand.
 
@@ -130,6 +125,20 @@ Root files read every session—keep minimal. Subdirs (research/, design/, revie
 **Format:** Tables/lists over prose. Answer first, evidence second.
 
 **Project config:** AGENTS.md primary. Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
+
+## Task Discipline
+
+Use `tk` for all tasks—persists across compaction. Details in task logs, not STATUS.md.
+
+**Session start:** Read STATUS.md → `tk ready` → `tk start <id>`
+
+**Before investigating:** `tk show <id>` for existing logs, check ai/, git history. Never start fresh without checking.
+
+**During work:** `tk log <id> "finding"` immediately—errors, root cause, file paths.
+
+**Creating tasks:** `tk add "title" -d "context"`. Always include description.
+
+**Completion:** `tk start` when beginning, `tk done` when complete. Stale status causes confusion.
 
 ## Subagents
 
@@ -152,8 +161,6 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 **Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
 
 **Before compact:** Update STATUS.md, `tk done` completed tasks, `tk log` any uncommitted findings.
-
-**Task hygiene:** Stale tasks cause confusion. Mark done immediately when complete. If a task reveals multiple distinct issues, create separate tasks—don't conflate.
 
 ---
 

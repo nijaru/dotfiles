@@ -117,7 +117,7 @@ Persistent memory—survives compaction. Update BEFORE implementing.
 
 **During work:** Log findings immediately with `tk log <id> "finding"`. Include error messages, root cause, files involved. Reference file paths so future sessions can find details.
 
-**Todos/tasks:** Use `tk`, never STATUS.md. Keep status current—`tk start` when beginning, `tk done` when complete, not later.
+**Todos/tasks:** Use `tk`, never STATUS.md. Add `-d "description"` for context. Keep status current—`tk start` when beginning, `tk done` when complete, not later.
 **Blockers/session notes:** STATUS.md
 **Architecture:** DESIGN.md
 **Decisions:** DECISIONS.md (context → decision → rationale)

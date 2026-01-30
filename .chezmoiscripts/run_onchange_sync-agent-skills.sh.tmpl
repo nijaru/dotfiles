@@ -5,6 +5,13 @@ set -euo pipefail
 
 CLAUDE_SKILLS="$HOME/.claude/skills"
 
+# Remove broken symlinks in a directory
+cleanup_broken() {
+    local dir="$1"
+    [[ -d "$dir" ]] || return 0
+    find "$dir" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+}
+
 # Skills available in canonical location
 SHARED_SKILLS=(profile review save setup-ai refactor writer sprint prune)
 EXTRA_SKILLS=(ask creating-skills update-chezmoi)
@@ -29,6 +36,7 @@ sync_tool() {
 
     echo "Syncing $name..."
     mkdir -p "$dir"
+    cleanup_broken "$dir"
 
     for skill in "${skills[@]}"; do
         link_skill "$dir" "$skill"

@@ -8,6 +8,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 Checkpoint session state to ai/ and tk. Goal: everything needed to resume is persisted.
 
+**Priority:** tk and ai/ updates first (from context). Git commands last (can recover if compaction hits).
+
 ## When to Trigger
 
 - Before `/compact`
@@ -22,41 +24,28 @@ Checkpoint session state to ai/ and tk. Goal: everything needed to resume is per
 - Quick fixes that don't change project state
 - User says "skip" or "don't save"
 
-## 1. Review Session
+## 1. Update tk Tasks
 
-What was accomplished? Run in parallel:
-
-```bash
-git diff --stat
-git log --oneline -5
-tk ls
-```
-
-Read ai/STATUS.md to compare against current state.
-
-## 2. Update tk Tasks (be thorough)
-
-Review ALL tasks against what was done:
+You already know what was done this session—no git commands needed.
 
 ```bash
-tk ls  # Current state
+tk ls  # Check current state
 ```
 
 For EACH task:
 
 - **Completed** → `tk done <id>`
-- **New work discovered** → `tk add "title"`
+- **New work discovered** → `tk add "title" -d "context"`
 - **Blocked** → Note in STATUS.md
 
 Don't leave stale tasks. If done, mark done. If new, add it.
 
-## 3. Update ai/ Files
+## 2. Update ai/ Files
 
 **ai/STATUS.md** (always):
 
-- Current state, metrics
+- Current focus, what's active
 - What worked / didn't
-- Active work
 - Blockers
 - Prune old content
 
@@ -69,16 +58,12 @@ Don't leave stale tasks. If done, mark done. If new, add it.
 
 - Context → Decision → Rationale (append)
 
-**ai/ROADMAP.md** (if phases changed):
-
-- Phase updates, scope changes
-
 **ai/SPRINTS.md** (if sprint progress):
 
 - Mark completed tasks
 - Update current sprint status
 
-## 4. Health Check
+## 3. Health Check
 
 | Issue              | Fix                      |
 | ------------------ | ------------------------ |
@@ -86,14 +71,14 @@ Don't leave stale tasks. If done, mark done. If new, add it.
 | Stale STATUS.md    | Remove old blockers/work |
 | Outdated DESIGN.md | Update to current        |
 
-## 5. Commit
+## 4. Commit (last)
 
 ```bash
 git add ai/ .tasks/
 git commit -m "Update session context"
 ```
 
-## 6. Report
+## 5. Report
 
 ```
 ## Session Saved
@@ -112,11 +97,7 @@ Committed: [yes/no]
 
 ## Next Steps
 
-[2-4 bullet points of immediate next actions for the next session, based on:
-- Pending tasks from tk
-- Blockers noted in STATUS.md
-- Incomplete sprint items
-- Natural continuation of current work]
+[2-4 bullet points for next session]
 
 Ready for /compact or new session.
 ```

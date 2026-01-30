@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Sync agent skills across tools
+# Hash: {{ include ".chezmoitemplates/skills-config.yaml" | sha256sum }}
+set -euo pipefail
+
+CLAUDE_SKILLS="$HOME/.claude/skills"
+
+# Skills available in canonical location
+SHARED_SKILLS=(profile review save setup-ai refactor writer sprint prune)
+EXTRA_SKILLS=(ask creating-skills update-chezmoi)
+
+link_skill() {
+    local tool_dir="$1"
+    local skill="$2"
+    local target="$CLAUDE_SKILLS/$skill"
+    local link="$tool_dir/$skill"
+
+    if [[ -d "$target" ]] && [[ ! -e "$link" ]]; then
+        ln -sf "$target" "$link"
+        echo "  Linked: $skill"
+    fi
+}
+
+sync_tool() {
+    local name="$1"
+    local dir="$2"
+    shift 2
+    local skills=("$@")
+
+    echo "Syncing $name..."
+    mkdir -p "$dir"
+
+    for skill in "${skills[@]}"; do
+        link_skill "$dir" "$skill"
+    done
+}
+
+# Codex
+sync_tool "codex" "$HOME/.codex/skills" \
+    "${SHARED_SKILLS[@]}" creating-skills update-chezmoi
+
+# Crush
+sync_tool "crush" "$HOME/.config/crush/skills" \
+    "${SHARED_SKILLS[@]}"
+
+# Goose
+sync_tool "goose" "$HOME/.config/goose/skills" \
+    "${SHARED_SKILLS[@]}"
+
+# Pi
+sync_tool "pi" "$HOME/.pi/agent/skills" \
+    "${SHARED_SKILLS[@]}" ask creating-skills update-chezmoi
+
+# Sync AGENTS.md
+echo "Syncing AGENTS.md..."
+AGENTS="$HOME/.claude/CLAUDE.md"
+
+for dir in \
+    "$HOME/.codex" \
+    "$HOME/.config/crush" \
+    "$HOME/.config/goose" \
+    "$HOME/.config/opencode" \
+    "$HOME/.config" \
+    "$HOME/.gemini" \
+    "$HOME/.pi/agent"
+do
+    link="$dir/AGENTS.md"
+    if [[ -d "$dir" ]] && [[ ! -e "$link" ]]; then
+        ln -sf "$AGENTS" "$link"
+        echo "  Linked: $dir/AGENTS.md"
+    fi
+done
+
+echo "Sync complete."

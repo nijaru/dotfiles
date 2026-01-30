@@ -1,0 +1,58 @@
+# Skills configuration
+# Canonical skills live in ~/.claude/skills/
+# This config defines which skills each tool receives
+
+shared:
+  - profile
+  - review
+  - save
+  - setup-ai
+  - refactor
+  - writer
+  - sprint
+  - prune
+
+tools:
+  # Claude Code - all skills (canonical location)
+  claude:
+    path: .claude/skills
+    skills: all
+    extra:
+      - ask
+      - creating-skills
+      - update-chezmoi
+
+  # Codex CLI
+  codex:
+    path: .codex/skills
+    skills: shared
+    extra:
+      - creating-skills
+      - update-chezmoi
+    local:
+      - jb
+      - research
+
+  # Crush
+  crush:
+    path: .config/crush/skills
+    skills: shared
+
+  # Goose
+  goose:
+    path: .config/goose/skills
+    skills: shared
+
+  # Pi
+  pi:
+    path: .pi/agent/skills
+    skills: shared
+    extra:
+      - ask
+      - creating-skills
+      - update-chezmoi
+
+  # Gemini - AGENTS.md only, no skills dir
+  gemini:
+    path: .gemini
+    skills: none

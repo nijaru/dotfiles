@@ -6,98 +6,52 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 # Context Save
 
-Checkpoint session state to ai/ and tk. Goal: everything needed to resume is persisted.
+Persist session state to ai/ and tk. Priority: tk and ai/ first (from context), git last.
 
-**Priority:** tk and ai/ updates first (from context). Git commands last (can recover if compaction hits).
-
-## When to Trigger
-
-- Before `/compact`
-- Session end ("done for today", "wrap up")
-- Context switch ("switching to X", "different project")
-- After significant work completes
-- Explicit: "/save", "save context"
-
-## When NOT to Trigger
-
-- Mid-task (save at completion)
-- Quick fixes that don't change project state
-- User says "skip" or "don't save"
+**Trigger:** Before `/compact`, session end, context switch, or explicitly.
 
 ## 1. Update tk Tasks
 
-You already know what was done this session—no git commands needed.
-
 ```bash
-tk ls  # Check current state
+tk ls
 ```
 
-For EACH task:
+For each task:
 
-- **Completed** → `tk done <id>`
-- **New work discovered** → `tk add "title" -d "context"`
-- **Blocked** → Note in STATUS.md
+- **Log findings first:** `tk log <id> "what was learned"` — errors, root cause, file paths
+- **Mark complete:** `tk done <id>`
+- **Add new:** `tk add "title" -d "context"`
 
-Don't leave stale tasks. If done, mark done. If new, add it.
+Don't leave stale tasks.
 
-## 2. Update ai/ Files
+## 2. Update ai/
 
-**ai/STATUS.md** (always):
+**STATUS.md** (always): Current focus, blockers, what worked. Prune stale content.
 
-- Current focus, what's active
-- What worked / didn't
-- Blockers
-- Prune old content
+**DESIGN.md** (if architecture changed): Components, patterns, interfaces.
 
-**ai/DESIGN.md** (if architecture changed):
+**DECISIONS.md** (if decisions made): Context → Decision → Rationale.
 
-- New components, patterns
-- Updated interfaces
+**SPRINTS.md** (if sprint progress): Mark completed, update status.
 
-**ai/DECISIONS.md** (if decisions made):
+Keep files <500 lines. Move details to subdirs if needed.
 
-- Context → Decision → Rationale (append)
-
-**ai/SPRINTS.md** (if sprint progress):
-
-- Mark completed tasks
-- Update current sprint status
-
-## 3. Health Check
-
-| Issue              | Fix                      |
-| ------------------ | ------------------------ |
-| Files >500 lines   | Prune, move to subdirs   |
-| Stale STATUS.md    | Remove old blockers/work |
-| Outdated DESIGN.md | Update to current        |
-
-## 4. Commit (last)
+## 3. Commit
 
 ```bash
 git add ai/ .tasks/
 git commit -m "Update session context"
 ```
 
-## 5. Report
+## 4. Report
 
 ```
-## Session Saved
+## Saved
 
-Tasks:
-- Done: [list marked complete]
-- Added: [list new]
-- Pending: [N remaining]
+Tasks: [N done, N added, N pending]
+ai/: [what changed]
 
-ai/:
-- STATUS.md: [summary]
-- DESIGN.md: [updated/unchanged]
-- SPRINTS.md: [updated/unchanged]
+## Next Session
 
-Committed: [yes/no]
-
-## Next Steps
-
-[2-4 bullet points for next session]
-
-Ready for /compact or new session.
+[2-4 bullets: what to do next based on pending tasks, blockers, incomplete work]
 ```

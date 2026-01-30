@@ -4,7 +4,7 @@ function update-agents --description "Update AI coding agents"
     function _agent -a name ver
         set_color --bold white
         printf "  %-10s" "$name"
-        set_color normal green
+        set_color normal brblack
         echo "$ver"
         set_color normal
     end

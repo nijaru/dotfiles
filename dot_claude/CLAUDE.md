@@ -134,7 +134,7 @@ Use `tk` for all tasks—persists across compaction. Details in task logs, not S
 
 **Before investigating:** `tk show <id>` for existing logs, check ai/, git history. Never start fresh without checking.
 
-**During work:** `tk log <id> "finding"` immediately—errors, root cause, file paths.
+**During work:** `tk log <id> "finding"` immediately—errors, root cause, file paths. Update STATUS.md when focus shifts, blockers emerge, or significant progress is made.
 
 **Creating tasks:** `tk add "title" -d "context"`. Always include description.
 

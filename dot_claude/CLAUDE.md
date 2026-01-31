@@ -101,7 +101,7 @@
 
 **Stopping Points:** Proactively advise the user when to compact context or start a new session (e.g., after feature completion, major milestones, or significant context shifts).
 
-**Git:** Never ask to commit—just commit after each fix, feature, or milestone. Push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
+**Git:** Never ask—commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
 
 **Releases:** NEVER trigger without explicit approval. Wait for CI.
 

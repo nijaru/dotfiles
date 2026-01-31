@@ -37,20 +37,23 @@ Run `orcx agents` to see configured agents (DeepSeek, Grok, etc.).
 ## Usage
 
 ```bash
-# Simple query
-orcx run "Your prompt here"
+# Simple query (uses default model)
+orcx "Your prompt here"
 
 # With specific agent
-orcx run -a fast "Your prompt here"
+orcx -a fast "Your prompt here"
 
 # Pipe context
-cat file.py | orcx run "Review this code"
+cat file.py | orcx "Review this code"
 
 # Include file context
-orcx run -f file.py "Review this code"
+orcx -f file.py "Review this code"
 
 # Save response to file
-orcx run -o response.md "Explain this concept"
+orcx -o response.md "Explain this concept"
+
+# Explicit run subcommand (equivalent)
+orcx run -a fast "Your prompt here"
 ```
 
 ## Conversations
@@ -59,13 +62,13 @@ orcx stores conversations in SQLite (~/.config/orcx/conversations.db).
 
 ```bash
 # Continue last conversation
-orcx run -c "Follow-up question"
+orcx -c "Follow-up question"
 
 # Resume specific conversation by ID
-orcx run --resume abc1 "More context"
+orcx --resume abc1 "More context"
 
 # Don't save this exchange
-orcx run --no-save "Quick question"
+orcx --no-save "Quick question"
 
 # List recent conversations
 orcx conversations list

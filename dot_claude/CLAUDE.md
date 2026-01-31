@@ -101,7 +101,7 @@
 
 **Stopping Points:** Proactively advise the user when to compact context or start a new session (e.g., after feature completion, major milestones, or significant context shifts).
 
-**Git:** Never ask—commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Confirm before PRs/publishing/force ops. No force push main. Messages: concise WHY.
+**Git:** Just commit—don't ask permission. Commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Only confirm before: PRs, publishing, force push, destructive ops. No force push main. Messages: concise WHY.
 
 **Releases:** NEVER trigger without explicit approval. Wait for CI.
 
@@ -164,4 +164,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ---
 
-**Updated:** 2026-01-29 | github.com/nijaru/agent-contexts
+**Updated:** 2026-01-30 | github.com/nijaru/agent-contexts

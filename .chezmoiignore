@@ -36,13 +36,6 @@ Brewfile
 # Tooling and dependencies
 .config/**/*.lock
 .config/**/node_modules
-.config/opencode/config.json
-.config/opencode/.gitignore
-.config/opencode/bun.lock
-.config/opencode/package.json
-.config/opencode/node_modules
-.config/opencode/providers
-.config/opencode/generate_config.sh
 
 
 # macOS-specific files

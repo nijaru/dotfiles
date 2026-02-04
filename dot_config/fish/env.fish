@@ -46,9 +46,6 @@ set -gx RUST_BACKTRACE 1
 set -gx NODE_ENV "development"
 set -gx NPM_CONFIG_USERCONFIG "$XDG_CONFIG_HOME/npm/npmrc"
 
-# OpenCode Settings
-set -gx OPENCODE_EXPERIMENTAL_OXFMT true
-
 # Python Settings
 set -gx PYTHONDONTWRITEBYTECODE 1 # Prevent .pyc files
 set -gx PYTHONUNBUFFERED 1        # Disable output buffering

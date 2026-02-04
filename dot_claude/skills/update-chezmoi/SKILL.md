@@ -9,13 +9,12 @@ Manage global Claude/Codex config and skills via chezmoi dotfiles.
 
 ## Architecture
 
-| Tool        | Deployed              | Chezmoi Source         | Notes           |
-| ----------- | --------------------- | ---------------------- | --------------- |
-| Claude Code | `~/.claude/`          | `dot_claude/`          | Source of truth |
-| Codex CLI   | `~/.codex/`           | `private_dot_codex/`   | Encrypted       |
-| Gemini CLI  | `~/.gemini/`          | `dot_gemini/`          |                 |
-| pi-mono     | `~/.pi/agent/`        | `dot_pi/agent/`        |                 |
-| opencode    | `~/.config/opencode/` | `dot_config/opencode/` |                 |
+| Tool        | Deployed       | Chezmoi Source       | Notes           |
+| ----------- | -------------- | -------------------- | --------------- |
+| Claude Code | `~/.claude/`   | `dot_claude/`        | Source of truth |
+| Codex CLI   | `~/.codex/`    | `private_dot_codex/` | Encrypted       |
+| Gemini CLI  | `~/.gemini/`   | `dot_gemini/`        |                 |
+| pi-mono     | `~/.pi/agent/` | `dot_pi/agent/`      |                 |
 
 **Single source of truth:** `dot_claude/CLAUDE.md` → all agents symlink AGENTS.md to it
 

@@ -10,7 +10,7 @@
 # Usage:
 #   llm-serve               # start server
 #   pi-local / pi-fedora    # pi wrappers
-#   opencode / crush / pi   # have provider configs (local/fedora)
+#   crush / pi              # have provider configs (local/fedora)
 
 function llm-serve
     function _llm_cleanup --on-signal INT --inherit-variable _llm_pid

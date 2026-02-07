@@ -13,21 +13,17 @@ $env.config.history = {
     isolation: true
 }
 
-$env.config.completions = {
-    case_sensitive: false
-    quick: true
-    partial: true
-    algorithm: fuzzy
-    use_ls_colors: true
-}
+$env.config.completions.case_sensitive = false
+$env.config.completions.quick = true
+$env.config.completions.partial = true
+$env.config.completions.algorithm = "fuzzy"
+$env.config.completions.use_ls_colors = true
 
-$env.config.table = {
-    mode: compact
-    index_mode: auto
-    show_empty: true
-    padding: { left: 1, right: 1 }
-    trim: { methodology: wrapping, wrapping_try_keep_words: true }
-}
+$env.config.table.mode = "compact"
+$env.config.table.index_mode = "auto"
+$env.config.table.show_empty = true
+$env.config.table.padding = { left: 1, right: 1 }
+$env.config.table.trim = { methodology: wrapping, wrapping_try_keep_words: true }
 
 # ── Environment ─────────────────────────────────────────
 $env.EDITOR = "zed"
@@ -39,16 +35,18 @@ $env.XDG_CACHE_HOME = ($env.HOME | path join ".cache")
 $env.XDG_DATA_HOME = ($env.HOME | path join ".local/share")
 $env.XDG_STATE_HOME = ($env.HOME | path join ".local/state")
 
-$env.PYTHONDONTWRITEBYTECODE = "1"
-$env.PYTHONUNBUFFERED = "1"
-$env.PYTHONFAULTHANDLER = "1"
+$env.PYTHONDONTWRITEBYTECODE = 1
+$env.PYTHONUNBUFFERED = 1
+$env.PYTHONFAULTHANDLER = 1
 
 $env.GOPATH = ($env.HOME | path join "go")
 $env.GOBIN = ($env.GOPATH | path join "bin")
 $env.GOTOOLCHAIN = "local"
+$env.GOFLAGS = "-buildvcs=false -trimpath"
 
 $env.CARGO_HOME = ($env.HOME | path join ".cargo")
 $env.RUSTUP_HOME = ($env.HOME | path join ".rustup")
+$env.RUST_BACKTRACE = 1
 
 # ── PATH ────────────────────────────────────────────────
 use std/util "path add"

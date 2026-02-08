@@ -11,7 +11,7 @@
 
 **Languages:** Python, Rust, Go, TypeScript (Bun), Mojo
 
-**Dependencies:** Add via CLI only (`cargo add`, `uv add`, `bun add`, `go get`)—CLI resolves latest compatible versions. Manual edits risk stale/nonexistent versions. Other manifest sections (build config, features, scripts, metadata) are fine to edit directly.
+**Dependencies:** Add via CLI (`cargo add`, `uv add`, `bun add`, `go get`)—resolves compatible versions. Never edit versions manually. Other manifest sections fine to edit.
 
 **Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Lint/format: `ruff`. Types: `ty`. Never pip.
 
@@ -57,18 +57,19 @@
 
 ## Development
 
-**Philosophy:** Do it right first—workarounds become permanent. Research → understand → plan → implement.
+**Philosophy:** Do it right first—workarounds become permanent. Fix what you touch. Research → understand → plan → implement.
 
-**Performance:** Idiomatic > clever. Profile before optimizing.
+**Design:** Clear > clever. Hard to explain = wrong abstraction. Small interfaces. A little copying over a little dependency.
 
-**Problem-solving:** Question assumptions. If something seems off, it probably is—stop and verify. If stuck, reframe the problem.
+**Performance:** Profile before optimizing.
+
+**Problem-solving:** Reproduce before fixing. Question assumptions. If something seems off, it probably is—stop and verify. If stuck, reframe the problem.
 
 **Quality:**
 
-- Research before implementing
 - Fix root cause, not symptoms
 - Read code before changing it
-- Update docs (README, ai/, AGENTS.md)
+- Update docs—record corrections in AGENTS.md to prevent repeats
 - Ask before breaking APIs
 
 **Errors:** Let errors propagate. Catch only to recover.
@@ -78,28 +79,22 @@
 - Replace completely in one commit—old code and all callers
 - No version suffixes (V2, V3), no "old"/"legacy"/"new" markers
 - No shims, adapters, or re-exports "for compatibility"
-- No deprecation unless explicitly instructed
-- If callers exist outside the repo, ask before breaking
-
-**Corrections:** Update AGENTS.md when corrected—prevents repeat mistakes.
+- No breadcrumbs: no `// moved to X`, `// removed`, `// deprecated` comments. Just delete.
+- No deprecation unless explicitly instructed. If callers exist outside the repo, ask first.
 
 **Review:** `/review` before major commits.
 
 **Style:**
 
 - **Naming:** Proportional to scope. Descriptive suffixes (`_batched`, `_async`) over version markers.
-- **Comments:** Non-obvious context only. Never comment your edits. No TODOs.
+- **Comments:** Why, not what—only when non-obvious from code. Never narrate changes. No TODOs. No commented-out code.
 - **Files:** Single concern. Tests separate.
-- **No breadcrumbs:** When deleting/moving code, just remove it. No `// moved to X`, `// removed`, `// deprecated`.
-- **Maintenance:** Fix what you touch. Technical debt compounds.
 
-**Testing:** Unit or e2e only. No mocks—they invent behaviors. Flaky tests are bugs. Verify tests actually ran.
+**Testing:** Unit or e2e only. No mocks—they invent behaviors. Test failure paths, not just happy paths. Flaky tests are bugs. Verify tests actually ran.
 
 **Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology.
 
 ## Workflow
-
-**Stopping Points:** Proactively advise the user when to compact context or start a new session (e.g., after feature completion, major milestones, or significant context shifts).
 
 **Git:** Just commit—don't ask permission. Commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Only confirm before: PRs, publishing, force push, destructive ops. No force push main. Messages: concise WHY.
 
@@ -158,10 +153,10 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ## Context Management
 
-**Prompt user to compact at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens
+**Compact/new session at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens. Proactively advise the user.
 
 **Before compact:** Update STATUS.md, `tk done` completed tasks, `tk log` any uncommitted findings.
 
 ---
 
-**Updated:** 2026-01-30 | github.com/nijaru/agent-contexts
+**Updated:** 2026-02-08 | github.com/nijaru/agent-contexts

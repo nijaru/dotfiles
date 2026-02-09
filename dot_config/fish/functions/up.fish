@@ -45,7 +45,7 @@ function up --description "Update all package managers and tools"
     echo "🔧 Updating mise tools..."
     if command -q mise
         mise up
-        and mise prune
+        and mise prune -y
     else
         echo "⚠️  mise not found, skipping"
     end

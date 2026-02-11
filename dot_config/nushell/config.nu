@@ -62,9 +62,9 @@ path add ($env.HOME | path join ".local/share/mise/shims")
 # ── Aliases ─────────────────────────────────────────────
 
 # Navigation
-alias ll = ls -l
+alias ll = ls
 alias la = ls -a
-alias lla = ls -la
+alias lla = ls -a
 
 # Editor
 alias z. = zed .

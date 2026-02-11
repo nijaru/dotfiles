@@ -38,12 +38,12 @@ style = "bold yellow"
 [directory]
 truncation_length = 4
 truncate_to_repo = false
-format = " [$path]($style)[$read_only]($read_only_style)"
+format = "[$path]($style)[$read_only]($read_only_style) "
 style = "bold cyan"
 
 [git_branch]
 symbol = ""
-format = " [$symbol $branch(:$remote_branch)]($style)"
+format = "[$symbol $branch(:$remote_branch)]($style)"
 style = "bold purple"
 
 [git_status]

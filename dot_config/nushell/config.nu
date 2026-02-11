@@ -1,4 +1,4 @@
-# config.nu — Nushell configuration (companion shell)
+# config.nu — Nushell configuration
 
 # ── Settings ────────────────────────────────────────────
 $env.config.show_banner = false
@@ -60,8 +60,135 @@ path add ($env.HOME | path join ".cache/.bun/bin")
 path add ($env.HOME | path join ".local/share/mise/shims")
 
 # ── Aliases ─────────────────────────────────────────────
+
+# Navigation
 alias ll = ls -l
 alias la = ls -a
+alias lla = ls -la
+
+# Editor
+alias z. = zed .
+alias nv. = nvim .
+alias hx. = hx .
+
+# Agents
+alias cl = claude
+alias clc = claude --continue
+
+# File operations
+alias mkd = mkdir
+alias t = touch
+alias cpv = rsync -ah --info=progress2
+alias mvv = rsync -ah --remove-source-files --info=progress2
+
+# Tools
+alias y = yazi
+alias hypf = hyperfine -N --warmup 5
+
+# Docker
+alias d = docker
+alias dc = docker compose
+
+# Git — core
+alias g = git
+alias gi = git init
+alias gs = git status
+alias gd = git diff --color-words
+alias gdh = git diff HEAD
+alias gds = git diff --staged
+alias gdc = git diff --cached
+alias gwt = git worktree
+
+# Git — branches
+alias gb = git branch -v
+alias gbv = git branch -vv
+alias gba = git branch --all --verbose
+alias gbl = git branch --verbose --sort=-committerdate
+alias gbr = git branch --remote
+alias gbd = git branch -d
+alias gbD = git branch -D
+alias gbc = git branch --show-current
+
+# Git — switching
+alias gsw = git switch
+alias gswc = git switch -c
+alias gswm = git switch main
+alias gswd = git switch dev
+alias gswb = git switch -
+
+# Git — staging
+alias ga = git add
+alias ga. = git add .
+alias gaa = git add --all
+alias gap = git add --patch
+alias gau = git add --update
+alias grm = git rm
+alias grmc = git rm --cached
+
+# Git — unstaging
+alias grs = git restore
+alias grss = git restore --staged
+alias grh1 = git reset HEAD~1
+alias gclean = git clean -df
+alias gnuke = git clean -dffx
+
+# Git — commits
+alias gc = git commit --gpg-sign
+alias gca = git commit --gpg-sign --amend
+alias gcf = git commit --gpg-sign --amend --reuse-message HEAD
+alias gcF = git commit --gpg-sign --amend
+alias gfix = git commit --gpg-sign --fixup
+
+# Git — stash
+alias gst = git stash
+alias gstp = git stash pop
+alias gstl = git stash list
+alias gsta = git stash apply
+alias gstu = git stash --include-untracked
+alias gstd = git stash drop
+alias gstc = git stash clear
+
+# Git — remote
+alias gf = git fetch --all --prune
+alias gpl = git pull --rebase
+alias gp = git push
+alias gpa = git push --all
+alias gpf = git push --force-with-lease
+alias gpu = git push -u
+alias gpuo = git push -u origin
+alias gtrack = git branch --set-upstream-to
+
+# Git — log
+alias gl = git log --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 10
+alias glg = git log --graph --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 20
+alias gls = git log --stat
+alias glp = git log --patch
+alias gll = git log --oneline
+alias glf = git log --follow -p
+alias glast = git log -1 HEAD --stat
+alias gwho = git shortlog -s --no-merges
+
+# Git — merge
+alias gm = git merge
+alias gmnff = git merge --no-ff
+alias gmnc = git merge --no-commit
+alias gmc = git merge --continue
+alias gms = git merge --skip
+alias gma = git merge --abort
+
+# Git — rebase
+alias gr = git rebase
+alias gri = git rebase -i
+alias grc = git rebase --continue
+alias gra = git rebase --abort
+alias grm = git rebase main
+
+# Git — maintenance
+alias greflog = git reflog
+alias gverify = git verify-commit HEAD
+alias gcleanup = git clean -xfd
+alias ggarbage = git gc --aggressive --prune=now
+alias gsubr = git config submodule.recurse true
 
 # ── Vendor Autoload Bootstrap ───────────────────────────
 # Integration scripts are generated once, then auto-sourced on startup.
@@ -73,5 +200,19 @@ if (which zoxide | is-not-empty) {
     let zoxide_init = ($vendor_dir | path join "zoxide.nu")
     if not ($zoxide_init | path exists) {
         zoxide init nushell | save -f $zoxide_init
+    }
+}
+
+if (which starship | is-not-empty) {
+    let starship_init = ($vendor_dir | path join "starship.nu")
+    if not ($starship_init | path exists) {
+        starship init nu | save -f $starship_init
+    }
+}
+
+if (which carapace | is-not-empty) {
+    let carapace_init = ($vendor_dir | path join "carapace.nu")
+    if not ($carapace_init | path exists) {
+        carapace _carapace nushell | save -f $carapace_init
     }
 }

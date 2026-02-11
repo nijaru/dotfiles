@@ -56,6 +56,16 @@
         "source.fixAll": true,
         "source.organizeImports": true
       }
+    },
+    "Mojo": {
+      "language_servers": ["mojo-lsp"]
+    }
+  },
+  "lsp": {
+    "mojo-lsp": {
+      "binary": {
+        "path": "mojo-lsp-server"
+      }
     }
   }
 }

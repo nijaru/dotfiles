@@ -3,9 +3,17 @@
 Include ~/.orbstack/ssh/config
 {{- end }}
 
+Host github.com
+    ControlMaster no
+
 Host *
     AddKeysToAgent yes
 {{- if eq .chezmoi.os "darwin" }}
     UseKeychain yes
 {{- end }}
     IdentityFile ~/.ssh/id_ed25519
+    ControlMaster auto
+    ControlPath ~/.ssh/sockets/%r@%h-%p
+    ControlPersist 600
+    ServerAliveInterval 60
+    ServerAliveCountMax 3

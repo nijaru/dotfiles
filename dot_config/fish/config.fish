@@ -67,20 +67,15 @@ if command -v fzf >/dev/null 2>&1
     fzf --fish | source
 end
 
-# SSH-aware configuration
-if status is-interactive
-    # Completely clear universal variable to prevent conflicts
-    set -e -U tide_prompt_transient_enabled 2>/dev/null
-    # SSH-specific settings
-    if set -q SSH_CLIENT; or set -q SSH_TTY
-        # Fix terminal type for SSH sessions (enables clear/Ctrl-L)
-        set -gx TERM xterm-256color
-        # Disable transient prompts over SSH (session variable)
-        set -g tide_prompt_transient_enabled false
-    else
-        # Enable transient prompts locally (session variable)
-        set -g tide_prompt_transient_enabled true
-    end
+# Initialize starship prompt
+if command -v starship >/dev/null 2>&1
+    starship init fish | source
+    enable_transience
+end
+
+# SSH-specific settings
+if set -q SSH_CLIENT; or set -q SSH_TTY
+    set -gx TERM xterm-256color
 end
 
 # OrbStack CLI integration

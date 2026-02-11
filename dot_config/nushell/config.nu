@@ -209,6 +209,7 @@ if (which starship | is-not-empty) {
     if not ($starship_init | path exists) {
         starship init nu | save -f $starship_init
     }
+    $env.TRANSIENT_PROMPT_COMMAND = {|| starship module character}
 }
 
 if (which carapace | is-not-empty) {

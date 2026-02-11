@@ -1,0 +1,76 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$os\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$fill\
+$cmd_duration\
+$python\
+$rust\
+$golang\
+$nodejs\
+$bun\
+$lua\
+$time\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[›](bold green)"
+error_symbol = "[›](bold red)"
+
+[os]
+disabled = false
+style = "dimmed white"
+
+[os.symbols]
+Macos = " "
+Fedora = " "
+
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+style = "bold yellow"
+
+[directory]
+truncation_length = 4
+truncate_to_repo = false
+format = " [$path]($style)[$read_only]($read_only_style)"
+style = "bold cyan"
+
+[git_branch]
+symbol = ""
+format = " [$symbol $branch(:$remote_branch)]($style)"
+style = "bold purple"
+
+[git_status]
+format = " [$ahead_behind$conflicted$modified$staged$untracked$stashed]($style) "
+style = "bold yellow"
+conflicted = "=${count} "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇡${ahead_count} ⇣${behind_count} "
+modified = "!${count} "
+staged = "+${count} "
+untracked = "?${count} "
+stashed = "*${count} "
+
+[fill]
+symbol = "─"
+style = "dimmed white"
+
+[time]
+disabled = false
+format = " [$time]($style)"
+style = "dimmed white"
+time_format = "%H:%M:%S"
+
+[cmd_duration]
+min_time = 2000
+format = " [$duration]($style)"
+
+[package]
+disabled = true

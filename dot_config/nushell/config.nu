@@ -160,8 +160,8 @@ alias gpuo = git push -u origin
 alias gtrack = git branch --set-upstream-to
 
 # Git — log
-alias gl = git log --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 10
-alias glg = git log --graph --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 20
+alias gl = git log --oneline --decorate -n 10
+alias glg = git log --graph --oneline --decorate -n 20
 alias gls = git log --stat
 alias glp = git log --patch
 alias gll = git log --oneline

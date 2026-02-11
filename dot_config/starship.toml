@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-command_timeout = 5000
+command_timeout = 1000
 
 format = """
 $os\
@@ -52,6 +52,7 @@ style = "green"
 [git_status]
 format = " $ahead_behind$conflicted$modified$staged$untracked$stashed"
 style = "yellow"
+ignore_submodules = true
 conflicted = "[=${count}](red) "
 ahead = "[⇡${count}](green) "
 behind = "[⇣${count}](green) "

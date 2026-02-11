@@ -134,6 +134,7 @@ alias gnuke = git clean -dffx
 
 # Git — commits
 alias gc = git commit --gpg-sign
+alias gcm = git commit --gpg-sign -m
 alias gca = git commit --gpg-sign --amend
 alias gcf = git commit --gpg-sign --amend --reuse-message HEAD
 alias gcF = git commit --gpg-sign --amend

@@ -23,11 +23,15 @@ if [ -f "$cwd/.git/HEAD" ]; then
 fi
 [ -z "$git_branch" ] && git_branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
 
-# Git state (compact: * dirty, + staged)
-git_state=""
+# Git diff stats (+added -removed)
+git_diff=""
 if [ -n "$git_branch" ]; then
-    git -C "$cwd" diff --quiet 2>/dev/null || git_state+="*"
-    git -C "$cwd" diff --cached --quiet 2>/dev/null || git_state+="+"
+    stat=$(git -C "$cwd" diff --shortstat 2>/dev/null)
+    if [ -n "$stat" ]; then
+        ins=$(printf '%s' "$stat" | grep -o '[0-9]* insertion' | grep -o '[0-9]*')
+        del=$(printf '%s' "$stat" | grep -o '[0-9]* deletion' | grep -o '[0-9]*')
+        git_diff="${ins:++$ins}${del:+ -$del}"
+    fi
 fi
 
 # Format token count with 1 decimal (e.g. 36.7k)
@@ -42,12 +46,13 @@ fmt_k() {
 # Context % color: green < 50, yellow 50-79, red 80+
 if ((used_pct >= 80)); then pc='31'; elif ((used_pct >= 50)); then pc='33'; else pc='32'; fi
 
-# CWD: relative from project_dir when in subdirectory, else tilde-collapse
-display_cwd="$cwd"
+# CWD: basename at project root, relative when in subdirectory
+display_cwd="${project_dir##*/}"
 if [[ "$cwd" != "$project_dir" && "$cwd" == "$project_dir"/* ]]; then
-    display_cwd="${project_dir##*/}/${cwd#$project_dir/}"
-elif [[ "$cwd" == "$HOME"* ]]; then
-    display_cwd="~${cwd#$HOME}"
+    display_cwd="${display_cwd}/${cwd#$project_dir/}"
+elif [[ "$cwd" != "$project_dir" ]]; then
+    display_cwd="$cwd"
+    [[ "$cwd" == "$HOME"* ]] && display_cwd="~${cwd#$HOME}"
 fi
 
 s='\033[2m • \033[0m'
@@ -56,4 +61,4 @@ printf "${s}\033[%sm%s%%\033[0m \033[2m(%dk/%dk)\033[0m" "$pc" "$used_pct" "$((c
 printf "${s}↑ %s ↓ %s" "$(fmt_k $total_in)" "$(fmt_k $total_out)"
 printf "${s}%s" "$display_cwd"
 [ -n "$git_branch" ] && printf "${s}\033[36m%s\033[0m" "$git_branch"
-[ -n "$git_state" ] && printf '\033[31m%s\033[0m' "$git_state"
+[ -n "$git_diff" ] && printf ' \033[2m%s\033[0m' "$git_diff"

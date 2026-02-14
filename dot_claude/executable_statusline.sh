@@ -23,18 +23,9 @@ if [ -f "$cwd/.git/HEAD" ]; then
 fi
 [ -z "$git_branch" ] && git_branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
 
-# Git diff stats (+added -removed)
-git_diff=""
+# Launch git diff async while we format everything else
 if [ -n "$git_branch" ]; then
-    stat=$(git -C "$cwd" diff HEAD --shortstat 2>/dev/null)
-    if [ -n "$stat" ]; then
-        ins=$(printf '%s' "$stat" | grep -o '[0-9]* insertion' | grep -o '[0-9]*')
-        del=$(printf '%s' "$stat" | grep -o '[0-9]* deletion' | grep -o '[0-9]*')
-        parts=""
-        [ -n "$ins" ] && parts="\033[32m+${ins}\033[0m"
-        [ -n "$del" ] && parts="${parts:+$parts/}\033[31m-${del}\033[0m"
-        git_diff="$parts"
-    fi
+    exec 3< <(git -C "$cwd" diff HEAD --shortstat 2>/dev/null)
 fi
 
 # Format token count with 1 decimal (e.g. 36.7k)
@@ -59,6 +50,20 @@ elif [[ "$cwd" != "$project_dir" ]]; then
     display_cwd="\033[37m${p}"
 else
     display_cwd="\033[37m${proj_name}"
+fi
+
+# Collect git diff result
+git_diff=""
+if [ -n "$git_branch" ]; then
+    stat=$(cat <&3)
+    if [ -n "$stat" ]; then
+        ins=$(printf '%s' "$stat" | grep -o '[0-9]* insertion' | grep -o '[0-9]*')
+        del=$(printf '%s' "$stat" | grep -o '[0-9]* deletion' | grep -o '[0-9]*')
+        parts=""
+        [ -n "$ins" ] && parts="\033[32m+${ins}\033[0m"
+        [ -n "$del" ] && parts="${parts:+$parts/}\033[31m-${del}\033[0m"
+        git_diff="$parts"
+    fi
 fi
 
 s='\033[2m • \033[0m'

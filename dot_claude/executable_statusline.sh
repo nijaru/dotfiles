@@ -15,18 +15,13 @@ IFS=$'\t' read -r model cwd project_dir ctx_size used_pct current_in total_in to
     ] | @tsv' <<< "$input"
 )
 
-# Git branch (fast path: read .git/HEAD directly)
+# Git branch (fast path: read .git/HEAD directly, no subprocess)
 git_branch=""
 if [ -f "$cwd/.git/HEAD" ]; then
     head=$(< "$cwd/.git/HEAD")
     [[ "$head" == ref:* ]] && git_branch="${head#ref: refs/heads/}"
 fi
 [ -z "$git_branch" ] && git_branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
-
-# Launch git diff async with timeout so it never stalls the statusline
-if [ -n "$git_branch" ]; then
-    exec 3< <(timeout 0.15 git -C "$cwd" diff HEAD --shortstat 2>/dev/null)
-fi
 
 # Format token count with 1 decimal (e.g. 36.7k)
 fmt_k() {
@@ -52,24 +47,9 @@ else
     display_cwd="\033[37m${proj_name}"
 fi
 
-# Collect git diff result
-git_diff=""
-if [ -n "$git_branch" ]; then
-    stat=$(cat <&3)
-    if [ -n "$stat" ]; then
-        ins=$(printf '%s' "$stat" | grep -o '[0-9]* insertion' | grep -o '[0-9]*')
-        del=$(printf '%s' "$stat" | grep -o '[0-9]* deletion' | grep -o '[0-9]*')
-        parts=""
-        [ -n "$ins" ] && parts="\033[32m+${ins}\033[0m"
-        [ -n "$del" ] && parts="${parts:+$parts/}\033[31m-${del}\033[0m"
-        git_diff="$parts"
-    fi
-fi
-
 s='\033[2m • \033[0m'
 printf '\033[36m%s\033[0m' "$model"
 printf "${s}\033[%sm%s%%\033[0m \033[2m(%dk/%dk)\033[0m" "$pc" "$used_pct" "$((current_in/1000))" "$((ctx_size/1000))"
 printf "${s}\033[2m↑\033[0;37m %s \033[2m↓\033[0;37m %s\033[0m" "$(fmt_k $total_in)" "$(fmt_k $total_out)"
 printf "${s}%b\033[0m" "$display_cwd"
 [ -n "$git_branch" ] && printf "${s}\033[36m%s\033[0m" "$git_branch"
-[ -n "$git_diff" ] && printf ' %b' "$git_diff"

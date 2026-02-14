@@ -28,10 +28,10 @@
 - `hf` — Hugging Face CLI
 - `sg` / `ast-grep` — tree-safe refactors (prefer over regex for structural edits)
 
-**Code search:** Use `colgrep` or `hhg` for semantic/concept search, Grep for exact strings.
+**Code search:** Semantic search for concepts, Grep for exact strings. Both require indexing (`colgrep init`, `hhg build`).
 
-- `colgrep "query" ./path` — semantic code search (ColBERT, hybrid with `-e`)
-- `hhg "query" ./path` | `hhg file#func` (by name) | `hhg file:42` (by line)
+- `colgrep "query" ./path` — semantic code search (ColBERT). Hybrid: `colgrep -e "pattern" "query"`. Flags: `-k N` results, `-c` content, `--include "*.rs"`, `--json`
+- `hhg "query" ./path` — semantic search. `hhg file#func` (by name) | `hhg file:42` (by line). Flags: `-n N` results, `-t py,rs` type filter, `-l` files only
 
 **Git tools:**
 

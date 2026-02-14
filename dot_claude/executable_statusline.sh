@@ -30,7 +30,10 @@ if [ -n "$git_branch" ]; then
     if [ -n "$stat" ]; then
         ins=$(printf '%s' "$stat" | grep -o '[0-9]* insertion' | grep -o '[0-9]*')
         del=$(printf '%s' "$stat" | grep -o '[0-9]* deletion' | grep -o '[0-9]*')
-        git_diff="${ins:++$ins}${del:+ -$del}"
+        parts=""
+        [ -n "$ins" ] && parts="\033[32m+${ins}\033[0m"
+        [ -n "$del" ] && parts="${parts:+$parts/}\033[31m-${del}\033[0m"
+        git_diff="$parts"
     fi
 fi
 
@@ -61,4 +64,4 @@ printf "${s}\033[%sm%s%%\033[0m \033[2m(%dk/%dk)\033[0m" "$pc" "$used_pct" "$((c
 printf "${s}↑ %s ↓ %s" "$(fmt_k $total_in)" "$(fmt_k $total_out)"
 printf "${s}%s" "$display_cwd"
 [ -n "$git_branch" ] && printf "${s}\033[36m%s\033[0m" "$git_branch"
-[ -n "$git_diff" ] && printf ' \033[2m%s\033[0m' "$git_diff"
+[ -n "$git_diff" ] && printf ' %b' "$git_diff"

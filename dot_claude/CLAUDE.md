@@ -155,13 +155,12 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
 
-**Before spawning:** Run expensive operations once in the parent—`cargo test`, `cargo build`, `go build`, `bun test`, etc.—then pass results to subagents. Three reviewers each running `cargo test` is 3x the wall time for no benefit. Build/test once, spawn with known-good state.
+**Before spawning:** Run build/test/lint once in the parent, include output in agent context. `cargo test` once beats `cargo test` × 3 reviewers.
 
 **Avoid parallel subagents when:**
-- An expensive step (build, test suite, lint) would run redundantly in each agent
 - Results depend on each other (sequential by nature)
-- A single agent can do the work in one pass (don't split for splitting's sake)
-- The task is speculative—validate the approach before parallelizing the work
+- One agent covers the scope—don't split reviewers across the same files
+- The approach is unvalidated—confirm it works before parallelizing
 
 **Context handoff:** Curate relevant context, don't dump history. Objectives at END (recency bias).
 

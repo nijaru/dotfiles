@@ -50,12 +50,10 @@ elif [[ "$cwd" == "$HOME"* ]]; then
     display_cwd="~${cwd#$HOME}"
 fi
 
-# Output with colors
-# dim=2, cyan=36, green=32, yellow=33, red=31
-printf '\033[2;36m%s\033[0;2m · ' "$model"
-printf '\033[%sm%s%%\033[0;2m (%dk/%dk)' "$pc" "$used_pct" "$((current_in/1000))" "$((ctx_size/1000))"
-printf '  |  ↑ %s · ↓ %s' "$(fmt_k $total_in)" "$(fmt_k $total_out)"
-printf '  |  %s' "$display_cwd"
-[ -n "$git_branch" ] && printf ' · \033[0;36m%s' "$git_branch"
-[ -n "$git_state" ] && printf '\033[31m%s' "$git_state"
-printf '\033[0m'
+s='\033[2m • \033[0m'
+printf '\033[36m%s\033[0m' "$model"
+printf "${s}\033[%sm%s%%\033[0m \033[2m(%dk/%dk)\033[0m" "$pc" "$used_pct" "$((current_in/1000))" "$((ctx_size/1000))"
+printf "${s}↑ %s ↓ %s" "$(fmt_k $total_in)" "$(fmt_k $total_out)"
+printf "${s}%s" "$display_cwd"
+[ -n "$git_branch" ] && printf "${s}\033[36m%s\033[0m" "$git_branch"
+[ -n "$git_state" ] && printf '\033[31m%s\033[0m' "$git_state"

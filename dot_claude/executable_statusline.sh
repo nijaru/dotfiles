@@ -26,7 +26,7 @@ fi
 # Git diff stats (+added -removed)
 git_diff=""
 if [ -n "$git_branch" ]; then
-    stat=$(git -C "$cwd" diff --shortstat 2>/dev/null)
+    stat=$(git -C "$cwd" diff HEAD --shortstat 2>/dev/null)
     if [ -n "$stat" ]; then
         ins=$(printf '%s' "$stat" | grep -o '[0-9]* insertion' | grep -o '[0-9]*')
         del=$(printf '%s' "$stat" | grep -o '[0-9]* deletion' | grep -o '[0-9]*')
@@ -64,7 +64,7 @@ fi
 s='\033[2m • \033[0m'
 printf '\033[36m%s\033[0m' "$model"
 printf "${s}\033[%sm%s%%\033[0m \033[2m(%dk/%dk)\033[0m" "$pc" "$used_pct" "$((current_in/1000))" "$((ctx_size/1000))"
-printf "${s}\033[37m↑ %s ↓ %s\033[0m" "$(fmt_k $total_in)" "$(fmt_k $total_out)"
+printf "${s}\033[2m↑\033[0;37m %s \033[2m↓\033[0;37m %s\033[0m" "$(fmt_k $total_in)" "$(fmt_k $total_out)"
 printf "${s}%b\033[0m" "$display_cwd"
 [ -n "$git_branch" ] && printf "${s}\033[36m%s\033[0m" "$git_branch"
 [ -n "$git_diff" ] && printf ' %b' "$git_diff"

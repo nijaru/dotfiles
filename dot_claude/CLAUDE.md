@@ -155,9 +155,10 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
 
-**Before spawning:** Run cheap checks first—`cargo test`, `go build`, `bun test`, `ruff check`, etc. Don't fan out to multiple reviewers/developers if the code doesn't compile or tests fail. Fix locally, then spawn. One fast Bash call beats three wasted subagents.
+**Before spawning:** Run expensive operations once in the parent—`cargo test`, `cargo build`, `go build`, `bun test`, etc.—then pass results to subagents. Three reviewers each running `cargo test` is 3x the wall time for no benefit. Build/test once, spawn with known-good state.
 
 **Avoid parallel subagents when:**
+- An expensive step (build, test suite, lint) would run redundantly in each agent
 - Results depend on each other (sequential by nature)
 - A single agent can do the work in one pass (don't split for splitting's sake)
 - The task is speculative—validate the approach before parallelizing the work

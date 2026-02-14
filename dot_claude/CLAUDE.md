@@ -28,9 +28,15 @@
 - `hf` — Hugging Face CLI
 - `sg` / `ast-grep` — tree-safe refactors (prefer over regex for structural edits)
 
-**Code search:** Use `hhg` (semantic) for concepts, Grep for exact strings.
+**Code search:** Use `colgrep` or `hhg` for semantic/concept search, Grep for exact strings.
 
+- `colgrep "query" ./path` — semantic code search (ColBERT, hybrid with `-e`)
 - `hhg "query" ./path` | `hhg file#func` (by name) | `hhg file:42` (by line)
+
+**Git tools:**
+
+- `sem diff` — entity-level semantic diffs (functions, classes). `sem impact <entity>` | `sem blame <file>`
+- `weave` — entity-level merge driver (configured globally, auto-used by git merge)
 
 **Background jobs:** Use `jb` for commands expected to run >30s (builds, test suites, benchmarks, dev servers).
 

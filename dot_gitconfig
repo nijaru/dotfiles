@@ -65,9 +65,13 @@
     tool             = difftastic                  # Use difftastic as external diff tool
 
 [merge]
-    conflictstyle    = zdiff3                      # Enhanced conflict resolution style
-    ff               = only                        # Only allow fast-forward merges
-    renameLimit      = 999999                      # Allow higher limits for renames
+    conflictstyle    = zdiff3
+    ff               = only
+    renameLimit      = 999999
+
+[merge "weave"]
+    name             = Entity-level semantic merge
+    driver           = weave-driver %O %A %B %L %P  # Requires: brew install ataraxy-labs/tap/weave
 
 [interactive]
     diffFilter       = delta --color-only          # Use delta for interactive diffs

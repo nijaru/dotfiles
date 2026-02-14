@@ -23,9 +23,9 @@ if [ -f "$cwd/.git/HEAD" ]; then
 fi
 [ -z "$git_branch" ] && git_branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
 
-# Launch git diff async while we format everything else
+# Launch git diff async with timeout so it never stalls the statusline
 if [ -n "$git_branch" ]; then
-    exec 3< <(git -C "$cwd" diff HEAD --shortstat 2>/dev/null)
+    exec 3< <(timeout 0.15 git -C "$cwd" diff HEAD --shortstat 2>/dev/null)
 fi
 
 # Format token count with 1 decimal (e.g. 36.7k)

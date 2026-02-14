@@ -155,6 +155,13 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
 
+**Before spawning:** Run cheap checks first—`cargo test`, `go build`, `bun test`, `ruff check`, etc. Don't fan out to multiple reviewers/developers if the code doesn't compile or tests fail. Fix locally, then spawn. One fast Bash call beats three wasted subagents.
+
+**Avoid parallel subagents when:**
+- Results depend on each other (sequential by nature)
+- A single agent can do the work in one pass (don't split for splitting's sake)
+- The task is speculative—validate the approach before parallelizing the work
+
 **Context handoff:** Curate relevant context, don't dump history. Objectives at END (recency bias).
 
 ## Context Management
@@ -165,4 +172,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ---
 
-**Updated:** 2026-02-08 | github.com/nijaru/agent-contexts
+**Updated:** 2026-02-14 | github.com/nijaru/agent-contexts

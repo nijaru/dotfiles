@@ -155,9 +155,12 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
 
+**Teams vs subagents:** Teams (TeamCreate) for coordinated parallel work with shared task lists and communication. Subagents for isolated one-off tasks.
+
 **Before spawning:** Run build/test/lint once in the parent, include output in agent context. `cargo test` once beats `cargo test` × 3 reviewers.
 
-**Avoid parallel subagents when:**
+**Avoid parallel agents when:**
+
 - Results depend on each other (sequential by nature)
 - One agent covers the scope—don't split reviewers across the same files
 - The approach is unvalidated—confirm it works before parallelizing
@@ -166,10 +169,10 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ## Context Management
 
-**Compact/new session at:** Feature complete · Switching codebase areas · Research synthesized · ~100k tokens. Proactively advise the user.
+**Compact/new session at:** Feature complete · Switching codebase areas · Research synthesized · ~150k tokens. Proactively advise the user.
 
 **Before compact:** Update STATUS.md, `tk done` completed tasks, `tk log` any uncommitted findings.
 
 ---
 
-**Updated:** 2026-02-14 | github.com/nijaru/agent-contexts
+**Updated:** 2026-02-16 | github.com/nijaru/agent-contexts

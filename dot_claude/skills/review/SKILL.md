@@ -1,18 +1,18 @@
 ---
 name: review
-description: Code review using parallel subagents.
+description: Code review using reviewer subagent.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 
 # Code Review
 
-Code review using 3 parallel subagents. Scope detected automatically.
+Single reviewer subagent with fresh eyes. Scope detected automatically.
 
 ## Workflow
 
 1. **Detect scope** (see below)
-2. **Launch 3 parallel reviewer subagents**
-3. **Aggregate findings** by severity, deduplicate
+2. **Build/test FIRST** — Run tests once in the parent before launching the reviewer. Include test output in the agent prompt. Tell the agent tests already pass.
+3. **Launch 1 reviewer subagent** with full checklist
 4. **Report summary** with actionable items
 
 ## Scope Detection
@@ -29,56 +29,44 @@ Code review using 3 parallel subagents. Scope detected automatically.
 # 8. Nothing -> inform user
 ```
 
-## Parallel Subagents
+## Reviewer Subagent
 
-Launch all 3 in parallel using Task tool with `subagent_type: reviewer`:
+Launch using Task tool with `subagent_type: reviewer`. One agent covers all three areas — splitting reviewers across the same files wastes tokens on redundant reads and deduplication.
 
-### Agent 1: Correctness
+### Checklist
 
-Logic and functional correctness.
+**Correctness:**
 
 - Logic errors, off-by-one, boundary conditions
-- Null/undefined handling
-- State consistency (partial failures)
+- Null/undefined handling, state consistency
 - Race conditions (if concurrent)
 - Edge cases: empty, max, negative, zero
-- Control flow correctness
-- Algorithm correctness
 
-### Agent 2: Safety
-
-Security and error handling (defensive thinking).
+**Safety:**
 
 - Input validation at boundaries
 - Hardcoded secrets, credentials
 - Injection: SQL, XSS, command, path traversal
-- Auth/authz checks
-- Sensitive data in logs
 - Silent failures, empty catch blocks
 - Error propagation (swallowed vs bubbled)
-- Fallback behavior hiding problems
 - Resource cleanup on error
 
-### Agent 3: Quality
+**Quality:**
 
-Design, performance, and idioms.
-
-- Fits existing patterns?
-- Single responsibility
+- Fits existing patterns? Single responsibility?
 - Over-engineering (future problems?)
 - Code smells: long functions (>40 lines), large files (>400 lines)
 - Dead code, unused variables
 - Naming: intention-revealing, proportional to scope
-- No `_v2`, `_new` suffixes
 - Unnecessary allocations (`String` vs `&str`, `Vec` vs `&[T]`)
-- O(n²) where O(n) possible
+- O(n^2) where O(n) possible
 - Blocking I/O in async, N+1 queries
 - Language idioms (Rust/Python/Go/TS)
 
-## Subagent Prompt
+### Prompt
 
 ```
-Review code changes for [FOCUS: Correctness | Safety | Quality].
+Review code changes for correctness, safety, and quality.
 
 Scope: [diff or files]
 
@@ -94,12 +82,6 @@ Severities:
 
 Be thorough. No false positives. Only flag what you're confident about.
 ```
-
-## Aggregation
-
-1. Deduplicate (same issue from multiple agents = 1 issue)
-2. Sort: ERROR → WARN → NIT
-3. Group by file
 
 ## Output Format
 
@@ -132,6 +114,10 @@ Issues: ERROR: X, WARN: X, NIT: X
 
 LGTM / LGTM with nits / Needs work
 ```
+
+## Large Reviews (many files across subsystems)
+
+For reviews spanning multiple subsystems, split by **file area** (frontend vs backend, module A vs module B), not by review type. Each reviewer gets different code, no redundancy.
 
 ## Quick Review (small changes)
 

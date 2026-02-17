@@ -6,26 +6,16 @@ allowed-tools: Read, Grep, Glob, Bash, Task
 
 # Refactor
 
-Analyze code and suggest concrete refactorings. For large architectural changes, spawn designer subagent.
+Analyze code and suggest concrete refactorings. Analyze directly in main session.
 
 ## Workflow
 
 1. **Identify scope** - file, function, or module
 2. **Analyze** - check against refactoring checklist
-3. **For large refactors** - spawn `designer` subagent for architectural planning
-4. **Propose changes** - specific before/after with priority order
-5. **Offer to implement** - if user approves
+3. **Propose changes** - specific before/after with priority order
+4. **Offer to implement** - if user approves
 
-## When to Use Designer Subagent
-
-Spawn designer via Task tool when:
-
-- Splitting a module into multiple files
-- Changing class/type hierarchy
-- Restructuring dependencies
-- Anything touching 3+ files
-
-For single-file refactors, analyze directly.
+For genuine architecture work (new module boundaries, dependency restructuring, type hierarchy redesign), suggest spawning a `designer` subagent. Routine multi-file changes (renames, interface updates, moving functions) don't need a designer.
 
 ## Refactoring Checklist
 
@@ -60,9 +50,9 @@ For single-file refactors, analyze directly.
 
 ### Structure
 
-- Multiple responsibilities → Split
-- Deep nesting → Early returns
-- God object → Decompose
+- Multiple responsibilities -> Split
+- Deep nesting -> Early returns
+- God object -> Decompose
 
 ## Output Format
 

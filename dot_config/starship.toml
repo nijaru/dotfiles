@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-command_timeout = 1000
+command_timeout = 1500
 
 format = """
 $os\
@@ -10,12 +10,6 @@ $git_branch\
 $git_status\
 $fill\
 $cmd_duration\
-$python\
-$rust\
-$golang\
-$nodejs\
-$bun\
-$lua\
 $time\
 $line_break\
 $character"""
@@ -66,15 +60,15 @@ stashed = "[*${count}](green) "
 symbol = "─"
 style = "bright-black"
 
+[cmd_duration]
+min_time = 2000
+format = " [$duration]($style)"
+
 [time]
 disabled = false
 format = " [$time]($style)"
 style = "bright-black"
 time_format = "%H:%M:%S"
-
-[cmd_duration]
-min_time = 2000
-format = " [$duration]($style)"
 
 [package]
 disabled = true

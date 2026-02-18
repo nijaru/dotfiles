@@ -1,12 +1,12 @@
 ---
 name: review
-description: Code review using reviewer subagent.
+description: Code review with refactoring suggestions — correctness, safety, quality, and structural improvements with before/after examples. Runs a reviewer subagent on detected scope or specified files.
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
 
 # Code Review
 
-Single reviewer subagent with fresh eyes. Scope detected automatically.
+Single reviewer subagent with fresh eyes. Covers correctness, safety, quality, and refactoring opportunities with before/after examples.
 
 ## Workflow
 
@@ -31,7 +31,7 @@ Single reviewer subagent with fresh eyes. Scope detected automatically.
 
 ## Reviewer Subagent
 
-Launch using Task tool with `subagent_type: reviewer`. One agent covers all three areas — splitting reviewers across the same files wastes tokens on redundant reads and deduplication.
+Launch using Task tool with `subagent_type: reviewer`. One agent covers all areas.
 
 ### Checklist
 
@@ -51,13 +51,14 @@ Launch using Task tool with `subagent_type: reviewer`. One agent covers all thre
 - Error propagation (swallowed vs bubbled)
 - Resource cleanup on error
 
-**Quality:**
+**Quality & Refactoring:**
 
 - Fits existing patterns? Single responsibility?
 - Over-engineering (future problems?)
-- Code smells: long functions (>40 lines), large files (>400 lines)
-- Dead code, unused variables
-- Naming: intention-revealing, proportional to scope
+- Naming: unclear names, `_v2`/`_new` suffixes, magic numbers, inconsistent style
+- Size: long functions (>40 lines), large files (>400 lines), deep nesting (>3), many parameters (>4)
+- Smells: duplication (3+ lines, 2+ times), feature envy, primitive obsession, dead code, speculative generality
+- Structure: god objects, multiple responsibilities — flag with before/after
 - Unnecessary allocations (`String` vs `&str`, `Vec` vs `&[T]`)
 - O(n^2) where O(n) possible
 - Blocking I/O in async, N+1 queries
@@ -66,18 +67,24 @@ Launch using Task tool with `subagent_type: reviewer`. One agent covers all thre
 ### Prompt
 
 ```
-Review code changes for correctness, safety, and quality.
+Review code for correctness, safety, and quality. For quality/structural issues, provide before/after examples.
 
 Scope: [diff or files]
 
 Report issues with confidence >= 80%. Format:
 
+Correctness/safety issues:
 [SEVERITY] file:line - Issue
   -> Fix
 
+Quality/refactoring issues:
+[SEVERITY] file:line - Issue
+  Before: [code]
+  After: [code]
+
 Severities:
 - ERROR: Must fix (bugs, security, silent failures)
-- WARN: Should fix (smells, performance)
+- WARN: Should fix (smells, performance, structure)
 - NIT: Optional (style, minor)
 
 Be thorough. No false positives. Only flag what you're confident about.
@@ -99,7 +106,8 @@ Issues: ERROR: X, WARN: X, NIT: X
 ## Important (should fix)
 
 [WARN] file:line - Issue
-  -> Fix
+  Before: [code]
+  After: [code]
 
 ## Minor
 
@@ -113,11 +121,21 @@ Issues: ERROR: X, WARN: X, NIT: X
 ## Verdict
 
 LGTM / LGTM with nits / Needs work
+
+## Refactoring Plan (if changes warranted)
+
+Priority:
+1. [Change] - file:line
+2. [Change] - file:line
+
+Risk: [Safe / Needs tests first]
+
+Implement these changes?
 ```
 
 ## Large Reviews (many files across subsystems)
 
-For reviews spanning multiple subsystems, split by **file area** (frontend vs backend, module A vs module B), not by review type. Each reviewer gets different code, no redundancy.
+For reviews spanning multiple subsystems, split by **file area** (frontend vs backend, module A vs module B), not by review type.
 
 ## Quick Review (small changes)
 
@@ -127,5 +145,5 @@ For < 50 lines, review directly without subagents:
 - [ ] Errors handled, not swallowed
 - [ ] No security issues
 - [ ] No debug statements
-- [ ] Naming clear
+- [ ] Naming clear, no structural issues
 - [ ] Fits existing patterns

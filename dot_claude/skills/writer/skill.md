@@ -261,18 +261,6 @@ Fix these issues?
 
 ---
 
-## External Review (Optional)
-
-Second opinion via other models:
-
-```bash
-orcx run -m openrouter/x-ai/grok-4.1-fast --no-save "Review for AI language and weak writing. Be specific: [text]"
-
-orcx run -m openrouter/google/gemini-3-flash-preview --no-save "Review for AI language and weak writing. Be specific: [text]"
-```
-
----
-
 ## Sources
 
 Patterns drawn from:

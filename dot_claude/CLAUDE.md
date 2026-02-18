@@ -153,6 +153,10 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 | `reviewer`   | Full validation (build/run/test) | ai/review/   |
 | `profiler`   | Deep performance analysis        | ai/review/   |
 
+**Model routing:** `opusplan` (default) uses Opus in plan mode, Sonnet for execution. Override subagent model: `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6`.
+
+**developer agent requires a spec** — not for open-ended tasks. Pass spec path or inline. If no spec, agent stops and reports.
+
 **When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
 
 **Teams vs subagents:** Teams (TeamCreate) for coordinated parallel work with shared task lists and communication. Subagents for isolated one-off tasks.

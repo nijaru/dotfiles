@@ -1,17 +1,20 @@
 # System Status & Blueprint
 
 ## Current State
+
 - **OS:** macOS (Tahoe) + Fedora 41 (Dual-boot)
 - **Status:** Fully restored, optimized, and hardened. Repo set to **Private**.
 
 ## Core Setup (For Future Reference)
 
 ### 1. Secrets & Encryption
+
 - **Tool:** `age` + `chezmoi`
 - **Master Key:** Symlinked from `~/Library/Mobile Documents/com~apple~CloudDocs/Developer/age-keys.txt` to `~/.config/age/keys.txt`.
 - **Encryption:** All secrets managed in `.chezmoidata.yaml.age`.
 
 ### 2. macOS Environment
+
 - **Shell:** Fish (Default). Optimized for <30ms startup.
 - **Terminal:** Ghostty. Config lives in `~/Library/Application Support/com.mitchellh.ghostty/config`.
 - **Editor:** Zed (`EDITOR="zed"`, `VISUAL="zed --wait"`).
@@ -19,15 +22,25 @@
 - **Packages:** `Brewfile` is a whitelist. Run `brew bundle cleanup --force` to purge bloat.
 
 ### 3. Fedora Configuration
+
 - **Secure Boot:** Enabled. NVIDIA drivers signed via MOK (`/etc/pki/akmods/certs/`).
 - **Disk:** Auto-unlocks via TPM2 (PCRs 0,1,4,5,7).
 - **Setup Script:** `~/restore_secure_boot.sh` (Staged on Fedora).
 
 ### 4. Development & Tooling
+
 - **Task Tracking:** Use `tk` CLI (installed via `bun add -g @nijaru/tk`). Tasks in `.tasks/`.
 - **Agent Management:** `update-agents` function optimized with Bun for fast, high-signal batch updates.
 - **Bun Global:** Global binaries at `~/.cache/.bun/bin` (added to path via `paths.fish`).
 - **Structure:** Repos at `~/github/<owner>/<repo>`. Use `ghc <repo>` to clone.
+
+### 5. AI CLI Skills
+
+Skills are symlinked from `~/.claude/skills/` to Gemini, Codex, and Pi via chezmoi. See `ai/skills-sync.md`.
+
+### 6. Shell
+
+Fish + Starship. Tide installed but inactive. Nushell migration incomplete. See `ai/shell-migration.md`.
 
 ---
 

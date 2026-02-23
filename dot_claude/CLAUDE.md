@@ -47,6 +47,7 @@
 
 - `tk add "title" -p 3` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>`
 - `tk show <id>` | `tk log <id> "msg"` | `tk block <id> <blocker>` | `tk reopen <id>`
+- `tk mv <id> <project>` — move task to a different project (updates all refs)
 
 **UI:** lucide/heroicons. No emoji unless requested.
 

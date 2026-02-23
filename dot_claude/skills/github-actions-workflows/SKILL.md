@@ -22,8 +22,9 @@ Run through this before writing or approving any workflow.
 - [ ] Runs on both `push` to main and `pull_request` targeting main
 - [ ] Concurrency cancels in-progress runs on same ref (saves minutes)
 - [ ] Full suite: type check → lint → format → test → build → verify
-- [ ] Dependency cache configured (avoids re-downloading on every run)
+- [ ] Dependency cache enabled (use setup action's `cache: true` if available, else `actions/cache`)
 - [ ] Build artifact verified (e.g. binary runs, `--version` output matches)
+- [ ] Release workflow is a superset of this — never fewer checks before publish than before merge
 
 ### Release workflows
 
@@ -55,7 +56,7 @@ on:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true # cancel redundant runs on same branch
+  cancel-in-progress: true # cancel redundant runs on same ref
 
 jobs:
   ci:
@@ -63,21 +64,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # setup-bun@v2 has built-in caching — use cache: true instead of actions/cache
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest # pin if release stability matters
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun/install/cache
-          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
-          restore-keys: ${{ runner.os }}-bun-
+          bun-version: latest # pin for release stability
+          cache: true
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Type check
+      # Cheap checks first — fail fast before running tests
+      - name: Type check # adapt for your stack
         run: bunx tsc --noEmit
 
       - name: Lint
@@ -92,20 +89,13 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Verify binary
+      - name: Verify binary # confirm artifact works, not just compiles
         run: ./binary --version
 ```
 
-**What belongs in CI:**
+**What belongs in CI:** everything required before merging. Fail early — type/lint before test. No side effects, no write-access secrets.
 
-- Everything that must pass before merging a PR
-- Fast feedback — fail early on cheap checks (type/lint before test)
-- No side effects — read-only, nothing published or deployed
-
-**What does NOT belong in CI:**
-
-- Publishing, deploying, tagging, or releasing
-- Secrets that grant write access to registries
+**What does NOT belong:** publish, deploy, tag, release. Any secret with registry write access.
 
 ---
 
@@ -219,14 +209,6 @@ jobs:
 High-risk (always use env): `inputs.*`, `github.event.*.title`, `github.event.*.body`, `github.head_ref`, any user-controlled string.
 
 Low-risk (no shell execution): `with:` blocks, `if:` expressions, `env:` assignment values.
-
----
-
-## CI Parity
-
-Release workflows drift from CI silently. Release must be a **superset** of CI — never run fewer checks before publishing than before merging.
-
-Pattern: copy CI steps into release and add a comment `# mirrors ci.yml`, or extract into a reusable workflow (`workflow_call`).
 
 ---
 

@@ -5,204 +5,100 @@ description: Use when writing, auditing, or fixing GitHub Actions workflows — 
 
 # GitHub Actions Workflow Engineering
 
-Patterns for CI and release workflows that are correct, safe, and recoverable. Language-agnostic — adapt commands for your stack.
+Non-obvious patterns that get missed in practice. Covers CI and release workflows across any language stack.
 
 ## Audit Checklist
 
-Run through this before writing or approving any workflow.
-
 ### Security
 
-- [ ] No `${{ inputs.* }}` or `${{ github.event.* }}` directly in `run:` blocks — use `env:` vars
-- [ ] Minimal permissions (`contents: read` default, escalate only where needed)
-- [ ] `pull_request_target` used? High risk — write access + runs fork code. Avoid unless necessary.
+- [ ] No `${{ inputs.* }}` or `${{ github.event.* }}` directly in `run:` — use `env:` vars (see below)
+- [ ] Minimal permissions — `contents: read` default, escalate only where needed
+- [ ] `pull_request_target`? High risk — has write access and runs fork code
 
-### CI workflows
+### CI
 
-- [ ] Runs on both `push` to main and `pull_request` targeting main
-- [ ] Concurrency cancels in-progress runs on same ref (saves minutes)
-- [ ] Full suite: type check → lint → format → test → build → verify
-- [ ] Dependency cache enabled (use setup action's built-in cache if available, else `actions/cache`)
-- [ ] Build artifact verified (e.g. binary runs, `--version` output matches)
-- [ ] Release workflow is a superset of this — never fewer checks before publish than before merge
+- [ ] Triggers on both `push: main` and `pull_request: main`
+- [ ] Concurrency cancels in-progress runs on same ref (`cancel-in-progress: true`)
+- [ ] Step order: static checks (type/lint/format) → test → build → verify artifact
+- [ ] Dependency cache enabled (setup actions often have `cache: true` built in)
+- [ ] Artifact verified at end — runs with `--version`, not just "build succeeded"
 
-### Release workflows
+### Release
 
 - [ ] Pre-flight validations before any side effects (version format, tag exists, registry version exists)
-- [ ] Full CI suite mirrored — release should be a superset, never a subset
-- [ ] Artifact version verified after build
-- [ ] Tag pushed **after** publish, not before
+- [ ] Full CI suite — release must be a superset of CI, never fewer checks
+- [ ] Artifact version verified after build (matches input version)
+- [ ] Tag pushed **after** publish
 - [ ] Concurrency group with `cancel-in-progress: false`
-- [ ] `dry_run` input for testing without publishing
+- [ ] `dry_run` input wired up
 
 ### General
 
-- [ ] Action versions pinned (`@v4`, not `@latest`)
-- [ ] Tool versions pinned where breakage is costly (e.g. `node-version: "22"` not `latest`)
-- [ ] Partial failure leaves system in a recoverable state (see ordering)
+- [ ] Action versions pinned (`@v4` not `@latest`)
+- [ ] Runtime versions pinned on release (breakage there is silent and hard to debug)
 
 ---
 
-## CI Workflow Structure
+## Release Step Ordering
 
-```yaml
-name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true # cancel redundant runs on same ref
-
-jobs:
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      # Use your language's setup action — many have built-in cache: true
-      # e.g. setup-node@v4, setup-go@v5, dtolnay/rust-toolchain, setup-python@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm" # built-in caching where supported
-
-      - name: Install dependencies
-        run: npm ci # use lockfile-frozen install: npm ci, cargo fetch, go mod download, uv sync
-
-      # Cheap checks first — fail fast before running tests
-      - name: Type check # tsc --noEmit, cargo check, mypy, pyright, etc.
-        run: npx tsc --noEmit
-
-      - name: Lint # eslint, clippy, ruff check, golangci-lint, etc.
-        run: npm run lint
-
-      - name: Format check # prettier --check, rustfmt --check, ruff format --check, gofmt, etc.
-        run: npm run format:check
-
-      - name: Test
-        run: npm test
-
-      - name: Build
-        run: npm run build
-
-      - name: Verify artifact # confirm it works, not just compiles
-        run: ./dist/binary --version
-```
-
-**What belongs in CI:** everything required before merging. Fail early — static checks before tests. No side effects, no write-access secrets.
-
-**What does NOT belong:** publish, deploy, tag, release. Any secret with registry write access.
-
----
-
-## Release Workflow Structure
-
-```yaml
-name: Release
-
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version (e.g. 1.2.3)"
-        required: true
-        type: string
-      dry_run:
-        description: "Skip publish and push"
-        required: false
-        type: boolean
-        default: false
-
-concurrency:
-  group: release
-  cancel-in-progress: false # never cancel an in-flight release
-
-permissions:
-  contents: write
-  id-token: write # for provenance/OIDC publish
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    env:
-      VERSION: ${{ inputs.version }} # use env var, not direct interpolation in run:
-    steps:
-      # 1. Validate (fail fast, no side effects)
-      # 2. Full CI suite
-      # 3. Bump version + build + verify artifact version
-      # 4. Push main
-      # 5. Publish to registry
-      # 6. Push tag  ← after publish, not before
-      # 7. Create GitHub release
-```
-
----
-
-## Release Step Ordering (Minimize Blast Radius)
+The one thing most people get wrong. Order matters for recoverability:
 
 ```
-validate → CI → bump → build → verify → push main → publish → push tag → create release
+validate → CI suite → bump version → build → verify → push main → publish → push tag → create release
 ```
 
-**Why tag last:** Tag signals "this shipped." Only push it when it has. If publish fails before tag is pushed, no orphaned remote tag.
+**Tag goes last.** Tag = "this shipped." Don't push it until it has. If publish fails before the tag is pushed, no orphaned remote tag, and re-running is clean.
 
-**Why push main before publish:** Version commit should be on main before the package is live.
+**Push main before publish.** Version commit should exist on main before the package is live.
 
 **Recovery after partial failure:**
 
-| What failed    | State                           | Recovery                                   |
-| -------------- | ------------------------------- | ------------------------------------------ |
-| Publish        | main pushed, no tag, no release | Fix cause, re-run (pre-checks will pass)   |
-| Tag push       | package published, no tag       | `git tag vX.Y.Z && git push origin vX.Y.Z` |
-| GitHub release | tag exists, package published   | Re-run or `gh release create` manually     |
+| What failed    | State                           | Recovery                                                    |
+| -------------- | ------------------------------- | ----------------------------------------------------------- |
+| Publish        | main pushed, no tag, no release | Fix cause, re-run — pre-checks pass since registry is clean |
+| Tag push       | published, no tag               | `git tag vX.Y.Z && git push origin vX.Y.Z`                  |
+| GitHub release | tag + package exist             | Re-run or `gh release create` — idempotent                  |
 
 ---
 
 ## Pre-flight Validation Pattern
 
-All checks before any side effects. Cheap first.
+Run before any side effects. Cheap checks first. All use `env: VERSION` (not direct interpolation).
 
 ```yaml
 - name: Validate version format
   run: |
     if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-      echo "Error: version must be X.Y.Z (got: $VERSION)"
-      exit 1
+      echo "Error: version must be X.Y.Z (got: $VERSION)"; exit 1
     fi
 
 - name: Check tag does not already exist
   run: |
     if git ls-remote --tags origin "refs/tags/v$VERSION" | grep -q .; then
-      echo "Error: tag v$VERSION already exists"
-      exit 1
+      echo "Error: tag v$VERSION already exists"; exit 1
     fi
 
-# Registry check — adapt for your package manager:
-# npm:   npm view "pkg@$VERSION" version 2>/dev/null
-# cargo: cargo search "pkg" | grep "^pkg " | grep -q "$VERSION"
-# PyPI:  pip index versions pkg 2>/dev/null | grep -q "$VERSION"
 - name: Check version not already published
   run: |
+    # npm: npm view "pkg@$VERSION" version 2>/dev/null
+    # cargo: cargo search pkg | grep "^pkg " | grep -q "$VERSION"
+    # PyPI: pip index versions pkg 2>/dev/null | grep -q "$VERSION"
     if npm view "pkg@$VERSION" version 2>/dev/null; then
-      echo "Error: pkg@$VERSION already published"
-      exit 1
+      echo "Error: pkg@$VERSION already published"; exit 1
     fi
 ```
 
 ---
 
-## Security: Env Vars for User Inputs
+## Security: Env Vars for Inputs
+
+`${{ inputs.x }}` in `run:` is interpolated before shell execution — injection risk.
 
 ```yaml
-# UNSAFE — direct interpolation is shell injection
+# UNSAFE
 run: git tag "v${{ inputs.version }}"
 
-# SAFE — set at job level, reference as normal env var
+# SAFE — set at job level
 jobs:
   release:
     env:
@@ -211,39 +107,51 @@ jobs:
       - run: git tag "v$VERSION"
 ```
 
-High-risk (always use env): `inputs.*`, `github.event.*.title`, `github.event.*.body`, `github.head_ref`, any user-controlled string.
-
-Low-risk (no shell execution): `with:` blocks, `if:` expressions, `env:` assignment values.
+Safe contexts (no shell execution): `with:` blocks, `if:` expressions, `env:` assignment values.
 
 ---
 
-## Dependency Caching
+## Concurrency
 
-Many setup actions have built-in caching — prefer that over manual `actions/cache`.
+```yaml
+# CI — cancel redundant runs on same branch/PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
-| Ecosystem  | Setup action             | Built-in cache             | Manual cache path              |
-| ---------- | ------------------------ | -------------------------- | ------------------------------ |
-| Node/npm   | `setup-node@v4`          | `cache: "npm"`             | `~/.npm`                       |
-| Bun        | `oven-sh/setup-bun@v2`   | `cache: true`              | `~/.bun/install/cache`         |
-| Rust/Cargo | `dtolnay/rust-toolchain` | none — use `actions/cache` | `~/.cargo/registry`, `target/` |
-| Go         | `setup-go@v5`            | `cache: true`              | `~/go/pkg/mod`                 |
-| Python/uv  | `setup-python@v5`        | `cache: "pip"`             | `~/.cache/uv`                  |
+# Release — never cancel in-flight
+concurrency:
+  group: release
+  cancel-in-progress: false
+```
 
-For manual `actions/cache`, always set `restore-keys` as a fallback for partial cache hits.
+Easy mistake: copying CI's `cancel-in-progress: true` into release and killing a publish mid-flight.
+
+---
+
+## Setup Actions with Built-in Cache
+
+Prefer setup action's native cache over a separate `actions/cache` step — simpler and avoids conflicts.
+
+| Ecosystem  | Action                   | Cache flag                          |
+| ---------- | ------------------------ | ----------------------------------- |
+| Bun        | `oven-sh/setup-bun@v2`   | `cache: true`                       |
+| Go         | `setup-go@v5`            | `cache: true`                       |
+| Node/npm   | `setup-node@v4`          | `cache: "npm"`                      |
+| Python/pip | `setup-python@v5`        | `cache: "pip"`                      |
+| Rust/Cargo | `dtolnay/rust-toolchain` | none — use `actions/cache` manually |
 
 ---
 
 ## Common Mistakes
 
-| Mistake                               | Consequence                                   | Fix                                       |
-| ------------------------------------- | --------------------------------------------- | ----------------------------------------- |
-| Tag before publish                    | Orphaned tag if publish fails                 | Push tag after publish                    |
-| Release runs fewer checks than CI     | Ships code that wouldn't pass review          | Mirror full CI suite                      |
-| `${{ inputs.x }}` in `run:`           | Shell injection                               | Use job-level `env:`                      |
-| No pre-flight checks                  | Re-run after partial failure corrupts state   | Validate before any side effects          |
-| No concurrency group on release       | Simultaneous runs race past validations       | `concurrency: group: release`             |
-| `cancel-in-progress: true` on release | Active release killed mid-publish             | Use `false` for release                   |
-| No dependency cache on CI             | Full install every run, slow feedback         | Use setup action cache or `actions/cache` |
-| Tool version unpinned on release      | Breaking update silently breaks release       | Pin version or document the risk          |
-| No registry pre-check before publish  | Re-run after partial failure double-publishes | Check registry before side effects        |
-| CI only runs on `push` to main        | PRs merge broken code                         | Add `pull_request` trigger                |
+| Mistake                               | Consequence                                   | Fix                          |
+| ------------------------------------- | --------------------------------------------- | ---------------------------- |
+| Tag before publish                    | Orphaned remote tag if publish fails          | Push tag after publish       |
+| Release skips checks CI runs          | Ships code that wouldn't merge                | Mirror full CI suite         |
+| `${{ inputs.x }}` in `run:`           | Shell injection                               | Job-level `env:`             |
+| No pre-flight checks                  | Partial re-run corrupts state                 | Validate before side effects |
+| `cancel-in-progress: true` on release | Kills active publish                          | Use `false`                  |
+| No registry pre-check                 | Re-run after partial failure double-publishes | Check before any push        |
+| CI only on `push` to main             | PRs merge broken code                         | Add `pull_request` trigger   |
+| Runtime version unpinned on release   | Silent breakage when upstream releases        | Pin version                  |

@@ -111,16 +111,16 @@
 
 ## ai/ Directory
 
-Persistent memory—survives compaction. Update BEFORE implementing.
+Persistent memory—survives compaction. Update before implementing. Stale files mislead—update or delete.
 
-| File         | Purpose                                                                                |
-| ------------ | -------------------------------------------------------------------------------------- |
-| STATUS.md    | Session state: current focus, external blockers, handoff notes. Pointers, not details. |
-| DESIGN.md    | Architecture decisions and system design                                               |
-| DECISIONS.md | Context → decision → rationale                                                         |
-| SPRINTS.md   | Sprint plans (use `/sprint` to generate)                                               |
+| File         | Purpose                                                                     |
+| ------------ | --------------------------------------------------------------------------- |
+| STATUS.md    | Current state, active blockers, index of topic files. Update every session. |
+| DESIGN.md    | Architecture decisions and system design                                    |
+| DECISIONS.md | Context → decision → rationale                                              |
+| SPRINTS.md   | Sprint plans (use `/sprint` to generate)                                    |
 
-Root files read every session—keep minimal. Subdirs (research/, design/, review/, tmp/) on demand.
+Root files read every session—keep minimal. Subdirs (research/, design/, review/, tmp/) for topic-specific detail. Delete resolved items, don't mark done.
 
 **Flow:** research/ → DESIGN.md → `/sprint` → SPRINTS.md → code → review/
 
@@ -176,7 +176,7 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 **Compact/new session at:** Feature complete · Switching codebase areas · Research synthesized · ~150k tokens. Proactively advise the user.
 
-**Before compact:** Update STATUS.md, `tk done` completed tasks, `tk log` any uncommitted findings.
+**Before compact:** Update ai/ files (especially STATUS.md), `tk done` completed tasks, `tk log` any uncommitted findings.
 
 ---
 

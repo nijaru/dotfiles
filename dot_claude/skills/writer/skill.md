@@ -50,6 +50,7 @@ Run 4 passes, flag issues with specific fixes.
 - **Vague gestures?** → Replace with named people, places, numbers
 - **No personality?** → Where's the humor, irony, or risk?
 - **Explains everything?** → Trust the reader
+- **Soulless but clean?** → Sterile writing is as obvious as slop (see Adding Voice)
 
 ---
 
@@ -96,6 +97,21 @@ AI sands down specific, unusual, nuanced facts (statistically rare) and replaces
 - Explaining jokes
 - Smoothing all rough edges
 
+### Adding Voice
+
+Removing AI patterns is half the job. Writing that's clean but lifeless is just as suspect.
+
+- **Have opinions.** React to facts, don't just report them. "I genuinely don't know how to feel about this" beats neutral pros-and-cons.
+- **Vary rhythm deliberately.** Short punches. Then a longer sentence that takes its time. Mix it up -- metronomic sameness feels algorithmic.
+- **Acknowledge complexity.** Real people have mixed feelings. "Impressive but unsettling" beats "impressive."
+- **Use first person when it fits.** "I keep coming back to..." signals a real person thinking.
+- **Let some mess in.** Perfect structure feels generated. Tangents, asides, half-formed thoughts are human.
+- **Be specific about feelings.** Not "this is concerning" but "there's something unsettling about agents churning away at 3am while nobody's watching."
+
+| Clean but soulless                                                                                                           | Has a pulse                                                                                                                                                                 |
+| ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "The experiment produced interesting results. The agents generated 3M lines of code. Some were impressed, others skeptical." | "3 million lines of code, generated while the humans presumably slept. Half the dev community is losing their minds. The truth is probably somewhere boring in the middle." |
+
 ### Strong Verbs
 
 | Weak   | Strong                               |
@@ -111,14 +127,16 @@ AI sands down specific, unusual, nuanced facts (statistically rare) and replaces
 
 ### Content Patterns
 
-| Pattern                  | Example                                                    | Fix                              |
-| ------------------------ | ---------------------------------------------------------- | -------------------------------- |
-| Significance inflation   | "pivotal moment," "broader trends," "profound impact"      | Cut or be specific               |
-| Vague attributions       | "experts argue," "industry reports suggest"                | Name source or cut               |
-| Superficial -ing clauses | "emphasizing the significance," "reflecting the relevance" | Delete entirely                  |
-| Formulaic sections       | "Challenges and Future Prospects"                          | Write what you actually know     |
-| Promotional language     | "breathtaking," "vibrant," "nestled," "state-of-the-art"   | Cut or replace with fact         |
-| Name-dropping notability | Excessive claims about coverage/awards                     | Only include if directly sourced |
+| Pattern                  | Before                                                             | After                                                          |
+| ------------------------ | ------------------------------------------------------------------ | -------------------------------------------------------------- |
+| Significance inflation   | "marking a pivotal moment in the evolution of regional statistics" | "was established in 1989 to collect regional statistics"       |
+| Vague attributions       | "Experts believe it plays a crucial role in the ecosystem"         | "supports several endemic fish species, per a 2019 CAS survey" |
+| Superficial -ing clauses | "symbolizing... reflecting... showcasing..."                       | Remove or expand with actual sources                           |
+| Formulaic sections       | "Despite challenges, continues to thrive"                          | Specific facts about actual challenges                         |
+| Promotional language     | "nestled within the breathtaking region"                           | "is a town in the Gonder region"                               |
+| Name-dropping notability | "cited in NYT, BBC, FT, and The Hindu"                             | "In a 2024 NYT interview, she argued..."                       |
+| Filler phrases           | "In order to", "Due to the fact that", "It is important to note"   | "To", "Because", just state it                                 |
+| Generic conclusions      | "The future looks bright. Exciting times lie ahead."               | Specific plans: "plans to open two more locations next year"   |
 
 ### Language Patterns
 
@@ -258,6 +276,13 @@ Ask these questions:
 
 Fix these issues?
 ```
+
+When the user says yes, apply fixes then run a **self-audit pass**:
+
+1. Rewrite the text with all flagged issues fixed
+2. Ask yourself: "What still sounds AI-generated about this?" -- list remaining tells
+3. Revise again to address those tells
+4. Present the final version
 
 ---
 

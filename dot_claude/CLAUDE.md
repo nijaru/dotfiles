@@ -68,6 +68,8 @@
 
 **Design:** Clear > clever. Hard to explain = wrong abstraction. Small interfaces. A little copying over a little dependency.
 
+**Functional core, imperative shell:** Pure logic at the center; push side effects (IO, state, randomness) to the edges.
+
 **Performance:** Profile before optimizing.
 
 **Problem-solving:** Reproduce before fixing. Question assumptions. If something seems off, it probably is—stop and verify. If stuck, reframe the problem.
@@ -180,4 +182,4 @@ For context isolation, parallelism, fresh perspective. ai/ files are shared memo
 
 ---
 
-**Updated:** 2026-02-16 | github.com/nijaru/agent-contexts
+**Updated:** 2026-03-03 | github.com/nijaru/agent-contexts

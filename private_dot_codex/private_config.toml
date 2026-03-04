@@ -1,7 +1,7 @@
 # Codex CLI Configuration
 
 # Model reasoning effort
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "high"
 
 # Project doc fallback - read AGENTS.md or CLAUDE.md
 project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]

@@ -1,6 +1,6 @@
 ---
 name: github-actions-workflows
-description: Use when writing, auditing, or fixing GitHub Actions workflows — CI, release, or deployment. Trigger on: creating a new workflow, reviewing an existing one, debugging a failure, or when a workflow caused an incident (partial publish, orphaned tag, flaky CI, etc.)
+description: "Use when writing, auditing, or fixing GitHub Actions workflows — CI, release, or deployment. Trigger on: creating a new workflow, reviewing an existing one, debugging a failure, or when a workflow caused an incident (partial publish, orphaned tag, flaky CI, etc.)"
 ---
 
 # GitHub Actions Workflow Engineering

@@ -2,20 +2,20 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/context7-mcp"],
+      "directTools": true
     },
     "exa": {
       "command": "npx",
       "args": ["-y", "exa-mcp-server"],
       "env": {
-        "EXA_API_KEY": "$EXA_API_KEY"
+        "EXA_API_KEY": "${EXA_API_KEY}"
       }
     },
     "parallel": {
       "httpUrl": "https://task-mcp.parallel.ai/mcp",
-      "headers": {
-        "Authorization": "Bearer $PARALLEL_API_KEY"
-      }
+      "auth": "bearer",
+      "bearerTokenEnv": "PARALLEL_API_KEY"
     }
   }
 }

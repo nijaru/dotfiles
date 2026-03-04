@@ -9,5 +9,11 @@
   "followUpMode": "all",
   "hideThinkingBlock": true,
   "collapseChangelog": true,
-  "defaultThinkingLevel": "medium"
+  "defaultThinkingLevel": "medium",
+  "packages": [
+    "npm:pi-mcp-adapter",
+    "npm:@yofriadi/pi-web-search",
+    "npm:pi-subagents",
+    "git:github.com/hjanuschka/shitty-extensions"
+  ]
 }

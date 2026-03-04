@@ -1,57 +1,77 @@
 {
-	"mcpServers": {
-		"context7": {
-			"command": "npx",
-			"args": ["-y", "@upstash/context7-mcp"]
-		},
-		"exa": {
-			"command": "npx",
-			"args": ["-y", "exa-mcp-server"],
-			"env": {
-				"EXA_API_KEY": "$EXA_API_KEY"
-			}
-		},
-		"parallel": {
-			"httpUrl": "https://task-mcp.parallel.ai/mcp",
-			"headers": {
-				"Authorization": "Bearer $PARALLEL_API_KEY"
-			}
-		}
-	},
-	"model": {
-		"name": "gemini-3.1-pro-preview",
-		"generateContentConfig": {
-			"thinkingConfig": {
-				"thinkingLevel": "HIGH"
-			}
-		}
-	},
-	"security": {
-		"auth": {
-			"selectedType": "oauth-personal"
-		}
-	},
-	"ui": {
-		"footer": {
-			"hideContextPercentage": false
-		},
-		"showMemoryUsage": true,
-		"theme": "Atom One"
-	},
-	"context": {
-		"fileName": "AGENTS.md"
-	},
-	"general": {
-		"previewFeatures": true
-	},
-	"tools": {
-		"useRipgrep": true,
-		"shell": {
-			"showColor": true,
-			"inactivityTimeout": 0
-		}
-	},
-	"privacy": {
-		"usageStatisticsEnabled": false
-	}
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "exa": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "exa-mcp-server"
+      ],
+      "env": {
+        "EXA_API_KEY": "$EXA_API_KEY"
+      }
+    },
+    "parallel": {
+      "httpUrl": "https://task-mcp.parallel.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer $PARALLEL_API_KEY"
+      }
+    }
+  },
+  "model": {
+    "name": "gemini-3.1-pro-preview",
+    "generateContentConfig": {
+      "thinkingConfig": {
+        "thinkingLevel": "HIGH"
+      }
+    }
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "ui": {
+    "footer": {
+      "hideContextPercentage": false
+    },
+    "showMemoryUsage": true,
+    "theme": "Atom One",
+    "hideContextSummary": true
+  },
+  "context": {
+    "fileName": "AGENTS.md"
+  },
+  "general": {
+    "previewFeatures": true,
+    "sessionRetention": {
+      "warningAcknowledged": true,
+      "enabled": true,
+      "maxAge": "30d"
+    },
+    "defaultApprovalMode": "auto_edit",
+    "enableNotifications": true,
+    "plan": {
+      "directory": "./ai/plans/"
+    }
+  },
+  "tools": {
+    "useRipgrep": true,
+    "shell": {
+      "showColor": true,
+      "inactivityTimeout": 0
+    }
+  },
+  "privacy": {
+    "usageStatisticsEnabled": false
+  },
+  "experimental": {
+    "modelSteering": true
+  }
 }

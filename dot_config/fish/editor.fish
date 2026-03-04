@@ -11,5 +11,6 @@ if status is-interactive
     abbr --add cl 'claude'
     abbr --add clc 'claude --continue'
     abbr --add gemy 'gemini --yolo'
+    abbr --add gemyr 'gemini --yolo -r'
     abbr --add codexy 'codex --yolo'
 end

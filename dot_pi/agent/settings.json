@@ -13,7 +13,6 @@
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:@yofriadi/pi-web-search",
-    "npm:pi-subagents",
-    "git:github.com/hjanuschka/shitty-extensions"
+    "npm:pi-subagents"
   ]
 }

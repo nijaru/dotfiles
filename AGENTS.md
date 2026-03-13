@@ -40,7 +40,9 @@ Skills are symlinked from `~/.claude/skills/` to Gemini, Codex, and Pi via chezm
 
 ### 6. Shell
 
-Fish + Starship. Tide installed but inactive. Nushell migration incomplete. See `ai/shell-migration.md`.
+Fish (primary) + Nushell (maintained in parallel). Starship prompt on both. Tide installed but inactive.
+
+**Nushell sync rule:** When adding fish functions, abbrs, or aliases, mirror them in `dot_config/nushell/config.nu`. Fish functions → nushell `def`/`def --env`. Fish abbrs/aliases → nushell `alias`. Keep git aliases, PATH, env vars, and tool integrations in sync across both shells.
 
 ---
 

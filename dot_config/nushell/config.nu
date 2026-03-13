@@ -59,12 +59,27 @@ path add ($env.HOME | path join ".cargo/bin")
 path add ($env.HOME | path join ".cache/.bun/bin")
 path add ($env.HOME | path join ".local/share/mise/shims")
 
+# ── Custom Commands ─────────────────────────────────────
+def pullall [] {
+    ^find . -maxdepth 2 -name .git -type d -execdir git pull ";"
+}
+
 # ── Aliases ─────────────────────────────────────────────
 
 # Navigation
 alias ll = ls
 alias la = ls -a
 alias lla = ls -a
+
+# Directory shortcuts
+def --env ... [] { cd ../.. }
+def --env .... [] { cd ../../.. }
+def --env ..... [] { cd ../../../.. }
+def --env dl [] { cd ~/Downloads }
+def --env dt [] { cd ~/Desktop }
+def --env doc [] { cd ~/Documents }
+def --env ghub [] { cd ~/github }
+def --env p [] { cd ~/Projects }
 
 # Editor
 alias z. = zed .
@@ -84,6 +99,14 @@ alias mvv = rsync -ah --remove-source-files --info=progress2
 # Tools
 alias y = yazi
 alias hypf = hyperfine -N --warmup 5
+alias py = python3
+alias bungi = bun install -g
+
+# macOS
+alias o = open
+alias "o." = open .
+alias clip = pbcopy
+alias paste = pbpaste
 
 # Docker
 alias d = docker
@@ -122,7 +145,7 @@ alias ga. = git add .
 alias gaa = git add --all
 alias gap = git add --patch
 alias gau = git add --update
-alias grm = git rm
+alias ggrm = git rm
 alias grmc = git rm --cached
 
 # Git — unstaging
@@ -136,8 +159,10 @@ alias gnuke = git clean -dffx
 alias gc = git commit --gpg-sign
 alias gcm = git commit --gpg-sign -m
 alias gca = git commit --gpg-sign --amend
+alias gcic = git commit --gpg-sign -m "Initial commit"
 alias gcf = git commit --gpg-sign --amend --reuse-message HEAD
 alias gcF = git commit --gpg-sign --amend
+alias gcan = git commit --gpg-sign --amend --no-edit
 alias gfix = git commit --gpg-sign --fixup
 
 # Git — stash
@@ -160,8 +185,9 @@ alias gpuo = git push -u origin
 alias gtrack = git branch --set-upstream-to
 
 # Git — log
-alias gl = git log --oneline --decorate -n 10
-alias glg = git log --graph --oneline --decorate -n 20
+alias gl = git log --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 10
+alias gln = git log --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n
+alias glg = git log --graph --pretty=format:"%C(green)%h%C(auto)%d %s %C(cyan)%cr %C(blue)<%an>%C(reset)" -n 20
 alias gls = git log --stat
 alias glp = git log --patch
 alias gll = git log --oneline

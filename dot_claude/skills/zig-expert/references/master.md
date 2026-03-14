@@ -1,0 +1,1 @@
+# Master (0.16.0-dev) Changes\n\n- **Type Resolution Redesign:** The compiler is now significantly lazier. Circular dependencies provide better diagnostics.\n- **Lazy Struct Analysis:** Fields of a struct are only analyzed if the struct is initialized.\n- **Better Error Tracebacks:** Improved error messages for deeply nested generics and circularity.

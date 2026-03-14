@@ -1,8 +1,8 @@
 {
-  "defaultProvider": "openrouter",
+  "defaultProvider": "huggingface",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.49.2",
+  "lastChangelogVersion": "0.58.1",
   "editorPaddingX": 1,
   "steeringMode": "all",
   "followUpMode": "all",
@@ -14,5 +14,6 @@
     "npm:@yofriadi/pi-web-search",
     "npm:pi-subagents",
     "https://github.com/davebcn87/pi-autoresearch"
-  ]
+  ],
+  "defaultModel": "zai-org/GLM-5"
 }

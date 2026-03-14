@@ -84,7 +84,11 @@ end
 ###############################################################################
 if command -v go >/dev/null 2>&1
     function goformat
-        gofumpt | golines
+        if test (count $argv) -eq 0
+            golines --base-formatter gofumpt -w .
+        else
+            golines --base-formatter gofumpt -w $argv
+        end
     end
 end
 

@@ -1,6 +1,17 @@
 {
 	"options": {
-		"initialize_as": "AGENTS.md"
+		"initialize_as": "AGENTS.md",
+		"skills_paths": ["~/.config/crush/skills"]
+	},
+	"models": {
+		"large": {
+			"model": "mlx-community/Qwen3-Next-80B-A3B-Thinking-4bit",
+			"provider": "local"
+		},
+		"small": {
+			"model": "cyankiwi/Devstral-Small-2-24B-Instruct-2512-AWQ-4bit",
+			"provider": "fedora"
+		}
 	},
 	"providers": {
 		"fedora": {

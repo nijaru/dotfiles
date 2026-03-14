@@ -3,6 +3,13 @@
 		"initialize_as": "AGENTS.md",
 		"skills_paths": ["~/.config/crush/skills"]
 	},
+	"providers": {
+		"ollama": {
+			"type": "openai",
+			"base_url": "http://localhost:11434/v1",
+			"api_key": "ollama"
+		}
+	},
 	"permissions": {
 		"allowed_tools": ["view", "ls", "glob", "grep", "bash"]
 	},

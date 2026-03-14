@@ -1,0 +1,28 @@
+{
+  "project": "tk",
+  "ref": "8mtd",
+  "title": "Review chezmoi shell sync changes",
+  "description": "Verify pending fish/nushell/codex managed-file changes against chezmoi source and summarize findings",
+  "status": "done",
+  "priority": 3,
+  "labels": [],
+  "assignees": [],
+  "parent": null,
+  "blocked_by": [],
+  "estimate": null,
+  "due_date": null,
+  "logs": [
+    {
+      "ts": "2026-03-13T00:49:59.323Z",
+      "msg": "User clarified goal: only sync current chezmoi status changes into source and apply them to home."
+    },
+    {
+      "ts": "2026-03-13T00:50:07.467Z",
+      "msg": "Applying current chezmoi source to deploy pullall.fish and updated nushell config to home."
+    }
+  ],
+  "created_at": "2026-03-13T00:47:52.693Z",
+  "updated_at": "2026-03-13T00:50:13.795Z",
+  "completed_at": "2026-03-13T00:50:13.795Z",
+  "external": {}
+}

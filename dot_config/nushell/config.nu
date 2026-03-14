@@ -61,7 +61,17 @@ path add ($env.HOME | path join ".local/share/mise/shims")
 
 # ── Custom Commands ─────────────────────────────────────
 def pullall [] {
-    ^find . -maxdepth 2 -name .git -type d -execdir git pull ";"
+    ls **/ .git | where type == dir | each { |it|
+        let repo = ($it.name | path dirname)
+        print $"Pulling ($repo)..."
+        try {
+            cd $repo
+            ^git pull
+            cd -
+        } catch { |err|
+            print $"Failed to pull ($repo): ($err.msg)"
+        }
+    }
 }
 
 # ── Aliases ─────────────────────────────────────────────
@@ -145,7 +155,8 @@ alias ga. = git add .
 alias gaa = git add --all
 alias gap = git add --patch
 alias gau = git add --update
-alias ggrm = git rm
+alias grm = git rm
+alias grmm = git rebase main
 alias grmc = git rm --cached
 
 # Git — unstaging
@@ -208,7 +219,6 @@ alias gr = git rebase
 alias gri = git rebase -i
 alias grc = git rebase --continue
 alias gra = git rebase --abort
-alias grm = git rebase main
 
 # Git — maintenance
 alias greflog = git reflog

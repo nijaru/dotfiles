@@ -11,7 +11,7 @@ approval_policy = "never"
 
 # Sandbox - full access
 sandbox_mode = "danger-full-access"
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 
 # MCP Servers (stdio)
 [mcp_servers.context7]
@@ -26,3 +26,6 @@ args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
 [mcp_servers.parallel]
 url = "https://task-mcp.parallel.ai/mcp"
 bearer_token_env_var = "PARALLEL_API_KEY"
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"

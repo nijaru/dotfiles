@@ -2,4 +2,4 @@ theme = "Catppuccin Macchiato"
 font-family = "JetBrainsMono Nerd Font"
 font-size = 15
 macos-titlebar-style = tabs
-auto-update-channel = tip
+auto-update-channel = stable

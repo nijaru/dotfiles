@@ -2,17 +2,11 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ]
+      "args": ["-y", "@upstash/context7-mcp"]
     },
     "exa": {
       "command": "npx",
-      "args": [
-        "-y",
-        "exa-mcp-server"
-      ],
+      "args": ["-y", "exa-mcp-server"],
       "env": {
         "EXA_API_KEY": "$EXA_API_KEY"
       }
@@ -25,12 +19,13 @@
     }
   },
   "model": {
-    "name": "gemini-3.1-pro-preview",
+    // "name": "gemini-3.1-pro-preview",
     "generateContentConfig": {
       "thinkingConfig": {
         "thinkingLevel": "HIGH"
       }
-    }
+    },
+    "compressionThreshold": 0.2
   },
   "security": {
     "auth": {

@@ -84,6 +84,10 @@ end
 ###############################################################################
 if command -v go >/dev/null 2>&1
     function goformat
+        if test "$PWD" = "$HOME"
+            echo "Error: Cannot run goformat in home directory."
+            return 1
+        end
         if test (count $argv) -eq 0
             goimports -w . && golines --base-formatter gofumpt -w .
         else

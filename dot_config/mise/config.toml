@@ -9,6 +9,7 @@ python = "latest"
 ruby = "latest"
 shfmt = "latest"
 usage = "latest"
+zig = "master"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python", "true"]

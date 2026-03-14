@@ -3,31 +3,6 @@
 		"initialize_as": "AGENTS.md",
 		"skills_paths": ["~/.config/crush/skills"]
 	},
-	"providers": {
-		"fedora": {
-			"type": "openai",
-			"base_url": "http://fedora:8080/v1",
-			"api_key": "none",
-			"models": [
-				{
-					"id": "cyankiwi/Devstral-Small-2-24B-Instruct-2512-AWQ-4bit",
-					"name": "Devstral Small 2 AWQ"
-				}
-			]
-		},
-		"local": {
-			"type": "openai",
-			"base_url": "http://localhost:8080/v1",
-			"api_key": "none",
-			"models": [
-				{
-					"id": "mlx-community/Qwen3-Next-80B-A3B-Thinking-4bit",
-					"name": "Qwen3-Next-80B Thinking"
-				}
-			]
-		}
-	},
-	"default_provider": "fedora",
 	"permissions": {
 		"allowed_tools": ["view", "ls", "glob", "grep", "bash"]
 	},

@@ -1,4 +1,110 @@
 {
+  "agent": {
+    "default_model": {
+      "provider": "ollama",
+      "model": "qwen3.5:27b",
+      "enable_thinking": true
+    },
+    "favorite_models": [],
+    "model_parameters": [],
+    "profiles": {
+      "developer": {
+        "name": "Developer",
+        "tools": {
+          "thinking": true,
+          "read_file": true,
+          "edit_file": true,
+          "create_directory": true,
+          "list_directory": true,
+          "find_path": true,
+          "copy_path": true,
+          "move_path": true,
+          "delete_path": true,
+          "grep": true,
+          "terminal": true,
+          "diagnostics": true,
+          "open": true,
+          "fetch": false
+        }
+      },
+      "researcher": {
+        "name": "Researcher",
+        "tools": {
+          "thinking": true,
+          "read_file": true,
+          "edit_file": false,
+          "create_directory": false,
+          "list_directory": true,
+          "find_path": true,
+          "copy_path": false,
+          "move_path": false,
+          "delete_path": false,
+          "grep": true,
+          "terminal": false,
+          "diagnostics": false,
+          "open": false,
+          "fetch": true
+        }
+      },
+      "reviewer": {
+        "name": "Reviewer",
+        "tools": {
+          "thinking": true,
+          "read_file": true,
+          "edit_file": false,
+          "create_directory": false,
+          "list_directory": true,
+          "find_path": true,
+          "copy_path": false,
+          "move_path": false,
+          "delete_path": false,
+          "grep": true,
+          "terminal": true,
+          "diagnostics": true,
+          "open": true,
+          "fetch": true
+        }
+      },
+      "designer": {
+        "name": "Designer",
+        "tools": {
+          "thinking": true,
+          "read_file": true,
+          "edit_file": false,
+          "create_directory": false,
+          "list_directory": true,
+          "find_path": true,
+          "copy_path": false,
+          "move_path": false,
+          "delete_path": false,
+          "grep": true,
+          "terminal": false,
+          "diagnostics": false,
+          "open": false,
+          "fetch": true
+        }
+      },
+      "profiler": {
+        "name": "Profiler",
+        "tools": {
+          "thinking": true,
+          "read_file": true,
+          "edit_file": false,
+          "create_directory": false,
+          "list_directory": true,
+          "find_path": true,
+          "copy_path": false,
+          "move_path": false,
+          "delete_path": false,
+          "grep": true,
+          "terminal": true,
+          "diagnostics": true,
+          "open": true,
+          "fetch": true
+        }
+      }
+    }
+  },
   "theme": {
     "mode": "dark",
     "light": "Catppuccin Latte",

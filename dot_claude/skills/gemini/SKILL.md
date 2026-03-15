@@ -1,71 +1,56 @@
 ---
 name: gemini
-description: Use when needing a second opinion from Gemini on any task — code review, debugging, analysis, architecture. Best when you want to pipe specific files yourself rather than letting an agent walk the repo.
+description: Use when needing a second opinion from Gemini for code review, debugging, or architectural analysis. Ideal for piping entire modules or codebases into a 2M token context window.
+allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Gemini CLI
+# Gemini (Contextual Review)
 
-Gemini is Google's AI CLI for second opinions. Pipe files directly — its 1M token context handles entire modules or codebases at once. Requires Google subscription (Gemini Advanced).
+## 🎯 Core Mandates
 
-## Key Distinction from Codex
+- **Context Mastery:** Leverage the 2M+ token window by piping entire modules or directories (e.g., `cat src/*.rs | gemini`).
+- **Precision:** Provide specific invariants for verification to avoid generic AI responses.
+- **Directness:** Use piping for targeted review of specific file sets rather than autonomous repo walking.
 
-- **Gemini**: you pipe files, it responds — fast, direct, good for targeted review
-- **Codex**: walks the repo itself autonomously — good when you don't want to select files manually
+## 📋 Execution Patterns
 
-## Quick Reference
-
+### 1. Targeted Review
 ```bash
-# One-shot question or analysis
-gemini "Your question here"
-
 # Pipe a file for review
-cat src/file.rs | gemini "Correctness review — look for data loss bugs and invariant violations"
+cat src/file.rs | gemini "Correctness review — identify data loss bugs"
 
-# Pipe multiple files together
-cat src/a.rs src/b.rs | gemini "Review these two files together, focus on their interaction"
+# Pipe multiple related files
+cat src/a.rs src/b.rs | gemini "Review interaction between these components"
+```
 
-# Pipe an entire module
-cat src/vector/store/*.rs | gemini "Architecture and correctness review of the store module"
+### 2. Module Analysis
+```bash
+# Analyze entire subsystem
+cat src/vector/store/*.rs | gemini "Architecture and correctness review"
 
-# Save output to file
+# Full source tree analysis
+find src -name "*.rs" | xargs cat | gemini "Identify coupling issues and missing abstractions"
+```
+
+### 3. Output Management
+```bash
+# Save response to file
 gemini "Your prompt" > /tmp/gemini-reply.txt 2>/dev/null
 
-# JSON output with metadata
+# JSON output for automation
 gemini -o json "Your prompt" 2>/dev/null | jq -r .response
 ```
 
-## Effective Prompts for Code Review
+## ⚖️ Anti-Rationalization
 
-Give Gemini specific invariants to verify — vague prompts get vague answers:
+| Excuse | Reality |
+| :--- | :--- |
+| "The current agent already reviewed it." | Gemini's massive context window provides a superior bird's-eye view of inter-module dependencies. |
+| "It's too much data to pipe manually." | `find ... | xargs cat` is trivial and faster than manual selection or autonomous walking. |
+| "I'll just use the default chat." | Default chats have smaller context limits and may lose track of distant file relationships. |
 
-```
-Full correctness review of this persistence layer.
+## 🛠️ Performance Standards
 
-Key invariants to verify:
-1. WAL replay must be skipped when slim snapshot is loaded
-2. dirty_since_flush must accumulate across checkpoints
-3. set_pending_merge_dir must be called on every persistent SegmentManager
-
-Look for: data loss scenarios, crash safety issues, incorrect recovery behavior.
-Report findings with file:line references. Be specific about what can go wrong.
-```
-
-## Large Codebase Pattern
-
-Gemini's 1M context is the main advantage — don't undersell it:
-
-```bash
-# Entire Rust source tree
-find src -name "*.rs" | xargs cat | gemini "Architecture review: identify coupling issues, missing abstractions, and correctness risks"
-
-# Specific subsystem
-cat src/vector/store/*.rs src/omen/*.rs | gemini "Review the persistence layer end-to-end"
-```
-
-## Parallel Review Pattern
-
-Run alongside Codex and a Claude reviewer subagent:
-
-```bash
-jb run "cat src/key/*.rs | gemini 'Full correctness review' > /tmp/gemini-review.txt" --follow
-```
+- **Invariants:** Always define 3+ specific invariants for Gemini to check.
+- **Formatting:** Request findings with `file:line` references.
+- **Parallelism:** Use `jb` to run Gemini reviews in parallel with other tools.

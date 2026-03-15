@@ -1,57 +1,63 @@
 ---
 name: save
-description: Update ai/ files and tk tasks.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+description: Use when persisting session state, updating AI context documents (ai/), and managing task progress (tk). Trigger before context compacting, session termination, or after completing a significant task.
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
-# Context Save
+# Save (Context Persistence)
 
-Persist session state to ai/ and tk. Priority: tk and ai/ first (from context), git last.
+## 🎯 Core Mandates
 
-**Trigger:** Before `/compact`, session end, context switch, or explicitly.
+- **Volatile Context:** Never assume state persists across sessions. Write every finding, blocker, and decision to `ai/` or `tk`.
+- **Log First:** Update `tk log <id>` with technical root causes and file paths BEFORE marking a task as `done`.
+- **Pruning:** Keep `STATUS.md` and other `ai/` documents compact (<500 lines). Delete outdated state aggressively.
+- **Next Steps:** Always define the "2-4 bullets" of what to do next to guide the following agent.
 
-## 1. Update tk Tasks
+## 🛠️ Persistence Standards
 
-```bash
-tk ls
-```
+### 1. Task Management (`tk`)
+- **Review:** Run `tk ls` to identify active and stale tasks.
+- **Log:** Record specific technical findings: `tk log <id> "Root cause: race condition in store.go:142"`.
+- **Done:** Close completed tasks immediately.
+- **Add:** Create atomic, actionable tasks for any remaining work.
 
-For each task:
+### 2. AI Context (`ai/`)
+- **STATUS.md:** Update current focus, active blockers, and what worked.
+- **DESIGN.md:** Reflect any changes to components, interfaces, or architectural patterns.
+- **DECISIONS.md:** Log new technical decisions using the `Context -> Decision -> Rationale` format.
+- **SPRINTS.md:** Ensure sprint progress reflects the reality of the codebase.
 
-- **Log findings first:** `tk log <id> "what was learned"` — errors, root cause, file paths
-- **Mark complete:** `tk done <id>`
-- **Add new:** `tk add "title" -d "context"`
-
-Don't leave stale tasks.
-
-## 2. Update ai/
-
-**STATUS.md** (always): Current focus, blockers, what worked. Prune stale content.
-
-**DESIGN.md** (if architecture changed): Components, patterns, interfaces.
-
-**DECISIONS.md** (if decisions made): Context → Decision → Rationale.
-
-**SPRINTS.md** (if sprint progress): Mark completed, update status.
-
-Keep files <500 lines. Move details to subdirs if needed.
-
-## 3. Commit
-
+### 3. Source Control
+Always commit context updates to ensure they are tracked:
 ```bash
 git add ai/ .tasks/
-git commit -m "Update session context"
+git commit -m "chore: save session context"
 ```
 
-## 4. Report
+## 📋 Reporting Format
 
+```markdown
+## Context Saved
+
+- **Tasks:** [N done, N added, N pending]
+- **AI Docs:** [Summary of updates to STATUS, DESIGN, etc.]
+
+## Next Steps (Transition Plan)
+
+1. [Actionable bullet]
+2. [Actionable bullet]
+3. [Actionable bullet]
 ```
-## Saved
 
-Tasks: [N done, N added, N pending]
-ai/: [what changed]
+## ⚖️ Anti-Rationalization
 
-## Next Session
+| Excuse | Reality |
+| :--- | :--- |
+| "The git commit message is enough." | Commits track code; `ai/` tracks intent, logic, and the future plan. |
+| "I'll update the status later." | Without immediate updates, context is lost during the next session swap or compaction. |
+| "I don't need to log findings." | Future agents will waste time re-discovering what you already learned. |
 
-[2-4 bullets: what to do next based on pending tasks, blockers, incomplete work]
-```
+## 🛠️ Troubeshooting
+
+- **Task Bloat:** If `tk ls` is overwhelmed, consolidate tasks into a new sprint in `ai/sprints/`.
+- **Doc Sprawl:** If `STATUS.md` exceeds 500 lines, move historical data to `ai/research/` or `ai/archive/`.

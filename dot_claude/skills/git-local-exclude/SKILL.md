@@ -1,109 +1,57 @@
 ---
 name: git-local-exclude
-description: Use when keeping files local but out of git history — ai/, .tasks/, notes/, secrets, or any personal context files that should never appear in commits or on GitHub. Also use when asked to remove files from git history while keeping them on disk.
+description: Use when keeping files local but out of git history (e.g., ai/, .tasks/, secrets). Use for removing files from git history while retaining them on disk without leaking patterns to .gitignore.
+allowed-tools: Bash, Read, Grep, Glob
 ---
 
 # Git Local Exclude
 
-Keep files on disk without ever committing them. Uses `.git/info/exclude` (never `.gitignore`).
+## 🎯 Core Mandates
 
-## When to Use
+- **Privacy First:** Use `.git/info/exclude` instead of `.gitignore` for personal or sensitive local files to avoid leaking their existence.
+- **Verification:** Always verify files exist on disk (`ls`) before and after any destructive git operations (e.g., `filter-repo`).
+- **Precedence:** Untrack files (`git rm --cached`) BEFORE applying history-rewriting tools.
 
-- User wants files kept locally but invisible to git — files AND the ignore pattern itself
-- User says "keep local but not in git", "don't commit this", "remove from history"
-- You are about to add a local-only pattern to `.gitignore` — stop, use exclude instead
-- The repo is public and you don't want `ai/` or `.tasks/` visible in the committed `.gitignore`
+## 🛠️ Implementation Standards
 
-**Do NOT use this skill** when the ignore pattern should be shared (e.g. `*.pyc`, `node_modules/`, build artifacts) — those belong in `.gitignore`.
-
-## The Key Distinction
-
-| File                | Committed to repo | Visible on GitHub | Use for                                        |
-| ------------------- | ----------------- | ----------------- | ---------------------------------------------- |
-| `.gitignore`        | Yes               | **Yes**           | Shared ignores: build artifacts, `*.pyc`, etc. |
-| `.git/info/exclude` | **No**            | **No**            | Personal local files: `ai/`, `.tasks/`, notes  |
-
-`.gitignore` is a public file — adding `ai/` there tells the world you have an `ai/` directory. `.git/info/exclude` is never committed and never leaves your machine.
-
-## Pattern A: New files (never tracked)
-
-Just add to `.git/info/exclude`:
-
+### 1. New Local Files (Untracked)
+Immediately add patterns to the local exclude file:
 ```bash
 echo "ai/" >> .git/info/exclude
 echo ".tasks/" >> .git/info/exclude
 ```
 
-Files are immediately ignored locally. Done.
+### 2. Untracking Existing Files
+Follow this exact sequence to remove from index without deleting from disk:
+1. Add to `.git/info/exclude`.
+2. Run `git rm -r --cached <path>`.
+3. Verify file existence: `ls <path>`.
+4. Commit the untracking: `git commit -m "chore: untrack local context"`.
 
-## Pattern B: Already-tracked files — untrack without deleting
+### 3. History Removal (Sensitive Data)
+Use only when data must be purged from all commits:
+1. Perform the "Untracking" sequence above.
+2. Run `git filter-repo --path <path> --invert-paths`.
+3. Re-add remote: `git remote add origin <url>`.
+4. Force push: `git push origin main --force`.
 
-```bash
-# 1. Add to local exclude FIRST
-echo "ai/" >> .git/info/exclude
-echo ".tasks/" >> .git/info/exclude
+## 📋 Pattern Distinction
 
-# 2. Untrack (remove from git index, keep files on disk)
-git rm -r --cached ai/ .tasks/
+| File | Committed | Visible | Use Case |
+| :--- | :--- | :--- | :--- |
+| `.gitignore` | Yes | Yes | Shared: `node_modules/`, `*.pyc`, build artifacts. |
+| `.git/info/exclude` | No | No | Private: `ai/`, `.tasks/`, personal notes, secrets. |
 
-# 3. Verify files still exist on disk before committing
-ls ai/ && ls .tasks/
+## ⚖️ Anti-Rationalization
 
-# 4. Commit the untrack
-git commit -m "chore: untrack local context directories"
-git push
-```
+| Excuse | Reality |
+| :--- | :--- |
+| "I'll just use .gitignore for now." | This commits the pattern to history, leaking your private directory structure to the public repo. |
+| "The files are already in history, so why bother?" | Untracking prevents future accidental leaks and reduces repo bloat for other contributors. |
+| "filter-repo is too dangerous." | Manual untracking (`rm --cached`) is safe; history rewriting is only for secrets. |
 
-Files remain on disk. Future commits ignore them. History still contains old commits with the files — acceptable for most cases.
+## 🛠️ Troubleshooting
 
-## Pattern C: Remove from history entirely (nuclear)
-
-Only do this if the files contain sensitive data that must not appear in any commit.
-
-**CRITICAL: Verify files exist locally BEFORE running filter-repo. It will delete tracked files from disk.**
-
-```bash
-# 1. Untrack and commit first (Pattern B above) — this is your safety net
-git rm -r --cached ai/ .tasks/
-git commit -m "chore: untrack local context directories"
-
-# 2. Verify files still on disk
-ls ai/ && ls .tasks/   # Must succeed before continuing
-
-# 3. Add to exclude
-echo "ai/" >> .git/info/exclude
-echo ".tasks/" >> .git/info/exclude
-
-# 4. Rewrite history (removes the remote — expected behavior)
-git filter-repo --path ai/ --path .tasks/ --invert-paths
-
-# 5. Re-add remote and force push
-git remote add origin <url>
-git push origin main --force
-
-# 6. Verify files still on disk (again)
-ls ai/ && ls .tasks/
-```
-
-## Common Mistakes
-
-| Mistake                                             | Consequence                                                          | Fix                                             |
-| --------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------- |
-| Adding to `.gitignore` instead of exclude           | Pattern committed, shared with team                                  | Revert that commit, use exclude                 |
-| Running `filter-repo` before untracking             | filter-repo checks out new HEAD, **deletes tracked files from disk** | Always untrack + commit first                   |
-| Running `filter-repo` without verifying local files | Data loss if objects are GC'd                                        | Check `ls` before every destructive step        |
-| Force pushing without re-adding remote              | filter-repo removes remote as safety measure                         | `git remote add origin <url>` after filter-repo |
-
-## Check Current Exclude
-
-```bash
-cat .git/info/exclude
-```
-
-## Recovering Lost Files
-
-If filter-repo deleted files from disk, check:
-
-1. `git filter-repo` saves a commit map at `.git/filter-repo/commit-map` — old SHAs listed there
-2. `git cat-file -e <old-sha>` — check if object still exists (often GC'd immediately)
-3. If gone: recreate from memory/other sources. The commit map is your only lead.
+- **Remote missing:** `filter-repo` removes remotes as a safety measure; re-add with `git remote add`.
+- **Files deleted:** If `ls` fails after `filter-repo`, check `.git/filter-repo/commit-map` for recovery.
+- **Pattern ignored:** Ensure no leading slashes if matching relative to repo root (e.g., `ai/` not `/ai/`).

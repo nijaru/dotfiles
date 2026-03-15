@@ -55,6 +55,9 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **DO NOT** use `//go:build` with old syntax (use Go 1.17+ syntax).
 
 ## 🏗️ Tooling & Workspace
+- **Modern Fix:** Use `go fix` to migrate legacy code to modern 1.26+ patterns.
 - **Dependencies:** Use the `tool` directive in `go.mod` for dev tools (Go 1.24+).
 - **Workspaces:** Default to `go.work` for multi-module development.
 - **Formatting:** Use `golines --base-formatter gofumpt`.
+- **Tidying:** Always run `go mod tidy` after changing dependencies.
+- **Go Tool:** Use `go tool [package]` for running project-specific tools defined in `go.mod` (Go 1.24+).

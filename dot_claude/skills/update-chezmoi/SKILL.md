@@ -1,108 +1,41 @@
 ---
 name: update-chezmoi
-description: Use when modifying global CLAUDE.md, dotfiles, or chezmoi config; syncing skills across machines; or adding skills to multiple TUI agents
+description: Use when modifying dotfiles, global AI config (~/.claude/CLAUDE.md), or syncing skills across agents.
+allowed-tools: Read, Write, Edit, Bash
 ---
 
 # Update Chezmoi
 
-Manage global Claude/Codex config and skills via chezmoi dotfiles.
+Manage global agent configurations and skills through the `chezmoi` dotfiles system.
 
-## Architecture
+## 🎯 Mandates
 
-| Tool        | Deployed       | Chezmoi Source       | Notes           |
-| ----------- | -------------- | -------------------- | --------------- |
-| Claude Code | `~/.claude/`   | `dot_claude/`        | Source of truth |
-| Codex CLI   | `~/.codex/`    | `private_dot_codex/` | Encrypted       |
-| Gemini CLI  | `~/.gemini/`   | `dot_gemini/`        |                 |
-| pi-mono     | `~/.pi/agent/` | `dot_pi/agent/`      |                 |
+- **Source of Truth:** `dot_claude/CLAUDE.md` is the primary reference. All agents link to it.
+- **Automation:** Use `chezmoi apply` immediately after modifications.
+- **Sync:** Commit and push to remote `dotfiles` after verifying local changes.
 
-**Single source of truth:** `dot_claude/CLAUDE.md` → all agents symlink AGENTS.md to it
+## 🛠️ Standards
 
-## Common Operations
+### 1. Skill Management
+To add a global skill:
+1. Create `~/.claude/skills/my-skill/SKILL.md`.
+2. Add symlink files to `chezmoi` source:
+   - `dot_gemini/skills/symlink_my-skill`
+   - `private_dot_codex/skills/symlink_my-skill`
+3. File content: `/Users/nick/.claude/skills/my-skill`.
 
-### Update Global CLAUDE.md
+### 2. Configuration Sync
+| Task | Command |
+| :--- | :--- |
+| Update Global CLAUDE.md | `edit ~/.claude/CLAUDE.md && chezmoi apply` |
+| Sync to Remote | `cd $(chezmoi source-path) && git add . && git commit && git push` |
+| Deploy to New Machine | `chezmoi update` |
 
-```bash
-# Edit directly (chezmoi tracks ~/.claude/)
-$EDITOR ~/.claude/CLAUDE.md
+### 3. Symlink Pattern
+Files named `symlink_NAME` in the source directory automatically resolve to symlinks in the target location.
 
-# Verify and apply
-chezmoi diff
-chezmoi apply
-```
-
-### Add New Skill
-
-1. Create skill directory:
-
-```bash
-mkdir -p ~/.claude/skills/my-skill
-```
-
-2. Create SKILL.md (see creating-skills skill for format)
-
-3. Share with other agents via symlinks:
-
-```bash
-# Codex CLI
-echo "/Users/nick/.claude/skills/my-skill" > \
-  ~/.local/share/chezmoi/private_dot_codex/skills/symlink_my-skill
-
-# pi-mono
-echo "/Users/nick/.claude/skills/my-skill" > \
-  ~/.local/share/chezmoi/dot_pi/agent/skills/symlink_my-skill
-```
-
-4. Apply:
-
-```bash
-chezmoi apply
-```
-
-### Update Existing Skill
-
-```bash
-# Edit in deployed location (chezmoi source auto-updates)
-$EDITOR ~/.claude/skills/my-skill/SKILL.md
-```
-
-### Sync to Other Machines
-
-```bash
-# On source machine
-cd ~/.local/share/chezmoi && git add -A && git commit -m "Update claude config" && git push
-
-# On target machine
-chezmoi update
-```
-
-## Chezmoi Symlink Pattern
-
-Files named `symlink_TARGET` in chezmoi source become symlinks:
-
-- File: `private_dot_codex/skills/symlink_profile`
-- Content: `/Users/nick/.claude/skills/profile`
-- Result: `~/.codex/skills/profile` → `/Users/nick/.claude/skills/profile`
-
-## File Locations
-
-| File            | Chezmoi Source                        | Deployed                       |
-| --------------- | ------------------------------------- | ------------------------------ |
-| CLAUDE.md       | `dot_claude/CLAUDE.md`                | `~/.claude/CLAUDE.md`          |
-| Skills          | `dot_claude/skills/*/`                | `~/.claude/skills/*/`          |
-| Codex config    | `private_dot_codex/config.toml`       | `~/.codex/config.toml`         |
-| Codex AGENTS.md | `private_dot_codex/symlink_AGENTS.md` | `~/.codex/AGENTS.md` (symlink) |
-
-## Verification
-
-```bash
-# Check chezmoi status
-chezmoi status
-
-# Preview changes
-chezmoi diff
-
-# Verify symlinks
-ls -la ~/.codex/AGENTS.md
-ls -la ~/.codex/skills/
-```
+## 🚫 Anti-Rationalization
+| Excuse | Reality |
+| :--- | :--- |
+| "I'll apply later" | Drift between source and destination causes configuration bugs. |
+| "I'll manually link it" | Manual links are lost on `chezmoi apply --force`. Use source files. |

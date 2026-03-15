@@ -1,74 +1,53 @@
 ---
 name: prune
-description: Clean up temp files, stale tasks, and organize ai/ directory.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+description: Use when cleaning up workspace clutter, organizing the ai/ directory, or removing stale task files. Trigger on root directory sprawl, outdated status documents, or redundant temporary scripts.
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
-# Prune
+# Prune (Workspace Hygiene)
 
-Clean up project cruft. Run when things feel cluttered.
+## 🎯 Core Mandates
 
-## 1. Survey
+- **Root Zero:** No temporary files in the project root. Move to `scripts/` or delete.
+- **Single Source:** Consolidate scattered `ai/` notes into single-topic documents.
+- **Aggressive Status:** Prune `STATUS.md` of resolved blockers and completed tasks.
+- **Task Integrity:** Mark completed tasks (`tk done`) and delete duplicates.
 
-```bash
-ls -la
-ls -la ai/ ai/**/* 2>/dev/null
-tk ls
-git status --short
-```
+## 🛠️ Cleanup Standards
 
-## 2. Clean
+### 1. File Triage
+For every file in the root or unexpected locations:
+- **No purpose:** Delete immediately.
+- **Useful tool:** Move to `scripts/` or `bin/`.
+- **Useful test:** Move to `tests/`.
+- **Core config:** Keep in root.
 
-**Files:** For each file in root and other unexpected places—does it serve an ongoing purpose?
+### 2. AI Directory Organization
+- **Top-level:** Keep `STATUS.md`, `DESIGN.md`, and `DECISIONS.md`.
+- **Subdirectories:** Group by `research/`, `sprints/`, or `design/`.
+- **Topic Focus:** One document per topic. Split multi-topic files; consolidate duplicates.
 
-- **No purpose** → delete it
-- **Has purpose, wrong location** → move to proper place (tests/, scripts/, etc.)
-- **Has purpose, right location** → keep
+### 3. Task Management
+- Mark finished tasks as `done`.
+- Delete stale or irrelevant tasks.
+- Ensure `SPRINTS.md` reflects current progress.
 
-Examples:
+## 📋 Execution Workflow
 
-- `test.py` in root, throwaway → delete
-- `test.py` in root, useful test → move to tests/
-- `debug.sh` worth keeping → move to scripts/
-- `benchmark.py` with structure → keep (ongoing tooling)
+1. **Survey:** Run `ls -R`, `tk ls`, and `git status --short`.
+2. **Execute:** Delete, move, and consolidate files based on triage standards.
+3. **Commit:** Stage all changes and commit with "chore: prune workspace".
 
-The difference is purpose, not name. Ask when uncertain.
+## ⚖️ Anti-Rationalization
 
-Don't touch: `.git/`, config files, source code
+| Excuse | Reality |
+| :--- | :--- |
+| "I'll clean this up after the PR." | Post-PR cleanup rarely happens; technical debt starts with "just one temp file." |
+| "I might need this debug script later." | If it's useful, it belongs in `scripts/` with a descriptive name, not in the root. |
+| "The ai/ directory is fine as is." | Scattered notes force future agents to waste tokens reading redundant information. |
 
-**Tasks:** Mark completed done, delete stale ones, consolidate duplicates.
+## 🛠️ Safe Exclusions
 
-## 3. Organize ai/
-
-Goal: hierarchical organization where agents can find any topic easily.
-
-- **Overview docs** at top level for high-level context
-- **Detailed docs** split out by specific topic
-- **One doc per topic** - no scattered duplicates
-
-Read each file to understand its content before acting.
-
-**Root files:**
-
-- STATUS.md - prune aggressively (resolved blockers, completed work, outdated state)
-- DESIGN.md - update if stale (remove descriptions of deleted code)
-- DECISIONS.md - keep all entries (it's a log)
-- SPRINTS.md - update sprint status
-
-**Subdirs (research/, design/, sprints/, etc.):**
-
-- Consolidate scattered content on same topic into one file
-- Split multi-topic files into focused single-topic docs
-- Leave alone if already well-organized
-
-Preserve all important content. Delete old files only after content is safely moved. If already well-organized, say so and move on.
-
-## 4. Finish
-
-```bash
-git add -A
-git diff --cached --stat  # review what changed
-git commit -m "Prune: clean up and organize"
-```
-
-Report what was removed, reorganized, or left alone.
+- **NEVER** touch `.git/` or core project configuration files.
+- **NEVER** delete source code unless specifically instructed.
+- **NEVER** delete `DECISIONS.md` entries; it is a permanent log.

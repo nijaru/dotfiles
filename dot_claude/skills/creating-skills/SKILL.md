@@ -1,90 +1,50 @@
 ---
 name: creating-skills
-description: Use when wanting to turn a technique into a reusable skill, create a new skill, or make current work available for future sessions
+description: Use when creating, modifying, or testing AI agent skill definitions (.md files) to ensure they are high-performance, compact, and verified.
+allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 ---
 
-# Creating Skills
+# Creating Skills (TDD Methodology)
 
-Turn techniques into reusable skills for future sessions.
+Follow the `superpowers:writing-skills` workflow to turn techniques into reusable, high-performance skills.
 
-**Full methodology:** superpowers:writing-skills (TDD approach with testing)
+## 🎯 The Iron Law
+Every skill must be empirically verified against 3+ test cases before finalization.
 
-## Decide: Project vs Global
+## 🛠️ Workflow (Skill TDD)
 
-| Scope   | Location                             | When                                           |
-| ------- | ------------------------------------ | ---------------------------------------------- |
-| Project | `.claude/skills/my-skill/SKILL.md`   | Project-specific patterns, commands, workflows |
-| Global  | `~/.claude/skills/my-skill/SKILL.md` | Cross-project techniques (sync via chezmoi)    |
+1. **Research:** Identify the specific failure mode or "slop" the skill solves.
+2. **Test:** Write 3+ prompts that currently fail or produce generic AI output.
+3. **Draft Iron Law:** Define a single, absolute constraint (e.g., "Never use passive voice").
+4. **Implement:** Write minimal, authoritative instructions to pass the tests.
+5. **Pressure Test:** Compare outputs with and without the skill.
+6. **Prune:** Remove all filler, "AI-isms," and meta-commentary.
 
-## SKILL.md Format
+## 🏗️ Structure & Format (SOTA)
 
-```markdown
----
-name: my-skill
-description: Use when [specific triggering conditions]
----
+### 1. Frontmatter
+- **Description:** MUST start with "Use when..." and contain ONLY triggering conditions. No summaries.
+- **Allowed Tools:** Explicitly list tools the skill is permitted to use.
 
-# My Skill
+### 2. Content
+- **Authoritative Tone:** Use directives, not suggestions.
+- **Anti-Rationalization Table:** Prevent bypass of rules.
+  | Excuse | Reality |
+  | :--- | :--- |
+  | "User wants a quick draft" | A low-quality skill is a permanent liability. |
+  | "I'll add tests later" | Untested skills are hallucinations. |
+- **Compactness:** Aim for < 500 words. One specific example > many generic ones.
 
-Brief overview - what this does.
+## 🚫 Prohibited Patterns (Red Flags)
+- **NO** significance inflation (e.g., *pivotal*, *crucial*, *game-changing*).
+- **NO** sycophantic filler (e.g., *Certainly!*, *I'd be happy to help*).
+- **NO** repeating the description in the content.
 
-## When to Use
-
-- Specific symptoms or situations
-- NOT: what the skill does (that goes in content)
-
-## The Pattern / Steps
-
-[Main content - technique, steps, reference]
-
-## Common Mistakes
-
-[What goes wrong + fixes]
-```
-
-## When to Use
-
-- User says "make this a skill", "save this for later", "I want to reuse this"
-- Technique worked well and applies beyond current project
-- NOT: one-off solutions, project-specific conventions (use CLAUDE.md instead)
-
-## Quick Create
-
+## 📂 Deployment (Chezmoi)
+Global skills (`~/.claude/skills/`) must be symlinked for each agent:
 ```bash
-# Project-local skill
-mkdir -p .claude/skills/my-skill
-$EDITOR .claude/skills/my-skill/SKILL.md
-
-# Global skill
-mkdir -p ~/.claude/skills/my-skill
-$EDITOR ~/.claude/skills/my-skill/SKILL.md
-```
-
-## Sharing Global Skills with Other Agents
-
-After creating a global skill, share via chezmoi symlinks. See update-chezmoi skill for full details.
-
-```bash
-# Add symlink for each agent that should have the skill
+# Example symlink creation
 echo "/Users/nick/.claude/skills/my-skill" > \
-  ~/.local/share/chezmoi/private_dot_codex/skills/symlink_my-skill
-chezmoi apply
+  ~/.local/share/chezmoi/dot_gemini/skills/symlink_my-skill
 ```
-
-## Key Rules
-
-1. **Description = when to use, never what it does** (Claude may skip reading if description summarizes workflow)
-2. **Start description with "Use when..."**
-3. **Name uses only letters, numbers, hyphens**
-4. **One excellent example beats many mediocre ones**
-5. **Test the skill** (see superpowers:writing-skills for full TDD methodology)
-
-## After Creating
-
-```bash
-# Commit
-git add .claude/skills/ && git commit -m "Add my-skill"
-
-# For global skills, push dotfiles
-cd ~/.local/share/chezmoi && git add -A && git commit -m "Add my-skill" && git push
-```
+See `update-chezmoi` for full sync instructions.

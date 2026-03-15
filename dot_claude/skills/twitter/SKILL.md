@@ -1,38 +1,40 @@
 ---
 name: twitter
-description: Use when needing real-time X/Twitter data — what people are saying, trending topics, social sentiment. Uses Grok via orcx CLI. Not for code review or technical tasks.
+description: Use when needing real-time X/Twitter data (trends, sentiment, specific tweets) via Grok.
+allowed-tools: Bash
 ---
 
-# Twitter / X Data via Grok
+# Twitter / X (Grok)
 
-Access real-time X/Twitter data through Grok using the `orcx` CLI.
+Retrieve and analyze real-time data from X/Twitter using the `orcx` CLI.
 
-**Only use for X/Twitter data.** For code review or second opinions, use the `gemini` or `codex` skills.
+## 🎯 Mandates
 
-## Quick Reference
+- **Scope:** ONLY use for X/Twitter data. Use `codex` or `gemini` for code/technical tasks.
+- **Freshness:** Always prioritize real-time queries for trending topics.
 
+## 🛠️ Standards
+
+### Common Queries
 ```bash
-# Query Grok
-orcx -a grok "What are people saying about X on Twitter right now?"
+# General search
+orcx -a grok "What are the top 3 trends in AI on Twitter right now?"
 
-# Check available agents and model IDs
-orcx agents
+# Sentiment analysis
+cat feedback.txt | orcx -a grok "Analyze the Twitter sentiment toward these features"
 
-# Pipe context
-cat file.txt | orcx -a grok "Summarize reactions to this"
-
-# Save output
-orcx -a grok "Query" -o response.md
-
-# Continue last conversation
-orcx -c "Follow-up question"
-
-# Include a file
-orcx -f file.txt "What do people think of this?"
-
-# One-off without saving
-orcx --no-save "Quick question"
-
-# List past conversations
-orcx conversations list
+# Persistence
+orcx -a grok "Query" -o response.md  # Save output
+orcx -c "Follow-up"                  # Continue context
 ```
+
+### CLI Reference
+- `orcx agents`: List available agents.
+- `orcx conversations list`: Review past interactions.
+- `orcx --no-save`: Execute one-off queries without history.
+
+## 🚫 Anti-Rationalization
+| Excuse | Reality |
+| :--- | :--- |
+| "I'll just guess the sentiment" | Twitter sentiment changes hourly; use Grok for accuracy. |
+| "Using this for code review" | Grok is for social data; use specialized coding skills for code. |

@@ -1,87 +1,62 @@
 ---
 name: refactor
-description: Analyze code and suggest concrete refactorings with before/after examples.
-allowed-tools: Read, Grep, Glob, Bash, Task
+description: Use when analyzing or implementing code improvements, simplifying complex logic, or reducing technical debt. Trigger on large functions (>40 lines), deep nesting (>3), or duplicated code.
+allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 ---
 
-# Refactor
+# Refactor (Technical Excellence)
 
-Analyze code and suggest concrete refactorings. Analyze directly in main session.
+## 🎯 Core Mandates
 
-## Workflow
+- **Surgical Precision:** Apply targeted changes that improve readability without altering behavior.
+- **Evidence-Driven:** Identify specific code smells (e.g., God objects, primitive obsession) before proposing changes.
+- **Verification:** Always verify refactorings with existing or new tests.
+- **Tone:** Be authoritative and directive in your suggestions.
 
-1. **Identify scope** - file, function, or module
-2. **Analyze** - check against refactoring checklist
-3. **Propose changes** - specific before/after with priority order
-4. **Offer to implement** - if user approves
+## 🛠️ Refactoring Standards
 
-For genuine architecture work (new module boundaries, dependency restructuring, type hierarchy redesign), suggest spawning a `designer` subagent. Routine multi-file changes (renames, interface updates, moving functions) don't need a designer.
+### 1. Naming & Syntax
+- **Intent-based:** Rename variables/functions to reflect *why* they exist, not *what* they are.
+- **No Suffixes:** Eliminate `_v2`, `_new`, or `_old`.
+- **Constants:** Extract all magic numbers and strings to named constants.
 
-## Refactoring Checklist
+### 2. Complexity Limits
+- **Function Length:** Split functions exceeding 40 lines.
+- **Parameter Count:** Use parameter objects for functions with >4 arguments.
+- **Nesting Depth:** Maximum depth of 3; use early returns and guard clauses to flatten logic.
+- **File Size:** Modules >400 lines must be decomposed into smaller files.
 
-### Naming
+### 3. Code Smells
+- **Duplication:** Extract logic appearing 2+ times into a helper.
+- **Dead Code:** Delete speculative generality or unused functions immediately.
+- **Feature Envy:** Move methods to the objects they interact with most.
 
-| Issue                  | Action                   |
-| ---------------------- | ------------------------ |
-| Unclear names          | Rename with intent       |
-| `_v2`, `_new` suffixes | Replace with descriptive |
-| Magic numbers          | Extract to constants     |
-| Inconsistent style     | Align with codebase      |
+## 📋 Proposal Format
 
-### Size
+```markdown
+## Refactoring: [Specific Component]
 
-| Metric         | Threshold | Action                 |
-| -------------- | --------- | ---------------------- |
-| Function lines | >40       | Extract helpers        |
-| Parameters     | >4        | Parameter object       |
-| Nesting depth  | >3        | Early return / extract |
-| File lines     | >400      | Split module           |
+**Location:** `file:line`
+**Problem:** [Concise technical reason for change]
 
-### Smells
-
-| Smell                            | Action           |
-| -------------------------------- | ---------------- |
-| Duplication (3+ lines, 2+ times) | Extract function |
-| Feature envy                     | Move method      |
-| Long param list                  | Parameter object |
-| Primitive obsession              | Value types      |
-| Dead code                        | Delete           |
-| Speculative generality           | Delete           |
-
-### Structure
-
-- Multiple responsibilities -> Split
-- Deep nesting -> Early returns
-- God object -> Decompose
-
-## Output Format
-
-```
-## Refactoring: [Name]
-
-Location: file:line
-Problem: [Why it matters]
-
-Before:
+**Before:**
 [code]
 
-After:
+**After:**
 [code]
 
-Benefit: [Improvement]
+**Benefit:** [Specific metric: readability, testability, or performance]
 ```
 
-## Summary
+## ⚖️ Anti-Rationalization
 
-```
-## Refactoring Plan
+| Excuse | Reality |
+| :--- | :--- |
+| "The code is working, don't touch it." | "Working" code is a liability if it's unmaintainable or overly complex. |
+| "I'll refactor this later." | Technical debt accumulates faster than it can be repaid; refactor during implementation. |
+| "Adding one more 'if' is faster." | Quick fixes lead to fragile "spaghetti" logic that hides bugs. |
 
-Priority:
-1. [Quick win] - file:line
-2. [Medium effort] - file:line
-3. [Larger change] - file:line
+## 🛠️ Escalation
 
-Risk: [Safe / Needs tests first]
-
-Implement these changes?
-```
+- For **architectural shifts** (dependency restructuring, new module boundaries), suggest spawning a `designer` subagent.
+- For **routine cleanup** (renames, interface updates, moving methods), execute directly.

@@ -9,18 +9,21 @@ Keep files on disk without ever committing them. Uses `.git/info/exclude` (never
 
 ## When to Use
 
-- User wants `ai/`, `.tasks/`, notes, or personal context excluded from a public repo
+- User wants files kept locally but invisible to git — files AND the ignore pattern itself
 - User says "keep local but not in git", "don't commit this", "remove from history"
-- You are about to add local-only patterns to `.gitignore` — stop, use exclude instead
+- You are about to add a local-only pattern to `.gitignore` — stop, use exclude instead
+- The repo is public and you don't want `ai/` or `.tasks/` visible in the committed `.gitignore`
+
+**Do NOT use this skill** when the ignore pattern should be shared (e.g. `*.pyc`, `node_modules/`, build artifacts) — those belong in `.gitignore`.
 
 ## The Key Distinction
 
-| File                | Committed | Shared with team | Use for                                                  |
-| ------------------- | --------- | ---------------- | -------------------------------------------------------- |
-| `.gitignore`        | Yes       | Yes              | Project-wide ignores (build artifacts, secrets patterns) |
-| `.git/info/exclude` | **No**    | **No**           | Personal local files (ai/, .tasks/, notes/)              |
+| File                | Committed to repo | Visible on GitHub | Use for                                        |
+| ------------------- | ----------------- | ----------------- | ---------------------------------------------- |
+| `.gitignore`        | Yes               | **Yes**           | Shared ignores: build artifacts, `*.pyc`, etc. |
+| `.git/info/exclude` | **No**            | **No**            | Personal local files: `ai/`, `.tasks/`, notes  |
 
-**Never put personal local patterns in `.gitignore`.** That commits them to history and shares them.
+`.gitignore` is a public file — adding `ai/` there tells the world you have an `ai/` directory. `.git/info/exclude` is never committed and never leaves your machine.
 
 ## Pattern A: New files (never tracked)
 

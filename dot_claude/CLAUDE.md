@@ -17,7 +17,7 @@
 
 **TypeScript:** `bun` always. Lint: `oxlint`. Format: `oxfmt`. Test: `vitest` or `bun test`.
 
-**Go:** `goimports` -> `gofumpt` -> `golines --base-formatter gofumpt`
+**Go:** `goimports` -> `golines --base-formatter gofumpt`
 
 **Rust:** `&str` > `String`, `&[T]` > `Vec<T>`. Errors: `anyhow` (apps), `thiserror` (libs). Async: `tokio` (network), `rayon` (CPU), sync (files). Edition 2024. `crate::` over `super::`. No `pub use` unless re-exporting for downstream. No global state (`lazy_static!`, `OnceCell`), prefer explicit context. Strong types over strings (enums, newtypes).
 

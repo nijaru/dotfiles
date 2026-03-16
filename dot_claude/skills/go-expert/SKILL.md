@@ -9,30 +9,53 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 ## 🎯 Core Mandates
 
 - **Modernity:** Prioritize Go 1.26+ idioms. Treat pre-2024 patterns as technical debt.
-- **Performance:** Optimize for "Green Tea" GC. Minimize allocations in hot paths using modern primitives.
+- **Performance:** Green Tea GC is default (Go 1.26). Minimize allocations in hot paths.
 - **Safety:** Use `os.Root` for all file operations to prevent path traversal.
 
-## 🛠️ Technical Standards (Go 1.26)
+## 🚫 Prohibited Patterns
+
+- **DO NOT** use `ioutil` (deprecated — use `os`/`io` directly).
+- **DO NOT** use `sort.Slice` (use `slices.Sort`).
+- **DO NOT** use `interface{}` (use `any`).
+- **DO NOT** use `reflect` where generics or iterators suffice.
+- **DO NOT** use `context.TODO()` in tests (use `t.Context()`).
+- **DO NOT** use `runtime.SetFinalizer` (use `runtime.AddCleanup` — Go 1.24, supports multiple cleanups, no cycle leaks).
+- **DO NOT** use `//go:build` with old syntax (use Go 1.17+ syntax).
+- **DO NOT** use `fmt.Sprintf("%s:%d", host, port)` for addresses — use `net.JoinHostPort` (IPv6 safe; `go vet hostport` catches this, Go 1.25).
+- **DO NOT** call `sync.WaitGroup.Add` inside the goroutine being counted — call before `go` (`go vet waitgroup`, Go 1.25).
+- **DO NOT** construct URLs with colons in the host (`http://host:80:80/`) — `net/url.Parse` rejects these (Go 1.26).
+
+## 🛠️ Technical Standards
 
 ### 1. Syntax & Core Language
-- **No `interface{}`:** Use `any` exclusively.
-- **Inline Pointers:** Use `new(T(value))` for inline pointer creation.
-  - *Example:* `p := new(int(42))`
-- **Recursive Generics:** Use recursive type constraints for linked structures.
+
+- **Inline Pointers:** `new(expr)` infers pointer type from expression (Go 1.26). Replaces `v := x; &v` patterns.
+  - `new(true)` → `*bool` · `new(int32(n))` → `*int32` · `new(f())` → `*ReturnType`
+- **Generic Type Aliases:** `type Set[T comparable] = map[T]struct{}` (Go 1.24).
+- **Recursive Generics:** Type parameters may reference their own generic type (Go 1.26).
   - `type Node[T Node[T]] interface { Next() T }`
-- **Iterators:** Use `iter.Seq` and `iter.Seq2`. Prefer range-over-functions for custom sequences.
-  - Signature: `func(yield func(V) bool) bool`
+- **Iterators:** Use `iter.Seq` / `iter.Seq2` and range-over-functions (Go 1.23+).
+  - `Seq[V any]` is `func(yield func(V) bool)` · `Seq2[K, V any]` is `func(yield func(K, V) bool)`
+  - String/byte iteration: `strings.Lines(s)`, `strings.SplitSeq(s, sep)`, `bytes.FieldsSeq(b)` (Go 1.24)
 
 ### 2. Modern Standard Library
-- **Logging:** Use `log/slog` for structured logging.
-- **Collections:** Use `slices` and `maps` packages for all generic operations (Sort, Contains, etc.).
-- **JSON v2:** Use `encoding/json/v2`. Apply `omitzero` struct tags to reduce payload size.
-- **FS Security:** Use `os.Root` to sandbox filesystem access (Go 1.24+).
+
+- **Logging:** Use `log/slog`. `NewMultiHandler` fans out to multiple handlers (Go 1.26). Use `LogAttrs()` over `Info()`/`Debug()` in hot paths — skips key-value boxing.
+- **Collections:** Use `slices` and `maps` packages for all generic operations.
+- **JSON:** Prefer `github.com/go-json-experiment/json` (v2) for new code — case-sensitive by default, `RejectUnknownMembers` option, functional options at call site, richer struct tags. API still evolving; pin your version. Also available as `encoding/json/v2` with `GOEXPERIMENT=jsonv2`.
+  - `omitzero` struct tag available in **standard** `encoding/json` since Go 1.24 (no v2 required).
+- **FS Security:** `os.Root` sandboxes all filesystem access including symlinks (Go 1.24). Methods mirror the `os` package.
+- **Post-Quantum Crypto:** Use `crypto/hpke` for Hybrid Public Key Encryption (RFC 9180). `crypto/tls` enables `SecP256r1MLKEM768` by default (Go 1.26).
+- **Signal Cause:** `os/signal.NotifyContext` cancels with cause — use `context.Cause(ctx)` to identify which signal fired (Go 1.26).
+- **Weak References:** Use `weak.Pointer[T]` for memory-efficient caches and canonicalization maps (Go 1.24). Pair with `runtime.AddCleanup`.
 
 ### 3. Concurrency & Performance
+
 - **Atomics:** Use generic types from `sync/atomic` (e.g., `atomic.Pointer[T]`).
-- **Sync Testing:** Use `testing/synctest` for deterministic concurrent tests with virtual clocks.
-- **Benchmarks:** Use `b.Loop()` for automatic timer management and to prevent compiler optimizations of loop bodies.
+- **WaitGroup:** Use `sync.WaitGroup.Go` — replaces `Add(1); go func() { defer Done() }()` (Go 1.25).
+- **SIMD:** Use `simd/archsimd` (Go 1.26, experimental, `GOEXPERIMENT=simd`) for vectorized hot paths — `Float32x4`, `Int32x4`, etc. with `Load`/`Store`/`Add`/`Mul`/`MulAdd` ops.
+- **Sync Testing:** Use `testing/synctest` for deterministic concurrent tests with virtual clocks (Go 1.25+).
+- **Benchmarks:** Use `b.Loop()` (Go 1.24) — automatic timer management, exactly-once-per-count, keeps variables alive. In Go 1.26, no longer blocks inlining of the loop body.
   ```go
   for b.Loop() {
       // implementation
@@ -40,24 +63,19 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
   ```
 
 ### 4. Error Handling
+
 - **Type-Safe Unwrapping:** Use `errors.AsType[T](err)` (Go 1.26).
   ```go
   if e, ok := errors.AsType[*MyErr](err); ok { ... }
   ```
 - **Wrapping:** Always use `fmt.Errorf("...: %w", err)`.
 
-## 🚫 Prohibited Patterns
-
-- **DO NOT** use `ioutil` (deprecated).
-- **DO NOT** use `sort.Slice` (use `slices.Sort`).
-- **DO NOT** use `reflect` where Generics or Iterators suffice.
-- **DO NOT** use `context.TODO()` in tests (use `t.Context()`).
-- **DO NOT** use `//go:build` with old syntax (use Go 1.17+ syntax).
-
 ## 🏗️ Tooling & Workspace
-- **Modern Fix:** Use `go fix` to migrate legacy code to modern 1.26+ patterns.
-- **Dependencies:** Use the `tool` directive in `go.mod` for dev tools (Go 1.24+).
+
+- **Modern Fix:** Use `go fix` to migrate to current idioms. Preview with `go fix -diff ./...`.
+- **Flight Recorder:** `runtime/trace.FlightRecorder` (Go 1.25) — ring-buffer trace capture for production; call `WriteTo` on significant events.
+- **Goroutine Leak Profile:** `GOEXPERIMENT=goroutineleakprofile` → `/debug/pprof/goroutineleak`. No overhead unless queried. Expected default in Go 1.27.
+- **Dependencies:** Use `tool` directive in `go.mod` for dev tools (Go 1.24+). Run with `go tool <pkg>`.
 - **Workspaces:** Default to `go.work` for multi-module development.
-- **Formatting:** Use `goimports`, then `golines --base-formatter gofumpt`.
-- **Tidying:** Always run `go mod tidy` after changing dependencies.
-- **Go Tool:** Use `go tool [package]` for running project-specific tools defined in `go.mod` (Go 1.24+).
+- **Formatting:** `goimports` → `golines --base-formatter gofumpt`.
+- **Tidying:** `go mod tidy` after every dependency change.

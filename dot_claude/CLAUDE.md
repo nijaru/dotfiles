@@ -130,6 +130,8 @@ Root files read every session—keep minimal. Subdirs (research/, design/, revie
 
 **Project config:** AGENTS.md primary. Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
 
+**Keeping ai/ and .tasks/ local in collaborative/public repos:** Add them to `.git/info/exclude` (not `.gitignore`) so they stay on disk but are never tracked or visible to other contributors. This avoids committing the pattern to history and keeps the repo clean for teams where you're not the solo dev. Use the `git-local-exclude` skill for the exact steps.
+
 ## Task Discipline
 
 Use `tk` for all tasks—persists across compaction. Details in task logs, not STATUS.md.

@@ -1,7 +1,11 @@
 {
 	"options": {
 		"initialize_as": "AGENTS.md",
-		"skills_paths": ["~/.config/crush/skills"]
+		"skills_paths": ["~/.config/crush/skills"],
+		"attribution": {
+			"trailer_style": "none",
+			"generated_with": false
+		}
 	},
 	"providers": {
 		"ollama": {

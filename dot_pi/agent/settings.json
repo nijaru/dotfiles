@@ -1,8 +1,8 @@
 {
-  "defaultProvider": "huggingface",
+  "defaultProvider": "openrouter",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.58.1",
+  "lastChangelogVersion": "0.58.3",
   "editorPaddingX": 1,
   "steeringMode": "all",
   "followUpMode": "all",
@@ -15,5 +15,5 @@
     "npm:pi-subagents",
     "https://github.com/davebcn87/pi-autoresearch"
   ],
-  "defaultModel": "zai-org/GLM-5"
+  "defaultModel": "openrouter/hunter-alpha"
 }

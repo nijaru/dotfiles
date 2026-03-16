@@ -63,6 +63,7 @@ function update-agents --description "Update AI coding agents"
         "@openai/codex:Codex" \
         "@charmland/crush:Crush" \
         "@google/gemini-cli:Gemini" \
+        "opencode-ai:OpenCode" \
         "@mariozechner/pi-coding-agent:Pi"
 
     function _get_ver -a pkg listing

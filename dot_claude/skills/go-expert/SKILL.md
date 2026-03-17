@@ -62,7 +62,14 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
   }
   ```
 
-### 4. Error Handling
+### 4. Naming
+
+- **Receivers:** 1-2 letter abbreviation of the type — never `self`/`this`. `(c *Client)`, `(srv *Server)`.
+- **No type encoding:** `users` not `userSlice`; `count` not `numUsers`. Only qualify when two forms coexist (`age`/`ageStr`).
+- **Reader/Writer params:** Always `r io.Reader`, `w io.Writer` — fixed conventions.
+- **Exported names:** Package name is part of the call site — `http.Client` not `http.HTTPClient`. No cryptic abbreviations.
+
+### 5. Error Handling
 
 - **Type-Safe Unwrapping:** Use `errors.AsType[T](err)` (Go 1.26).
   ```go

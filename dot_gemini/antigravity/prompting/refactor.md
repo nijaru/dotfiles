@@ -1,0 +1,1 @@
+# Refactor Code\n\nAnalyze and improve code structure without changing behavior.\n\n## Workflow\n1. **Identify complexity** (deep nesting, long functions).\n2. **Propose abstractions**.\n3. **Apply changes**.\n4. **Verify correctness**.

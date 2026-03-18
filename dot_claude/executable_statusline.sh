@@ -36,8 +36,27 @@ else
     display_cwd="\033[37m${proj_name}"
 fi
 
+# x2 usage indicator: March 13-28 2026, outside 8AM-2PM ET on weekdays
+x2_suffix=""
+now_epoch=$(date +%s)
+promo_start=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-03-13 00:00:00" +%s 2>/dev/null || date -d "2026-03-13 00:00:00" +%s)
+promo_end=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-03-28 23:59:59" +%s 2>/dev/null || date -d "2026-03-28 23:59:59" +%s)
+if (( now_epoch >= promo_start && now_epoch <= promo_end )); then
+    # Get current hour in ET and day of week (1=Mon..7=Sun)
+    et_hour=$(TZ="America/New_York" date +%H)
+    et_dow=$(TZ="America/New_York" date +%u)  # 1=Monday, 7=Sunday
+    et_hour=${et_hour#0}  # strip leading zero
+    # Weekday (1-5) during peak hours (8-13 = 8AM to 1:59PM, i.e. before 2PM)
+    if (( et_dow >= 1 && et_dow <= 5 && et_hour >= 8 && et_hour < 14 )); then
+        x2_suffix=""
+    else
+        x2_suffix=" \033[33m[x2]\033[0m"
+    fi
+fi
+
 s='\033[2m • \033[0m'
 printf '\033[36m%s\033[0m' "$model"
+printf "%b" "$x2_suffix"
 printf "${s}\033[%sm%s%%\033[0m \033[2m(%dk/%dk)\033[0m" "$pc" "$used_pct" "$((current_in/1000))" "$((ctx_size/1000))"
 printf "${s}%b\033[0m" "$display_cwd"
 [ -n "$git_branch" ] && printf "${s}\033[36m%s\033[0m" "$git_branch"

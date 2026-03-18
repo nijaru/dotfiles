@@ -11,6 +11,7 @@ shared:
   - writer
   - sprint
   - prune
+  - handoff
 
 tools:
   # Claude Code - all skills (canonical location)
@@ -18,7 +19,6 @@ tools:
     path: .claude/skills
     skills: all
     extra:
-      - ask
       - creating-skills
       - update-chezmoi
 
@@ -48,7 +48,6 @@ tools:
     path: .pi/agent/skills
     skills: shared
     extra:
-      - ask
       - creating-skills
       - update-chezmoi
 

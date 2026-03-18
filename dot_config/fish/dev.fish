@@ -80,9 +80,15 @@ if command -v direnv >/dev/null 2>&1
 end
 
 ###############################################################################
-# Go (just the format helper)
+# Go
 ###############################################################################
 if command -v go >/dev/null 2>&1
+    if status is-interactive
+        abbr --add ggu  'go get -u ./...'
+        abbr --add gmt  'go mod tidy'
+        abbr --add goup 'go get -u ./... && go mod tidy'
+    end
+
     function goformat
         if test "$PWD" = "$HOME"
             echo "Error: Cannot run goformat in home directory."

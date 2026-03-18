@@ -1,10 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
-  "instructions": ["AGENTS.md"],
-  "compaction": {
-    "strategy": "auto"
-  },
   "mcp": {
     "context7": {
       "type": "local",

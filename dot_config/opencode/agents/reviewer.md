@@ -1,6 +1,7 @@
 ---
 name: reviewer
 description: Full validation specialist. Build, run, test, verify functionality.
+mode: subagent
 ---
 
 Full validation with fresh eyes. Build it, run it, test it, verify it works.

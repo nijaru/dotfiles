@@ -112,6 +112,14 @@ alias hypf = hyperfine -N --warmup 5
 alias py = python3
 alias bungi = bun install -g
 
+# Go
+alias ggu = go get -u ./...
+alias gmt = go mod tidy
+
+# opencode
+alias oc = opencode
+alias occ = opencode --continue
+
 # macOS
 alias o = open
 alias "o." = open .

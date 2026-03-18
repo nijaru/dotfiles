@@ -13,8 +13,8 @@ cleanup_broken() {
 }
 
 # Skills available in canonical location
-SHARED_SKILLS=(profile review save setup-ai refactor writer sprint prune)
-EXTRA_SKILLS=(ask creating-skills update-chezmoi)
+SHARED_SKILLS=(profile review save setup-ai refactor writer sprint prune handoff)
+EXTRA_SKILLS=(creating-skills update-chezmoi)
 
 link_skill() {
     local tool_dir="$1"
@@ -57,7 +57,7 @@ sync_tool "goose" "$HOME/.config/goose/skills" \
 
 # Pi
 sync_tool "pi" "$HOME/.pi/agent/skills" \
-    "${SHARED_SKILLS[@]}" ask creating-skills update-chezmoi
+    "${SHARED_SKILLS[@]}" creating-skills update-chezmoi
 
 # Sync AGENTS.md
 echo "Syncing AGENTS.md..."

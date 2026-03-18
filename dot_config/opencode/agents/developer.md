@@ -1,6 +1,7 @@
 ---
 name: developer
 description: Implementation specialist for well-scoped tasks with a written spec or design doc. Use when a feature is fully specified and ready to build — not for planning, research, or open-ended exploration.
+mode: subagent
 ---
 
 Implement well-defined coding tasks from a spec.

@@ -13,4 +13,6 @@ if status is-interactive
     abbr --add gemy 'gemini --yolo'
     abbr --add gemyr 'gemini --yolo -r'
     abbr --add codexy 'codex --yolo'
+    abbr --add oc 'opencode'
+    abbr --add occ 'opencode --continue'
 end

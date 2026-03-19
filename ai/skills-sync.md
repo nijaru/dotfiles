@@ -54,3 +54,4 @@ Tool-specific skills remain outside the shared set:
 - OpenCode loads skills from `~/.config/opencode/skills/`, `~/.claude/skills/`, and `~/.agents/skills/`. Set `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=1` to avoid duplicate discovery when `~/.agents` aliases `~/.claude`.
 - Pi natively discovers both `~/.pi/agent/skills/` and `~/.agents/skills/`, so the explicit `skills` setting is a clear, portable way to make the shared root obvious in config.
 - Antigravity currently stores a GUI-configured custom path in `~/.gemini/antigravity/skills.txt`, but direct linkage of its legacy `skills` directory is the more reliable arrangement.
+- As of March 18, 2026, Antigravity still does not appear to surface these shared skills reliably even with the direct link, so treat its setup as best-effort until its loader catches up with Gemini CLI.

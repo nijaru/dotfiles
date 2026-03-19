@@ -1,6 +1,13 @@
 # Status
 
-Dotfiles synced. Added an `autoresearch` skill and wired it across the shared CLI skill paths.
+Dotfiles synced and skill paths consolidated around `~/.agents/skills`.
+
+## Current State
+
+- Shared skills are authored once in `dot_claude/skills/`.
+- Gemini CLI, Codex CLI, Pi, Crush, and OpenCode consume the shared path cleanly.
+- Antigravity is configured against the shared path on a best-effort basis, but still appears to lag Gemini CLI's Agent Skills behavior.
+- No active local task remains for this skills consolidation pass.
 
 ## Reference
 

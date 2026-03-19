@@ -1,6 +1,6 @@
 # Status
 
-Dotfiles fully synced. No active work.
+Dotfiles synced. Added an `autoresearch` skill and wired it across the shared CLI skill paths.
 
 ## Reference
 

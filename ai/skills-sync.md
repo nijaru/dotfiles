@@ -4,6 +4,7 @@ All CLIs share skills via symlinks from `~/.claude/skills/`. Managed by chezmoi.
 
 | Skill                    | Claude | Gemini | Codex | Pi  | Crush |
 | ------------------------ | ------ | ------ | ----- | --- | ----- |
+| autoresearch             | ✓      | ✓      | ✓     | ✓   | ✓     |
 | codex                    | ✓      | ✓      | ✓     | ✓   | ✓     |
 | creating-skills          | ✓      | ✓      | ✓     | ✓   | ✓     |
 | gemini                   | ✓      | —      | —     | —   | ✓     |
@@ -29,3 +30,5 @@ All CLIs share skills via symlinks from `~/.claude/skills/`. Managed by chezmoi.
 | Crush  | `~/.config/crush/skills/` | `dot_config/crush/skills/symlink_*`  |
 
 To add a skill: create it in `~/.claude/skills/`, then add a `symlink_<name>` file containing the absolute path to each CLI's chezmoi source dir, then `chezmoi apply`.
+
+Gemini CLI follows the Agent Skills standard: user skills live in `~/.gemini/skills/`, with `~/.agents/skills/` as a higher-priority alias. `dot_gemini/antigravity/skills/` is not part of the current sync path.

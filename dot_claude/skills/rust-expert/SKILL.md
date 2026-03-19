@@ -1,6 +1,6 @@
 ---
 name: rust-expert
-description: Expert guidance for writing idiomatic, high-performance Rust (Edition 2024, 1.93+). Use when implementing systems logic, async services, or performance-critical libraries.
+description: Use when needing idiomatic, high-performance Rust (Edition 2024, 1.93+) guidance for systems logic, async services, or performance-critical libraries.
 allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 ---
 

@@ -22,10 +22,8 @@ To add a global skill:
 
 1. Create `~/.claude/skills/my-skill/SKILL.md`.
 2. Shared-capable tools should consume it via `~/.agents/skills`.
-3. Mirror only where a tool still requires its own root:
-   - `private_dot_codex/skills/symlink_my-skill`
-4. Keep tool-specific skills in the tool's own skills directory when needed.
-5. Symlink file content should point to `/Users/nick/.claude/skills/my-skill`.
+3. Keep tool-specific skills in the tool's own skills directory only when a tool cannot use the shared path.
+4. For legacy roots that need a bridge, prefer one directory-level link over many per-skill links.
 
 ### 2. Configuration Sync
 
@@ -46,10 +44,12 @@ Files named `symlink_NAME` in the source directory automatically resolve to syml
 Current preference:
 
 - Shared path: `~/.agents/skills` (alias of `~/.claude/skills`)
+- Codex: use the shared path directly
 - Gemini CLI: use the shared path for shared skills
 - Pi: add the shared path in `~/.pi/agent/settings.json`
 - Crush: add the shared path in `~/.config/crush/crush.json`
 - OpenCode: use the shared path and disable duplicate `.claude/skills` scanning
+- Antigravity: point `~/.gemini/antigravity/skills` at the shared path
 
 ## 🚫 Anti-Rationalization
 

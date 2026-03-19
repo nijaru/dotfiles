@@ -1,6 +1,6 @@
 ---
 name: mojo-expert
-description: Expert guidance for writing idiomatic, high-performance Mojo (v26.1, pre-1.0). Use when implementing GPU kernels, SIMD-accelerated algorithms, or Python-interop performance libraries.
+description: Use when needing idiomatic, high-performance Mojo (v26.1, pre-1.0) guidance for GPU kernels, SIMD-accelerated algorithms, or Python-interop performance libraries.
 allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 ---
 

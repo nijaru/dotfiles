@@ -1,6 +1,6 @@
 ---
 name: zig-expert
-description: Expert guidance for writing idiomatic, high-performance Zig (Master/0.16.0). Use when implementing system-level logic, SIMD-accelerated algorithms, or memory-mapped storage engines.
+description: Use when needing idiomatic, high-performance Zig (Master/0.16.0) guidance for system-level logic, SIMD-accelerated algorithms, or memory-mapped storage engines.
 allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 ---
 

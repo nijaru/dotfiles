@@ -47,6 +47,7 @@ $env.GOFLAGS = "-buildvcs=false -trimpath"
 $env.CARGO_HOME = ($env.HOME | path join ".cargo")
 $env.RUSTUP_HOME = ($env.HOME | path join ".rustup")
 $env.RUST_BACKTRACE = 1
+$env.OPENCODE_DISABLE_CLAUDE_CODE_SKILLS = "1"
 
 # ── PATH ────────────────────────────────────────────────
 use std/util "path add"

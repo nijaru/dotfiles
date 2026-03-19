@@ -41,10 +41,10 @@ Every skill must be empirically verified against 3+ test cases before finalizati
 - **NO** repeating the description in the content.
 
 ## 📂 Deployment (Chezmoi)
-Global skills (`~/.claude/skills/`) must be symlinked for each agent:
+Global skills live in `~/.claude/skills/`. Prefer configuring agents to read the shared `~/.agents/skills/` path, and only mirror the tools that still require their own root:
 ```bash
 # Example symlink creation
 echo "/Users/nick/.claude/skills/my-skill" > \
-  ~/.local/share/chezmoi/dot_gemini/skills/symlink_my-skill
+  ~/.local/share/chezmoi/private_dot_codex/skills/symlink_my-skill
 ```
 See `update-chezmoi` for full sync instructions.

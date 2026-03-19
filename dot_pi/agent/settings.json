@@ -2,13 +2,16 @@
   "defaultProvider": "openrouter",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.58.3",
+  "lastChangelogVersion": "0.60.0",
   "editorPaddingX": 1,
   "steeringMode": "all",
   "followUpMode": "all",
   "hideThinkingBlock": true,
   "collapseChangelog": true,
   "defaultThinkingLevel": "high",
+  "skills": [
+    "~/.agents/skills"
+  ],
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:@yofriadi/pi-web-search",

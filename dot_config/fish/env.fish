@@ -60,6 +60,9 @@ set -gx BUNDLE_USER_HOME "$XDG_CONFIG_HOME/bundle"
 # Ripgrep configuration
 set -gx RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 
+# Agent tooling
+set -gx OPENCODE_DISABLE_CLAUDE_CODE_SKILLS 1
+
 # Platform-specific settings
 switch $__fish_uname
     case Darwin

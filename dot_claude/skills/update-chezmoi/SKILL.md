@@ -21,10 +21,11 @@ Manage global agent configurations and skills through the `chezmoi` dotfiles sys
 To add a global skill:
 
 1. Create `~/.claude/skills/my-skill/SKILL.md`.
-2. Add symlink files to `chezmoi` source:
-   - `dot_gemini/skills/symlink_my-skill`
+2. Shared-capable tools should consume it via `~/.agents/skills`.
+3. Mirror only where a tool still requires its own root:
    - `private_dot_codex/skills/symlink_my-skill`
-3. File content: `/Users/nick/.claude/skills/my-skill`.
+4. Keep tool-specific skills in the tool's own skills directory when needed.
+5. Symlink file content should point to `/Users/nick/.claude/skills/my-skill`.
 
 ### 2. Configuration Sync
 
@@ -41,6 +42,14 @@ To add a global skill:
 ### 3. Symlink Pattern
 
 Files named `symlink_NAME` in the source directory automatically resolve to symlinks in the target location.
+
+Current preference:
+
+- Shared path: `~/.agents/skills` (alias of `~/.claude/skills`)
+- Gemini CLI: use the shared path for shared skills
+- Pi: add the shared path in `~/.pi/agent/settings.json`
+- Crush: add the shared path in `~/.config/crush/crush.json`
+- OpenCode: use the shared path and disable duplicate `.claude/skills` scanning
 
 ## 🚫 Anti-Rationalization
 

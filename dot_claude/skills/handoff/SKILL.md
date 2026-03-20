@@ -19,13 +19,19 @@ Check the exact wording before acting:
 
 ## Step 2: Generate (if applicable)
 
-**Gather context first:**
+**1. Sync persistent state first.** The next agent will load these—they must be current before the handoff is written:
 
-- Run `tk ls` to check task state
+- Update `ai/STATUS.md` with current focus, blockers, and any new findings
+- Run `tk done` / `tk log` to flush completed work and discoveries into task state
+- Update `ai/DESIGN.md` or `ai/DECISIONS.md` if architectural choices were made this session
+
+**2. Gather context:**
+
+- Run `tk ls` to confirm task state
 - Run `git log --oneline -20` for recent commits
 - Note any active `jb` background jobs
 
-**Write `./handoff.md` with:**
+**3. Write `./handoff.md` with:**
 
 1. **Status** — What was achieved this session
 2. **Context** — Key files changed, patterns introduced, bugs fixed
@@ -39,8 +45,8 @@ Check the exact wording before acting:
 
 ## Anti-patterns
 
-| Mistake                                         | Correction                                                                 |
-| :---------------------------------------------- | :------------------------------------------------------------------------- |
-| Generating a new handoff when asked to read one | Read the file; do not regenerate                                           |
-| Updating `STATUS.md` instead                    | `handoff.md` is a focused transition baton; `STATUS.md` is long-term state |
-| Committing `handoff.md`                         | Ephemeral by design—only commit if explicitly asked                        |
+| Mistake                                         | Correction                                                     |
+| :---------------------------------------------- | :------------------------------------------------------------- |
+| Generating a new handoff when asked to read one | Read the file; do not regenerate                               |
+| Skipping `ai/` and task sync                    | Next agent loads stale state—update before writing the handoff |
+| Committing `handoff.md`                         | Ephemeral by design—only commit if explicitly asked            |

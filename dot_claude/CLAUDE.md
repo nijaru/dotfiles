@@ -128,7 +128,7 @@ Root files read every session—keep minimal. Subdirs (research/, design/, revie
 
 **Format:** Tables/lists over prose. Answer first, evidence second.
 
-**Project config:** AGENTS.md primary. Claude Code: `ln -s ../AGENTS.md .claude/CLAUDE.md`
+**Project config:** AGENTS.md primary. Claude Code: `ln -s AGENTS.md CLAUDE.md` (project root, not `.claude/`)
 
 **Keeping ai/ and .tasks/ local in collaborative/public repos:** Add them to `.git/info/exclude` (not `.gitignore`) so they stay on disk but are never tracked or visible to other contributors. This avoids committing the pattern to history and keeps the repo clean for teams where you're not the solo dev. Use the `git-local-exclude` skill for the exact steps.
 

@@ -12,7 +12,7 @@ Initialize or migrate project-specific AI context management. Prioritize token e
 
 - **Efficiency:** Session files must stay < 500 lines. Move details to reference subdirs.
 - **Tracking:** Initialize `tk` CLI for all project tasks.
-- **Consistency:** `./CLAUDE.md` (project root) MUST be a symlink to `AGENTS.md`. Never place it under `.claude/`.
+- **Consistency:** `AGENTS.md` is the source of truth. Claude Code reads it via `.claude/CLAUDE.md` (symlink). Open source projects may use `./CLAUDE.md` at root instead—follow the convention already present in the repo.
 
 ## 🛠️ Execution Standards
 
@@ -26,11 +26,11 @@ Read these in parallel to gather project intelligence:
 
 ### 2. Configuration Handling
 
-| Scenario            | Action                                                        |
-| :------------------ | :------------------------------------------------------------ |
-| Neither file exists | Create `AGENTS.md`, symlink `CLAUDE.md` -> `AGENTS.md`.       |
-| Only `CLAUDE.md`    | Rename to `AGENTS.md`, create symlink.                        |
-| Both exist          | Merge to `AGENTS.md`, remove old `CLAUDE.md`, create symlink. |
+| Scenario                 | Action                                                                |
+| :----------------------- | :-------------------------------------------------------------------- |
+| Neither file exists      | Create `AGENTS.md`, symlink `.claude/CLAUDE.md` -> `../AGENTS.md`.    |
+| Only `CLAUDE.md` at root | Rename to `AGENTS.md`, create symlink (or leave as-is for OSS repos). |
+| Both exist               | Merge to `AGENTS.md`, remove old `CLAUDE.md`, create symlink.         |
 
 ### 3. Structure Initialization
 

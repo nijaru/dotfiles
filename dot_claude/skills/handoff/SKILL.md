@@ -33,11 +33,7 @@ Check the exact wording before acting:
 4. **Next Steps** — 2-4 atomic, actionable bullets for the incoming agent
 5. **Environment** — Active background jobs, env vars, or other session state
 
-**3. Then sync persistent state** so the next agent's supporting context is also current:
-
-- Update `ai/STATUS.md` with current focus, blockers, and any new findings
-- Run `tk done` / `tk log` to flush completed work and discoveries into task state
-- Update `ai/DESIGN.md` or `ai/DECISIONS.md` if architectural choices were made this session
+**3. Then run `/save`** to sync `ai/` and task state so the next agent's supporting context is also current.
 
 ## Lifecycle
 
@@ -45,8 +41,8 @@ Check the exact wording before acting:
 
 ## Anti-patterns
 
-| Mistake                                         | Correction                                                  |
-| :---------------------------------------------- | :---------------------------------------------------------- |
-| Generating a new handoff when asked to read one | Read the file; do not regenerate                            |
-| Skipping `ai/` and task sync                    | Next agent loads stale state—sync after writing the handoff |
-| Committing `handoff.md`                         | Ephemeral by design—only commit if explicitly asked         |
+| Mistake                                         | Correction                                                           |
+| :---------------------------------------------- | :------------------------------------------------------------------- |
+| Generating a new handoff when asked to read one | Read the file; do not regenerate                                     |
+| Skipping `/save` after writing the handoff      | Next agent loads stale `ai/` and task state—always run `/save` after |
+| Committing `handoff.md`                         | Ephemeral by design—only commit if explicitly asked                  |

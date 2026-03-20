@@ -38,7 +38,7 @@
 - `sem diff` — entity-level semantic diffs (functions, classes). `sem impact <entity>` | `sem blame <file>`
 - `weave` — entity-level merge driver (configured globally, auto-used by git merge)
 
-**Background jobs:** Use `jb` only for commands likely to run several minutes or longer (slow full-suite test runs, long builds, dev servers, extended benchmarks). Do NOT use for commands that complete in under a minute or two—just run them directly in the shell.
+**Background jobs:** Default to running commands directly. Only use `jb` when you have strong reason to expect a command will take several minutes or more—dev servers, known slow full-suite test runs, large release builds. When in doubt, run directly.
 
 - `jb run "cmd" --follow` | `jb list` | `jb logs <id> --tail` | `jb stop <id>`
 - `jb status <id>` | `jb wait <id>` | `jb retry <id>`

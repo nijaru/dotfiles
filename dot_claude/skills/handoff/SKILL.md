@@ -1,53 +1,46 @@
 ---
 name: handoff
-description: Use when transitioning the session to another agent or TUI. Summarizes current state, decisions, and next steps into a `handoff.md` file.
+description: Use when generating or updating a handoff document to transition the session to another agent or TUI. DO NOT trigger when the user says "read the handoff", "load the handoff", or "here's the handoff"—handle those as plain file reads.
 allowed-tools: Bash, Read, Write
 ---
 
 # Handoff
 
-Prepare the workspace for a seamless transition to a new agent or session.
+## Step 1: Determine intent
 
-## Intent Disambiguation
+Check the exact wording before acting:
 
-Read conversation context carefully before acting:
+| User said                                            | Action                                                                                                               |
+| :--------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| "read/load/open the handoff" or "here's the handoff" | Read `./handoff.md` with the Read tool, summarize its contents to the user, and stop. Do NOT generate a new handoff. |
+| "update the handoff"                                 | Read `./handoff.md` first, then update it in place.                                                                  |
+| `/handoff` invoked or "make/write/create a handoff"  | Generate or overwrite `./handoff.md`. Proceed below.                                                                 |
+| Ambiguous                                            | Default to generating. If the user wanted to read it, they would say so.                                             |
 
-- **Skill was invoked (`/handoff`)** → Generate or update `handoff.md`. Do not just read it.
-- **User says "read the handoff" / "load the handoff" / "here's the handoff"** → Read `./handoff.md` and internalize it as context for the current session. Do not regenerate it.
-- **User says "update the handoff"** → Read the existing `./handoff.md` first, then update it in place.
-- **Ambiguous** → Default to generating/updating. If the user wanted to read it, they would say so explicitly.
+## Step 2: Generate (if applicable)
 
-## 🎯 Mandates
+**Gather context first:**
 
-- **Default path:** Always write to `./handoff.md` (project root) unless the user specifies otherwise.
-- **Context Preservation:** Capture the essence of the session: what was achieved, what changed, and what's next.
-- **Actionable Next Steps:** Be specific about the immediate tasks for the next agent.
+- Run `tk ls` to check task state
+- Run `git log --oneline -20` for recent commits
+- Note any active `jb` background jobs
 
-## 🏗️ Handoff Structure
+**Write `./handoff.md` with:**
 
-The `handoff.md` file must include:
-
-1. **Current Status:** A high-level summary of the session's achievements.
-2. **Context:** Key files modified, new patterns introduced, or critical bugs fixed.
-3. **Decisions:** Any architectural or design choices made (Context -> Decision -> Rationale).
-4. **Next Steps:** 2-4 atomic, actionable bullets for the incoming agent.
-5. **Environment:** Any session-specific variables or background processes (like `jb`) that are still relevant.
-
-## 🛠️ Workflow (generating)
-
-1. **Summarize:** Analyze the session history and `tk` tasks.
-2. **Write:** Generate or update `./handoff.md`.
-3. **Notify:** Tell the user the file is ready and to pass it to the next agent.
+1. **Status** — What was achieved this session
+2. **Context** — Key files changed, patterns introduced, bugs fixed
+3. **Decisions** — Context → Decision → Rationale for any architectural choices
+4. **Next Steps** — 2-4 atomic, actionable bullets for the incoming agent
+5. **Environment** — Active background jobs, env vars, or other session state
 
 ## Lifecycle
 
-`handoff.md` is a **temporary baton**—not a permanent artifact. Do NOT commit it unless the user explicitly requests it.
+`handoff.md` is a temporary baton—not a permanent artifact. Do NOT commit it unless explicitly asked.
 
-## 🚫 Anti-Rationalization
+## Anti-patterns
 
-| Excuse                                   | Reality                                                                                         |
-| :--------------------------------------- | :---------------------------------------------------------------------------------------------- |
-| "The next agent will figure it out."     | Without a handoff, the next agent wastes tokens and time re-exploring.                          |
-| "I'll just update STATUS.md."            | `handoff.md` is a focused "baton" for the immediate transition; `STATUS.md` is long-term state. |
-| "I'll commit it for safekeeping."        | Don't—it's ephemeral by design. Only commit if explicitly asked.                                |
-| "User invoked /handoff so I'll read it." | Skill invocation means generate/update, not read.                                               |
+| Mistake                                         | Correction                                                                 |
+| :---------------------------------------------- | :------------------------------------------------------------------------- |
+| Generating a new handoff when asked to read one | Read the file; do not regenerate                                           |
+| Updating `STATUS.md` instead                    | `handoff.md` is a focused transition baton; `STATUS.md` is long-term state |
+| Committing `handoff.md`                         | Ephemeral by design—only commit if explicitly asked                        |

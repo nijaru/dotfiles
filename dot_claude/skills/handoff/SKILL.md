@@ -30,9 +30,14 @@ The `handoff.md` file must include:
 2. **Write:** Generate the `handoff.md` content.
 3. **Notify:** Instruct the user to provide this file to the next agent.
 
+## Lifecycle
+
+`handoff.md` is a **temporary baton**—not a permanent artifact. Do NOT commit it unless the user explicitly requests it.
+
 ## 🚫 Anti-Rationalization
 
-| Excuse | Reality |
-| :--- | :--- |
-| "The next agent will figure it out." | Without a handoff, the next agent wastes tokens and time re-exploring. |
-| "I'll just update STATUS.md." | `handoff.md` is a focused "baton" for the immediate transition; `STATUS.md` is long-term state. |
+| Excuse                               | Reality                                                                                         |
+| :----------------------------------- | :---------------------------------------------------------------------------------------------- |
+| "The next agent will figure it out." | Without a handoff, the next agent wastes tokens and time re-exploring.                          |
+| "I'll just update STATUS.md."        | `handoff.md` is a focused "baton" for the immediate transition; `STATUS.md` is long-term state. |
+| "I'll commit it for safekeeping."    | Don't—it's ephemeral by design. Only commit if explicitly asked.                                |

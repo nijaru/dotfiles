@@ -6,14 +6,14 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 # Save (Context Persistence)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Volatile Context:** Never assume state persists across sessions. Write every finding, blocker, and decision to `ai/` or `tk`.
 - **Log First:** Update `tk log <id>` with technical root causes and file paths BEFORE marking a task as `done`.
 - **Pruning:** Keep `STATUS.md` and other `ai/` documents compact (<500 lines). Delete outdated state aggressively.
 - **Next Steps:** Always define the "2-4 bullets" of what to do next to guide the following agent.
 
-## 🛠️ Persistence Standards
+## Persistence Standards
 
 ### 1. Task Management (`tk`)
 
@@ -48,22 +48,7 @@ Run `git status` first. Commit everything pending in logical groups:
      ```
    - **Excluded via `.git/info/exclude`**: skip — files persist locally, never stage them.
 
-## 📋 Reporting Format
-
-```markdown
-## Context Saved
-
-- **Tasks:** [N done, N added, N pending]
-- **AI Docs:** [Summary of updates to STATUS, DESIGN, etc.]
-
-## Next Steps (Transition Plan)
-
-1. [Actionable bullet]
-2. [Actionable bullet]
-3. [Actionable bullet]
-```
-
-## ⚖️ Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse                              | Reality                                                                                |
 | :---------------------------------- | :------------------------------------------------------------------------------------- |
@@ -71,7 +56,7 @@ Run `git status` first. Commit everything pending in logical groups:
 | "I'll update the status later."     | Without immediate updates, context is lost during the next session swap or compaction. |
 | "I don't need to log findings."     | Future agents will waste time re-discovering what you already learned.                 |
 
-## 🛠️ Troubeshooting
+## Troubleshooting
 
 - **Task Bloat:** If `tk ls` is overwhelmed, consolidate tasks into a new sprint in `ai/sprints/`.
 - **Doc Sprawl:** If `STATUS.md` exceeds 500 lines, move historical data to `ai/research/` or `ai/archive/`.

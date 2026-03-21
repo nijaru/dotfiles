@@ -103,7 +103,46 @@ function update-agents --description "Update AI coding agents"
         end
     end
 
-    functions -e _get_ver _agent _agent_updated _agent_err
+    functions -e _get_ver
+
+    # 3. Third-party skills
+    set_color --bold cyan
+    echo ""
+    echo "Updating third-party skills..."
+    set_color normal
+
+    # Format: "repo_url|skill1 skill2 ..."
+    set -l skill_sources \
+        "https://github.com/modular/skills|mojo-syntax mojo-gpu-fundamentals mojo-python-interop new-modular-project"
+
+    set -l tmp (mktemp -d)
+    for entry in $skill_sources
+        set -l parts (string split "|" $entry)
+        set -l repo $parts[1]
+        set -l skills (string split " " $parts[2])
+        set -l clone_dir $tmp/(string replace -ra '.+/' '' $repo)
+
+        if not git clone --depth=1 --quiet $repo $clone_dir 2>/dev/null
+            _agent_err (string replace -ra '.+/' '' $repo) red "clone failed"
+            continue
+        end
+
+        for skill in $skills
+            set -l src $clone_dir/$skill
+            set -l dst ~/.claude/skills/$skill
+            if not test -d $src
+                _agent_err $skill yellow "not found in repo"
+            else if test -d $dst; and diff -rq $src $dst >/dev/null 2>&1
+                _agent $skill "up to date"
+            else
+                cp -r $src ~/.claude/skills/
+                _agent_err $skill green "updated"
+            end
+        end
+    end
+    rm -rf $tmp
+
+    functions -e _agent _agent_updated _agent_err
 
     command -q mise; and mise reshim >/dev/null 2>&1
 end

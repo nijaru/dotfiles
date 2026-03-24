@@ -9,6 +9,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 Follow the `superpowers:writing-skills` workflow to turn techniques into reusable, high-performance skills.
 
 ## 🎯 The Iron Law
+
 Every skill must be empirically verified against 3+ test cases before finalization.
 
 ## 🛠️ Workflow (Skill TDD)
@@ -23,10 +24,12 @@ Every skill must be empirically verified against 3+ test cases before finalizati
 ## 🏗️ Structure & Format (SOTA)
 
 ### 1. Frontmatter
+
 - **Description:** MUST start with "Use when..." and contain ONLY triggering conditions. No summaries.
 - **Allowed Tools:** Explicitly list tools the skill is permitted to use.
 
 ### 2. Content
+
 - **Authoritative Tone:** Use directives, not suggestions.
 - **Anti-Rationalization Table:** Prevent bypass of rules.
   | Excuse | Reality |
@@ -36,10 +39,13 @@ Every skill must be empirically verified against 3+ test cases before finalizati
 - **Compactness:** Aim for < 500 words. One specific example > many generic ones.
 
 ## 🚫 Prohibited Patterns (Red Flags)
-- **NO** significance inflation (e.g., *pivotal*, *crucial*, *game-changing*).
-- **NO** sycophantic filler (e.g., *Certainly!*, *I'd be happy to help*).
+
+- **NO** significance inflation (e.g., _pivotal_, _crucial_, _game-changing_).
+- **NO** sycophantic filler (e.g., _Certainly!_, _I'd be happy to help_).
 - **NO** repeating the description in the content.
 
 ## 📂 Deployment (Chezmoi)
-Global skills live in `~/.claude/skills/`. Prefer configuring agents to read the shared `~/.agents/skills/` path, and only add tool-local bridges when a surface cannot consume the shared root directly.
-See `update-chezmoi` for full sync instructions.
+
+Create skills in the chezmoi **source**: `~/.local/share/chezmoi/dot_claude/skills/my-skill/SKILL.md`.
+Never create directly in `~/.claude/skills/` — that's the destination and bypasses tracking.
+After creating: `chezmoi apply --force`, then commit and push. See `chezmoi-expert` for full workflow.

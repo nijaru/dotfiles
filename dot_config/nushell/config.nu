@@ -61,6 +61,10 @@ path add ($env.HOME | path join ".cache/.bun/bin")
 path add ($env.HOME | path join ".local/share/mise/shims")
 
 # ── Custom Commands ─────────────────────────────────────
+def xpost [url: string] {
+    ^yt-dlp --dump-json $url err> /dev/null | from json | select description uploader uploader_id upload_date like_count repost_count webpage_url
+}
+
 def pullall [] {
     ls **/ .git | where type == dir | each { |it|
         let repo = ($it.name | path dirname)

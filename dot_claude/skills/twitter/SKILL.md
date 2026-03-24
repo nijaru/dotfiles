@@ -1,40 +1,33 @@
 ---
 name: twitter
-description: Use when needing real-time X/Twitter data (trends, sentiment, specific tweets) via Grok.
+description: Use when fetching X/Twitter post content by URL, or searching for recent X posts.
 allowed-tools: Bash
 ---
 
-# Twitter / X (Grok)
+# X / Twitter
 
-Retrieve and analyze real-time data from X/Twitter using the `orcx` CLI.
+Fetch post content using `xpost` (yt-dlp wrapper) or search via Exa.
 
-## 🎯 Mandates
+## Fetch a post by URL
 
-- **Scope:** ONLY use for X/Twitter data. Use `codex` or `gemini` for code/technical tasks.
-- **Freshness:** Always prioritize real-time queries for trending topics.
-
-## 🛠️ Standards
-
-### Common Queries
 ```bash
-# General search
-orcx -a grok "What are the top 3 trends in AI on Twitter right now?"
-
-# Sentiment analysis
-cat feedback.txt | orcx -a grok "Analyze the Twitter sentiment toward these features"
-
-# Persistence
-orcx -a grok "Query" -o response.md  # Save output
-orcx -c "Follow-up"                  # Continue context
+xpost https://x.com/user/status/123456789
 ```
 
-### CLI Reference
-- `orcx agents`: List available agents.
-- `orcx conversations list`: Review past interactions.
-- `orcx --no-save`: Execute one-off queries without history.
+Returns JSON: `text`, `author`, `handle`, `date`, `likes`, `reposts`, `url`.
+
+## Search for recent posts
+
+Use Exa web search scoped to x.com:
+
+```bash
+# Via MCP
+mcp__exa__web_search_exa query="site:x.com <topic>" num_results=10
+```
 
 ## 🚫 Anti-Rationalization
-| Excuse | Reality |
-| :--- | :--- |
-| "I'll just guess the sentiment" | Twitter sentiment changes hourly; use Grok for accuracy. |
-| "Using this for code review" | Grok is for social data; use specialized coding skills for code. |
+
+| Excuse                          | Reality                                          |
+| :------------------------------ | :----------------------------------------------- |
+| "I'll use orcx/Grok instead"    | `xpost` is free and works for all agents.        |
+| "I can guess the tweet content" | Fetch it — content changes and deletions happen. |

@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit
 - **Issue Tracking:** `gh issue list`, `gh issue view`.
 
 ### 4. Git Standards
-- **Commit Messages:** Follow the "WHY" principle. Concise summary first, followed by rationale if non-obvious.
+- **Commit Messages:** Use `git-commit` skill for message format and rules.
 - **Exclusion:** Use `.git/info/exclude` for agent files (ai/, .tasks/) as per `git-local-exclude`.
 
 ## 🚫 Anti-Rationalization

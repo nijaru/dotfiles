@@ -107,7 +107,9 @@
 
 **VCS Preference:** Default to `git` for all repositories unless a `.jj/` directory is present, in which case use the `jj` skill. 
 
-**Git:** Just commit—don't ask permission. Commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Only confirm before: PRs, publishing, force push, destructive ops. No force push main. Messages: concise WHY.
+**Git:** Just commit—don't ask permission. Commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Only confirm before: PRs, publishing, force push, destructive ops. No force push main.
+
+**Commits:** Format `type(scope): msg`. Scope is mandatory. Allowed types: `feat` `fix` `refactor` `perf` `test` `docs` `build` `ci` `chore`. Imperative mood. No periods. Use `git-commit` skill for full spec.
 
 **Releases:** NEVER trigger without explicit approval. Wait for CI.
 

@@ -1,46 +1,75 @@
 ---
 name: chezmoi-expert
-description: Use for managing dotfiles, syncing agent configurations, and handling source/destination drift safely.
+description: Use for managing dotfiles, syncing agent skills/config, and handling chezmoi source/destination workflows.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
-# chezmoi (The Dotfiles Orchestrator)
+# chezmoi
 
-## 🎯 Core Mandates
+## 🎯 Mandates
 
-- **Pre-flight Check:** Run `chezmoi status` BEFORE every `apply`. No exceptions.
-- **Verification First:** If `status` shows `D` (Deleted) or `DA` for files you just created, STOP. Verify they are tracked with `chezmoi add`.
-- **Target vs Source:** Always be explicit about whether you are editing the **Source** (`dot_...`) or the **Target** (`~/...`).
-- **Diff before Force:** Never use `apply --force` if `chezmoi status` shows unexpected changes. Run `chezmoi diff` first.
+- **Edit source, not destination.** Source is `~/.local/share/chezmoi/` (`dot_` prefix maps to `~/`). Never edit `~/` files directly.
+- **`chezmoi apply --force` after every change.** Always `--force` — without it, chezmoi prompts interactively and hangs in non-TTY contexts (agents, scripts).
+- **`chezmoi status` before applying** if the diff is unexpected. `chezmoi diff` to inspect before committing.
 
-## 🛠️ Technical Standards
+## 🛠️ Standards
 
-### 1. The Standard Workflow
+### 1. add vs apply — critical distinction
 
-| Step          | Action                | Command                                          |
-| :------------ | :-------------------- | :----------------------------------------------- |
-| **1. Check**  | Inspect current drift | `chezmoi status`                                 |
-| **2. Edit**   | Modify the source     | `edit dot_path/to/file`                          |
-| **3. Verify** | Review the drift      | `chezmoi diff`                                   |
-| **4. Apply**  | Sync to destination   | `chezmoi apply --force`                          |
-| **5. Commit** | Track the change      | `git add <specific-file> && git commit -m "msg"` |
+| Command                   | Direction            | When to use                                  |
+| :------------------------ | :------------------- | :------------------------------------------- |
+| `chezmoi add <dest-path>` | destination → source | Pull a file into tracking for the first time |
+| `chezmoi apply --force`   | source → destination | Deploy source changes to the live system     |
 
-### 2. Status Legend (Agent Cheat Sheet)
+**Never use `chezmoi add` to deploy.** It overwrites source with destination.
 
-- `M`: Modified (Safe to apply).
-- `A`: Added in Source (Safe to apply).
-- `D`: Deleted in Source (Danger: Destination will be deleted).
-- `DA`: Deleted in Source / Added in Destination (Conflict).
+### 2. Workflow
 
-### 3. Global Configuration
+```bash
+# Edit source
+edit ~/.local/share/chezmoi/dot_claude/skills/my-skill/SKILL.md
 
-- **CLAUDE.md**: The primary reference for all agents. Keep it in sync.
-- **Skills**: Shared skills live in `dot_claude/skills/`.
+# Deploy + commit
+chezmoi apply --force
+cd ~/.local/share/chezmoi
+git add <specific-file>          # never git add . or git add -p
+git commit -m "type(scope): msg"
+git push
+```
+
+### 3. Status Legend
+
+- `M`: Modified — safe to apply
+- `A`: Added in source — safe to apply
+- `D`: Deleted in source — destination will be deleted
+- `DA`: Conflict — deleted in source, added in destination
+
+### 4. Skill Management
+
+New skill: create under `~/.local/share/chezmoi/dot_claude/skills/my-skill/SKILL.md`, then `chezmoi apply --force`.
+
+Untracked plugin skill: `chezmoi add ~/.claude/skills/my-skill/SKILL.md` to pull into source, then commit.
+
+Shared path across agents: `~/.agents/skills` (alias of `~/.claude/skills`).
+
+| Agent       | Config                                                   |
+| :---------- | :------------------------------------------------------- |
+| Codex       | shared path directly                                     |
+| Gemini CLI  | shared path directly                                     |
+| Pi          | `~/.pi/agent/settings.json`                              |
+| Crush       | `~/.config/crush/crush.json`                             |
+| OpenCode    | shared path, disable duplicate `.claude/skills` scanning |
+| Antigravity | `~/.gemini/antigravity/skills` → shared path             |
+
+### 5. Symlink Pattern
+
+Files named `symlink_NAME` in source resolve to symlinks at the destination.
 
 ## 🚫 Anti-Rationalization
 
-| Excuse                     | Reality                                                                         |
-| :------------------------- | :------------------------------------------------------------------------------ |
-| "It's a small sync"        | Small syncs are where `apply --force` deletions happen. Check status.           |
-| "I'll add it to git later" | Chezmoi status relies on the link between source and target. Track immediately. |
-| "I'm in the source repo"   | Being in the source doesn't mean the destination is safe. Use `chezmoi` tools.  |
+| Excuse                             | Reality                                                               |
+| :--------------------------------- | :-------------------------------------------------------------------- |
+| "I'll use `chezmoi add` to deploy" | `add` goes destination → source. Use `apply --force`.                 |
+| "I'll skip `--force`"              | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts. |
+| "I'll apply later"                 | Drift causes silent config bugs. Apply immediately.                   |
+| "I'll manually link it"            | Manual links are lost on `apply --force`. Use source files.           |

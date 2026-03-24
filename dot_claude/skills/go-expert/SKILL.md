@@ -56,6 +56,8 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **SIMD:** Use `simd/archsimd` (Go 1.26, experimental, `GOEXPERIMENT=simd`) for vectorized hot paths — `Float32x4`, `Int32x4`, etc. with `Load`/`Store`/`Add`/`Mul`/`MulAdd` ops.
 - **Sync Testing:** Use `testing/synctest` for deterministic concurrent tests with virtual clocks (Go 1.25+).
 - **Benchmarks:** Use `b.Loop()` (Go 1.24) — automatic timer management, exactly-once-per-count, keeps variables alive. In Go 1.26, no longer blocks inlining of the loop body.
+- **Storage/database hot paths:** Pre-allocate slices with `make([]T, 0, capacity)`. Avoid `append` in tight I/O loops without pre-sizing. Size buffers at initialization, not per-operation.
+- **Invariant assertions:** Use `panic` (not `log.Fatal`) for invariant violations in non-trivial functions — things that should never happen, not user/input errors. Document the invariant being asserted.
   ```go
   for b.Loop() {
       // implementation
@@ -68,6 +70,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **No type encoding:** `users` not `userSlice`; `count` not `numUsers`. Only qualify when two forms coexist (`age`/`ageStr`).
 - **Reader/Writer params:** Always `r io.Reader`, `w io.Writer` — fixed conventions.
 - **Exported names:** Package name is part of the call site — `http.Client` not `http.HTTPClient`. No cryptic abbreviations.
+- **Units in systems/storage code:** When unit confusion is a real risk (mixed ms/ns, bytes/pages), append units as suffixes — `latencyMs`, `sizeBytes`, `timeoutMsMax`. Don't force this on every variable; Go style prefers terseness where context is clear.
 
 ### 5. Error Handling
 

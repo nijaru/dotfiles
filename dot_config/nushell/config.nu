@@ -66,17 +66,17 @@ def xpost [url: string] {
 }
 
 def pullall [] {
-    ls **/ .git | where type == dir | each { |it|
-        let repo = ($it.name | path dirname)
-        print $"Pulling ($repo)..."
+    let repos = (^find . -maxdepth 2 -name .git -type d | lines | sort | each { |it| $it | path dirname })
+    for repo in $repos {
+        print ""
+        print $"(ansi cyan_bold)── ($repo)(ansi reset)"
         try {
-            cd $repo
-            ^git pull
-            cd -
+            ^git -C $repo pull
         } catch { |err|
-            print $"Failed to pull ($repo): ($err.msg)"
+            print $"(ansi red_bold)  error: ($err.msg)(ansi reset)"
         }
     }
+    print ""
 }
 
 # ── Aliases ─────────────────────────────────────────────

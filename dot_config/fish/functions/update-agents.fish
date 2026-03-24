@@ -3,7 +3,7 @@ function update-agents --description "Update AI coding agents"
 
     function _agent -a name ver
         set_color --bold white
-        printf "  %-10s" "$name"
+        printf "  %-22s" "$name"
         set_color normal brblack
         echo "$ver"
         set_color normal
@@ -11,7 +11,7 @@ function update-agents --description "Update AI coding agents"
 
     function _agent_updated -a name old_ver new_ver
         set_color --bold white
-        printf "  %-10s" "$name"
+        printf "  %-22s" "$name"
         set_color normal brblack
         printf "%s " "$old_ver"
         set_color normal white
@@ -23,7 +23,7 @@ function update-agents --description "Update AI coding agents"
 
     function _agent_err -a name color msg
         set_color --bold white
-        printf "  %-10s" "$name"
+        printf "  %-22s" "$name"
         set_color normal $color
         echo "$msg"
         set_color normal

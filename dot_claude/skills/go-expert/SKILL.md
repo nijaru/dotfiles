@@ -56,8 +56,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **SIMD:** Use `simd/archsimd` (Go 1.26, experimental, `GOEXPERIMENT=simd`) for vectorized hot paths — `Float32x4`, `Int32x4`, etc. with `Load`/`Store`/`Add`/`Mul`/`MulAdd` ops.
 - **Sync Testing:** Use `testing/synctest` for deterministic concurrent tests with virtual clocks (Go 1.25+).
 - **Benchmarks:** Use `b.Loop()` (Go 1.24) — automatic timer management, exactly-once-per-count, keeps variables alive. In Go 1.26, no longer blocks inlining of the loop body.
-- **Storage/database hot paths:** Pre-allocate slices with `make([]T, 0, capacity)`. Avoid `append` in tight I/O loops without pre-sizing. Size buffers at initialization, not per-operation.
-- **Invariant assertions:** Use `panic` (not `log.Fatal`) for invariant violations in non-trivial functions — things that should never happen, not user/input errors. Document the invariant being asserted.
+- **Invariant assertions:** Use `panic` (not `log.Fatal`) for invariant violations — things that should never happen, not user/input errors. `log.Fatal` calls `os.Exit` and skips defers.
 
 ### 4. Naming
 
@@ -65,7 +64,6 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **No type encoding:** `users` not `userSlice`; `count` not `numUsers`. Only qualify when two forms coexist (`age`/`ageStr`).
 - **Reader/Writer params:** Always `r io.Reader`, `w io.Writer` — fixed conventions.
 - **Exported names:** Package name is part of the call site — `http.Client` not `http.HTTPClient`. No cryptic abbreviations.
-- **Unit safety:** When a function takes multiple numeric args of the same type with different units, use distinct named types (`type Milliseconds int64`) rather than naming conventions. Compiler-enforced; naming alone is not.
 
 ### 5. Error Handling
 

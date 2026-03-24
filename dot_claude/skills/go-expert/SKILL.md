@@ -58,11 +58,6 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **Benchmarks:** Use `b.Loop()` (Go 1.24) — automatic timer management, exactly-once-per-count, keeps variables alive. In Go 1.26, no longer blocks inlining of the loop body.
 - **Storage/database hot paths:** Pre-allocate slices with `make([]T, 0, capacity)`. Avoid `append` in tight I/O loops without pre-sizing. Size buffers at initialization, not per-operation.
 - **Invariant assertions:** Use `panic` (not `log.Fatal`) for invariant violations in non-trivial functions — things that should never happen, not user/input errors. Document the invariant being asserted.
-  ```go
-  for b.Loop() {
-      // implementation
-  }
-  ```
 
 ### 4. Naming
 

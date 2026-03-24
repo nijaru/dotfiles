@@ -74,7 +74,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **Invariant assertions:** Use `std.debug.assert` for preconditions and postconditions on non-trivial functions. In storage/database code, pair assertions across write/read paths — assert the invariant before writing, assert it again after reading back. Positive statements (`assert(x > 0)`) over negations (`assert(!(x <= 0))`).
 - **Bounded execution:** All loops over external data (disk, network, queues) must have explicit bounds. Unbounded loops are bugs in storage code.
 - **Naming with units:** Append units and qualifiers as suffixes, sorted by descending significance — `latency_ms_max`, `size_bytes`, `count_max`, `offset_bytes`. Makes unit mismatches and truncation visible at the call site.
-- **Function decomposition in systems code:** Centralize control flow in parent functions; keep leaf functions pure and side-effect-free. Push conditionals up, push loops down.
+- **Function decomposition in systems code:** Centralize control flow in parent functions; keep leaf functions pure and side-effect-free.
 
 ## 🏗️ Build System (0.15+)
 

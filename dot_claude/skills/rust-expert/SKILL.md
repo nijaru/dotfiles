@@ -65,7 +65,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **Slice chunks (1.88):** `slice.as_chunks::<N>()` returns `(&[[T; N]], &[T])` — exact-size chunks without bounds checks in the loop.
 - **`MaybeUninit` slices (1.93):** `uninit_slice.write_copy_of_slice(&src)` and `assume_init_ref()` for safe incremental initialization.
 - **Storage/database hot paths:** Pre-allocate with `Vec::with_capacity` or arena allocation. Avoid per-operation heap allocation in I/O loops. Size buffers at initialization.
-- **Naming in systems code:** Append units and qualifiers as suffixes, sorted by descending significance — `latency_ms`, `size_bytes`, `timeout_ms_max`, `count_max`. Makes unit mismatches visible at the call site.
+- **Unit safety:** Use newtypes for numeric values where unit confusion is a real risk (`struct Milliseconds(u64)`, `struct Bytes(u64)`). Naming conventions alone don't catch mismatches; types do.
 - **Invariant assertions:** Use `debug_assert!` for preconditions and postconditions on non-trivial functions. Use `assert!` where the invariant must hold in release (e.g., storage consistency checks). In paired write/read paths, assert before the write and after the read.
 
 ### 4. I/O & Async

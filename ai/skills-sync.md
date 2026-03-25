@@ -36,6 +36,7 @@ Tool-specific skills remain outside the shared set:
 | Crush       | `dot_config/crush/crush.json -> options.skills_paths` includes `~/.agents/skills` | `dot_config/crush/skills/` for Crush-only skills                      |
 | OpenCode    | `dot_config/opencode/opencode.json -> skills.paths: ["~/.agents/skills"]`         | `dot_config/opencode/skills/` only if ever needed                     |
 | Antigravity | `~/.gemini/antigravity/skills -> ~/.agents/skills`                                | `dot_gemini/antigravity/`                                             |
+| Droid       | No skills system — uses AGENTS.md only                                            | `dot_factory/symlink_AGENTS.md -> ~/.claude/CLAUDE.md`                |
 
 ## Strategy
 

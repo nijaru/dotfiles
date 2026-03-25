@@ -53,14 +53,11 @@
 
 **Search:**
 
-| Tool                | Use                                   |
-| ------------------- | ------------------------------------- |
-| WebSearch           | Quick facts, current events (default) |
-| Context7            | Library/framework docs                |
-| Exa                 | Code examples, RAG, semantic search   |
-| Parallel MCP search | Multi-hop research                    |
-
-**Never use:** `parallel_createDeepResearch` - expensive, prefer manual search + synthesis.
+| Tool      | Use                                   |
+| --------- | ------------------------------------- |
+| WebSearch | Quick facts, current events (default) |
+| Context7  | Library/framework docs                |
+| Exa       | Code examples, RAG, semantic search   |
 
 ## Development
 
@@ -105,7 +102,7 @@
 
 ## Workflow
 
-**VCS Preference:** Default to `git` for all repositories unless a `.jj/` directory is present, in which case use the `jj` skill. 
+**VCS Preference:** Default to `git` for all repositories unless a `.jj/` directory is present, in which case use the `jj` skill.
 
 **Git:** Just commit—don't ask permission. Commit often. One logical change = one commit (function + callers, feature + tests). Don't split cohesive changes across commits or bundle unrelated ones. Push regularly. Only confirm before: PRs, publishing, force push, destructive ops. No force push main.
 

@@ -16,10 +16,10 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 1. add vs apply — critical distinction
 
-| Command                   | Direction            | When to use                                  |
-| :------------------------ | :------------------- | :------------------------------------------- |
-| `chezmoi add <dest-path>` | destination → source | Pull a file into tracking for the first time |
-| `chezmoi apply --force`   | source → destination | Deploy source changes to the live system     |
+| Command                   | Direction            | When to use                                                     |
+| :------------------------ | :------------------- | :-------------------------------------------------------------- |
+| `chezmoi add <dest-path>` | destination → source | Sync destination changes back to source (new or existing files) |
+| `chezmoi apply --force`   | source → destination | Deploy source changes to the live system                        |
 
 **Never use `chezmoi add` to deploy.** It overwrites source with destination.
 

@@ -1,57 +1,33 @@
 ---
 name: codex
-description: Use when needing agentic codebase review or second AI opinion where the agent must walk the repo autonomously without pasting code. Ideal for pre-release review, complex bug analysis, or validating invariants across a codebase.
+description: Use ONLY when explicitly asked to invoke or run the Codex CLI tool for agentic review. Do NOT trigger when "codex" appears in conversation as a model name, topic, or reference.
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
 # Codex (Agentic Review)
 
-## 🎯 Core Mandates
+Use when you want a different model to walk the repo autonomously — useful for pre-release review or validating invariants you can't easily enumerate upfront.
 
-- **Autonomy:** Use Codex to walk the repo instead of pasting files. It excels at finding bugs across multiple files.
-- **Precision:** Be specific about invariants (e.g., "RecordStore::set() is NOT idempotent").
-- **Persistence:** Always use `-o <file>` to capture the final model response for synthesis.
+## When to use
 
-## 🛠️ Sandbox Standards
+- Pre-release review across a full codebase
+- Bug hunt where you don't know which files are involved
+- Validating a property that spans many files
 
-| Mode | Flag | Application |
-| :--- | :--- | :--- |
-| Workspace-write | `--full-auto` | Default; current working directory. |
-| Danger Access | `-s danger-full-access` | When system paths must be read. |
-| No Sandbox | `--dangerously-bypass-approvals-and-sandbox` | Cross-repo (`../`) or outside workspace. |
+## Execution
 
-**Constraint:** If reviewing code in `../`, you MUST use `--dangerously-bypass-approvals-and-sandbox -C /absolute/path/to/repo`.
-
-## 📋 Execution Patterns
-
-### 1. Code Review
 ```bash
-# Review a specific commit
-codex review --commit <sha>
+# Review against base branch
+codex review --base main -o /tmp/codex-review.txt
 
-# Review changes against base branch
-codex review --base main
-
-# Review with custom instructions
-codex review "Focus on persistence correctness and invariant violations" -o /tmp/codex-review.txt
+# Freeform analysis
+echo "Find all places where X invariant could be violated" | codex exec --full-auto -o /tmp/codex-reply.txt
 ```
 
-### 2. Freeform Analysis
+**Always use `-o <file>`** — findings are lost without it.
+
+## Cross-repo
+
 ```bash
-# Ask about codebase (piped input)
-echo "Review src/vector/store/ for recovery path bugs" | codex exec --full-auto -o /tmp/codex-reply.txt
+codex --dangerously-bypass-approvals-and-sandbox -C /absolute/path/to/repo "prompt"
 ```
-
-## ⚖️ Anti-Rationalization
-
-| Excuse | Reality |
-| :--- | :--- |
-| "I'll just paste the code into the chat." | Pasting loses deep context and cross-file dependencies that Codex can trace. |
-| "It's too slow for a quick check." | Accuracy in complex systems requires thoroughness. Use parallel execution if speed is critical. |
-| "I don't need an output file." | Without `-o`, the agent's findings are lost to the ephemeral terminal buffer. |
-
-## 🛠️ Troubleshooting
-
-- **No output:** Ensure `-o` is used; it saves the *last* model message.
-- **Permission denied:** Use the bypass flags for files outside the immediate project root.
-- **Timeouts:** Break deep analysis into focused sub-questions per directory or module.

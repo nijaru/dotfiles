@@ -22,10 +22,5 @@ args = ["-y", "@upstash/context7-mcp"]
 command = "npx"
 args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
 
-# MCP Servers (HTTP)
-[mcp_servers.parallel]
-url = "https://task-mcp.parallel.ai/mcp"
-bearer_token_env_var = "PARALLEL_API_KEY"
-
 [notice.model_migrations]
 "gpt-5.3-codex" = "gpt-5.4"

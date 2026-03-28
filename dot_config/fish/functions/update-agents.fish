@@ -1,6 +1,4 @@
 function update-agents --description "Update AI coding agents"
-    argparse f/force -- $argv
-
     function _agent -a name ver
         set_color --bold white
         printf "  %-22s" "$name"
@@ -36,7 +34,8 @@ function update-agents --description "Update AI coding agents"
     # 1. Claude Code
     if command -q claude
         set -l claude_out (claude update 2>&1)
-        if test $status -eq 0
+        set -l claude_status $status
+        if test $claude_status -eq 0
             set -l v_str (echo $claude_out | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
             _agent "Claude" "$v_str"
         else
@@ -54,7 +53,9 @@ function update-agents --description "Update AI coding agents"
     # 2. Droid (brew cask)
     if command -q droid
         set -l old_ver (droid --version 2>/dev/null)
-        brew upgrade --cask droid >/dev/null 2>&1
+        if brew list --cask droid >/dev/null 2>&1
+            brew upgrade --cask droid >/dev/null 2>&1
+        end
         set -l new_ver (droid --version 2>/dev/null)
         if test "$old_ver" != "$new_ver"
             _agent_updated "Droid" $old_ver $new_ver
@@ -97,7 +98,11 @@ function update-agents --description "Update AI coding agents"
         set -l pkg (string split ":" $entry)[1]
         set -a pkg_names $pkg
     end
-    bun add -g $pkg_names >/dev/null 2>&1
+    if not bun add -g $pkg_names >/dev/null 2>&1
+        _agent_err "Bun packages" red "update failed"
+        functions -e _get_ver _agent _agent_updated _agent_err
+        return 1
+    end
 
     # Capture versions after update
     set -l after_list (bun pm ls -g 2>/dev/null | string collect)

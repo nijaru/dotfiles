@@ -58,13 +58,6 @@ Focus on code touched in the current session unless explicitly told otherwise.
 - Code outside the recently modified scope
 - Passing tests — don't break green
 
-## Subagent dispatch
+## Language conventions
 
-When the scope is large or you want isolation, spawn a `developer` subagent with:
-
-```
-Task: Simplify recently modified code in [file(s)]
-Scope: Only code touched in this session
-Constraint: Preserve all existing behavior. Follow CLAUDE.md conventions.
-Files changed: [list]
-```
+Before making changes, check for a language-specific expert skill and load it if available (e.g. `rust-expert`, `go-expert`, `python-expert`, `bun-expert`). Those skills carry idiomatic conventions that take precedence over generic heuristics here.

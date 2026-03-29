@@ -1,6 +1,6 @@
 ---
 name: nu-data
-description: Use when querying, transforming, or exploring structured data (JSON, CSV, TOML, NDJSON, Parquet) interactively or in scripts — instead of jq, awk, or Python one-liners.
+description: Use when about to reach for jq, awk, or a Python one-liner to query, filter, or transform structured data (JSON, CSV, TOML, NDJSON, Parquet).
 allowed-tools: Bash, Read, Write, Edit
 ---
 
@@ -50,14 +50,14 @@ ls *.json | each { |f| open $f.name | get id } | flatten
 ### NDJSON (newline-delimited)
 
 ```nu
-open logs.ndjson | lines | each { from json } | where level == "error"
+open logs.ndjson | lines | each { |line| $line | from json } | where level == "error"
 ```
 
-### Large data with Polars
+### Large data with Polars (requires plugin)
 
 ```nu
-use std/formats *
-open large.parquet | polars filter ... | polars collect
+# Install once: plugin add ~/.cargo/bin/nu_plugin_polars
+polars open large.parquet | polars filter col("age") > lit(30) | polars collect
 ```
 
 ### Reshape and output
@@ -97,4 +97,4 @@ cat data.json | nu -c "from json | where active == true"
 - `open` auto-detects format by extension — for ambiguous files use `open f.txt | from json`
 - Nu paths use `.` not `[]` for array index: `get users.0` not `get users[0]`
 - String interpolation uses `$"..."`: `$"Hello ($name)"`
-- Pipelines in `each` blocks need `{ |it| ... }` closure syntax
+- Pipelines in `each` blocks need explicit params: `{ |row| ... }` not `{ ... }`

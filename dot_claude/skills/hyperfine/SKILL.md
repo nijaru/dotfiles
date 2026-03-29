@@ -1,6 +1,6 @@
 ---
 name: hyperfine
-description: Use when benchmarking command-line tools or scripts — measuring performance, comparing implementations, or producing statistically valid timing results.
+description: Use when benchmarking CLI tools or scripts instead of time — measuring performance, comparing implementations, or tracking regressions with statistical validity.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
@@ -37,18 +37,19 @@ hyperfine --warmup 3 \
 
 ## Key Flags
 
-| Flag                       | Use                                                |
-| -------------------------- | -------------------------------------------------- |
-| `--warmup N`               | Discard first N runs (always use, min 3)           |
-| `--runs N`                 | Fixed run count (default: auto, min 10)            |
-| `--min-runs N`             | Minimum when using auto                            |
-| `--prepare CMD`            | Run before each timing (clear caches, reset state) |
-| `--setup CMD`              | Run once before all runs                           |
-| `--cleanup CMD`            | Run after all runs                                 |
-| `--export-json out.json`   | Machine-readable results                           |
-| `--export-markdown out.md` | Table for docs/PRs                                 |
-| `--shell none`             | Remove shell overhead for simple commands          |
-| `--ignore-failure`         | Benchmark even if exit code nonzero                |
+| Flag                        | Use                                                      |
+| --------------------------- | -------------------------------------------------------- |
+| `--warmup N`                | Discard first N runs (always use, min 3)                 |
+| `--runs N`                  | Fixed run count (default: auto, min 10)                  |
+| `--min-runs N`              | Minimum when using auto                                  |
+| `--prepare CMD`             | Run before each timing (clear caches, reset state)       |
+| `--setup CMD`               | Run once before all runs                                 |
+| `--cleanup CMD`             | Run after all runs                                       |
+| `--export-json out.json`    | Machine-readable results                                 |
+| `--export-markdown out.md`  | Table for docs/PRs                                       |
+| `--shell none`              | Remove shell overhead for simple commands                |
+| `--ignore-failure`          | Benchmark even if exit code nonzero                      |
+| `--parameter-list VAR LIST` | Discrete values sweep (vs `--parameter-scan` for ranges) |
 
 ## Cache Control
 
@@ -99,12 +100,14 @@ Commands:    [exact commands with flags]
 ## Export and Diff
 
 ```bash
-# Save baseline
+# Save baseline and new results separately
 hyperfine --warmup 3 --export-json before.json 'old-tool input'
-
-# Save after changes
 hyperfine --warmup 3 --export-json after.json 'new-tool input'
 
-# Compare (requires hyperfine's compare script or jq)
-jq -r '[.results[] | {command, mean, stddev}]' before.json after.json
+# Compare with hyperfine's bundled script
+# (find it at: $(dirname $(which hyperfine))/../share/hyperfine/scripts/)
+python3 scripts/compare.py before.json after.json
+
+# Or extract means manually
+jq '.results[0] | {command, mean, stddev}' before.json after.json
 ```

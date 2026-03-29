@@ -11,7 +11,7 @@ approval_policy = "never"
 
 # Sandbox - full access
 sandbox_mode = "danger-full-access"
-model = "gpt-5.4"
+model = "gpt-5.4-mini"
 
 # MCP Servers (stdio)
 [mcp_servers.context7]

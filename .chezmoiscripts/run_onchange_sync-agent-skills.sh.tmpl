@@ -13,7 +13,13 @@ cleanup_broken() {
 }
 
 # Skills available in canonical location
-SHARED_SKILLS=(profile review save setup-ai refactor writer sprint prune handoff)
+SHARED_SKILLS=(
+    profile review save setup-ai refactor writer sprint prune handoff
+    hf-cli huggingface-community-evals huggingface-datasets huggingface-gradio
+    huggingface-jobs huggingface-llm-trainer huggingface-paper-publisher
+    huggingface-papers huggingface-trackio huggingface-vision-trainer
+    transformers-js systems-expert
+)
 EXTRA_SKILLS=(creating-skills update-chezmoi)
 
 link_skill() {

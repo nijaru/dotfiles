@@ -2,7 +2,7 @@
   "defaultProvider": "openrouter",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.60.0",
+  "lastChangelogVersion": "0.63.2",
   "editorPaddingX": 1,
   "steeringMode": "all",
   "followUpMode": "all",

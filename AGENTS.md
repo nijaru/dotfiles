@@ -36,7 +36,7 @@
 
 ### 5. AI CLI Skills
 
-Skills are symlinked from `~/.claude/skills/` to Gemini, Codex, and Pi via chezmoi. See `ai/skills-sync.md`.
+Skills are symlinked from `~/.claude/skills/` to Gemini, Codex, and Pi via chezmoi. Canonical shared set includes `hf-cli` (Hugging Face CLI), `huggingface-datasets`, `huggingface-llm-trainer`, `systems-expert` (High-Performance Engineering), etc. See `ai/skills-sync.md`.
 
 ### 6. Shell
 

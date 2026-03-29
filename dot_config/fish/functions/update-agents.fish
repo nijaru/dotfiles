@@ -134,9 +134,10 @@ function update-agents --description "Update AI coding agents"
     echo "Updating third-party skills..."
     set_color normal
 
-    # Format: "repo_url|skill1 skill2 ..."
+    # Format: "repo_url|source_path[:dest_name] ..."
     set -l skill_sources \
-        "https://github.com/modular/skills|mojo-syntax mojo-gpu-fundamentals mojo-python-interop new-modular-project"
+        "https://github.com/modular/skills|mojo-syntax mojo-gpu-fundamentals mojo-python-interop new-modular-project" \
+        "https://github.com/huggingface/skills|skills/hf-cli skills/huggingface-community-evals skills/huggingface-datasets skills/huggingface-gradio skills/huggingface-jobs skills/huggingface-llm-trainer skills/huggingface-paper-publisher skills/huggingface-papers skills/huggingface-trackio skills/huggingface-vision-trainer skills/transformers-js"
 
     set -l tmp (mktemp -d)
     for entry in $skill_sources
@@ -150,16 +151,25 @@ function update-agents --description "Update AI coding agents"
             continue
         end
 
-        for skill in $skills
-            set -l src $clone_dir/$skill
-            set -l dst ~/.claude/skills/$skill
+        for skill_entry in $skills
+            set -l skill_parts (string split ":" $skill_entry)
+            set -l src_path $skill_parts[1]
+            set -l dest_name (string replace -ra '.+/' '' $src_path)
+            if test (count $skill_parts) -gt 1
+                set dest_name $skill_parts[2]
+            end
+
+            set -l src $clone_dir/$src_path
+            set -l dst ~/.claude/skills/$dest_name
             if not test -d $src
-                _agent_err $skill yellow "not found in repo"
+                _agent_err $dest_name yellow "not found in repo"
             else if test -d $dst; and diff -rq $src $dst >/dev/null 2>&1
-                _agent $skill "up to date"
+                _agent $dest_name "up to date"
             else
-                cp -r $src ~/.claude/skills/
-                _agent_err $skill green "updated"
+                rm -rf $dst
+                mkdir -p (dirname $dst)
+                cp -r $src $dst
+                _agent_err $dest_name green "updated"
             end
         end
     end

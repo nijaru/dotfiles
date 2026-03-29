@@ -14,6 +14,10 @@ Canonical shared skills live in `~/.claude/skills/`, with `~/.agents/skills/` as
 | review                   | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
 | save                     | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
 | simplify                 | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
+| hf-cli                  | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
+| huggingface-datasets     | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
+| huggingface-llm-trainer  | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
+| systems-expert           | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
 | setup-ai                 | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
 | sprint                   | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
 | twitter                  | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |

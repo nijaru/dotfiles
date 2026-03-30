@@ -44,7 +44,7 @@ function llm-serve
         llama-server \
             --model $_model \
             --n-gpu-layers 999 \
-            --ctx-size 32768 \
+            --ctx-size 131072 \
             --host 0.0.0.0 \
             --port 8080 &
         set _llm_pid $last_pid

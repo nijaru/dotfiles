@@ -34,7 +34,26 @@
 - **Bun Global:** Global binaries at `~/.cache/.bun/bin` (added to path via `paths.fish`).
 - **Structure:** Repos at `~/github/<owner>/<repo>`. Use `ghc <repo>` to clone.
 
-### 5. AI CLI Skills
+### 5. Local LLM Serving
+
+`llm-serve` starts an OpenAI-compatible server on port 8080 using mlx-lm (Mac) or vLLM (Fedora).
+
+- **Mac model:** `~/.lmstudio/models/mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit`
+- **Fedora model:** `cyankiwi/GLM-4.7-Flash-AWQ-4bit` via vLLM
+- **Endpoint:** `http://localhost:8080/v1`
+
+Agent integrations (all point at port 8080):
+
+| Agent    | Config location                     | How to select              |
+| -------- | ----------------------------------- | -------------------------- |
+| pi       | `~/.pi/agent/models.json`           | Model picker (`local` provider) |
+| opencode | `dot_config/opencode/opencode.json` | Model picker               |
+| droid    | `dot_factory/settings.json`         | `/model` selector          |
+| crush    | `OPENAI_BASE_URL` env var           | Set before launch          |
+
+`pi-local` and `pi-fedora` functions are convenience wrappers for `--provider local/fedora`.
+
+### 6. AI CLI Skills
 
 Skills are symlinked from `~/.claude/skills/` to Gemini, Codex, and Pi via chezmoi. Canonical shared set includes `hf-cli` (Hugging Face CLI), `huggingface-datasets`, `huggingface-llm-trainer`, `systems-expert` (High-Performance Engineering), etc. See `ai/skills-sync.md`.
 

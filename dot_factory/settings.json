@@ -1,1 +1,12 @@
-{}
+{
+  "customModels": [
+    {
+      "model": "Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit",
+      "displayName": "Qwen3.5-27B Opus Distilled (local)",
+      "baseUrl": "http://localhost:8080/v1",
+      "apiKey": "local",
+      "provider": "generic-chat-completion-api",
+      "maxOutputTokens": 16384
+    }
+  ]
+}

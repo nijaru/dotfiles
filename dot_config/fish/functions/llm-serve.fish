@@ -1,5 +1,5 @@
 # Local LLM inference server - OpenAI-compatible API on port 8080
-# macOS: MLX + Qwen3-Coder-Next 4-bit (80B/3B active MoE) on M3 Max
+# macOS: MLX + Qwen3.5-27B Claude Opus 4.6 Distilled 4-bit on M3 Max
 # Linux: vLLM + GLM-4.7-Flash AWQ 4-bit (~17GB) on 4090
 # Auto-installs dependencies on first run. Ctrl+C to stop.
 #
@@ -18,7 +18,7 @@ function llm-serve
     if test (uname) = "Darwin"
         python -c "import mlx_lm" 2>/dev/null
         or uv pip install --python (which python) mlx-lm
-        python -m mlx_lm server --model mlx-community/Qwen3-Coder-Next-4bit --port 8080 &
+        python -m mlx_lm server --model ~/.lmstudio/models/mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit --port 8080 &
         set _llm_pid $last_pid
     else
         python -c "import vllm" 2>/dev/null

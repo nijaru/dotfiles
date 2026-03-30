@@ -19,10 +19,14 @@ function llm-serve
 
     if test (uname) = "Darwin"
         set _mlx_id mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit
-        if test -d ~/.lmstudio/models/$_mlx_id
+        set _hf_mlx ~/.cache/huggingface/hub/models--mlx-community--Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit
+        if test -d $_hf_mlx
+            # mlx-lm resolves from HF cache via model ID
+            set _model $_mlx_id
+        else if test -d ~/.lmstudio/models/$_mlx_id
             set _model ~/.lmstudio/models/$_mlx_id
         else
-            # mlx-lm resolves from HF cache or downloads automatically
+            # not found locally; mlx-lm will download to HF cache
             set _model $_mlx_id
         end
         uvx --from mlx-lm mlx_lm server \

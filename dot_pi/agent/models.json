@@ -14,6 +14,11 @@
 			"baseUrl": "http://localhost:11434/v1",
 			"apiKey": "ollama",
 			"api": "openai-completions"
+		},
+		"local": {
+			"baseUrl": "http://localhost:8080/v1",
+			"apiKey": "local",
+			"api": "openai-completions"
 		}
 	}
 }

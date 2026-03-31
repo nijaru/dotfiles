@@ -1,0 +1,20 @@
+[install]
+# Supply Chain Security: 3 days in seconds (72 hours).
+minimumReleaseAge = 259200
+
+# Trusted packages that bypass the age gate (fast updates allowed).
+minimumReleaseAgeExcludes = [
+  "@charmland/crush",
+  "@google/gemini-cli",
+  "@mariozechner/pi-coding-agent",
+  "@openai/codex",
+  "@sourcegraph/amp",
+  "@tobilu/qmd",
+  "opencode-ai",
+  "typescript",
+  "@types/bun",
+  "@types/node",
+  "bun-types",
+  "oxlint",
+  "oxfmt"
+]

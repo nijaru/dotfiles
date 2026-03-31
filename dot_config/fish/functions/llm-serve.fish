@@ -29,7 +29,7 @@ function llm-serve
             # not found locally; mlx-lm will download to HF cache
             set _model $_mlx_id
         end
-        uvx --from mlx-lm mlx_lm server \
+        uvx --python 3.14t --from mlx-lm mlx_lm server \
             --model $_model \
             --host 0.0.0.0 --port 8080 &
         set _llm_pid $last_pid

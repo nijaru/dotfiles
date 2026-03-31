@@ -1,5 +1,13 @@
 # Cargo build configuration for faster compilation
 
+[net]
+# Use the local git binary (safer than built-in library, respects your git-config/SSH).
+git-fetch-with-cli = true
+
+[registries.crates-io]
+# Use the sparse protocol (faster and more secure as it avoids cloning the index).
+protocol = "sparse"
+
 [build]
 incremental = true
 

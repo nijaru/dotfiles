@@ -1,0 +1,4 @@
+# Supply Chain Security: 3-day age gate and script sandboxing.
+# Prevents installing package versions published < 72 hours ago.
+min-release-age=3
+ignore-scripts=true

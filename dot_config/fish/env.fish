@@ -91,11 +91,10 @@ switch $__fish_uname
         set -gx HOMEBREW_NO_ENV_HINTS 1                # Reduce verbose output
         set -gx HOMEBREW_NO_ANALYTICS 1                # Disable analytics
         set -gx HOMEBREW_BOOTSNAP 1                    # Enable bootsnap for faster Ruby startup
+        set -gx HOMEBREW_NO_INSECURE_REDIRECT 1        # Enforce HTTPS only (security)
 end
 
 # Load API keys (secrets.fish is NOT tracked by chezmoi)
 if test -r $HOME/.config/fish/secrets.fish
     source $HOME/.config/fish/secrets.fish
 end
-
-# Path configuration is handled in conf.d/paths.fish

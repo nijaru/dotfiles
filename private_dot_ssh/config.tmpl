@@ -7,6 +7,8 @@ Host github.com
     ControlMaster no
 
 Host *
+    HashKnownHosts yes
+    VerifyHostKeyDNS yes
     AddKeysToAgent yes
 {{- if eq .chezmoi.os "darwin" }}
     UseKeychain yes

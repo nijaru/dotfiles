@@ -11,7 +11,7 @@
         "baseURL": "http://localhost:8080/v1"
       },
       "models": {
-        "Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit": {
+        "/Users/nick/.lmstudio/models/mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit": {
           "name": "Qwen3.5-27B Opus Distilled"
         }
       }

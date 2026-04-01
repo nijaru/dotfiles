@@ -9,14 +9,22 @@
   "hideThinkingBlock": true,
   "collapseChangelog": true,
   "defaultThinkingLevel": "high",
-  "skills": [
-    "~/.agents/skills"
-  ],
+  "skills": ["~/.agents/skills"],
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-subagents",
     "npm:pi-web-search",
     "npm:pi-messenger"
   ],
-  "defaultModel": "qwen/qwen3.6-plus-preview:free"
+  "defaultModel": "qwen/qwen3.6-plus-preview:free",
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "models": [
+        { "id": "qwen3.5:27b" }
+      ]
+    }
+  }
 }

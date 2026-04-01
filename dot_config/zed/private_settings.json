@@ -161,33 +161,6 @@
         }
       }
     },
-    "JavaScript": {
-      "language_servers": ["oxc", "!eslint", "..."],
-      "formatter": {
-        "external": {
-          "command": "oxfmt",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
-    },
-    "TypeScript": {
-      "language_servers": ["oxc", "!eslint", "..."],
-      "formatter": {
-        "external": {
-          "command": "oxfmt",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
-    },
-    "TSX": {
-      "language_servers": ["oxc", "!eslint", "..."],
-      "formatter": {
-        "external": {
-          "command": "oxfmt",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
-    },
     "Python": {
       "language_servers": ["ruff", "ty"],
       "code_actions_on_format": {
@@ -203,15 +176,5 @@
         "source.organizeImports": true
       }
     },
-    "Mojo": {
-      "language_servers": ["mojo-lsp"]
-    }
-  },
-  "lsp": {
-    "mojo-lsp": {
-      "binary": {
-        "path": "mojo-lsp-server"
-      }
-    }
   }
 }

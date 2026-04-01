@@ -145,9 +145,49 @@
         "source.organizeImports": true
       }
     },
-    "JavaScript": { "language_servers": ["oxc", "!eslint", "..."] },
-    "TypeScript": { "language_servers": ["oxc", "!eslint", "..."] },
-    "TSX": { "language_servers": ["oxc", "!eslint", "..."] },
+    "JSON": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "JSONC": {
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "JavaScript": {
+      "language_servers": ["oxc", "!eslint", "..."],
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "TypeScript": {
+      "language_servers": ["oxc", "!eslint", "..."],
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "TSX": {
+      "language_servers": ["oxc", "!eslint", "..."],
+      "formatter": {
+        "external": {
+          "command": "oxfmt",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
     "Python": {
       "language_servers": ["ruff", "ty"],
       "code_actions_on_format": {

@@ -147,7 +147,37 @@ Use `tk` for all tasks—persists across compaction. Details in task logs, not S
 
 **Completion:** `tk start` when beginning, `tk done` when complete. Stale status causes confusion.
 
-## Subagents
+## Coordinator Mindset
+
+Operate as a **Coordinator** for all tasks, prioritizing synthesis and verification over mechanical action.
+
+- **Synthesis Before Action:** Always read and understand the problem space before acting. Synthesize findings into a specific implementation plan or spec in `ai/` for significant changes.
+- **Selective Delegation:** For small, local tasks, "just do it" yourself. Reserve subagents for parallel research, context isolation, or broad implementation.
+- **Red-Green Verification:** Always reproduce the failure before fixing and verify the solution with tests.
+- **Efficiency over Ceremony:** Avoid subagent "slop" and mirrored task tables.
+
+## Context Management (`save` skill)
+
+Use the `save` skill to manage session state and tasks.
+
+- **Task Lifecycle:** Use `tk start` when beginning, `tk log` for discoveries (with file:line), and `tk done` when finished.
+- **Just-in-Time Memory:** Keep `ai/` documents compact. Use a flat structure by default; only create subdirectories if complexity warrants it.
+- **Persistence:** Log findings immediately to survive compaction and be available to future agents.
+
+## Code Standards (Single Pass)
+
+Use these standards during every `review` or `simplify` operation:
+
+| Category | Signal | Fix |
+| :--- | :--- | :--- |
+| **Correctness** | Logic errors, edge cases, safety risks | Fix the root cause, add tests |
+| **Complexity** | Function > 40 lines, Nesting > 3 | Split boundaries, early returns, guard clauses |
+| **Quality** | Poor naming, inconsistent style | Rename for intent, normalize style |
+| **Efficiency** | O(n^2) logic, unnecessary allocations | Optimize algorithm, reuse abstractions |
+| **Cleanliness** | Duplication, dead code, verbose comments | Extract shared logic, delete dead code, clarify WHY |
+
+## Task Discipline
+
 
 For context isolation, parallelism, fresh perspective. ai/ files are shared memory.
 

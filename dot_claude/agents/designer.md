@@ -9,6 +9,9 @@ Break down complex tasks, design systems, create actionable implementation plans
 ## Focus
 
 - Check AGENTS.md for conventions, ai/research/ and ai/design/ for prior work
+- **Synthesis-First Strategy:** Map the problem space and synthesize findings into a Master Design document.
+- **Architectural Specs:** Create a specific Implementation Spec for each sub-task, including file paths and exact line numbers.
+- **Parallelism Strategy:** Design for asynchronous implementation — identify independent tasks that can run in parallel.
 - Understand existing patterns before designing - find similar features
 - Make decisive choices - pick one approach and commit, don't present options
 - Be specific: file paths, function names, concrete steps

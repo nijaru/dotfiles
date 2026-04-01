@@ -10,7 +10,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 - **Explicit over implicit.** No hidden control flow, no exceptions, no null. Every edge case is in the type.
 - **Custom types are everything.** Enums, structs, and tagged unions are all `type`. Model the domain; let the compiler enforce it.
-- **Pipeline-first.** `|>` passes to the **first** argument (opposite of Elixir). Use captures (`int.add(_, 5)`) or anonymous functions when you need a different position.
+- **Pipeline-first.** `|>` passes to the **first** argument (same as Elixir). To pipe to a different position, use a capture with `_` as the slot: `string.append("prefix", _)` or an anonymous function.
 - **`use` for Result chains.** Desugar callbacks; don't nest `case` pyramids.
 - **No function-head pattern matching.** All branching lives in `case` expressions inside the body.
 
@@ -70,7 +70,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 - **Everything `snake_case`** — variables, functions, modules, fields.
 - **`PascalCase`** for type names and variant constructors only.
-- **Predicates** conventionally suffixed with `_is` or structured as `is_active` (no `?`).
+- **Predicates** use `is_` prefix: `is_empty`, `is_some`, `is_none` (no `?` suffix — that's Elixir).
 - Always run `gleam format` before committing.
 
 ## 🏗️ Tooling

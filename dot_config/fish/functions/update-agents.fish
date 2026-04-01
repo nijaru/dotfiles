@@ -177,6 +177,7 @@ function update-agents --description "Update AI coding agents"
                 rm -rf $dst
                 mkdir -p (dirname $dst)
                 cp -r $src $dst
+                chezmoi add $dst 2>/dev/null
                 _agent_err $dest_name green "updated"
             end
         end

@@ -3,7 +3,17 @@
 		"openrouter": {
 			"baseUrl": "https://openrouter.ai/api/v1",
 			"apiKey": "$OPENROUTER_API_KEY",
-			"api": "openai-responses"
+			"api": "openai-responses",
+			"models": [
+				{
+					"id": "qwen/qwen3.6-plus-preview:free",
+					"name": "Qwen 3.6 Plus Preview (free)",
+					"reasoning": true,
+					"input": ["text"],
+					"contextWindow": 1000000,
+					"maxTokens": 32000
+				}
+			]
 		},
 		"anthropic": {
 			"baseUrl": "https://api.anthropic.com/v1",

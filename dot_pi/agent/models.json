@@ -15,6 +15,20 @@
 				}
 			]
 		},
+		"zen": {
+			"baseUrl": "https://opencode.ai/zen/v1",
+			"apiKey": "$OPENCODE_ZEN_API_KEY",
+			"api": "openai-completions",
+			"models": [
+				{ "id": "qwen3.6-plus-free", "name": "Qwen 3.6 Plus (free)", "reasoning": true, "contextWindow": 1000000, "maxTokens": 32000 },
+				{ "id": "minimax-m2.5-free", "name": "MiniMax M2.5 (free)" },
+				{ "id": "mimo-v2-pro-free", "name": "MiMo V2 Pro (free)" },
+				{ "id": "mimo-v2-omni-free", "name": "MiMo V2 Omni (free)" },
+				{ "id": "mimo-v2-flash-free", "name": "MiMo V2 Flash (free)" },
+				{ "id": "nemotron-3-super-free", "name": "Nemotron 3 Super (free)" },
+				{ "id": "trinity-large-preview-free", "name": "Trinity Large Preview (free)" }
+			]
+		},
 		"anthropic": {
 			"baseUrl": "https://api.anthropic.com/v1",
 			"apiKey": "$ANTHROPIC_API_KEY",

@@ -2,7 +2,7 @@
   "defaultProvider": "openrouter",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.63.2",
+  "lastChangelogVersion": "0.64.0",
   "editorPaddingX": 1,
   "steeringMode": "all",
   "followUpMode": "all",
@@ -14,9 +14,9 @@
   ],
   "packages": [
     "npm:pi-mcp-adapter",
-    "npm:@yofriadi/pi-web-search",
     "npm:pi-subagents",
-    "https://github.com/davebcn87/pi-autoresearch"
+    "npm:pi-web-search",
+    "npm:pi-messenger"
   ],
-  "defaultModel": "openrouter/hunter-alpha"
+  "defaultModel": "qwen/qwen3.6-plus-preview:free"
 }

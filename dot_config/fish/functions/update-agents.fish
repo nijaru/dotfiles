@@ -146,7 +146,15 @@ function update-agents --description "Update AI coding agents"
         set -l skills (string split " " $parts[2])
         set -l clone_dir $tmp/(string replace -ra '.+/' '' $repo)
 
-        if not git clone --depth=1 --quiet $repo $clone_dir 2>/dev/null
+        set -l clone_ok false
+        for attempt in 1 2 3
+            if git clone --depth=1 --quiet $repo $clone_dir 2>/dev/null
+                set clone_ok true
+                break
+            end
+            rm -rf $clone_dir
+        end
+        if not $clone_ok
             _agent_err (string replace -ra '.+/' '' $repo) red "clone failed"
             continue
         end

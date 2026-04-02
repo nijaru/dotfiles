@@ -77,13 +77,8 @@
 
 **Refactoring:** Clean breaks, not gradual migrations. When changing interfaces, signatures, or patterns:
 
-- Replace completely in one commit—old code and all callers
-- No version suffixes (V2, V3), no "old"/"legacy"/"new" markers
-- No shims, adapters, or re-exports "for compatibility"
-- No breadcrumbs: no `// moved to X`, `// removed`, `// deprecated` comments. Just delete.
-- No deprecation unless explicitly instructed. If callers exist outside the repo, ask first.
-- When changing code, replace the affected implementation wholesale. Do not keep fallback paths, shims, compatibility branches, or workaround code unless explicit compatibility or deprecation is requested.
-- Keep the rewrite scoped to the requested component or module; do not expand it into unrelated parts of the repo.
+- Replace the requested component wholesale.
+- Delete old code, shims, fallbacks, compatibility branches, and deprecation scaffolding unless the user explicitly asks to preserve compatibility or add deprecation.
 
 **Style:**
 

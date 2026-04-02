@@ -52,13 +52,13 @@
           "id": "gemma4:26b",
           "name": "Gemma 4 26B",
           "input": ["text", "image"],
-          "contextWindow": 131072
+          "contextWindow": 262144
         },
         {
           "id": "gemma4:31b",
           "name": "Gemma 4 31B",
           "input": ["text", "image"],
-          "contextWindow": 131072
+          "contextWindow": 262144
         }
       ]
     },

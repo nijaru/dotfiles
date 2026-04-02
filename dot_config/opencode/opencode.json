@@ -12,8 +12,8 @@
         "apiKey": "ollama"
       },
       "models": {
-        "gemma4:26b": { "name": "Gemma 4 26B" },
-        "gemma4:31b": { "name": "Gemma 4 31B" }
+        "gemma4:26b": { "name": "Gemma 4 26B", "limit": { "context": 131072 } },
+        "gemma4:31b": { "name": "Gemma 4 31B", "limit": { "context": 131072 } }
       }
     },
     "ollama-fedora": {
@@ -24,7 +24,10 @@
         "apiKey": "ollama"
       },
       "models": {
-        "gemma4:31b-64k": { "name": "Gemma 4 31B 64K" }
+        "gemma4:31b-64k": {
+          "name": "Gemma 4 31B 64K",
+          "limit": { "context": 65536 }
+        }
       }
     }
   },

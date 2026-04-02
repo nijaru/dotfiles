@@ -69,6 +69,7 @@
 
 - Fix root cause, not symptoms
 - Read code before changing it
+- Prefer the environment's built-in file-editing mechanism over ad hoc Python or shell rewrites; use scripts only when they are the right tool.
 - Update docs—record corrections in AGENTS.md to prevent repeats
 - Ask before breaking APIs
 
@@ -98,7 +99,7 @@
 
 **VCS:** Default to `git`. Use `jj` skill if `.jj/` directory is present.
 
-**Git:** Commit often without asking. One logical change = one commit (function + callers, feature + tests). Push regularly. Confirm before: PRs, publishing, force push, destructive ops. No force push main.
+**Git:** Commit immediately after finishing each coherent change set, without waiting for a reminder or permission. One logical change = one commit (function + callers, feature + tests). Push regularly. Confirm before: PRs, publishing, force push, destructive ops. No force push main.
 
 **Commits:** `type(scope): msg` — scope mandatory. → `git-commit` skill for full spec.
 

@@ -9,8 +9,8 @@
       "maxOutputTokens": 16384
     },
     {
-      "model": "gemma4:26b",
-      "displayName": "Gemma 4 26B (Fedora)",
+      "model": "gemma4:31b-64k",
+      "displayName": "Gemma 4 31B 64K (Fedora)",
       "baseUrl": "http://fedora:11434/v1",
       "apiKey": "ollama",
       "provider": "generic-chat-completion-api",

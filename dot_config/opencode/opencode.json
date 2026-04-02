@@ -4,16 +4,28 @@
     "paths": ["~/.agents/skills"]
   },
   "provider": {
-    "local": {
+    "ollama": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Local (llm-serve)",
+      "name": "Ollama (local)",
       "options": {
-        "baseURL": "http://localhost:8080/v1"
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey": "ollama"
       },
       "models": {
-        "/Users/nick/.lmstudio/models/mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit": {
-          "name": "Qwen3.5-27B Opus Distilled"
-        }
+        "gemma4:26b": { "name": "Gemma 4 26B" },
+        "gemma4:31b": { "name": "Gemma 4 31B" }
+      }
+    },
+    "ollama-fedora": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (Fedora)",
+      "options": {
+        "baseURL": "http://fedora:11434/v1",
+        "apiKey": "ollama"
+      },
+      "models": {
+        "gemma4:26b": { "name": "Gemma 4 26B" },
+        "gemma4:31b": { "name": "Gemma 4 31B" }
       }
     }
   },

@@ -1,10 +1,18 @@
 {
   "customModels": [
     {
-      "model": "Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit",
-      "displayName": "Qwen3.5-27B Opus Distilled (local)",
-      "baseUrl": "http://localhost:8080/v1",
-      "apiKey": "local",
+      "model": "gemma4:26b",
+      "displayName": "Gemma 4 26B (ollama)",
+      "baseUrl": "http://localhost:11434/v1",
+      "apiKey": "ollama",
+      "provider": "generic-chat-completion-api",
+      "maxOutputTokens": 16384
+    },
+    {
+      "model": "gemma4:26b",
+      "displayName": "Gemma 4 26B (Fedora)",
+      "baseUrl": "http://fedora:11434/v1",
+      "apiKey": "ollama",
       "provider": "generic-chat-completion-api",
       "maxOutputTokens": 16384
     }

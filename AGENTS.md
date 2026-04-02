@@ -36,22 +36,21 @@
 
 ### 5. Local LLM Serving
 
-`llm-serve` starts an OpenAI-compatible server on port 8080 using mlx-lm (Mac) or vLLM (Fedora).
+Ollama runs on both machines (port 11434). Use `ollama pull <model>` to fetch models.
 
-- **Mac model:** `~/.lmstudio/models/mlx-community/Qwen3.5-27B-Claude-4.6-Opus-Distilled-MLX-4bit`
-- **Fedora model:** `cyankiwi/GLM-4.7-Flash-AWQ-4bit` via vLLM
-- **Endpoint:** `http://localhost:8080/v1`
+- **Mac endpoint:** `http://localhost:11434/v1` (MLX backend)
+- **Fedora endpoint:** `http://fedora:11434/v1` (CUDA backend, via Tailscale)
+- **Primary model:** `gemma4:26b` (18GB, 256K ctx, multimodal)
 
-Agent integrations (all point at port 8080):
+Agent integrations:
 
-| Agent    | Config location                     | How to select              |
-| -------- | ----------------------------------- | -------------------------- |
-| pi       | `~/.pi/agent/models.json`           | Model picker (`local` provider) |
-| opencode | `dot_config/opencode/opencode.json` | Model picker               |
-| droid    | `dot_factory/settings.json`         | `/model` selector          |
-| crush    | `OPENAI_BASE_URL` env var           | Set before launch          |
+| Agent    | Config location                     | How to select                                    |
+| -------- | ----------------------------------- | ------------------------------------------------ |
+| pi       | `~/.pi/agent/models.json`           | Model picker (`ollama`/`ollama-fedora` provider) |
+| opencode | `dot_config/opencode/opencode.json` | Model picker                                     |
+| droid    | `dot_factory/settings.json`         | `/model` selector                                |
 
-`pi-local` and `pi-fedora` functions are convenience wrappers for `--provider local/fedora`.
+`pi-local` and `pi-fedora` are convenience wrappers for `--provider ollama/ollama-fedora`.
 
 ### 7. AI CLI Skills
 

@@ -77,8 +77,8 @@
 
 **Refactoring:** Clean breaks, not gradual migrations. When changing interfaces, signatures, or patterns:
 
-- Replace the requested component wholesale.
-- Delete old code, shims, fallbacks, compatibility branches, and deprecation scaffolding unless the user explicitly asks to preserve compatibility or add deprecation.
+- Replace the changed component wholesale.
+- Do not leave old code, shims, fallbacks, compatibility branches, or deprecation scaffolding unless the user explicitly asks to preserve compatibility or add deprecation.
 
 **Style:**
 

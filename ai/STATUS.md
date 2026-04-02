@@ -8,6 +8,7 @@ Dotfiles synced and skill paths consolidated around `~/.agents/skills`.
 - Gemini CLI, Codex CLI, Pi, Crush, and OpenCode consume the shared path cleanly.
 - Antigravity is configured against the shared path on a best-effort basis, but still appears to lag Gemini CLI's Agent Skills behavior.
 - No active local task remains for this skills consolidation pass.
+- Global Claude guidance now explicitly prefers full refactors over shims, fallbacks, and deprecation scaffolding when a touched area is being rewritten.
 
 ## Incident (2026-03-30)
 

@@ -82,8 +82,8 @@
 - No shims, adapters, or re-exports "for compatibility"
 - No breadcrumbs: no `// moved to X`, `// removed`, `// deprecated` comments. Just delete.
 - No deprecation unless explicitly instructed. If callers exist outside the repo, ask first.
-- When refactoring a touched area, prefer a clean replacement over preserving legacy branches, fallbacks, or workaround code. Remove old paths in the same change unless compatibility is explicitly required.
-- Keep the rewrite scoped to the area you are changing; do not expand it into unrelated parts of the repo.
+- When changing code, replace the affected implementation wholesale. Do not keep fallback paths, shims, compatibility branches, or workaround code unless explicit compatibility or deprecation is requested.
+- Keep the rewrite scoped to the requested component or module; do not expand it into unrelated parts of the repo.
 
 **Style:**
 

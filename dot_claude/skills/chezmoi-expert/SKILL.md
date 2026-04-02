@@ -8,27 +8,33 @@ allowed-tools: Bash, Read, Write, Edit
 
 ## Mandates
 
-- **Edit destination, then `chezmoi add`.** Edit the live file at `~/`, then run `chezmoi add <dest-path>` to sync back to source. Fewer steps, no double-writing.
+- **Prefer `chezmoi edit --apply $FILE`** — opens the source file directly, applies on exit. Works with templates and encrypted files.
+- **Alternative: edit destination, then `chezmoi add $FILE`** — valid for plain (non-template) files. Simpler when editing many files at once.
+- **`chezmoi add` does NOT work with templates** (`.tmpl` files) — use `chezmoi edit` for those.
 - **Always `--force` with `apply`.** Without it, chezmoi prompts interactively and hangs in non-TTY contexts.
-- **`chezmoi diff` before committing** if the diff is unexpected.
 
 ## Standards
 
-### 1. add vs apply — critical distinction
+### 1. Commands
 
-| Command                   | Direction            | When to use                                       |
-| :------------------------ | :------------------- | :------------------------------------------------ |
-| `chezmoi add <dest-path>` | destination → source | After editing a destination file directly         |
-| `chezmoi apply --force`   | source → destination | Pulling updates — deploying source to live system |
+| Command                      | Direction            | When to use                                            |
+| :--------------------------- | :------------------- | :----------------------------------------------------- |
+| `chezmoi edit --apply $FILE` | source (opens+apply) | Primary workflow — works for all file types            |
+| `chezmoi add <dest-path>`    | destination → source | After editing destination directly (non-templates)     |
+| `chezmoi re-add`             | destination → source | Bulk re-sync all modified destinations (non-templates) |
+| `chezmoi apply --force`      | source → destination | Pulling updates from remote, deploying source changes  |
 
 ### 2. Workflow
 
 ```bash
-# Edit destination directly
-edit ~/.claude/skills/my-skill/SKILL.md
+# Option A — recommended (works with templates/encryption)
+chezmoi edit --apply ~/.claude/skills/my-skill/SKILL.md
 
-# Sync to source + commit
+# Option B — destination-first (plain files only)
+edit ~/.claude/skills/my-skill/SKILL.md
 chezmoi add ~/.claude/skills/my-skill/SKILL.md
+
+# Commit either way
 cd ~/.local/share/chezmoi
 git add dot_claude/skills/my-skill/SKILL.md
 git commit -m "type(scope): msg"
@@ -65,9 +71,9 @@ Files named `symlink_NAME` in source resolve to symlinks at the destination.
 
 ## Anti-Rationalization
 
-| Excuse                               | Reality                                                               |
-| :----------------------------------- | :-------------------------------------------------------------------- |
-| "I'll edit the source file directly" | Edit destination, then `chezmoi add`. Fewer steps, no double-writing. |
-| "I'll skip `--force`"                | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts. |
-| "I'll `chezmoi add` after apply"     | `add` first, then commit. `apply` is for pulling updates only.        |
-| "I'll manually link it"              | Manual links are lost on `apply --force`. Use source files.           |
+| Excuse                             | Reality                                                                    |
+| :--------------------------------- | :------------------------------------------------------------------------- |
+| "I'll just edit the source file"   | Use `chezmoi edit --apply` — it handles templates and encryption properly. |
+| "I'll use `chezmoi add` on a tmpl" | `add`/`re-add` don't work with templates. Use `chezmoi edit` instead.      |
+| "I'll skip `--force`"              | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts.      |
+| "I'll manually link it"            | Manual links are lost on `apply --force`. Use source files.                |

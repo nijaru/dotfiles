@@ -8,31 +8,31 @@ allowed-tools: Bash, Read, Write, Edit
 
 ## Mandates
 
-- **Prefer `chezmoi edit --apply $FILE`** — opens the source file directly, applies on exit. Works with templates and encrypted files.
-- **Alternative: edit destination, then `chezmoi add $FILE`** — valid for plain (non-template) files. Simpler when editing many files at once.
-- **`chezmoi add` does NOT work with templates** (`.tmpl` files) — use `chezmoi edit` for those.
-- **Always `--force` with `apply`.** Without it, chezmoi prompts interactively and hangs in non-TTY contexts.
+- **Plain files:** Use Edit/Write tools on the destination (`~/`), then `chezmoi add <dest-path>` to sync to source.
+- **Template files (`.tmpl`):** `chezmoi add` doesn't work — edit the source file directly (`~/.local/share/chezmoi/`) with Edit/Write tools, then `chezmoi apply --force`.
+- **Always `--force` with `apply`.** Without it, chezmoi hangs waiting for a TTY that doesn't exist in agent contexts.
+- **`chezmoi edit` launches `$EDITOR` — never use it from an agent.**
 
 ## Standards
 
 ### 1. Commands
 
-| Command                      | Direction            | When to use                                            |
-| :--------------------------- | :------------------- | :----------------------------------------------------- |
-| `chezmoi edit --apply $FILE` | source (opens+apply) | Primary workflow — works for all file types            |
-| `chezmoi add <dest-path>`    | destination → source | After editing destination directly (non-templates)     |
-| `chezmoi re-add`             | destination → source | Bulk re-sync all modified destinations (non-templates) |
-| `chezmoi apply --force`      | source → destination | Pulling updates from remote, deploying source changes  |
+| Command                   | Direction            | When to use                                          |
+| :------------------------ | :------------------- | :--------------------------------------------------- |
+| `chezmoi add <dest-path>` | destination → source | After editing a plain destination file with tools    |
+| `chezmoi re-add`          | destination → source | Bulk re-sync all modified plain destinations         |
+| `chezmoi apply --force`   | source → destination | After editing source directly (templates/encryption) |
 
 ### 2. Workflow
 
 ```bash
-# Option A — recommended (works with templates/encryption)
-chezmoi edit --apply ~/.claude/skills/my-skill/SKILL.md
-
-# Option B — destination-first (plain files only)
-edit ~/.claude/skills/my-skill/SKILL.md
+# Plain files — edit destination, sync to source
+# (use Edit/Write tools on ~/.claude/skills/my-skill/SKILL.md)
 chezmoi add ~/.claude/skills/my-skill/SKILL.md
+
+# Template files — edit source directly, deploy
+# (use Edit/Write tools on ~/.local/share/chezmoi/dot_.../file.tmpl)
+chezmoi apply --force
 
 # Commit either way
 cd ~/.local/share/chezmoi

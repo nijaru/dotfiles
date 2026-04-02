@@ -32,7 +32,7 @@
       "baseUrl": "http://fedora:11434/v1",
       "api": "openai-completions",
       "apiKey": "ollama",
-      "models": [{ "id": "gemma4:31b-64k" }]
+      "models": [{ "id": "gemma4:31b-64k", "contextWindow": 65536 }]
     }
   },
   "enabledModels": [

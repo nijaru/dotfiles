@@ -6,14 +6,14 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 # Elixir Expert (v1.18+)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **The Zen of Elixir:** Immutability, pattern matching, and recursion are your primary tools. Favor pipeline operators (`|>`) for readability.
 - **Fault Tolerance:** Design for failure. Use supervisors and monitors. "Let it crash" (within a supervised process).
 - **Concurrency:** Processes are cheap. Use them for isolation and state, but don't over-engineer. Prefer `Task` or `GenServer` over raw `spawn`.
 - **Modernity:** Prioritize Elixir 1.18+ features. Embrace Gradual Typing (`strong` and `dynamic` types).
 
-## 🚫 Prohibited Patterns
+## Prohibited Patterns
 
 - **DO NOT** use `if` or `unless` where pattern matching or `case` is clearer.
 - **DO NOT** use `Enum` where `Stream` is more efficient for large or infinite collections.
@@ -24,7 +24,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **DO NOT** use `try/catch` for control flow. Use tagged tuples (`{:ok, value}`, `{:error, reason}`).
 - **DO NOT** use `Mix.Config` (deprecated)—use `Config` (introduced in 1.9).
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Types & Safety (Elixir 1.17 - 1.18+)
 
@@ -65,7 +65,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **Bang!:** Functions that raise on error should end with `!` (e.g., `save!`).
 - **Formatting:** Always run `mix format`. Adhere to `.formatter.exs`.
 
-## 🏗️ Tooling & Workspace
+## Tooling & Workspace
 
 - **Build Tool:** `mix`.
 - **Package Manager:** `Hex`.

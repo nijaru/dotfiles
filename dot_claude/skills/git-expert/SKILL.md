@@ -1,18 +1,18 @@
 ---
 name: git-expert
-description: Use for complex version control operations, semantic diffs (sem), merge drivers (weave), and the GitHub CLI (gh).
+description: Use when performing complex git operations, semantic diffs with `sem`, entity-level merges with `weave`, or GitHub CLI (`gh`) tasks beyond basic commits.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
 # Git Expert (Semantic Stack)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Discovery First:** Before using any VCS tool, check for `.git/`. If present and `.jj/` is absent, use `git` as the primary interface.
 - **Semantic Insight:** Use `sem diff` for entity-level changes (functions, classes) and `git dft` (difftastic) for structural diffing.
 - **Clean History:** Maintain atomic, logical commits. One change = one commit.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Advanced Diffing
 | Tool | Task | Command | Purpose |
@@ -35,7 +35,7 @@ allowed-tools: Bash, Read, Write, Edit
 - **Commit Messages:** Use `git-commit` skill for message format and rules.
 - **Exclusion:** Use `.git/info/exclude` for agent files (ai/, .tasks/) as per `git-local-exclude`.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

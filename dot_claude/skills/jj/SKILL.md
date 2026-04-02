@@ -6,13 +6,13 @@ allowed-tools: Bash, Read
 
 # jj (Jujutsu Version Control)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Discovery First:** Before using any VCS tool, check for `.jj/`. If present, use `jj` as the primary interface.
 - **Logless Workflow:** Every change in the working copy is automatically snapshotted. No manual `git add`.
 - **Conflict Management:** Conflicts in `jj` are first-class objects in the graph. You MUST resolve or `jj describe` them; do not leave the graph in an ambiguous state.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Discovery & State
 ```bash
@@ -36,7 +36,7 @@ jj st
 - **Resolve:** Edit the files to resolve markers, then `jj describe` to confirm the fix.
 - **Avoid:** Do not `jj git push` if conflicts exist in the current stack.
 
-## 📋 jj vs. Git for Agents
+## jj vs. Git for Agents
 
 | Factor | jj Mindset | Git Mindset |
 | :--- | :--- | :--- |
@@ -45,7 +45,7 @@ jj st
 | **Commits** | "Revisions" (can be empty/anonymous) | "Commits" (require message) |
 | **Pushing** | `jj git push` | `git push` |
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

@@ -8,13 +8,13 @@ allowed-tools: Read, Task, AskUserQuestion
 
 Transform project specifications into iterative, demoable sprints and atomic, verifiable tasks.
 
-## 🎯 Mandates
+## Mandates
 
 - **Demoable:** Every sprint MUST result in working, demoable software.
 - **Atomic:** Tasks must be single-concern and ideally single-commit.
 - **Verifiable:** Every task must have explicit acceptance criteria or tests.
 
-## 🛠️ Standards
+## Standards
 
 ### 1. Analysis
 Identify core requirements, integration points, and technical risks from the provided spec (`@docs/spec.md`, `DESIGN.md`, etc.).
@@ -32,7 +32,7 @@ Structure sprints to build incrementally. Avoid "backend-only" sprints.
 | **Criteria** | Verifiable "Definition of Done." |
 | **Technical Notes** | Specific code paths or "gotchas." |
 
-## 🏗️ Output Structure
+## Output Structure
 
 ### ai/SPRINTS.md
 ```markdown
@@ -48,7 +48,7 @@ Structure sprints to build incrementally. Avoid "backend-only" sprints.
 **Criteria:** Rejects invalid tokens, extracts user ID, tests pass.
 ```
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 | Excuse | Reality |
 | :--- | :--- |
 | "This task is too small to list" | Small tasks are where scope creep hides. |

@@ -8,7 +8,7 @@ allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 
 Analyze code for correctness, safety, and efficiency. This skill supports two modes: **Report** (analysis only) and **Refine** (apply improvements).
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Evidence-First:** Establish a baseline by running tests BEFORE the review.
 - **Single-Pass:** Evaluate all categories (Correctness, Complexity, Quality, Efficiency, Cleanliness) in one pass.
@@ -17,7 +17,7 @@ Analyze code for correctness, safety, and efficiency. This skill supports two mo
     - **Report:** Output a categorized report (`ERROR`, `WARN`, `NIT`). End with `Verdict: LGTM`, `LGTM with nits`, or `Needs work`.
     - **Refine:** Apply targeted, behavior-preserving changes to improve clarity and reduce technical debt.
 
-## 🛠️ Execution Workflow
+## Execution Workflow
 
 1. **Scope:** Detect modified files, feature branch diffs, or staged changes.
 2. **Baseline:** Run `build` and `test` to establish a "Green" starting state.
@@ -27,7 +27,7 @@ Analyze code for correctness, safety, and efficiency. This skill supports two mo
     - **Refine Mode:** Edit files surgically. Use language-expert skills (`rust-expert`, etc.) for idiomatic patterns.
 5. **Verify:** Run tests/linter after refinement to ensure behavior is unchanged.
 
-## ⚖️ Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

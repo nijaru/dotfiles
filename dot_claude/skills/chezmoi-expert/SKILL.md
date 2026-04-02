@@ -6,13 +6,13 @@ allowed-tools: Bash, Read, Write, Edit
 
 # chezmoi
 
-## 🎯 Mandates
+## Mandates
 
 - **Edit source, not destination.** Source is `~/.local/share/chezmoi/` (`dot_` prefix maps to `~/`). Never edit `~/` files directly.
 - **`chezmoi apply --force` after every change.** Always `--force` — without it, chezmoi prompts interactively and hangs in non-TTY contexts (agents, scripts).
 - **`chezmoi status` before applying** if the diff is unexpected. `chezmoi diff` to inspect before committing.
 
-## 🛠️ Standards
+## Standards
 
 ### 1. add vs apply — critical distinction
 
@@ -65,7 +65,7 @@ Shared path across agents: `~/.agents/skills` (alias of `~/.claude/skills`).
 
 Files named `symlink_NAME` in source resolve to symlinks at the destination.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse                             | Reality                                                               |
 | :--------------------------------- | :-------------------------------------------------------------------- |

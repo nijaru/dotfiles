@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 # Gleam Expert (v1.x)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Explicit over implicit.** No hidden control flow, no exceptions, no null. Every edge case is in the type.
 - **Custom types are everything.** Enums, structs, and tagged unions are all `type`. Model the domain; let the compiler enforce it.
@@ -14,7 +14,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **`use` for Result chains.** Desugar callbacks; don't nest `case` pyramids.
 - **No function-head pattern matching.** All branching lives in `case` expressions inside the body.
 
-## 🚫 Prohibited Patterns
+## Prohibited Patterns
 
 - **DO NOT** write multiple function clauses — Gleam has one function body per name.
 - **DO NOT** use `:atoms` — use custom type variants (`PascalCase` constructors) instead.
@@ -24,7 +24,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **DO NOT** string-interpolate with `#{}` — use `<>` for concatenation or `string.concat`/`string.join`.
 - **DO NOT** write OTP actors for JavaScript targets — `gleam_otp` is Erlang-only.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Types & Pattern Matching
 
@@ -73,7 +73,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **Predicates** use `is_` prefix: `is_empty`, `is_some`, `is_none` (no `?` suffix — that's Elixir).
 - Always run `gleam format` before committing.
 
-## 🏗️ Tooling
+## Tooling
 
 | Task           | Command                                     |
 | :------------- | :------------------------------------------ |

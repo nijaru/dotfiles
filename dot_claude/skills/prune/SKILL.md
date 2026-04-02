@@ -6,14 +6,14 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 # Prune (Workspace Hygiene)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Root Zero:** No temporary files in the project root. Move to `scripts/` or delete.
 - **Single Source:** Consolidate scattered `ai/` notes into single-topic documents.
 - **Aggressive Status:** Prune `STATUS.md` of resolved blockers and completed tasks.
 - **Task Integrity:** Mark completed tasks (`tk done`) and delete duplicates.
 
-## 🛠️ Cleanup Standards
+## Cleanup Standards
 
 ### 1. File Triage
 For every file in the root or unexpected locations:
@@ -32,13 +32,13 @@ For every file in the root or unexpected locations:
 - Delete stale or irrelevant tasks.
 - Ensure `SPRINTS.md` reflects current progress.
 
-## 📋 Execution Workflow
+## Execution Workflow
 
 1. **Survey:** Run `ls -R`, `tk ls`, and `git status --short`.
 2. **Execute:** Delete, move, and consolidate files based on triage standards.
 3. **Commit:** Stage all changes and commit with "chore: prune workspace".
 
-## ⚖️ Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |
@@ -46,7 +46,7 @@ For every file in the root or unexpected locations:
 | "I might need this debug script later." | If it's useful, it belongs in `scripts/` with a descriptive name, not in the root. |
 | "The ai/ directory is fine as is." | Scattered notes force future agents to waste tokens reading redundant information. |
 
-## 🛠️ Safe Exclusions
+## Safe Exclusions
 
 - **NEVER** touch `.git/` or core project configuration files.
 - **NEVER** delete source code unless specifically instructed.

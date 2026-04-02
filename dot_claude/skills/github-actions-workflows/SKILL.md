@@ -6,14 +6,14 @@ allowed-tools: Bash, Read, Grep, Glob, Edit
 
 # GitHub Actions Workflow Engineering
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Security:** Never use `${{ inputs.* }}` or `${{ github.event.* }}` directly in `run:` blocks. Always map to `env:` variables.
 - **Ordering:** Follow the "Validation -> CI -> Build -> Verify -> Publish -> Tag" sequence. Tagging MUST be the final step.
 - **Stability:** Pin all action versions (`@v4`) and runtime versions. Never use `@latest`.
 - **Efficiency:** Enable native caching in setup actions (e.g., `cache: true` in `setup-go`).
 
-## 🛠️ Implementation Standards
+## Implementation Standards
 
 ### 1. Release Orchestration
 Order matters for recoverability. Tag only after a successful publish.
@@ -42,7 +42,7 @@ Always verify state before side effects:
 - Tag non-existence (`git ls-remote --tags`).
 - Registry availability (e.g., `npm view`).
 
-## 📋 Security Injection Prevention
+## Security Injection Prevention
 
 **UNSAFE:**
 ```yaml
@@ -59,7 +59,7 @@ jobs:
       - run: git tag "v$VERSION"
 ```
 
-## ⚖️ Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |
@@ -67,7 +67,7 @@ jobs:
 | "Tagging first is easier to track." | Tagging before publishing creates orphaned remote tags that block clean re-runs after failures. |
 | "I don't need to pin versions." | Unpinned runtimes or actions cause silent, non-deterministic breakage when upstreams update. |
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 - **Partial Failure:** If publish fails, fix the cause and re-run. Pre-flight checks will pass as the registry remains clean.
 - **Orphaned Tag:** If a tag was pushed but publish failed, delete the remote tag before re-running.

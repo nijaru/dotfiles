@@ -6,14 +6,14 @@ allowed-tools: Bash, Read, Write, Edit
 
 # Python Expert (3.14+ / Astral Stack)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **The Astral Stack:** `uv` for management, `ruff` for linting/formatting, `ty` for type checking.
 - **Never `pip`:** All dependencies and environments are managed via `uv`.
 - **Parallel by default:** Leverage Python 3.14's free-threaded mode (no-GIL) for CPU-parallel work using `threading`.
 - **Validation:** Every change must pass `ruff check`, `ruff format`, and `ty check`.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Astral Stack Workflow (2026)
 | Task | Command | Standard |
@@ -35,14 +35,14 @@ allowed-tools: Bash, Read, Write, Edit
 - **Style:** F-strings are the default. Use `t-strings` for structured data only.
 - **Types:** Strictly enforced at boundaries. `ty` is authoritative over `mypy`.
 
-## 🏗️ Tooling & Testing
+## Tooling & Testing
 
 - **Linter:** `ruff check --all-features`.
 - **Formatter:** `ruff format`.
 - **Tester:** `uv run pytest`.
 - **Runner:** `uv run`.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

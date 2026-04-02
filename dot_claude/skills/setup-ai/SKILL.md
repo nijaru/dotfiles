@@ -8,13 +8,13 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
 
 Initialize or migrate project-specific AI context management. Prioritize token efficiency and machine-readability.
 
-## 🎯 Mandates
+## Mandates
 
 - **Efficiency:** Session files must stay < 500 lines. Move details to reference subdirs.
 - **Tracking:** Initialize `tk` CLI for all project tasks.
 - **Consistency:** `AGENTS.md` is the source of truth. Claude Code reads it via `.claude/CLAUDE.md` (symlink). Open source projects may use `./CLAUDE.md` at root instead—follow the convention already present in the repo.
 
-## 🛠️ Execution Standards
+## Execution Standards
 
 ### 1. Detection Phase
 
@@ -47,14 +47,14 @@ tk init  # Initialize task tracking
 - **ai/DECISIONS.md:** Append-only log of architectural choices and rationales.
 - **AGENTS.md:** The "Source of Truth." Use tables for stack, commands, and verification steps.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse                        | Reality                                                      |
 | :---------------------------- | :----------------------------------------------------------- |
 | "It's a small project"        | Inconsistent structure leads to context drift in 3 sessions. |
 | "I'll update STATUS.md later" | Stale context is the primary cause of agent hallucinations.  |
 
-## 📦 Verification
+## Verification
 
 1. `ls -la AGENTS.md CLAUDE.md` (Verify symlink).
 2. `tk ready` (Verify task tracking).

@@ -6,13 +6,13 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 # Go Expert (v1.26)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Modernity:** Prioritize Go 1.26+ idioms. Treat pre-2024 patterns as technical debt.
 - **Performance:** Green Tea GC is default (Go 1.26). Minimize allocations in hot paths.
 - **Safety:** Use `os.Root` for all file operations to prevent path traversal.
 
-## 🚫 Prohibited Patterns
+## Prohibited Patterns
 
 - **DO NOT** use `ioutil` (deprecated — use `os`/`io` directly).
 - **DO NOT** use `sort.Slice` (use `slices.Sort`).
@@ -25,7 +25,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **DO NOT** call `sync.WaitGroup.Add` inside the goroutine being counted — call before `go` (`go vet waitgroup`, Go 1.25).
 - **DO NOT** construct URLs with colons in the host (`http://host:80:80/`) — `net/url.Parse` rejects these (Go 1.26).
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Syntax & Core Language
 
@@ -73,7 +73,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
   ```
 - **Wrapping:** Always use `fmt.Errorf("...: %w", err)`.
 
-## 🏗️ Tooling & Workspace
+## Tooling & Workspace
 
 - **Modern Fix:** Use `go fix` to migrate to current idioms. Preview with `go fix -diff ./...`.
 - **Flight Recorder:** `runtime/trace.FlightRecorder` (Go 1.25) — ring-buffer trace capture for production; call `WriteTo` on significant events.

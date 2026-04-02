@@ -6,14 +6,14 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 # Zig Expert (0.16.0 / Master)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Explicit Allocators:** Functions and structs MUST accept `std.mem.Allocator`. Never use global allocators.
 - **Error Handling:** `try` for propagation, `errdefer` for cleanup. Never ignore errors silently.
 - **Comptime First:** Prefer comptime specialization over runtime branching. Zero-cost abstraction.
 - **Unmanaged by Default:** Use unmanaged containers (`ArrayListUnmanaged`, `HashMapUnmanaged`) — managed variants deprecated.
 
-## 🚫 Prohibited Patterns
+## Prohibited Patterns
 
 - **NO** `usingnamespace` — removed in 0.15. Use explicit imports or conditional compilation.
 - **NO** `async`/`await` — removed in 0.15. Use `std.Io.Evented` for async I/O (0.16+).
@@ -27,7 +27,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **NO** lossy int-to-float implicit coercion — compile error since 0.15; use explicit float literals.
 - **NO** `{}` format verb to call format methods — use `{f}` since 0.15.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Language Features
 
@@ -73,14 +73,14 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - ZON (Zig Object Notation) for data serialization at comptime and runtime (0.14).
 - **Invariant assertions:** Use `std.debug.assert` for preconditions and postconditions on non-trivial functions. Positive statements (`assert(x > 0)`) over negations (`assert(!(x <= 0))`).
 
-## 🏗️ Build System (0.15+)
+## Build System (0.15+)
 
 - **`root_module` field** (required since 0.15): Replaces `root_source_file` in `addExecutable`/`addLibrary`.
 - **`--watch`** for continuous rebuilds · **`--webui`** for live build dashboard · **`--time-report`** for profiling.
 - **`zig-pkg/`** (0.16): Fetched packages stored locally alongside `build.zig` for reproducible offline builds.
 - **`build.zig.zon`**: Always include `version` and `paths` fields.
 
-## 🛠️ Tooling
+## Tooling
 
 - **Fast debug builds:** x86_64 backend default in debug mode since 0.15 (~5x faster than LLVM). Use `-fllvm` to opt out.
 - **Incremental compilation:** `-fincremental --watch` for 63ms rebuilds on large codebases.

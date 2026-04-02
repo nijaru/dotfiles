@@ -1,8 +1,6 @@
 ---
 name: research
 description: Use when researching unfamiliar patterns, evaluating tools or libraries, comparing approaches, or answering "what's the best way" questions with web, docs, and code search.
-metadata:
-  short-description: Research topics using web and code search
 ---
 
 # Research

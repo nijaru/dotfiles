@@ -1,12 +1,12 @@
 ---
 name: systems-expert
-description: Use for high-performance, safety-critical systems engineering. Incorporates Tiger Style, Mechanical Sympathy, and Data-Oriented Design (DOD).
+description: Use when designing or implementing performance-critical, safety-critical, or real-time systems requiring Tiger Style, Mechanical Sympathy, or Data-Oriented Design principles.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
 # Systems Expert (Tiger Style / Mechanical Sympathy / DOD)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Safety First:** Assertions are used to downgrade catastrophic correctness bugs into liveness bugs (crash instead of corrupt). Minimum 2 assertions per function.
 - **Static Memory:** Zero dynamic allocation after initialization (`no_std` / custom allocators). No GC-dependent hot paths.
@@ -14,7 +14,7 @@ allowed-tools: Bash, Read, Write, Edit
 - **Hard Limits:** Everything (queues, loops, memory) must have a fixed upper bound to prevent tail latency spikes.
 - **Zero Dependencies:** Favor in-house implementations of critical paths over opaque third-party crates/packages.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Control Flow & Memory
 | Constraint | Rationale | Standard |
@@ -35,7 +35,7 @@ allowed-tools: Bash, Read, Write, Edit
 - **Mechanical Sympathy:** Align data structures to 64-byte cache lines. Use padding to prevent "False Sharing" in concurrent systems.
 - **Batching:** Process data in batches to amortize the cost of I/O and context switches.
 
-## 🏗️ Language-Specific Application
+## Language-Specific Application
 
 ### Rust
 - Use `no_std` for core engines.
@@ -52,7 +52,7 @@ allowed-tools: Bash, Read, Write, Edit
 - Use `SIMD` types explicitly for parallel data processing.
 - Apply `comptime` assertions to enforce hardware invariants at compile-time.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

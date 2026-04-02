@@ -1,18 +1,18 @@
 ---
 name: sg
-description: Use for structural code search and replace using ast-grep for high-confidence refactors.
+description: Use when searching or replacing code structures (functions, calls, blocks) across a codebase using tree-sitter patterns instead of regex.
 allowed-tools: Bash, Read
 ---
 
 # sg (ast-grep)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Structural over Regex:** Use `sg` when you need to match code structures (functions, classes, blocks) rather than text patterns.
 - **Syntactic Validity:** `sg` only operates on syntactically valid code. Fix syntax errors before running.
 - **Mass Edit Safety:** Always use `--interactive` or verify with `sg scan` before applying `sg rewrite`.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Common Commands
 | Task | Command | Purpose |
@@ -33,7 +33,7 @@ allowed-tools: Bash, Read
 - Verify matches with `sg scan`.
 - Apply changes surgically.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

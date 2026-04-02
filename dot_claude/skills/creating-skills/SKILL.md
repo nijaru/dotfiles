@@ -8,11 +8,11 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 Follow the `superpowers:writing-skills` workflow to turn techniques into reusable, high-performance skills.
 
-## 🎯 The Iron Law
+## The Iron Law
 
 Every skill must be empirically verified against 3+ test cases before finalization.
 
-## 🛠️ Workflow (Skill TDD)
+## Workflow (Skill TDD)
 
 1. **Research:** Identify the specific failure mode or "slop" the skill solves.
 2. **Test:** Write 3+ prompts that currently fail or produce generic AI output.
@@ -21,7 +21,7 @@ Every skill must be empirically verified against 3+ test cases before finalizati
 5. **Pressure Test:** Compare outputs with and without the skill.
 6. **Prune:** Remove all filler, "AI-isms," and meta-commentary.
 
-## 🏗️ Structure & Format (SOTA)
+## Structure & Format (SOTA)
 
 ### 1. Frontmatter
 
@@ -38,13 +38,13 @@ Every skill must be empirically verified against 3+ test cases before finalizati
   | "I'll add tests later" | Untested skills are hallucinations. |
 - **Compactness:** Aim for < 500 words. One specific example > many generic ones.
 
-## 🚫 Prohibited Patterns (Red Flags)
+## Prohibited Patterns (Red Flags)
 
 - **NO** significance inflation (e.g., _pivotal_, _crucial_, _game-changing_).
 - **NO** sycophantic filler (e.g., _Certainly!_, _I'd be happy to help_).
 - **NO** repeating the description in the content.
 
-## 📂 Deployment (Chezmoi)
+## Deployment (Chezmoi)
 
 Create skills in the chezmoi **source**: `~/.local/share/chezmoi/dot_claude/skills/my-skill/SKILL.md`.
 Never create directly in `~/.claude/skills/` — that's the destination and bypasses tracking.

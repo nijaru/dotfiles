@@ -6,13 +6,13 @@ allowed-tools: Bash, Read, Grep, Glob
 
 # Git Local Exclude
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Privacy First:** Use `.git/info/exclude` instead of `.gitignore` for personal or sensitive local files to avoid leaking their existence.
 - **Verification:** Always verify files exist on disk (`ls`) before and after any destructive git operations (e.g., `filter-repo`).
 - **Precedence:** Untrack files (`git rm --cached`) BEFORE applying history-rewriting tools.
 
-## 🛠️ Implementation Standards
+## Implementation Standards
 
 ### 1. New Local Files (Untracked)
 Immediately add patterns to the local exclude file:
@@ -35,14 +35,14 @@ Use only when data must be purged from all commits:
 3. Re-add remote: `git remote add origin <url>`.
 4. Force push: `git push origin main --force`.
 
-## 📋 Pattern Distinction
+## Pattern Distinction
 
 | File | Committed | Visible | Use Case |
 | :--- | :--- | :--- | :--- |
 | `.gitignore` | Yes | Yes | Shared: `node_modules/`, `*.pyc`, build artifacts. |
 | `.git/info/exclude` | No | No | Private: `ai/`, `.tasks/`, personal notes, secrets. |
 
-## ⚖️ Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |
@@ -50,7 +50,7 @@ Use only when data must be purged from all commits:
 | "The files are already in history, so why bother?" | Untracking prevents future accidental leaks and reduces repo bloat for other contributors. |
 | "filter-repo is too dangerous." | Manual untracking (`rm --cached`) is safe; history rewriting is only for secrets. |
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 - **Remote missing:** `filter-repo` removes remotes as a safety measure; re-add with `git remote add`.
 - **Files deleted:** If `ls` fails after `filter-repo`, check `.git/filter-repo/commit-map` for recovery.

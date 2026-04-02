@@ -25,7 +25,7 @@ Use Exa web search scoped to x.com:
 mcp__exa__web_search_exa query="site:x.com <topic>" num_results=10
 ```
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse                          | Reality                                          |
 | :------------------------------ | :----------------------------------------------- |

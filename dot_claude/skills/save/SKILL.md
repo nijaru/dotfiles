@@ -4,7 +4,9 @@ description: Use when persisting session state, updating AI context documents (a
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
-# Context (Persistence & Task Management)
+# Save (Session Persistence)
+
+**Iron Law:** Volatile context — write findings to `ai/` or `tk` immediately; never assume state survives compaction.
 
 ## Core Mandates
 
@@ -16,16 +18,19 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ## Persistence Standards
 
 ### 1. Task Management (`tk`)
+
 - **Start:** `tk start <id>` when starting work.
 - **Log:** `tk log <id> "finding (with file:line)"`.
 - **Done:** Close tasks immediately.
 - **Add:** Create atomic, actionable tasks for remaining work.
 
 ### 2. AI Context (`ai/`)
+
 - **STATUS.md:** Update current Global Phase, active focus, and what worked.
 - **DESIGN.md:** Record architectural decisions ONLY if they deviate from initial plans.
 - **DECISIONS.md:** Log high-impact decisions using the `Context -> Decision -> Rationale` format.
 
 ### 3. Source Control
+
 - **Commits:** One logical change = one commit.
 - **Context files:** Stage and commit `ai/` and `.tasks/` only if they are tracked. Prefer local persistence via `.git/info/exclude`.

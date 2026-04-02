@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 
 # Rust Expert (Edition 2024 / 1.93+)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Edition 2024:** All new crates use `edition = "2024"` in `Cargo.toml`. Migrate with `cargo fix --edition`.
 - **Borrow before clone:** Prefer `&str`/`&[T]`/`&T` over owned types at API boundaries. `.clone()` to fix borrow errors is a code smell — rethink ownership.
@@ -14,7 +14,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **Async routing:** `tokio` for network I/O, `rayon` for CPU-parallel work, sync stdlib for file I/O (async file I/O rarely improves throughput).
 - **Strong types:** Newtypes and enums over `String`/`i32` for domain concepts. Parse at boundaries, use types internally.
 
-## 🚫 Prohibited Patterns
+## Prohibited Patterns
 
 - **NO** `.unwrap()` in library code — use `?`, `expect("reason")`, or proper error handling.
 - **NO** `Box<dyn Error>` in library return types — use `thiserror` enums.
@@ -27,7 +27,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - **NO** `std::sync::Mutex` for high-contention paths — prefer `parking_lot::Mutex` or restructure with channels.
 - **NO** `#[bench]` attribute — hard error since 1.88; use `criterion` or `divan`.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Edition 2024 Changes
 
@@ -78,7 +78,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 - `anyhow`: `.context("what you were doing")` on every `?` at call sites. Use `anyhow::bail!` and `ensure!` macros.
 - Chain errors for diagnostics; let them propagate rather than catching to log and re-throw.
 
-## 🏗️ Tooling
+## Tooling
 
 - **Test runner:** `cargo nextest` — parallel, faster, better output than `cargo test`.
 - **Linting:** `cargo clippy --all-features --all-targets -- -D warnings` in CI.

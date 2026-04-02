@@ -6,14 +6,14 @@ allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 
 # Refactor (Technical Excellence)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Surgical Precision:** Apply targeted changes that improve readability without altering behavior.
 - **Evidence-Driven:** Identify specific code smells (e.g., God objects, primitive obsession) before proposing changes.
 - **Verification:** Always verify refactorings with existing or new tests.
 - **Tone:** Be authoritative and directive in your suggestions.
 
-## 🛠️ Refactoring Standards
+## Refactoring Standards
 
 ### 1. Naming & Syntax
 - **Intent-based:** Rename variables/functions to reflect *why* they exist, not *what* they are.
@@ -31,7 +31,7 @@ allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 - **Dead Code:** Delete speculative generality or unused functions immediately.
 - **Feature Envy:** Move methods to the objects they interact with most.
 
-## 📋 Proposal Format
+## Proposal Format
 
 ```markdown
 ## Refactoring: [Specific Component]
@@ -48,7 +48,7 @@ allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 **Benefit:** [Specific metric: readability, testability, or performance]
 ```
 
-## ⚖️ Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |
@@ -56,7 +56,7 @@ allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 | "I'll refactor this later." | Technical debt accumulates faster than it can be repaid; refactor during implementation. |
 | "Adding one more 'if' is faster." | Quick fixes lead to fragile "spaghetti" logic that hides bugs. |
 
-## 🛠️ Escalation
+## Escalation
 
 - For **architectural shifts** (dependency restructuring, new module boundaries), suggest spawning a `designer` subagent.
 - For **routine cleanup** (renames, interface updates, moving methods), execute directly.

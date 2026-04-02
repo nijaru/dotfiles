@@ -1,18 +1,18 @@
 ---
 name: fish-expert
-description: Use for managing the Fish/Nushell dual-shell environment, maintaining shell configuration, and mirroring functions/aliases.
+description: Use when adding or modifying Fish shell functions, abbreviations, aliases, or config that must also be mirrored in Nushell.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
 # Fish/Nushell Dual-Shell Maintenance
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **The Sync Rule:** Any change to `config.fish`, Fish functions, abbreviations, or aliases MUST be mirrored in `config.nu`.
 - **Fish first:** Author in Fish, then translate to Nushell.
 - **Starship configuration:** Keep `starship.toml` unified across both shells.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Mirroring Strategy
 | Fish Concept | Nushell Mirror |
@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit
 - Ensure custom commands are properly exported.
 - Test with `nu -c "your-command"`.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

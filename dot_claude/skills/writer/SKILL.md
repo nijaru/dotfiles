@@ -8,13 +8,13 @@ allowed-tools: Read, Edit, Bash, AskUserQuestion
 
 Rigorous prose review to eliminate "AI slop" and enforce a concrete, human voice.
 
-## 🎯 Mandates
+## Mandates
 
 - **Concrete over Abstract:** Replace vague descriptions with sensory or numerical details.
 - **Active Voice:** Minimize "was/were" and nominalizations.
 - **No Filler:** Eliminate AI-isms (pivotal, delve, landscape, navigate).
 
-## 🛠️ Standards
+## Standards
 
 ### The 4-Pass Review
 1. **Structure:** Put the point first (no buried leads).
@@ -28,12 +28,12 @@ Rigorous prose review to eliminate "AI slop" and enforce a concrete, human voice
 - **Nouns:** Tapestry, realm, era, testament, cornerstone.
 - **Phrases:** "At the intersection of...", "Unlock the potential", "Seamless integration".
 
-## 🏗️ Core Principles
+## Core Principles
 - **Vary Rhythm:** Mix short punches with longer builds.
 - **Acknowledge Complexity:** Real people have mixed feelings; AI is always positive.
 - **Trust the Reader:** Don't explain everything.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 | Excuse | Reality |
 | :--- | :--- |
 | "It sounds more professional" | "Professional" is often a mask for "generic AI slop." |

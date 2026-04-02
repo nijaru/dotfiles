@@ -1,18 +1,18 @@
 ---
 name: bun-expert
-description: Use for all JavaScript/TypeScript development, global binary management, and project-local tasks using Bun.
+description: Use when writing, testing, or managing dependencies in a Bun-based JavaScript/TypeScript project.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
 # Bun Expert (The TS Native Runtime)
 
-## 🎯 Core Mandates
+## Core Mandates
 
 - **Bun First:** Use `bun` for package management (`bun add`), testing (`bun test`), and script execution (`bun run`).
 - **Global Binaries:** Manage global CLI tools with `bun add -g`.
 - **Zero-config:** Leverage Bun's native TS support; avoid unnecessary `tsconfig.json` bloat.
 
-## 🛠️ Technical Standards
+## Technical Standards
 
 ### 1. Bun CLI Workflow
 | Task | Command | Standard |
@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit
 - **Formatting:** Use `oxfmt` or `prettier` through Bun.
 - **Linting:** Use `oxlint` for high-speed checks.
 
-## 🚫 Anti-Rationalization
+## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |

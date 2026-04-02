@@ -2,7 +2,15 @@
   "customModels": [
     {
       "model": "gemma4:26b",
-      "displayName": "Gemma 4 26B (ollama)",
+      "displayName": "Gemma 4 26B (local)",
+      "baseUrl": "http://localhost:11434/v1",
+      "apiKey": "ollama",
+      "provider": "generic-chat-completion-api",
+      "maxOutputTokens": 16384
+    },
+    {
+      "model": "gemma4:31b",
+      "displayName": "Gemma 4 31B (local)",
       "baseUrl": "http://localhost:11434/v1",
       "apiKey": "ollama",
       "provider": "generic-chat-completion-api",

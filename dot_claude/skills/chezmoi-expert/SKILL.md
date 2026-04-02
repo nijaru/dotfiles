@@ -8,31 +8,29 @@ allowed-tools: Bash, Read, Write, Edit
 
 ## Mandates
 
-- **Edit source, not destination.** Source is `~/.local/share/chezmoi/` (`dot_` prefix maps to `~/`). Never edit `~/` files directly.
-- **`chezmoi apply --force` after every change.** Always `--force` — without it, chezmoi prompts interactively and hangs in non-TTY contexts (agents, scripts).
-- **`chezmoi status` before applying** if the diff is unexpected. `chezmoi diff` to inspect before committing.
+- **Edit destination, then `chezmoi add`.** Edit the live file at `~/`, then run `chezmoi add <dest-path>` to sync back to source. Fewer steps, no double-writing.
+- **Always `--force` with `apply`.** Without it, chezmoi prompts interactively and hangs in non-TTY contexts.
+- **`chezmoi diff` before committing** if the diff is unexpected.
 
 ## Standards
 
 ### 1. add vs apply — critical distinction
 
-| Command                   | Direction            | When to use                                                     |
-| :------------------------ | :------------------- | :-------------------------------------------------------------- |
-| `chezmoi add <dest-path>` | destination → source | Sync destination changes back to source (new or existing files) |
-| `chezmoi apply --force`   | source → destination | Deploy source changes to the live system                        |
-
-**Never use `chezmoi add` to deploy.** It overwrites source with destination.
+| Command                   | Direction            | When to use                                       |
+| :------------------------ | :------------------- | :------------------------------------------------ |
+| `chezmoi add <dest-path>` | destination → source | After editing a destination file directly         |
+| `chezmoi apply --force`   | source → destination | Pulling updates — deploying source to live system |
 
 ### 2. Workflow
 
 ```bash
-# Edit source
-edit ~/.local/share/chezmoi/dot_claude/skills/my-skill/SKILL.md
+# Edit destination directly
+edit ~/.claude/skills/my-skill/SKILL.md
 
-# Deploy + commit
-chezmoi apply --force
+# Sync to source + commit
+chezmoi add ~/.claude/skills/my-skill/SKILL.md
 cd ~/.local/share/chezmoi
-git add <specific-file>          # never git add . or git add -p
+git add dot_claude/skills/my-skill/SKILL.md
 git commit -m "type(scope): msg"
 git push
 ```
@@ -67,9 +65,9 @@ Files named `symlink_NAME` in source resolve to symlinks at the destination.
 
 ## Anti-Rationalization
 
-| Excuse                             | Reality                                                               |
-| :--------------------------------- | :-------------------------------------------------------------------- |
-| "I'll use `chezmoi add` to deploy" | `add` goes destination → source. Use `apply --force`.                 |
-| "I'll skip `--force`"              | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts. |
-| "I'll apply later"                 | Drift causes silent config bugs. Apply immediately.                   |
-| "I'll manually link it"            | Manual links are lost on `apply --force`. Use source files.           |
+| Excuse                               | Reality                                                               |
+| :----------------------------------- | :-------------------------------------------------------------------- |
+| "I'll edit the source file directly" | Edit destination, then `chezmoi add`. Fewer steps, no double-writing. |
+| "I'll skip `--force`"                | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts. |
+| "I'll `chezmoi add` after apply"     | `add` first, then commit. `apply` is for pulling updates only.        |
+| "I'll manually link it"              | Manual links are lost on `apply --force`. Use source files.           |

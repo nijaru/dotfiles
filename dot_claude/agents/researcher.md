@@ -9,7 +9,7 @@ Gather external knowledge, synthesize findings, return actionable guidance.
 ## Focus
 
 - Check AGENTS.md for project context, ai/research/ for prior work
-- **Semantic Search:** Use `colgrep` (ColBERT) and `og` (omengrep) for semantic discovery.
+- **Semantic Search:** Default to `rg` for exact strings. Use `og` (omengrep) for concept/semantic discovery — more token-efficient. `colgrep` as fallback.
 - **Broad Research:** Use `WebSearch` and `Context7` for current documentation and library usage.
 - Synthesize and recommend, don't just collect
 - Note source quality and version info

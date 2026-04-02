@@ -9,7 +9,9 @@
   "hideThinkingBlock": true,
   "collapseChangelog": true,
   "defaultThinkingLevel": "high",
-  "skills": ["~/.agents/skills"],
+  "skills": [
+    "~/.agents/skills"
+  ],
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-subagents",
@@ -23,8 +25,18 @@
       "api": "openai-completions",
       "apiKey": "ollama",
       "models": [
-        { "id": "qwen3.5:27b" }
+        {
+          "id": "qwen3.5:27b"
+        }
       ]
     }
-  }
+  },
+  "enabledModels": [
+    "openrouter/qwen/qwen3.6-plus-preview:free",
+    "zai/glm-5.1",
+    "zen/mimo-v2-pro-free",
+    "zen/qwen3.6-plus-free",
+    "openrouter/openrouter/free"
+  ],
+  "quietStartup": true
 }

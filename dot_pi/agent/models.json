@@ -17,7 +17,7 @@
 		},
 		"zen": {
 			"baseUrl": "https://opencode.ai/zen/v1",
-			"apiKey": "$OPENCODE_ZEN_API_KEY",
+			"apiKey": "OPENCODE_ZEN_API_KEY",
 			"api": "openai-completions",
 			"models": [
 				{ "id": "qwen3.6-plus-free", "name": "Qwen 3.6 Plus (free)", "reasoning": true, "contextWindow": 1000000, "maxTokens": 32000 },
@@ -43,6 +43,21 @@
 			"baseUrl": "http://localhost:8080/v1",
 			"apiKey": "local",
 			"api": "openai-completions"
+		},
+		"zai": {
+			"baseUrl": "https://api.z.ai/api/paas/v4/",
+			"apiKey": "ZAI_API_KEY",
+			"api": "openai-completions",
+			"models": [
+				{
+					"id": "glm-5.1",
+					"name": "GLM-5.1",
+					"reasoning": true,
+					"input": ["text"],
+					"contextWindow": 200000,
+					"maxTokens": 32000
+				}
+			]
 		}
 	}
 }

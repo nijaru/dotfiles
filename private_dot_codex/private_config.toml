@@ -1,18 +1,18 @@
 # Codex CLI Configuration
 
-# Model reasoning effort
+# Model
+model = "gpt-5.4-mini"
 model_reasoning_effort = "high"
+
+personality = "pragmatic"
 
 # Project doc fallback - read AGENTS.md or CLAUDE.md
 project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md", "README.md"]
 
 # Approval prompts - never ask before running commands
 approval_policy = "never"
-
 # Sandbox - full access
 sandbox_mode = "danger-full-access"
-model = "gpt-5.4-mini"
-personality = "pragmatic"
 
 # MCP Servers (stdio)
 [mcp_servers.context7]
@@ -22,6 +22,3 @@ args = ["-y", "@upstash/context7-mcp"]
 [mcp_servers.exa]
 command = "npx"
 args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
-
-[notice.model_migrations]
-"gpt-5.3-codex" = "gpt-5.4"

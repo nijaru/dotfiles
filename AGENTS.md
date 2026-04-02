@@ -3,7 +3,7 @@
 ## Current State
 
 - **OS:** macOS (Tahoe) + Fedora 41 (Dual-boot)
-- **Status:** Fully restored, optimized, and hardened. Repo set to **Private**.
+- **Repo:** Private
 
 ## Core Setup (For Future Reference)
 
@@ -53,7 +53,7 @@ Agent integrations (all point at port 8080):
 
 `pi-local` and `pi-fedora` functions are convenience wrappers for `--provider local/fedora`.
 
-### 6. AI CLI Skills
+### 7. AI CLI Skills
 
 Skills are symlinked from `~/.claude/skills/` to Gemini, Codex, and Pi via chezmoi. Canonical shared set includes `hf-cli` (Hugging Face CLI), `huggingface-datasets`, `huggingface-llm-trainer`, `systems-expert` (High-Performance Engineering), etc. See `ai/skills-sync.md`.
 
@@ -64,6 +64,19 @@ Fish (primary) + Nushell (maintained in parallel). Starship prompt on both. Tide
 **Nushell sync rule:** When adding fish functions, abbrs, or aliases, mirror them in `dot_config/nushell/config.nu`. Fish functions → nushell `def`/`def --env`. Fish abbrs/aliases → nushell `alias`. Keep git aliases, PATH, env vars, and tool integrations in sync across both shells.
 
 ---
+
+## Chezmoi Workflow
+
+Edit destination files directly, then sync back to source:
+
+```bash
+chezmoi add ~/.config/foo          # sync destination → source
+chezmoi diff                       # preview pending changes
+chezmoi apply --force              # apply source → destination (for pulling updates)
+chezmoi re-add                     # re-sync all tracked destinations to source
+```
+
+**Key paths:** Source is `~/.local/share/chezmoi/`. Destination is `~/`. Prefix mapping: `dot_` → `.`, `executable_` → sets +x.
 
 ## Managing API Keys
 

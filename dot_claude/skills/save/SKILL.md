@@ -6,31 +6,24 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 # Save (Session Persistence)
 
-**Iron Law:** Volatile context — write findings to `ai/` or `tk` immediately; never assume state survives compaction.
+**Iron Law:** Volatile context — write findings to `ai/` or `tk` immediately. Never assume state survives compaction.
 
-## Core Mandates
+## Checklist
 
-- **Volatile Context:** Never assume state persists. Write findings, blockers, and decisions to `ai/` or `tk` immediately.
-- **Task Lifecycle:** Use `tk start` when beginning, `tk log` for discoveries (with file:line), and `tk done` when finished.
-- **High-Signal Logging:** Only log findings in `tk log` that are essential for context recovery.
-- **Just-in-Time Documentation:** Keep `ai/` documents compact. Use a flat structure by default.
+### 1. Tasks (`tk`)
 
-## Persistence Standards
-
-### 1. Task Management (`tk`)
-
-- **Start:** `tk start <id>` when starting work.
-- **Log:** `tk log <id> "finding (with file:line)"`.
-- **Done:** Close tasks immediately.
-- **Add:** Create atomic, actionable tasks for remaining work.
+- Close completed tasks: `tk done <id>`
+- Log key findings: `tk log <id> "finding (file:line)"` — high-signal only, skip what's derivable from code
+- Add remaining work: `tk add "title" -p N -d "context"`
 
 ### 2. AI Context (`ai/`)
 
-- **STATUS.md:** Update current Global Phase, active focus, and what worked.
-- **DESIGN.md:** Record architectural decisions ONLY if they deviate from initial plans.
-- **DECISIONS.md:** Log high-impact decisions using the `Context -> Decision -> Rationale` format.
+- **STATUS.md:** Update phase, active focus, blockers.
+- **README.md:** If topic files were added, changed, or deleted — update index pointers. Format: `- [Title](path) — one-line hook`. Verify all links are live; remove dead ones.
+- **DESIGN.md:** Record architectural changes only.
+- **DECISIONS.md:** Append to Log section: `[date] Context → Decision → Rationale`. If Log exceeds ~20 entries, run `/setup-ai` next session to compact into Principles.
 
 ### 3. Source Control
 
-- **Commits:** One logical change = one commit.
-- **Context files:** Stage and commit `ai/` and `.tasks/` only if they are tracked. Prefer local persistence via `.git/info/exclude`.
+- Commit `ai/` and `.tasks/` if tracked. One logical change = one commit.
+- Prefer keeping ai/ local via `.git/info/exclude`.

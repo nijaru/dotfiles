@@ -27,12 +27,24 @@ Determine mode: **Init** (no ai/ exists) or **Audit** (ai/ exists).
 | Only `CLAUDE.md` at root | Rename to `AGENTS.md`, create symlink (leave as-is for OSS repos) |
 | Both exist               | Merge to `AGENTS.md`, remove old `CLAUDE.md`, create symlink      |
 
+## Topic File Frontmatter Standard
+
+All files in `research/`, `design/`, `review/` must start with:
+
+```yaml
+---
+date: YYYY-MM-DD
+summary: one-line description
+status: active | resolved | stale
+---
+```
+
 ## Mode: Init (New Repo)
 
 ### 1. Scaffold
 
 ```bash
-mkdir -p ai/research ai/design ai/review ai/tmp
+mkdir -p ai/research ai/design ai/review ai/sprints ai/tmp
 echo '*' > ai/tmp/.gitignore
 tk init
 ```
@@ -158,18 +170,6 @@ Rewrite `ai/README.md` from scratch based on what actually exists after consolid
 ```
 
 Every file in ai/ root should have an entry. Topic files in subdirs get entries only if actively referenced.
-
-## Topic File Frontmatter Standard
-
-All files in `research/`, `design/`, `review/` must start with:
-
-```yaml
----
-date: YYYY-MM-DD
-summary: one-line description
-status: active | resolved | stale
----
-```
 
 ## Verification
 

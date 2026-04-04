@@ -22,6 +22,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 - **README.md:** If topic files were added, changed, or deleted — update index pointers. Format: `- [Title](path) — one-line hook`. Verify all links are live; remove dead ones.
 - **DESIGN.md:** Record architectural changes only.
 - **DECISIONS.md:** Append to Log section: `[date] Context → Decision → Rationale`. If Log exceeds ~20 entries, run `/setup-ai` next session to compact into Principles.
+- **PLAN.md:** Update sprint status or task progress if changed this session.
 
 ### 3. Source Control
 

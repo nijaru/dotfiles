@@ -116,10 +116,11 @@ ai/
 ├── STATUS.md        # Phase, focus, blockers — updated every session
 ├── DESIGN.md        # Current architecture — answers "what is it?"
 ├── DECISIONS.md     # Why decisions were made — Principles + Log sections
-├── PLAN.md          # Current active plan — one plan at a time, replace when done
+├── PLAN.md          # Active plan or sprint index (managed by /sprint)
 ├── research/        # Investigation docs
 ├── design/          # Detailed design docs
 ├── review/          # Review outputs
+├── sprints/         # Sprint detail files (NN-name.md) — created by /sprint
 └── tmp/             # Scratch (gitignored)
 ```
 
@@ -129,13 +130,13 @@ Read `ai/README.md` → `ai/STATUS.md` → load relevant topic files for current
 
 ### File Roles
 
-| File         | Purpose                                                                                                                                         | Update Rule                                                                          |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| README.md    | Index only — pointers, ~150 chars/entry. No content.                                                                                            | Update when topic files are added/changed. Verify links are live. Remove dead links. |
-| STATUS.md    | Phase, active focus, blockers.                                                                                                                  | Every session.                                                                       |
-| DESIGN.md    | Current architecture — answers "what is it?"                                                                                                    | When architecture changes.                                                           |
-| DECISIONS.md | Why it is that way. Two sections: **Principles** (distilled, stable) + **Log** (recent ~20 entries verbatim, `Context → Decision → Rationale`). | Append to Log. When Log > ~20 entries, run `/setup-ai` to compact into Principles.   |
-| PLAN.md      | Current active plan. One plan at a time.                                                                                                        | Replace when complete — extract outcomes to DECISIONS.md/DESIGN.md first.            |
+| File         | Purpose                                                                                                                                         | Update Rule                                                                                                 |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| README.md    | Index only — pointers, ~150 chars/entry. No content.                                                                                            | Update when topic files are added/changed. Verify links are live. Remove dead links.                        |
+| STATUS.md    | Phase, active focus, blockers.                                                                                                                  | Every session.                                                                                              |
+| DESIGN.md    | Current architecture — answers "what is it?"                                                                                                    | When architecture changes.                                                                                  |
+| DECISIONS.md | Why it is that way. Two sections: **Principles** (distilled, stable) + **Log** (recent ~20 entries verbatim, `Context → Decision → Rationale`). | Append to Log. When Log > ~20 entries, run `/setup-ai` to compact into Principles.                          |
+| PLAN.md      | Active plan. Simple: flat document. Complex: sprint index table with detail files in `ai/sprints/` (managed by `/sprint`).                      | Update as sprints progress. When plan is complete, extract outcomes to DECISIONS.md/DESIGN.md then replace. |
 
 ### Index Discipline
 
@@ -228,7 +229,7 @@ For context isolation, parallelism, fresh perspective. `ai/` files are shared me
 
 **Before compact:** Update `ai/STATUS.md` and `ai/README.md` (index), `tk done` completed tasks, `tk log` any uncommitted findings.
 
-**Keep ai/ compact:** Flat structure by default; subdirectories only if complexity warrants.
+**Keep ai/ lean:** Root files stay minimal. Subdirs (research/, design/, review/) exist by default but stay empty until needed.
 
 ## Code Standards (Single Pass)
 

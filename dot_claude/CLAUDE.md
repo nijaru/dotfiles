@@ -246,3 +246,6 @@ Use during every `review` or `simplify` operation:
 ---
 
 **Updated:** 2026-04-02 | github.com/nijaru/agent-contexts
+
+## Gemini Added Memories
+- fast-repricing strategy is currently losing money consistently and should be paused or significantly refactored.

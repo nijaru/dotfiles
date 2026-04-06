@@ -50,27 +50,7 @@ function update-agents --description "Update AI coding agents"
         end
     end
 
-    # 2. Droid (brew cask)
-    if command -q droid
-        set -l old_ver (droid --version 2>/dev/null)
-        if brew list --cask droid >/dev/null 2>&1
-            brew upgrade --cask droid >/dev/null 2>&1
-        end
-        set -l new_ver (droid --version 2>/dev/null)
-        if test "$old_ver" != "$new_ver"
-            _agent_updated "Droid" $old_ver $new_ver
-        else
-            _agent "Droid" $new_ver
-        end
-    else
-        if brew install --cask droid >/dev/null 2>&1
-            _agent_err "Droid" green "installed"
-        else
-            _agent_err "Droid" red "install failed"
-        end
-    end
-
-    # 3. JS/TS Packages via Bun
+    # 2. JS/TS Packages via Bun
     if not command -q bun
         _agent_err "Bun" yellow "not found"
         return
@@ -81,6 +61,7 @@ function update-agents --description "Update AI coding agents"
         "@sourcegraph/amp:Amp" \
         "@openai/codex:Codex" \
         "@charmland/crush:Crush" \
+        "droid:Droid" \
         "@google/gemini-cli:Gemini" \
         "opencode-ai:OpenCode" \
         "@mariozechner/pi-coding-agent:Pi"
@@ -128,7 +109,7 @@ function update-agents --description "Update AI coding agents"
 
     functions -e _get_ver
 
-    # 4. Third-party skills
+    # 3. Third-party skills
     set_color --bold cyan
     echo ""
     echo "Updating third-party skills..."

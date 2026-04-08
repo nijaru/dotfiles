@@ -1,8 +1,5 @@
 # Supply Chain Security: 3-day age gate to mitigate zero-day malware.
 exclude-newer = "3 days"
 
-# Per-package overrides: these bypass the age gate completely ("none" = no restriction)
-[exclude-newer-package]
-"uv" = "none"      # uv itself (frequent updates)
-"ruff" = "none"    # Ruff linter/formatter (very active)
-"ty" = "none"      # Astral's fast type checker (newer tool, often updated)
+# Per-package overrides: these bypass the age gate completely
+exclude-newer-package = { uv = false, ruff = false, ty = false }

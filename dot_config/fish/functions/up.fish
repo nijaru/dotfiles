@@ -69,7 +69,7 @@ function up --description "Update all package managers and tools"
     # Rust toolchain
     echo "🦀 Updating Rust toolchain..."
     if command -q rustup
-        rustup update
+        rustup update stable nightly
     else
         echo "⚠️  rustup not found, skipping"
     end

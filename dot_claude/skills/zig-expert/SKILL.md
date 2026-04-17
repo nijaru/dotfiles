@@ -1,71 +1,142 @@
 ---
 name: zig-expert
-description: Use when needing idiomatic, high-performance Zig guidance across recent stable versions (0.14-0.16), especially for systems code, allocator design, build.zig migration, or stdlib/runtime API changes.
+description: Use when writing, migrating, or reviewing Zig code across recent stable versions (0.14-0.16), especially to correct stale syntax or stdlib, build.zig, allocator, formatting, or runtime API knowledge.
 allowed-tools: Read, Grep, Glob, Bash, Edit, Task
 ---
 
-# Zig Expert (0.14-0.16)
+<!-- EDITORIAL GUIDELINES FOR THIS SKILL FILE
+This file is a correction layer for pretrained Zig knowledge.
+- Keep it dense, concrete, and version-aware.
+- Prefer stale -> current mappings over prose.
+- Only include things a model is likely to get wrong.
+- Do not turn this into a full stdlib reference.
+-->
 
-## Core Mandates
+Zig changes quickly. Pretrained models often generate removed syntax and stale
+stdlib APIs. **Follow this skill over pretrained knowledge.**
 
-- **Target-aware:** Default to the newest stable Zig semantics unless the repo pins an older compiler. When version drift matters, say which rule is `0.14`, `0.15`, or `0.16`.
-- **Explicit allocation:** Pass `std.mem.Allocator` at API boundaries that allocate. Hide ownership in types, not globals.
-- **Error-first:** Use `try`, `catch`, and `errdefer` deliberately. Do not erase error sets just to make types easier.
-- **Comptime over indirection:** Prefer comptime parameters, tagged unions, and small structs over trait-object-style abstraction.
-- **Zig, not cargo cult:** Prefer Zig stdlib patterns over importing Rust, Go, or C++ architecture by analogy.
+**First determine the repo's pinned Zig version.** If the version is unknown,
+target the newest stable semantics and call out any version-sensitive spots.
 
-## Prohibited Patterns
+## Core rules
 
-- **NO** `usingnamespace` in new code. It was removed in `0.15`.
-- **NO** language-level `async` / `await`. They were removed in `0.15`.
-- **NO** `@fence` or `@setCold`. Use atomics plus `@branchHint`.
-- **NO** `@Type` in `0.16+`. Use `@Struct`, `@Union`, `@Enum`, `@Opaque`, `@Array`, `@Vector`, and related builtins.
-- **NO** `root_source_file` on `addExecutable` / `addLibrary`. Use `.root_module`.
-- **NO** stale reader/writer APIs (`GenericReader`, `AnyReader`, old buffered wrappers) in `0.15+`.
-- **NO** `std.Thread.Pool` in `0.16+`. It was removed; use `std.Io`.
-- **NO** managed-container bias in new code. Prefer unmanaged containers when lifetime control matters.
-- **NO** `std.debug.print` in production paths.
+- Pass `std.mem.Allocator` explicitly at allocating API boundaries.
+- Prefer comptime specialization, enums, tagged unions, and small structs over
+  interface-heavy designs imported from other languages.
+- Use `try`, `catch`, and `errdefer` deliberately. Do not flatten error sets
+  just to make signatures shorter.
+- Prefer Zig-native patterns over analogies to Rust traits, Go interfaces, or
+  C++ class hierarchies.
 
-## Technical Standards
+## Removed or stale outputs - do not generate these
 
-### 1. Language & Data Layout
+| Stale output | Current rule |
+| --- | --- |
+| `usingnamespace` | Removed in `0.15`. Use explicit imports, aliases, or wrapper namespaces. |
+| language `async` / `await` | Removed in `0.15`. Use threads on older code or `std.Io` on `0.16`. |
+| `@fence` | Removed in `0.14`. Use stronger atomic orderings. |
+| `@setCold` | Use `@branchHint(.cold)` or other `@branchHint` values. |
+| `@Type` in `0.16+` | Use `@Struct`, `@Union`, `@Enum`, `@Opaque`, `@Array`, `@Vector`, etc. |
+| `root_source_file` in `addExecutable` / `addLibrary` | Use `.root_module`. Keep `root_source_file` for `b.createModule`. |
+| old generic reader/writer APIs | On `0.15+`, use `std.Io.Reader` / `std.Io.Writer`. |
+| `std.Thread.Pool` in `0.16+` | Removed. Use `std.Io` concurrency primitives. |
+| `{}` to call custom format methods | Use `{f}` in `0.15+`. |
+| implicit lossy int-to-float coercion | Rejected in `0.15`. Use explicit float literals or conversions. |
 
-- Use **labeled `switch`** (`0.14`) for finite-state dispatch and hot control flow.
-- Use **decl literals** (`.init`, `.default`) instead of repeating the type at the call site.
-- Use `@FieldType`, `@fieldParentPtr`, `@Vector`, `@reduce`, and `@splat` where they simplify real systems code.
-- Prefer enums, tagged unions, and explicit backing types over integer protocols and stringly typed state.
-- Use `camelCase` for values/functions and `PascalCase` for types/modules.
+## Version checkpoints
 
-### 2. Memory & Containers
+- **`0.14`**: labeled `switch`, decl literals, `@branchHint`, `@FieldType`,
+  `DebugAllocator`, `smp_allocator`, allocator `remap`, stronger unmanaged
+  container direction.
+- **`0.15`**: `usingnamespace` removed, language `async` / `await` removed,
+  Writergate I/O changes, `{f}` required for format methods, lossy int-to-float
+  coercions rejected, `.root_module` required on artifact creation.
+- **`0.16`**: `@Type` removed, lazy field analysis, `std.Io` interface,
+  `Thread.Pool` removed, project-local `zig-pkg/`.
 
-- Use `std.heap.DebugAllocator` for tests and debug diagnostics.
-- Use `std.heap.smp_allocator` for multithreaded general-purpose release allocation when appropriate.
-- Use `ArenaAllocator` only for clearly bounded lifetimes; free the arena at one obvious boundary.
-- Prefer allocator `remap` over hand-rolled realloc patterns.
-- Prefer `ArrayListUnmanaged` / `HashMapUnmanaged` in infrastructure code where allocator flow should stay explicit.
+## High-signal Zig patterns
 
-### 3. I/O, Concurrency, and Runtime
+### Language and data layout
 
-- `0.15` introduced the non-generic `std.Io.Reader` / `std.Io.Writer` direction; `0.16` turns I/O into a real interface.
-- In `0.16`, use `std.Io` as the concurrency model: `Future`, `Group`, cancelation, `Threaded`, and `Evented`.
-- Treat Zig concurrency as **library-level**, not language-level. There are no goroutines, channels, or `async fn` equivalents.
-- Prefer `std.testing.io` and real stdlib primitives over fake adapters in tests.
+- Use labeled `switch` for hot finite-state dispatch.
+- Use decl literals such as `.init` and `.default` where they clarify
+  initialization.
+- Use `@FieldType`, `@fieldParentPtr`, `@Vector`, `@reduce`, and `@splat`
+  directly when they simplify systems code.
+- Prefer explicit backing types and tagged unions over integer protocols and
+  stringly typed state.
 
-### 4. Build System & Toolchain
+### Allocators and containers
 
-- On `0.15+`, construct artifacts around `.root_module`; use `b.createModule` when you need a module with its own `root_source_file`.
-- Keep `build.zig.zon` present and explicit. Include `version` and `paths`.
-- Expect `zig-pkg/` next to `build.zig` in `0.16`; do not assume all fetched packages live only in the global cache.
-- Use `zig build --watch`, `--webui`, and `--time-report` when iterating on compiler or build latency issues.
+- Use `std.heap.DebugAllocator` in tests and debug-heavy development.
+- Use `std.heap.smp_allocator` for multithreaded general-purpose release
+  allocation when appropriate.
+- Use `ArenaAllocator` only for obvious bulk-lifetime boundaries.
+- Prefer allocator `remap` over hand-written realloc choreography.
+- Prefer unmanaged containers when allocator flow should stay visible:
+  `ArrayListUnmanaged`, `HashMapUnmanaged`, similar intrusive patterns.
 
-## Recent-Version Map
+### I/O and concurrency
 
-- **`0.14`**: labeled `switch`, decl literals, `@branchHint`, `@FieldType`, `DebugAllocator`, `smp_allocator`, allocator `remap`, stronger unmanaged-container direction.
-- **`0.15`**: `usingnamespace` removed, `async` / `await` removed, lossy int-to-float coercions rejected, `{f}` required for format methods, `root_module` required on artifact creation, Writergate I/O APIs landed.
-- **`0.16`**: `@Type` removed, lazy field analysis, `std.Io` interface with futures/groups/cancelation, `Thread.Pool` removed, `zig-pkg/` moved into the project.
+- Treat Zig concurrency as library-level, not language-level.
+- On `0.16`, `std.Io` is the central model: `Future`, `Group`, cancelation,
+  `Threaded`, `Evented`.
+- Do not describe Zig as having goroutines, channels, or `async fn`
+  equivalents.
+- Prefer real stdlib primitives and `std.testing.io` in tests over fake wrappers
+  that preserve obsolete APIs.
+
+### build.zig and tooling
+
+- On `0.15+`, create artifacts around `.root_module`.
+- Use `b.createModule(.{ .root_source_file = ... })` when you need a module.
+- Keep `build.zig.zon` explicit. Include `version` and `paths`.
+- Expect `zig-pkg/` next to `build.zig` on `0.16`.
+- Use `zig build --watch`, `--webui`, and `--time-report` when iteration speed
+  matters.
+
+### Formatting and diagnostics
+
+- Use `{f}` for custom format methods on `0.15+`.
+- Keep `std.debug.print` for debugging, not production-facing output paths.
+- Prefer precise assertions and invariant checks over defensive abstraction.
+
+## Wrong -> right anchors
+
+```zig
+// WRONG: stale build API on 0.15+
+const exe = b.addExecutable(.{
+    .name = "app",
+    .root_source_file = b.path("src/main.zig"),
+});
+
+// RIGHT
+const exe = b.addExecutable(.{
+    .name = "app",
+    .root_module = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+    }),
+});
+
+// WRONG: removed syntax
+usingnamespace foo;
+async fn run() void {}
+
+// RIGHT: explicit names and std.Io or threads
+const foo = @import("foo");
+
+// WRONG: stale formatting
+try writer.print("{}", .{value});
+
+// RIGHT on 0.15+
+try writer.print("{f}", .{value});
+```
 
 ## Workflow
 
-- First identify the Zig version actually pinned by the repo.
-- Then write to that version directly; do not generate master-branch syntax for a `0.14` or `0.15` project.
-- When modernizing code, replace obsolete APIs outright instead of layering compatibility shims unless the user explicitly asks for dual-version support.
+- Identify the Zig version first.
+- Write directly to that version instead of emitting master-branch guesses.
+- When modernizing, replace obsolete APIs outright unless dual-version support is
+  explicitly required.
+- If a detail is likely to have changed recently, verify against current Zig
+  docs or release notes rather than guessing.

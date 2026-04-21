@@ -2,7 +2,7 @@
   "defaultProvider": "openrouter",
   "theme": "dark",
   "autoSave": true,
-  "lastChangelogVersion": "0.64.0",
+  "lastChangelogVersion": "0.67.1",
   "editorPaddingX": 1,
   "steeringMode": "all",
   "followUpMode": "all",
@@ -16,31 +16,35 @@
     "npm:pi-web-search",
     "npm:pi-messenger"
   ],
-  "defaultModel": "qwen/qwen3.6-plus:free",
+  "defaultModel": "moonshotai/kimi-k2.6:floor",
   "providers": {
     "ollama": {
       "baseUrl": "http://localhost:11434/v1",
       "api": "openai-completions",
       "apiKey": "ollama",
       "models": [
-        { "id": "qwen3.5:27b" },
-        { "id": "gemma4:26b" },
-        { "id": "gemma4:31b" }
+        {
+          "id": "qwen3.5:27b"
+        },
+        {
+          "id": "gemma4:26b"
+        },
+        {
+          "id": "gemma4:31b"
+        }
       ]
     },
     "ollama-fedora": {
       "baseUrl": "http://fedora:11434/v1",
       "api": "openai-completions",
       "apiKey": "ollama",
-      "models": [{ "id": "gemma4:31b-64k", "contextWindow": 65536 }]
+      "models": [
+        {
+          "id": "gemma4:31b-64k",
+          "contextWindow": 65536
+        }
+      ]
     }
   },
-  "enabledModels": [
-    "openrouter/qwen/qwen3.6-plus:free",
-    "zai/glm-5.1",
-    "zen/mimo-v2-pro-free",
-    "zen/qwen3.6-plus-free",
-    "openrouter/openrouter/free"
-  ],
   "quietStartup": true
 }

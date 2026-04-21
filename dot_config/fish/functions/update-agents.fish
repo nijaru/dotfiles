@@ -37,22 +37,22 @@ function update-agents --description "Update AI coding agents"
         set -l claude_status $status
         if test $claude_status -eq 0
             set -l v_str (echo $claude_out | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-            _agent "Claude" "$v_str"
+            _agent Claude "$v_str"
         else
-            _agent_err "Claude" red "update failed"
+            _agent_err Claude red "update failed"
         end
     else
         set -l installer (curl -fsSL https://claude.ai/install.sh)
         if test -n "$installer"; and echo "$installer" | bash
-            _agent_err "Claude" green "installed"
+            _agent_err Claude green installed
         else
-            _agent_err "Claude" red "install failed"
+            _agent_err Claude red "install failed"
         end
     end
 
     # 2. JS/TS Packages via Bun
     if not command -q bun
-        _agent_err "Bun" yellow "not found"
+        _agent_err Bun yellow "not found"
         return
     end
 
@@ -99,7 +99,7 @@ function update-agents --description "Update AI coding agents"
         if test -z "$new_ver"
             _agent_err $name yellow "not found"
         else if test -z "$old_ver"
-            _agent_updated $name "new" $new_ver
+            _agent_updated $name new $new_ver
         else if test "$old_ver" != "$new_ver"
             _agent_updated $name $old_ver $new_ver
         else
@@ -118,7 +118,7 @@ function update-agents --description "Update AI coding agents"
     # Format: "repo_url|source_path[:dest_name] ..."
     set -l skill_sources \
         "https://github.com/modular/skills|mojo-syntax mojo-gpu-fundamentals mojo-python-interop new-modular-project" \
-        "https://github.com/huggingface/skills|skills/hf-cli skills/huggingface-community-evals skills/huggingface-datasets skills/huggingface-gradio skills/huggingface-jobs skills/huggingface-llm-trainer skills/huggingface-paper-publisher skills/huggingface-papers skills/huggingface-trackio skills/huggingface-vision-trainer skills/transformers-js"
+        "https://github.com/huggingface/skills|skills/hf-cli skills/huggingface-community-evals skills/huggingface-datasets skills/huggingface-gradio skills/huggingface-llm-trainer skills/huggingface-paper-publisher skills/huggingface-papers skills/huggingface-tool-builder skills/huggingface-trackio skills/huggingface-vision-trainer skills/transformers-js"
 
     set -l tmp (mktemp -d)
     for entry in $skill_sources
@@ -159,7 +159,7 @@ function update-agents --description "Update AI coding agents"
                 mkdir -p (dirname $dst)
                 cp -r $src $dst
                 chezmoi add $dst 2>/dev/null
-                _agent_err $dest_name green "updated"
+                _agent_err $dest_name green updated
             end
         end
     end

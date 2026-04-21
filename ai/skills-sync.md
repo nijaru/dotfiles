@@ -1,63 +1,46 @@
+---
+date: 2026-04-09
+summary: How agent skills are shared across all CLI tools
+status: active
+---
+
 # Skills Sync
 
-Canonical shared skills live in `~/.claude/skills/`, with `~/.agents/skills/` as the shared cross-tool path. Managed by chezmoi.
+## Architecture
 
-| Skill                    | Claude | Gemini | Codex | Pi  | Crush | Antigravity |
-| ------------------------ | ------ | ------ | ----- | --- | ----- | ----------- |
-| autoresearch             | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| codex                    | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| creating-skills          | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| github-actions-workflows | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| prune                    | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| refactor                 | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| research                 | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| review                   | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| save                     | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| simplify                 | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| hf-cli                  | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| huggingface-datasets     | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| huggingface-llm-trainer  | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| systems-expert           | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| setup-ai                 | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| sprint                   | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| twitter                  | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| update-chezmoi           | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
-| writer                   | ✓      | ✓      | ✓     | ✓   | ✓     | ✓           |
+Canonical skills live in `~/.claude/skills/`. Everything else flows from there.
 
-Tool-specific skills remain outside the shared set:
+```
+~/.claude/skills/   ← canonical source, managed by chezmoi
+~/.agents/          ← symlink → ~/.claude  (chezmoi: symlink_dot_agents)
+~/.agents/skills/   ← therefore also ~/.claude/skills/
+```
 
-- `gemini` stays Gemini/Claude/Crush-facing.
-- Codex system skills remain under `~/.codex/skills/.system`.
-- Any future Pi, Crush, or Gemini-only skills should stay in the tool-local root.
+## Tool Discovery
 
-## Path Strategy
+Every tool reads `~/.agents/skills/` natively — no sync scripts, no symlinks to maintain.
 
-| Tool        | Shared skills strategy                                                            | Tool-specific location                                                |
-| ----------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Claude Code | native `~/.claude/skills/`                                                        | `dot_claude/skills/`                                                  |
-| Gemini CLI  | native `~/.agents/skills/` alias                                                  | `dot_gemini/skills/` for Gemini-only skills                           |
-| Codex CLI   | native `~/.agents/skills` discovery                                               | `private_dot_codex/skills/` only for Codex-only extras if ever needed |
-| Pi          | `dot_pi/agent/settings.json -> skills: ["~/.agents/skills"]`                      | `dot_pi/agent/skills/` for Pi-only skills                             |
-| Crush       | `dot_config/crush/crush.json -> options.skills_paths` includes `~/.agents/skills` | `dot_config/crush/skills/` for Crush-only skills                      |
-| OpenCode    | `dot_config/opencode/opencode.json -> skills.paths: ["~/.agents/skills"]`         | `dot_config/opencode/skills/` only if ever needed                     |
-| Antigravity | `~/.gemini/antigravity/skills -> ~/.agents/skills`                                | `dot_gemini/antigravity/`                                             |
-| Droid       | `dot_factory/symlink_skills -> ~/.agents/skills`                                  | `dot_factory/symlink_AGENTS.md -> ~/.claude/CLAUDE.md`                |
+| Tool        | Skills path         | How configured                      |
+| :---------- | :------------------ | :---------------------------------- |
+| Claude Code | `~/.claude/skills/` | Hardcoded (canonical)               |
+| Codex CLI   | `~/.agents/skills/` | Hardcoded                           |
+| Goose       | `~/.agents/skills/` | Hardcoded                           |
+| Opencode    | `~/.agents/skills/` | `opencode.json → skills.paths`      |
+| Crush       | `~/.agents/skills/` | `crush.json → options.skills_paths` |
+| Pi          | `~/.agents/skills/` | `settings.json → skills`            |
 
-## Strategy
+## Adding a Skill
 
-- Author shared skills once in `dot_claude/skills/`.
-- Let Gemini CLI discover shared skills through `~/.agents/skills`; keep `dot_gemini/skills/` only for Gemini-specific skills.
-- Let Pi discover shared skills through `~/.agents/skills` via `settings.json`; keep `dot_pi/agent/skills/` only for Pi-specific skills.
-- Let Crush discover shared skills through `options.skills_paths`; keep `dot_config/crush/skills/` only for Crush-specific skills.
-- Let OpenCode discover shared skills via `skills.paths` in `opencode.json`; do not mirror shared skills into `~/.config/opencode/skills/`.
-- Let Codex discover shared skills through `~/.agents/skills`; do not mirror shared skills into `~/.codex/skills/`.
-- Point Antigravity's legacy `skills` root directly at `~/.agents/skills`, and treat `skills.txt` as a consistency hint rather than the primary discovery mechanism.
+1. Create `~/.claude/skills/<name>/SKILL.md`
+2. `chezmoi add ~/.claude/skills/<name>/SKILL.md`
+3. Done — all tools pick it up immediately via the `~/.agents` symlink
 
-## Notes
+## Tool-Specific Extras
 
-- Gemini CLI follows the Agent Skills standard: user skills live in `~/.gemini/skills/`, with `~/.agents/skills/` as a higher-priority alias.
-- Codex officially reads user skills from `~/.agents/skills`, repo skills from `.agents/skills` up to repo root, and supports symlinked skill folders in those locations.
-- OpenCode uses `skills.paths` in `opencode.json` to load shared skills from `~/.agents/skills`. The native auto-discovery was unreliable; explicit config is required.
-- Pi natively discovers both `~/.pi/agent/skills/` and `~/.agents/skills/`, so the explicit `skills` setting is a clear, portable way to make the shared root obvious in config.
-- Antigravity currently stores a GUI-configured custom path in `~/.gemini/antigravity/skills.txt`, but direct linkage of its legacy `skills` directory is the more reliable arrangement.
-- As of March 18, 2026, Antigravity still does not appear to surface these shared skills reliably even with the direct link, so treat its setup as best-effort until its loader catches up with Gemini CLI.
+- **Codex** — `~/.codex/skills/.system/` contains Codex-managed built-in skills (imagegen, skill-creator, etc.). Do not touch.
+- **Crush** — `crush.json` also lists `~/.config/crush/skills/` as a secondary path for Crush-only skills if ever needed.
+- **Pi** — `~/.pi/agent/skills/` exists as a secondary path for Pi-only skills if ever needed.
+
+## History
+
+Previously used a `run_onchange_sync-agent-skills.sh.tmpl` chezmoi script to maintain explicit skill symlinks per tool. Removed 2026-04-09 after confirming all tools read `~/.agents/skills/` natively.

@@ -1,7 +1,7 @@
 # Codex CLI Configuration
 
 # Model
-model = "gpt-5.4-mini"
+model = "gpt-5.4"
 model_reasoning_effort = "high"
 
 personality = "pragmatic"
@@ -22,3 +22,6 @@ args = ["-y", "@upstash/context7-mcp"]
 [mcp_servers.exa]
 command = "npx"
 args = ["-y", "exa-mcp-server", "-e", "EXA_API_KEY"]
+
+[projects."/Users/nick/github/nijaru/pacabot"]
+trust_level = "trusted"

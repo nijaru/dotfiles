@@ -9,7 +9,7 @@
 
 ## Stack
 
-**Languages:** Python, Rust, Go, TypeScript (Bun), Mojo — use expert skills for language-specific patterns.
+**Languages:** Python, Rust, Go, TypeScript (Bun), Mojo, C++, Zig — use expert skills for language-specific patterns.
 
 **Dependencies:** Add via CLI (`cargo add`, `uv add`, `bun add`, `go get`). Never edit versions manually.
 
@@ -20,6 +20,10 @@
 **Rust:** Edition 2024. `anyhow` (apps), `thiserror` (libs). No global state. Strong types over strings. → `rust-expert` skill
 
 **Go:** `goimports` → `golines --base-formatter gofumpt` → `go-expert` skill
+
+**C++:** C++23 baseline, CMake + Ninja build system. → `cpp-expert` skill, `cmake-expert` skill
+
+**JUCE:** Audio plugins and applications (JUCE 8). CMake-first, APVTS for parameters, real-time safe `processBlock`. → `juce-expert` skill
 
 **Tools:**
 
@@ -96,7 +100,7 @@
 
 **VCS:** Default to `git`. Use `jj` skill if `.jj/` directory is present.
 
-**Git:** Commit immediately after finishing each coherent change set, without waiting for a reminder or permission. One logical change = one commit (function + callers, feature + tests). Push regularly. Confirm before: PRs, publishing, force push, destructive ops. No force push main.
+**Git:** ALWAYS commit immediately after finishing each coherent change set, without waiting for a reminder or permission. One logical change = one commit (function + callers, feature + tests). Push regularly. Confirm before: PRs, publishing, force push, destructive ops. No force push main.
 
 **Commits:** `type(scope): msg` — scope mandatory. → `git-commit` skill for full spec.
 
@@ -106,71 +110,27 @@
 
 ## ai/ Directory
 
-Persistent memory — survives compaction. Update before implementing. Stale files mislead — update or delete.
+Persistent context per project — survives compaction. Update before implementing; stale files mislead.
 
-### Structure
+**Session start:** `ai/README.md` → `ai/STATUS.md` → load relevant topic files for the current task only.
 
-```
-ai/
-├── README.md        # Index: pointers to all topic files (~150 chars/entry, no content)
-├── STATUS.md        # Phase, focus, blockers — updated every session
-├── DESIGN.md        # Current architecture — answers "what is it?"
-├── DECISIONS.md     # Why decisions were made — Principles + Log sections
-├── PLAN.md          # Active plan or sprint index (managed by /sprint)
-├── research/        # Investigation docs
-├── design/          # Detailed design docs
-├── review/          # Review outputs
-├── sprints/         # Sprint detail files (NN-name.md) — created by /sprint
-└── tmp/             # Scratch (gitignored)
-```
+| File           | Purpose                                                   | Update                                             |
+| :------------- | :-------------------------------------------------------- | :------------------------------------------------- |
+| `README.md`    | Index only — pointers, ~150 chars/entry, no content       | Immediately on any add/change/delete               |
+| `STATUS.md`    | Phase, focus, blockers                                    | Every session                                      |
+| `DESIGN.md`    | Current architecture                                      | On architecture changes                            |
+| `DECISIONS.md` | **Principles** (distilled) + **Log** (recent ~20 entries) | Append to Log; compact when > 20 entries           |
+| `PLAN.md`      | Active plan or sprint index (managed by `/sprint`)        | As sprints progress; extract outcomes then replace |
 
-### Session Start
+Subdirs: `research/` · `design/` · `review/` · `sprints/` · `tmp/` (gitignored)
 
-Read `ai/README.md` → `ai/STATUS.md` → load relevant topic files for current task. Only load what the task requires.
-
-### File Roles
-
-| File         | Purpose                                                                                                                                         | Update Rule                                                                                                 |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| README.md    | Index only — pointers, ~150 chars/entry. No content.                                                                                            | Update when topic files are added/changed. Verify links are live. Remove dead links.                        |
-| STATUS.md    | Phase, active focus, blockers.                                                                                                                  | Every session.                                                                                              |
-| DESIGN.md    | Current architecture — answers "what is it?"                                                                                                    | When architecture changes.                                                                                  |
-| DECISIONS.md | Why it is that way. Two sections: **Principles** (distilled, stable) + **Log** (recent ~20 entries verbatim, `Context → Decision → Rationale`). | Append to Log. When Log > ~20 entries, run `/setup-ai` to compact into Principles.                          |
-| PLAN.md      | Active plan. Simple: flat document. Complex: sprint index table with detail files in `ai/sprints/` (managed by `/sprint`).                      | Update as sprints progress. When plan is complete, extract outcomes to DECISIONS.md/DESIGN.md then replace. |
-
-### Index Discipline
-
-README.md is pointers only. Format: `- [Title](path) — one-line hook`
-
-- Write to file → update README.md immediately. Index must stay synchronized.
-- Don't persist derivable facts — if it's grep-able from code or git history, don't write it to ai/.
-- ai/ is hints, not truth — verify against code when it matters.
-
-### Topic File Frontmatter
-
-All files in `research/`, `design/`, `review/` must start with:
-
-```yaml
----
-date: YYYY-MM-DD
-summary: one-line description
-status: active | resolved | stale
----
-```
-
-### Consolidation Rules
-
-- Merge before multiplying — one focused file beats three overlapping ones.
-- Delete resolved files — don't mark done, delete.
-- When ai/ is out of sync or bloated, run `/setup-ai` to audit, consolidate, and rebuild the index.
+**Key rules:** `README.md` is index-only — update it immediately when files change. Don't persist derivable facts. `ai/` is hints, not truth — verify against code. Merge before multiplying; delete resolved files.
 
 **Flow:** `research/` → `DESIGN.md` → `/sprint` → `PLAN.md` → code → `review/`
 
-**Format:** Tables/lists over prose. Answer first, evidence second.
+**Project config:** `AGENTS.md` primary. `ln -s AGENTS.md CLAUDE.md` (both at repo root) for own repos. OSS repos often use `./CLAUDE.md` — follow whatever is present.
 
-**Project config:** AGENTS.md primary. Claude Code reads `.claude/CLAUDE.md` automatically—use `ln -s ../AGENTS.md .claude/CLAUDE.md` for your own repos. OSS/external repos often use `./CLAUDE.md`—follow whatever convention is present.
-
-**Keeping ai/ and .tasks/ local:** Add to `.git/info/exclude` (not `.gitignore`). → `git-local-exclude` skill
+**Keeping `ai/` and `.tasks/` local:** `.git/info/exclude` → `git-local-exclude` skill. Full conventions → `ai-context` skill. Init/audit → `setup-ai` skill.
 
 ## Task Discipline
 

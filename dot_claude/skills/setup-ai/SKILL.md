@@ -21,11 +21,11 @@ Determine mode: **Init** (no ai/ exists) or **Audit** (ai/ exists).
 
 ## AGENTS.md / CLAUDE.md Configuration
 
-| Scenario                 | Action                                                            |
-| :----------------------- | :---------------------------------------------------------------- |
-| Neither file exists      | Create `AGENTS.md`, symlink `.claude/CLAUDE.md` → `../AGENTS.md`  |
-| Only `CLAUDE.md` at root | Rename to `AGENTS.md`, create symlink (leave as-is for OSS repos) |
-| Both exist               | Merge to `AGENTS.md`, remove old `CLAUDE.md`, create symlink      |
+| Scenario                 | Action                                                                                |
+| :----------------------- | :------------------------------------------------------------------------------------ |
+| Neither file exists      | Create `AGENTS.md`, symlink `./CLAUDE.md` → `AGENTS.md` (`ln -s AGENTS.md CLAUDE.md`) |
+| Only `CLAUDE.md` at root | Rename to `AGENTS.md`, create symlink (leave as-is for OSS repos)                     |
+| Both exist               | Merge to `AGENTS.md`, remove old `CLAUDE.md`, create symlink                          |
 
 ## Topic File Frontmatter Standard
 
@@ -174,7 +174,7 @@ Every file in ai/ root should have an entry. Topic files in subdirs get entries 
 ## Verification
 
 ```bash
-ls -la AGENTS.md .claude/CLAUDE.md   # verify symlink
+ls -la AGENTS.md CLAUDE.md            # verify symlink
 tk ready                               # verify task tracking
 ls -R ai/                              # verify structure
 ```

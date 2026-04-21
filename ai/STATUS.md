@@ -1,24 +1,25 @@
 # Status
 
-Dotfiles synced and skill paths consolidated around `~/.agents/skills`.
+Skills sync fully simplified. Chezmoi state clean.
 
 ## Current State
 
-- Shared skills are authored once in `dot_claude/skills/`.
-- Gemini CLI, Codex CLI, Pi, Crush, and OpenCode consume the shared path cleanly.
-- Antigravity is configured against the shared path on a best-effort basis, but still appears to lag Gemini CLI's Agent Skills behavior.
-- No active local task remains for this skills consolidation pass.
-- Global Claude guidance now uses a two-line refactor rule: replace the changed component wholesale, and do not leave old code or compatibility scaffolding unless explicitly requested.
+- All skills authored in `~/.claude/skills/`, accessible to all tools via `~/.agents` symlink.
+- No sync scripts. No per-tool symlink maintenance. All tools read `~/.agents/skills/` natively.
+- `run_onchange_sync-agent-skills.sh.tmpl` removed 2026-04-09 — was unnecessary.
+- `skills-config.yaml` retained as documentation only (no longer drives any script logic).
+- New skills added today: `cpp-expert`, `cmake-expert`, `juce-expert`, `ai-context`.
+- Global CLAUDE.md: `ai/` section trimmed from 60 lines to ~20; full conventions moved to `ai-context` skill.
 
 ## Incident (2026-03-30)
 
-- `chezmoi apply --force` was run without reading all modified files first (llm-serve.fish, opencode.json, settings.json).
-- MM status indicated conflict on `dot_pi/agent/settings.json` — resolved by apply but source/destination states not verified beforehand.
-- **Lesson:** Always read all modified files before applying, especially with MM conflicts.
+- `chezmoi apply --force` run without reading all modified files first.
+- MM conflict on `dot_pi/agent/settings.json` — resolved by apply but not verified beforehand.
+- **Lesson:** Always `chezmoi diff` before apply, especially with MM conflicts.
 
 ## Reference
 
-- `ai/skills-sync.md` — skill matrix and chezmoi source paths for all CLIs
+- `ai/skills-sync.md` — skill path architecture and tool discovery table
 - `ai/shell-migration.md` — tide/starship/nushell migration notes
 - `ai/research/claude-code-statusline-api.md` — statusline JSON schema and gotchas
 - `ai/ollama-setup.md` — ollama install, Fedora gotchas, 64K context Modelfile

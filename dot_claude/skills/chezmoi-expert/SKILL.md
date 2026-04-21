@@ -50,7 +50,7 @@ git push
 
 ### 4. Skill Management
 
-New skill: create under `~/.local/share/chezmoi/dot_claude/skills/my-skill/SKILL.md`, then `chezmoi apply --force`.
+New skill: create at `~/.claude/skills/my-skill/SKILL.md` (destination), then `chezmoi add ~/.claude/skills/my-skill/SKILL.md`.
 
 Untracked plugin skill: `chezmoi add ~/.claude/skills/my-skill/SKILL.md` to pull into source, then commit.
 
@@ -71,9 +71,9 @@ Files named `symlink_NAME` in source resolve to symlinks at the destination.
 
 ## Anti-Rationalization
 
-| Excuse                             | Reality                                                                    |
-| :--------------------------------- | :------------------------------------------------------------------------- |
-| "I'll just edit the source file"   | Use `chezmoi edit --apply` — it handles templates and encryption properly. |
-| "I'll use `chezmoi add` on a tmpl" | `add`/`re-add` don't work with templates. Use `chezmoi edit` instead.      |
-| "I'll skip `--force`"              | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts.      |
-| "I'll manually link it"            | Manual links are lost on `apply --force`. Use source files.                |
+| Excuse                             | Reality                                                                                       |
+| :--------------------------------- | :-------------------------------------------------------------------------------------------- |
+| "I'll just edit the source file"   | Edit the destination file directly, then `chezmoi add <dest-path>`.                           |
+| "I'll use `chezmoi add` on a tmpl" | `add`/`re-add` don't work with templates. Edit source directly, then `chezmoi apply --force`. |
+| "I'll skip `--force`"              | Chezmoi hangs waiting for a TTY that doesn't exist in agent contexts.                         |
+| "I'll manually link it"            | Manual links are lost on `apply --force`. Use source files.                                   |

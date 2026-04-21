@@ -24,13 +24,8 @@
       "apiKey": "ollama",
       "models": [
         {
-          "id": "qwen3.5:27b"
-        },
-        {
-          "id": "gemma4:26b"
-        },
-        {
-          "id": "gemma4:31b"
+          "id": "qwen3.6:latest",
+          "contextWindow": 262144
         }
       ]
     },
@@ -40,8 +35,8 @@
       "apiKey": "ollama",
       "models": [
         {
-          "id": "gemma4:31b-64k",
-          "contextWindow": 65536
+          "id": "qwen3.5:27b",
+          "contextWindow": 163840
         }
       ]
     }

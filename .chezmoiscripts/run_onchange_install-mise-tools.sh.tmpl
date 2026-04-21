@@ -1,0 +1,12 @@
+#!/bin/sh
+# Re-runs whenever the mise config changes.
+# config.toml hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -e
+
+if ! command -v mise >/dev/null 2>&1; then
+    echo "mise not installed, skipping tool install"
+    exit 0
+fi
+
+echo "Installing mise tools from config.toml..."
+mise install

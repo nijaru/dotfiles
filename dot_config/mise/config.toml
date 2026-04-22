@@ -10,7 +10,7 @@ ruby = "latest"
 shfmt = "latest"
 usage = "latest"
 zig = "latest"
-aube = "latest"
+"github:endevco/aube" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python", "true"]

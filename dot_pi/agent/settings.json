@@ -35,7 +35,7 @@
       "apiKey": "ollama",
       "models": [
         {
-          "id": "qwen3.5:27b",
+          "id": "qwen3.6:27b",
           "contextWindow": 163840
         }
       ]

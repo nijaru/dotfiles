@@ -26,8 +26,8 @@
         "apiKey": "ollama"
       },
       "models": {
-        "qwen3.5:27b": {
-          "name": "Qwen3.5 27B 160K",
+        "qwen3.6:27b": {
+          "name": "Qwen3.6 27B 160K",
           "limit": { "context": 163840, "output": 32768 }
         }
       }

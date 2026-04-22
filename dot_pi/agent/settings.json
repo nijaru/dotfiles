@@ -36,7 +36,7 @@
       "models": [
         {
           "id": "qwen3.6:27b",
-          "contextWindow": 163840
+          "contextWindow": 131072
         }
       ]
     }

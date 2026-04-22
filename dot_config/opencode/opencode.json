@@ -27,8 +27,8 @@
       },
       "models": {
         "qwen3.6:27b": {
-          "name": "Qwen3.6 27B 160K",
-          "limit": { "context": 163840, "output": 32768 }
+          "name": "Qwen3.6 27B 128K",
+          "limit": { "context": 131072, "output": 32768 }
         }
       }
     }

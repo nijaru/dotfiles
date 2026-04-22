@@ -1,0 +1,31 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! systemctl list-unit-files ollama.service >/dev/null 2>&1; then
+    echo "ollama.service not installed, skipping override"
+    exit 0
+fi
+
+OVERRIDE=/etc/systemd/system/ollama.service.d/override.conf
+
+sudo mkdir -p "$(dirname "$OVERRIDE")"
+sudo rm -f "$OVERRIDE"
+sudo tee "$OVERRIDE" >/dev/null <<CONF
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0:11434"
+Environment="OLLAMA_FLASH_ATTENTION=1"
+Environment="OLLAMA_KV_CACHE_TYPE=q4_0"
+Environment="OLLAMA_CONTEXT_LENGTH=98304"
+Environment="OLLAMA_NUM_PARALLEL=1"
+CONF
+
+sudo chown root:root "$OVERRIDE"
+sudo chmod 644 "$OVERRIDE"
+if command -v restorecon >/dev/null 2>&1; then
+    sudo restorecon "$OVERRIDE"
+fi
+
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+{{- end }}

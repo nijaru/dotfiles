@@ -31,6 +31,20 @@
           "limit": { "context": 131072, "output": 32768 }
         }
       }
+    },
+    "vllm-fedora": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "vLLM (Fedora)",
+      "options": {
+        "baseURL": "http://fedora:11435/v1",
+        "apiKey": "vllm"
+      },
+      "models": {
+        "qwen3.6:27b-4090": {
+          "name": "Qwen3.6 27B 4090",
+          "limit": { "context": 40960, "output": 32768 }
+        }
+      }
     }
   },
   "mcp": {

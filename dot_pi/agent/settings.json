@@ -39,6 +39,17 @@
           "contextWindow": 131072
         }
       ]
+    },
+    "vllm-fedora": {
+      "baseUrl": "http://fedora:11435/v1",
+      "api": "openai-completions",
+      "apiKey": "vllm",
+      "models": [
+        {
+          "id": "qwen3.6:27b-4090",
+          "contextWindow": 40960
+        }
+      ]
     }
   },
   "quietStartup": true

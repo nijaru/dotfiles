@@ -46,11 +46,13 @@ Agent integrations:
 
 | Agent    | Config location                     | How to select                                    |
 | -------- | ----------------------------------- | ------------------------------------------------ |
-| pi       | `~/.pi/agent/models.json`           | Model picker (`ollama`/`ollama-fedora` provider) |
+| pi       | `~/.pi/agent/models.json`; settings patched by `.chezmoiscripts/run_onchange_configure-pi-settings.sh` | Model picker (`ollama`/`ollama-fedora`/`llama-fedora` provider) |
 | opencode | `dot_config/opencode/opencode.json` | Model picker                                     |
 | droid    | `dot_factory/settings.json`         | `/model` selector                                |
 
 `pi-local` and `pi-fedora` are convenience wrappers for `--provider ollama/ollama-fedora`.
+
+Config ownership: files that apps rewrite frequently should not be managed as whole files. Codex `~/.codex/config.toml` and Pi `~/.pi/agent/settings.json` are patched by chezmoi scripts so generated plugin/runtime/version state stays local.
 
 ### 7. AI CLI Skills
 

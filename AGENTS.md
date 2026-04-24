@@ -40,7 +40,7 @@ Fedora serves the primary local model with llama.cpp on its default port 8080.
 
 - **Fedora endpoint:** `http://fedora:8080/v1` (CUDA backend, via Tailscale)
 - **Primary model:** `qwen3.6:27b` (Qwen3.6 27B, 128K ctx, llama.cpp)
-- **Serve command on Fedora:** `llm-serve start` (systemd user service) or `llm-serve` foreground; `status`/`stop`/`restart` are supported.
+- **Serve command on Fedora:** `llm-serve start` (systemd user service) or `llm-serve serve` foreground; bare `llm-serve` prints help.
 
 Agent integrations:
 

@@ -10,7 +10,7 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
     set -l download_only 0
     set -l verify_only 0
     set -l gguf_file ""
-    set -l command serve
+    set -l command help
 
     switch $os
         case Darwin
@@ -92,7 +92,7 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
                 echo "Usage: llm-serve [serve|start|stop|restart|status] [MODEL|PROFILE] [options]"
                 echo ""
                 echo "Commands:"
-                echo "  serve           run in the foreground (default)"
+                echo "  serve           run in the foreground"
                 echo "  start           run as a systemd user service on Linux"
                 echo "  stop            stop the systemd user service and matching llama-server"
                 echo "  restart         stop, then start"
@@ -143,6 +143,10 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
     set -l llama_pattern "llama-server .*Qwen3.6-27B|llama-server .*--alias qwen3.6:27b"
 
     switch $command
+        case help
+            llm-serve --help
+            return 0
+
         case status
             if test $os = Linux; and command -q systemctl; and systemctl --user is-active --quiet $unit.service
                 systemctl --user status $unit.service --no-pager

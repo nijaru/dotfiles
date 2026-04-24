@@ -5,7 +5,7 @@
 - Local agent configs now target Fedora llama.cpp Qwen3.6 27B on `http://fedora:8080/v1`.
 - Ollama providers are retired from Pi, OpenCode, Droid/Factory, Crush, and Zed managed configs.
 - Zed uses `agent.default_model` plus `language_models.openai_compatible.fedora` for the custom endpoint.
-- `llm-serve` supports `start`, `stop`, `restart`, and `status`; `start` uses a systemd user service on Linux.
+- `llm-serve` supports `serve`, `start`, `stop`, `restart`, and `status`; bare `llm-serve` prints help.
 
 Skills sync fully simplified. Chezmoi state clean.
 

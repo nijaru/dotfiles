@@ -1,0 +1,557 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# ///
+from __future__ import annotations
+
+import argparse
+import os
+import platform
+import re
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass, replace
+from pathlib import Path
+from typing import Never
+
+
+COMMANDS = {"serve", "start", "stop", "restart", "status"}
+UNIT = "llm-serve"
+LLAMA_PATTERN = r"llama-server .*Qwen3\.6-27B|llama-server .*--alias qwen3\.6:27b"
+
+
+@dataclass(frozen=True)
+class Profile:
+    model: str
+    served_name: str
+    backend: str
+    ctx: int
+    port: int
+    host: str
+    gguf_file: str | None = None
+
+
+PROFILES: dict[str, Profile] = {
+    "darwin-default": Profile(
+        model="mlx-community/Qwen3.6-35B-A3B-6bit",
+        served_name="qwen3.6:latest",
+        backend="mlx",
+        ctx=262144,
+        port=8081,
+        host="127.0.0.1",
+    ),
+    "linux-default": Profile(
+        model="unsloth/Qwen3.6-27B-GGUF",
+        gguf_file="Qwen3.6-27B-UD-Q4_K_XL.gguf",
+        served_name="qwen3.6:27b",
+        backend="llama",
+        ctx=131072,
+        port=8080,
+        host="0.0.0.0",
+    ),
+    "qwen36-llama": Profile(
+        model="unsloth/Qwen3.6-27B-GGUF",
+        gguf_file="Qwen3.6-27B-UD-Q4_K_XL.gguf",
+        served_name="qwen3.6:27b",
+        backend="llama",
+        ctx=131072,
+        port=8080,
+        host="0.0.0.0",
+    ),
+    "qwen36-llama-q4km": Profile(
+        model="unsloth/Qwen3.6-27B-GGUF",
+        gguf_file="Qwen3.6-27B-Q4_K_M.gguf",
+        served_name="qwen3.6:27b",
+        backend="llama",
+        ctx=131072,
+        port=8080,
+        host="0.0.0.0",
+    ),
+    "qwen36-4090": Profile(
+        model="LibertAIDAI/Qwen3.6-27B-W4A16-G128",
+        served_name="qwen3.6:27b-4090",
+        backend="vllm",
+        ctx=40960,
+        port=8080,
+        host="0.0.0.0",
+    ),
+    "qwen36-fp8": Profile(
+        model="Qwen/Qwen3.6-27B-FP8",
+        served_name="qwen3.6:27b-fp8",
+        backend="vllm",
+        ctx=32768,
+        port=8080,
+        host="0.0.0.0",
+    ),
+}
+
+
+def main() -> int:
+    command, args = split_command(sys.argv[1:])
+    if command == "help":
+        print_help()
+        return 0
+
+    options = parse_options(args)
+    profile = build_profile(options)
+
+    if command == "status":
+        return status()
+    if command == "stop":
+        return stop()
+    if command == "restart":
+        stop()
+        command = "start"
+    if command == "start":
+        return start(args)
+    if command == "serve":
+        return serve(profile, options)
+
+    print_help()
+    return 0
+
+
+def split_command(argv: list[str]) -> tuple[str, list[str]]:
+    if not argv or argv[0] in {"-h", "--help", "help"}:
+        return "help", []
+    if argv[0] in COMMANDS:
+        return argv[0], argv[1:]
+    return "help", argv
+
+
+def parse_options(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("model_or_profile", nargs="?")
+    parser.add_argument("--served-name")
+    parser.add_argument("--port", "-p", type=int)
+    parser.add_argument("--host", "-H")
+    parser.add_argument("--backend", "-b", choices=["mlx", "llama", "vllm", "sglang"])
+    parser.add_argument("--gguf-file")
+    parser.add_argument("--ctx", "-c", type=int)
+    parser.add_argument("--download-only", action="store_true")
+    parser.add_argument("--verify-only", action="store_true")
+    parser.add_argument("--help", "-h", action="store_true")
+    options, unknown = parser.parse_known_args(argv)
+    if options.help:
+        print_help()
+        raise SystemExit(0)
+    if unknown:
+        fail(f"unknown argument: {' '.join(unknown)}")
+    return options
+
+
+def build_profile(options: argparse.Namespace) -> Profile:
+    os_name = platform.system()
+    if os_name == "Darwin":
+        profile = PROFILES["darwin-default"]
+    elif os_name == "Linux":
+        profile = PROFILES["linux-default"]
+    else:
+        fail(f"unsupported OS {os_name}")
+
+    model_or_profile = options.model_or_profile
+    if model_or_profile in PROFILES:
+        selected = PROFILES[model_or_profile]
+        profile = replace(
+            selected,
+            host=profile.host,
+            port=profile.port if selected.backend != "mlx" else selected.port,
+        )
+    elif model_or_profile:
+        profile = replace(
+            profile, model=model_or_profile, served_name=Path(model_or_profile).name
+        )
+
+    if options.served_name:
+        profile = replace(profile, served_name=options.served_name)
+    if options.port:
+        profile = replace(profile, port=options.port)
+    if options.host:
+        profile = replace(profile, host=options.host)
+    if options.backend:
+        profile = replace(profile, backend=options.backend)
+    if options.gguf_file:
+        profile = replace(profile, gguf_file=options.gguf_file)
+    if options.ctx:
+        profile = replace(profile, ctx=options.ctx)
+    return profile
+
+
+def serve(profile: Profile, options: argparse.Namespace) -> int:
+    describe(profile)
+    if profile.backend == "mlx":
+        return serve_mlx(profile, options)
+    if profile.backend == "llama":
+        return serve_llama(profile, options)
+    if profile.backend in {"vllm", "sglang"}:
+        return serve_python_backend(profile, options)
+    fail(f"unknown backend {profile.backend}")
+
+
+def start(args: list[str]) -> int:
+    require_linux("llm-serve start uses systemd user services")
+    require_command("systemd-run", "systemd-run not found; run llm-serve serve instead")
+    if systemctl_active():
+        print(f"{UNIT}.service is already running")
+        return subprocess.run(
+            ["systemctl", "--user", "status", f"{UNIT}.service", "--no-pager"]
+        ).returncode
+
+    script = resolve_script()
+    cmd = [
+        "systemd-run",
+        "--user",
+        "--unit",
+        UNIT,
+        "--collect",
+        "--same-dir",
+        str(script),
+        "serve",
+        *args,
+    ]
+    subprocess.run(cmd, check=True)
+    return subprocess.run(
+        ["systemctl", "--user", "status", f"{UNIT}.service", "--no-pager"]
+    ).returncode
+
+
+def stop() -> int:
+    if platform.system() == "Linux" and shutil.which("systemctl"):
+        subprocess.run(
+            ["systemctl", "--user", "stop", f"{UNIT}.service"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    if shutil.which("pkill"):
+        subprocess.run(
+            ["pkill", "-f", LLAMA_PATTERN],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    return 0
+
+
+def status() -> int:
+    if (
+        platform.system() == "Linux"
+        and shutil.which("systemctl")
+        and systemctl_active()
+    ):
+        return subprocess.run(
+            ["systemctl", "--user", "status", f"{UNIT}.service", "--no-pager"]
+        ).returncode
+    if shutil.which("pgrep"):
+        return subprocess.run(["pgrep", "-af", LLAMA_PATTERN]).returncode
+    fail("no supported status checker found")
+
+
+def serve_mlx(profile: Profile, options: argparse.Namespace) -> int:
+    require_os("Darwin", "mlx backend requires macOS")
+    require_command("uvx", "uvx not found; install uv")
+    if options.download_only or options.verify_only:
+        print("mlx backend does not prefetch Hugging Face snapshots separately")
+        return 0
+    return run(
+        [
+            "uvx",
+            "--from",
+            "mlx-lm",
+            "mlx_lm.server",
+            "--model",
+            profile.model,
+            "--host",
+            profile.host,
+            "--port",
+            str(profile.port),
+        ]
+    )
+
+
+def serve_llama(profile: Profile, options: argparse.Namespace) -> int:
+    require_linux("llama backend is intended for Linux")
+    require_command(
+        "llama-server",
+        "llama-server not found; build llama.cpp with CUDA and put llama-server on PATH",
+    )
+    require_command("hf", "hf not found; install Hugging Face CLI")
+    require_hf_auth()
+
+    gguf_file = profile.gguf_file or Path(profile.model).name
+    local_model = download_gguf(profile.model, gguf_file)
+    print(f"Verified GGUF: {local_model}")
+    if options.download_only or options.verify_only:
+        return 0
+
+    return run(
+        [
+            "llama-server",
+            "-m",
+            str(local_model),
+            "--alias",
+            profile.served_name,
+            "--host",
+            profile.host,
+            "--port",
+            str(profile.port),
+            "-ngl",
+            "99",
+            "-c",
+            str(profile.ctx),
+            "-np",
+            "1",
+            "-fa",
+            "on",
+            "--cache-type-k",
+            "q4_0",
+            "--cache-type-v",
+            "q4_0",
+        ]
+    )
+
+
+def serve_python_backend(profile: Profile, options: argparse.Namespace) -> int:
+    require_linux(f"{profile.backend} backend is intended for Linux")
+    require_command("uv", "uv not found")
+    require_command("hf", "hf not found; install Hugging Face CLI")
+    require_hf_auth()
+
+    if profile.backend == "vllm":
+        if not run_quiet(["vllm", "--version"]):
+            tool_python = find_tool_python()
+            print("Repairing vllm tool environment...")
+            subprocess.run(
+                [
+                    "uv",
+                    "tool",
+                    "install",
+                    "--python",
+                    tool_python,
+                    "--reinstall",
+                    "vllm==0.19.1",
+                ],
+                check=True,
+            )
+    elif not run_quiet(["python", "-c", "import sglang"]):
+        fail("sglang not installed in the active Python environment")
+
+    local_model = download_snapshot(profile.model)
+    print(f"Verified snapshot: {local_model}")
+    if options.download_only or options.verify_only:
+        return 0
+
+    if profile.backend == "vllm":
+        return run(
+            [
+                "vllm",
+                "serve",
+                str(local_model),
+                "--served-model-name",
+                profile.served_name,
+                "--host",
+                profile.host,
+                "--port",
+                str(profile.port),
+                "--max-model-len",
+                str(profile.ctx),
+                "--gpu-memory-utilization",
+                "0.95",
+                "--kv-cache-dtype",
+                "fp8",
+                "--max-num-seqs",
+                "8",
+                "--enable-prefix-caching",
+                "--language-model-only",
+                "--reasoning-parser",
+                "qwen3",
+                "--enable-auto-tool-choice",
+                "--tool-call-parser",
+                "qwen3_coder",
+                "--speculative-config",
+                '{"method":"qwen3_next_mtp","num_speculative_tokens":2}',
+            ]
+        )
+
+    return run(
+        [
+            "python",
+            "-m",
+            "sglang.launch_server",
+            "--model-path",
+            str(local_model),
+            "--served-model-name",
+            profile.served_name,
+            "--host",
+            profile.host,
+            "--port",
+            str(profile.port),
+            "--context-length",
+            str(profile.ctx),
+            "--mem-fraction-static",
+            "0.95",
+            "--reasoning-parser",
+            "qwen3",
+            "--tool-call-parser",
+            "qwen3_coder",
+        ]
+    )
+
+
+def download_gguf(model: str, gguf_file: str) -> Path:
+    print("Prefetching GGUF...")
+    result = subprocess.run(
+        ["hf", "download", model, "--include", gguf_file],
+        check=True,
+        env={**os.environ, "HF_HUB_DISABLE_PROGRESS_BARS": "1"},
+        capture_output=True,
+        text=True,
+    )
+    candidates = parse_hf_paths(result.stdout, model, gguf_file)
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    fail("hf download did not return a valid GGUF path")
+
+
+def download_snapshot(model: str) -> Path:
+    print("Prefetching model snapshot...")
+    result = subprocess.run(
+        ["hf", "download", model],
+        check=True,
+        env={**os.environ, "HF_HUB_DISABLE_PROGRESS_BARS": "1"},
+        capture_output=True,
+        text=True,
+    )
+    for candidate in parse_hf_paths(result.stdout, model, None):
+        if candidate.is_dir():
+            return candidate
+    fail("hf download did not return a valid local path")
+
+
+def parse_hf_paths(output: str, model: str, filename: str | None) -> list[Path]:
+    clean = re.sub(r"\x1b\[[0-9;]*m", "", output)
+    paths: list[Path] = []
+    for line in clean.splitlines():
+        value = line.rsplit("path: ", maxsplit=1)[-1].strip()
+        if not value:
+            continue
+        candidate = Path(value).expanduser()
+        if filename and candidate.is_dir():
+            candidate = candidate / filename
+        paths.append(candidate)
+    if filename:
+        paths.extend(
+            Path.home().glob(
+                f".cache/huggingface/hub/models--{model.replace('/', '--')}/snapshots/*/{filename}"
+            )
+        )
+    return paths
+
+
+def find_tool_python() -> str:
+    for candidate in ("python3.12", "python3.13"):
+        if shutil.which(candidate):
+            return candidate
+    fail("Need Python 3.12 or 3.13 for Linux model tooling")
+
+
+def require_hf_auth() -> None:
+    if not run_quiet(["hf", "auth", "whoami", "--format", "json"]):
+        fail("Hugging Face auth missing; run: hf auth login")
+
+
+def describe(profile: Profile) -> None:
+    print(f"Preparing {profile.model}")
+    print(f"  backend      {profile.backend}")
+    print(f"  served_name  {profile.served_name}")
+    print(f"  endpoint     http://{profile.host}:{profile.port}/v1")
+    print(f"  ctx          {profile.ctx}")
+    if profile.gguf_file:
+        print(f"  gguf_file    {profile.gguf_file}")
+    print("  cache        ~/.cache/huggingface/hub/")
+
+
+def print_help() -> None:
+    print(
+        """Usage: llm-serve [serve|start|stop|restart|status] [MODEL|PROFILE] [options]
+
+Commands:
+  serve           run in the foreground
+  start           run as a systemd user service on Linux
+  stop            stop the systemd user service and matching llama-server
+  restart         stop, then start
+  status          show systemd status or matching server processes
+
+Profiles:
+  qwen36-llama      Linux default: Unsloth Qwen3.6 27B UD-Q4_K_XL GGUF
+  qwen36-llama-q4km Baseline Unsloth Qwen3.6 27B Q4_K_M GGUF
+  qwen36-4090       vLLM: 4090-targeted Qwen3.6 27B W4A16
+  qwen36-fp8        Official FP8 Qwen3.6 27B
+
+Options:
+  --backend, -b     macOS: mlx (default)
+                    Linux: llama (default) | vllm | sglang
+  --gguf-file       GGUF filename when backend=llama and MODEL is an HF repo
+  --served-name     OpenAI model id exposed by the server
+  --port, -p        listen port
+  --host, -H        bind address
+  --ctx, -c         max context length
+  --download-only   verify/install tooling and prefetch model, then exit
+  --verify-only     verify tooling/auth/model snapshot, then exit
+
+Defaults:
+  macOS  mlx-community/Qwen3.6-35B-A3B-6bit
+         backend=mlx host=127.0.0.1 port=8081 ctx=262144
+  Linux  unsloth/Qwen3.6-27B-GGUF
+         file=Qwen3.6-27B-UD-Q4_K_XL.gguf backend=llama host=0.0.0.0 port=8080 ctx=131072"""
+    )
+
+
+def require_linux(message: str) -> None:
+    require_os("Linux", message)
+
+
+def require_os(expected: str, message: str) -> None:
+    if platform.system() != expected:
+        fail(message)
+
+
+def require_command(command: str, message: str) -> None:
+    if not shutil.which(command):
+        fail(message)
+
+
+def resolve_script() -> Path:
+    script = Path(sys.argv[0])
+    if script.exists():
+        return script.resolve()
+    resolved = shutil.which(sys.argv[0])
+    if resolved:
+        return Path(resolved).resolve()
+    fail("could not resolve llm-serve executable path")
+
+
+def systemctl_active() -> bool:
+    return run_quiet(["systemctl", "--user", "is-active", "--quiet", f"{UNIT}.service"])
+
+
+def run(command: list[str]) -> int:
+    return subprocess.run(command).returncode
+
+
+def run_quiet(command: list[str]) -> bool:
+    return (
+        subprocess.run(
+            command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        ).returncode
+        == 0
+    )
+
+
+def fail(message: str) -> Never:
+    print(f"llm-serve: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

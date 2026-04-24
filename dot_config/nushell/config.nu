@@ -80,8 +80,7 @@ def pullall [] {
 }
 
 def --wrapped llm-serve [...args: string] {
-    let cmd = ((["llm-serve"] ++ $args) | each { |arg| $arg | to json -r } | str join " ")
-    ^fish -lc $cmd
+    ^llm-serve ...$args
 }
 
 # ── Aliases ─────────────────────────────────────────────

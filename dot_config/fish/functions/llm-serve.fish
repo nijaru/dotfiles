@@ -10,6 +10,7 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
     set -l download_only 0
     set -l verify_only 0
     set -l gguf_file ""
+    set -l command serve
 
     switch $os
         case Darwin
@@ -30,6 +31,14 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
             echo "llm-serve: unsupported OS $os"
             set_color normal
             return 1
+    end
+
+    if test (count $argv) -gt 0
+        switch $argv[1]
+            case serve start stop restart status
+                set command $argv[1]
+                set -e argv[1]
+        end
     end
 
     set -l i 1
@@ -80,7 +89,14 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
             case --verify-only
                 set verify_only 1
             case --help -h
-                echo "Usage: llm-serve [MODEL|PROFILE] [options]"
+                echo "Usage: llm-serve [serve|start|stop|restart|status] [MODEL|PROFILE] [options]"
+                echo ""
+                echo "Commands:"
+                echo "  serve           run in the foreground (default)"
+                echo "  start           run as a systemd user service on Linux"
+                echo "  stop            stop the systemd user service and matching llama-server"
+                echo "  restart         stop, then start"
+                echo "  status          show systemd status or matching server processes"
                 echo ""
                 echo "Profiles:"
                 echo "  qwen36-llama      Linux default: Unsloth Qwen3.6 27B UD-Q4_K_XL GGUF"
@@ -121,6 +137,61 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
 
     if test -z "$served_model_name"
         set served_model_name (path basename $model)
+    end
+
+    set -l unit llm-serve
+    set -l llama_pattern "llama-server .*Qwen3.6-27B|llama-server .*--alias qwen3.6:27b"
+
+    switch $command
+        case status
+            if test $os = Linux; and command -q systemctl; and systemctl --user is-active --quiet $unit.service
+                systemctl --user status $unit.service --no-pager
+                return $status
+            end
+            if command -q pgrep
+                pgrep -af "$llama_pattern"
+                return $status
+            end
+            echo "No supported status checker found"
+            return 1
+
+        case stop restart
+            if test $os = Linux; and command -q systemctl
+                systemctl --user stop $unit.service >/dev/null 2>&1
+            end
+            if command -q pkill
+                pkill -f "$llama_pattern" >/dev/null 2>&1
+            end
+            if test $command = stop
+                return 0
+            end
+            set command start
+
+        case start
+            if test $os != Linux
+                set_color red
+                echo "llm-serve start uses systemd user services and is intended for Linux"
+                set_color normal
+                return 1
+            end
+            if not command -q systemd-run
+                set_color red
+                echo "systemd-run not found — run llm-serve in the foreground instead"
+                set_color normal
+                return 1
+            end
+            if systemctl --user is-active --quiet $unit.service
+                echo "$unit.service is already running"
+                systemctl --user status $unit.service --no-pager
+                return 0
+            end
+            set -l command_line "llm-serve serve"
+            if test (count $argv) -gt 0
+                set command_line "$command_line "(string join " " (string escape -- $argv))
+            end
+            systemd-run --user --unit $unit --collect --same-dir fish -lc $command_line
+            systemctl --user status $unit.service --no-pager
+            return $status
     end
 
     set_color --bold cyan

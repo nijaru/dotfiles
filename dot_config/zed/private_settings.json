@@ -106,6 +106,27 @@
       }
     }
   },
+  "language_models": {
+    "openai_compatible": {
+      "fedora": {
+        "api_url": "http://fedora:8080/v1",
+        "available_models": [
+          {
+            "name": "qwen3.6:27b",
+            "display_name": "fedora/qwen3.6:27b",
+            "max_tokens": 131072,
+            "max_output_tokens": 32768,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": false,
+              "prompt_cache_key": false
+            }
+          }
+        ]
+      }
+    }
+  },
   "theme": {
     "mode": "dark",
     "light": "Catppuccin Latte",
@@ -176,6 +197,6 @@
         "source.fixAll": true,
         "source.organizeImports": true
       }
-    },
+    }
   }
 }

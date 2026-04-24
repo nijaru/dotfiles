@@ -2,7 +2,7 @@
 
 Status: stale. Fedora local serving moved to llama.cpp on `http://fedora:8080/v1` with provider/model id `fedora/qwen3.6:27b`. This file is retained as migration history for the old Ollama setup.
 
-The current Fedora command is `llm-serve`, which defaults to `unsloth/Qwen3.6-27B-GGUF`, `Qwen3.6-27B-UD-Q4_K_XL.gguf`, 128K context, and port 8080.
+The current Fedora command is `llm-serve start`, which runs a systemd user service. Plain `llm-serve` still runs foreground. Defaults: `unsloth/Qwen3.6-27B-GGUF`, `Qwen3.6-27B-UD-Q4_K_XL.gguf`, 128K context, and port 8080.
 
 ## Old Ollama Setup
 

@@ -40,14 +40,14 @@
         }
       ]
     },
-    "vllm-fedora": {
+    "llama-fedora": {
       "baseUrl": "http://fedora:11435/v1",
       "api": "openai-completions",
-      "apiKey": "vllm",
+      "apiKey": "llama",
       "models": [
         {
-          "id": "qwen3.6:27b-4090",
-          "contextWindow": 40960
+          "id": "qwen3.6:27b-llama",
+          "contextWindow": 262144
         }
       ]
     }

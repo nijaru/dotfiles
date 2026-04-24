@@ -1,4 +1,4 @@
-function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/SGLang (Linux)"
+function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM, or SGLang"
     set -l os (uname)
 
     set -l model ""
@@ -9,6 +9,7 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
     set -l host 127.0.0.1
     set -l download_only 0
     set -l verify_only 0
+    set -l gguf_file ""
 
     switch $os
         case Darwin
@@ -17,10 +18,11 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
             set backend mlx
             set ctx 262144
         case Linux
-            set model LibertAIDAI/Qwen3.6-27B-W4A16-G128
-            set served_model_name qwen3.6:27b-4090
-            set backend vllm
-            set ctx 40960
+            set model unsloth/Qwen3.6-27B-GGUF
+            set gguf_file Qwen3.6-27B-UD-Q4_K_XL.gguf
+            set served_model_name qwen3.6:27b-llama
+            set backend llama
+            set ctx 262144
             set port 11435
             set host 0.0.0.0
         case '*'
@@ -33,6 +35,18 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
     set -l i 1
     while test $i -le (count $argv)
         switch $argv[$i]
+            case qwen36-llama
+                set model unsloth/Qwen3.6-27B-GGUF
+                set gguf_file Qwen3.6-27B-UD-Q4_K_XL.gguf
+                set served_model_name qwen3.6:27b-llama
+                set backend llama
+                set ctx 262144
+            case qwen36-llama-q4km
+                set model unsloth/Qwen3.6-27B-GGUF
+                set gguf_file Qwen3.6-27B-Q4_K_M.gguf
+                set served_model_name qwen3.6:27b-llama
+                set backend llama
+                set ctx 262144
             case qwen36-4090
                 set model LibertAIDAI/Qwen3.6-27B-W4A16-G128
                 set served_model_name qwen3.6:27b-4090
@@ -55,6 +69,9 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
             case --backend -b
                 set i (math $i + 1)
                 set backend $argv[$i]
+            case --gguf-file
+                set i (math $i + 1)
+                set gguf_file $argv[$i]
             case --ctx -c
                 set i (math $i + 1)
                 set ctx $argv[$i]
@@ -66,12 +83,15 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
                 echo "Usage: llm-serve [MODEL|PROFILE] [options]"
                 echo ""
                 echo "Profiles:"
-                echo "  qwen36-4090       Linux default: 4090-targeted Qwen3.6 27B W4A16"
+                echo "  qwen36-llama      Linux default: Unsloth Qwen3.6 27B UD-Q4_K_XL GGUF"
+                echo "  qwen36-llama-q4km Baseline Unsloth Qwen3.6 27B Q4_K_M GGUF"
+                echo "  qwen36-4090       vLLM: 4090-targeted Qwen3.6 27B W4A16"
                 echo "  qwen36-fp8        Official FP8 Qwen3.6 27B"
                 echo ""
                 echo "Options:"
                 echo "  --backend, -b     macOS: mlx (default)"
-                echo "                    Linux: vllm (default) | sglang"
+                echo "                    Linux: llama (default) | vllm | sglang"
+                echo "  --gguf-file       GGUF filename when backend=llama and MODEL is an HF repo"
                 echo "  --served-name     OpenAI model id exposed by the server"
                 echo "  --port, -p        listen port"
                 echo "  --host, -H        bind address"
@@ -82,8 +102,8 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
                 echo "Defaults:"
                 echo "  macOS  mlx-community/Qwen3.6-35B-A3B-6bit"
                 echo "         backend=mlx host=127.0.0.1 port=8081 ctx=262144"
-                echo "  Linux  LibertAIDAI/Qwen3.6-27B-W4A16-G128"
-                echo "         backend=vllm host=0.0.0.0 port=11435 ctx=40960"
+                echo "  Linux  unsloth/Qwen3.6-27B-GGUF"
+                echo "         file=Qwen3.6-27B-UD-Q4_K_XL.gguf backend=llama host=0.0.0.0 port=11435 ctx=262144"
                 return 0
             case '-*'
                 set_color red
@@ -110,6 +130,9 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
     echo "  served_name  $served_model_name"
     echo "  endpoint     http://$host:$port/v1"
     echo "  ctx          $ctx"
+    if test -n "$gguf_file"
+        echo "  gguf_file    $gguf_file"
+    end
     echo "  cache        ~/.cache/huggingface/hub/"
     set_color normal
 
@@ -132,6 +155,76 @@ function llm-serve --description "Serve an HF model via mlx-lm (macOS) or vLLM/S
                 return 0
             end
             uvx --from mlx-lm mlx_lm.server --model $model --host $host --port $port
+
+        case llama
+            if test $os != Linux
+                set_color red
+                echo "llama backend is intended for Linux"
+                set_color normal
+                return 1
+            end
+            if not command -q llama-server
+                set_color red
+                echo "llama-server not found — build llama.cpp with CUDA and put llama-server on PATH"
+                set_color normal
+                echo "  git clone https://github.com/ggml-org/llama.cpp ~/github/ggml-org/llama.cpp"
+                echo "  cmake -S ~/github/ggml-org/llama.cpp -B ~/github/ggml-org/llama.cpp/build -DGGML_CUDA=ON -DCMAKE_BUILD_TYPE=Release"
+                echo "  cmake --build ~/github/ggml-org/llama.cpp/build --config Release -j"
+                return 1
+            end
+            if not command -q hf
+                set_color red
+                echo "hf not found — install Hugging Face CLI"
+                set_color normal
+                return 1
+            end
+            if hf auth whoami --format json >/dev/null 2>&1
+                true
+            else
+                set_color red
+                echo "Hugging Face auth missing — run: hf auth login"
+                set_color normal
+                return 1
+            end
+            if test -z "$gguf_file"
+                set gguf_file (path basename $model)
+            end
+
+            echo "Prefetching GGUF..."
+            set -l download_output (HF_HUB_DISABLE_PROGRESS_BARS=1 hf download $model --include $gguf_file)
+            set -l clean_output (string replace -ra '\x1B\[[0-9;]*m' '' -- $download_output)
+            set -l local_model (string trim -- (string replace -r '.*path: ' '' -- $clean_output[-1]))
+            if test -d "$local_model"
+                set local_model $local_model/$gguf_file
+            end
+            if not test -f "$local_model"
+                set local_model ~/.cache/huggingface/hub/models--(string replace -a "/" "--" -- $model)/snapshots/*/$gguf_file
+            end
+            if not test -f "$local_model"
+                set_color red
+                echo "hf download did not return a valid GGUF path"
+                set_color normal
+                return 1
+            end
+
+            set_color green
+            echo "Verified GGUF: $local_model"
+            set_color normal
+
+            if test $download_only -eq 1 -o $verify_only -eq 1
+                return 0
+            end
+
+            llama-server \
+                -m $local_model \
+                --alias $served_model_name \
+                --host $host --port $port \
+                -ngl 99 \
+                -c $ctx \
+                -np 1 \
+                -fa on \
+                --cache-type-k q4_0 \
+                --cache-type-v q4_0
 
         case vllm sglang
             if test $os != Linux

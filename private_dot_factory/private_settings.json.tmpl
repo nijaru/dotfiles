@@ -32,6 +32,24 @@
       "provider": "generic-chat-completion-api"
     },
     {
+      "model": "deepseek/deepseek-v4-pro",
+      "displayName": "DeepSeek V4 Pro (OpenRouter)",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "apiKey": "{{ $secrets.openrouter_api_key }}",
+      "maxOutputTokens": 32000,
+      "noImageSupport": true,
+      "provider": "generic-chat-completion-api"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash",
+      "displayName": "DeepSeek V4 Flash (OpenRouter)",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "apiKey": "{{ $secrets.openrouter_api_key }}",
+      "maxOutputTokens": 32000,
+      "noImageSupport": true,
+      "provider": "generic-chat-completion-api"
+    },
+    {
       "model": "gemini-3.1-pro-preview-customtools",
       "displayName": "Gemini 3.1 Pro Preview [Google]",
       "baseUrl": "https://generativelanguage.googleapis.com/v1beta/openai/",

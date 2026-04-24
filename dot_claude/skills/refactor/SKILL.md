@@ -1,62 +1,38 @@
 ---
 name: refactor
-description: Use when analyzing or implementing code improvements, simplifying complex logic, or reducing technical debt. Trigger on large functions (>40 lines), deep nesting (>3), or duplicated code.
+description: Use when improving existing code structure while preserving behavior; trigger on complex functions, deep nesting, duplication, unclear names, or technical debt that does not require changing the design.
 allowed-tools: Bash, Read, Grep, Glob, Edit, Task
 ---
 
-# Refactor (Technical Excellence)
+# Refactor
 
-## Core Mandates
+## Boundary
 
-- **Surgical Precision:** Apply targeted changes that improve readability without altering behavior.
-- **Evidence-Driven:** Identify specific code smells (e.g., God objects, primitive obsession) before proposing changes.
-- **Verification:** Always verify refactorings with existing or new tests.
-- **Tone:** Be authoritative and directive in your suggestions.
+Refactoring changes the shape of existing code without changing external behavior. If the first implementation is complete but should be replaced with a cleaner second attempt, use `second-pass`. If the current design may be fundamentally wrong, use `rewrite`.
 
-## Refactoring Standards
+## Mandates
 
-### 1. Naming & Syntax
-- **Intent-based:** Rename variables/functions to reflect *why* they exist, not *what* they are.
-- **No Suffixes:** Eliminate `_v2`, `_new`, or `_old`.
-- **Constants:** Extract all magic numbers and strings to named constants.
+- Preserve behavior unless the user explicitly asks for behavior changes.
+- Identify the concrete smell before editing: duplication, unclear names, oversized function, excessive nesting, primitive obsession, dead code, or misplaced responsibility.
+- Prefer deletion and simplification over new abstractions.
+- Verify with existing tests or focused manual checks.
 
-### 2. Complexity Limits
-- **Function Length:** Split functions exceeding 40 lines.
-- **Parameter Count:** Use parameter objects for functions with >4 arguments.
-- **Nesting Depth:** Maximum depth of 3; use early returns and guard clauses to flatten logic.
-- **File Size:** Modules >400 lines must be decomposed into smaller files.
+## Standards
 
-### 3. Code Smells
-- **Duplication:** Extract logic appearing 2+ times into a helper.
-- **Dead Code:** Delete speculative generality or unused functions immediately.
-- **Feature Envy:** Move methods to the objects they interact with most.
+- Split functions over 40 lines when they mix responsibilities.
+- Flatten nesting deeper than 3 levels with guard clauses or extracted helpers.
+- Replace magic values with named constants only when the meaning is domain-specific.
+- Rename for intent; never introduce `_new`, `_old`, `_v2`, or compatibility shims.
+- Delete dead code and speculative generality immediately.
 
-## Proposal Format
+## Output
 
-```markdown
-## Refactoring: [Specific Component]
-
-**Location:** `file:line`
-**Problem:** [Concise technical reason for change]
-
-**Before:**
-[code]
-
-**After:**
-[code]
-
-**Benefit:** [Specific metric: readability, testability, or performance]
-```
+State the behavior-preservation check, the main structural change, and the verification command/result. If no edit is warranted, say what made the current structure acceptable.
 
 ## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |
-| "The code is working, don't touch it." | "Working" code is a liability if it's unmaintainable or overly complex. |
-| "I'll refactor this later." | Technical debt accumulates faster than it can be repaid; refactor during implementation. |
-| "Adding one more 'if' is faster." | Quick fixes lead to fragile "spaghetti" logic that hides bugs. |
-
-## Escalation
-
-- For **architectural shifts** (dependency restructuring, new module boundaries), suggest spawning a `designer` subagent.
-- For **routine cleanup** (renames, interface updates, moving methods), execute directly.
+| "This is working, so structure does not matter." | Working code can still hide bugs and slow future changes. |
+| "I'll add a wrapper and migrate later." | Compatibility layers become permanent. Change the interface cleanly or do not change it. |
+| "This needs a rewrite." | If behavior and design stay the same, it is a refactor, not a rewrite. |

@@ -43,35 +43,16 @@
       "apiKey": "$ANTHROPIC_API_KEY",
       "api": "anthropic-messages"
     },
-    "ollama": {
-      "baseUrl": "http://localhost:11434/v1",
-      "apiKey": "ollama",
+    "fedora": {
+      "baseUrl": "http://fedora:8080/v1",
+      "apiKey": "llama",
       "api": "openai-completions",
       "models": [
         {
-          "id": "gemma4:26b",
-          "name": "Gemma 4 26B",
-          "input": ["text", "image"],
-          "contextWindow": 262144
-        },
-        {
-          "id": "gemma4:31b",
-          "name": "Gemma 4 31B",
-          "input": ["text", "image"],
-          "contextWindow": 262144
-        }
-      ]
-    },
-    "ollama-fedora": {
-      "baseUrl": "http://fedora:11434/v1",
-      "apiKey": "ollama",
-      "api": "openai-completions",
-      "models": [
-        {
-          "id": "gemma4:31b-64k",
-          "name": "Gemma 4 31B 64K",
-          "input": ["text", "image"],
-          "contextWindow": 65536
+          "id": "qwen3.6:27b",
+          "name": "Qwen3.6 27B 128K",
+          "input": ["text"],
+          "contextWindow": 131072
         }
       ]
     },

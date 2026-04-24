@@ -1,5 +1,5 @@
-# Run pi with Fedora Ollama (CUDA) via Tailscale
+# Run pi with Fedora llama.cpp via Tailscale
 
 function pi-fedora
-    pi --provider ollama-fedora $argv
+    pi --provider fedora $argv
 end

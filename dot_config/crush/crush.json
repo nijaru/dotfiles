@@ -8,10 +8,10 @@
 		}
 	},
 	"providers": {
-		"ollama": {
+		"fedora": {
 			"type": "openai",
-			"base_url": "http://localhost:11434/v1",
-			"api_key": "ollama"
+			"base_url": "http://fedora:8080/v1",
+			"api_key": "llama"
 		}
 	},
 	"permissions": {

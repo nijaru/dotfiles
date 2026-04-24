@@ -1,6 +1,10 @@
 # Ollama Setup
 
-Both machines run ollama on port 11434. Configs in chezmoi: pi, opencode, droid all point to `ollama` (local) and `ollama-fedora` (`http://fedora:11434/v1` via Tailscale).
+Status: stale. Fedora local serving moved to llama.cpp on `http://fedora:8080/v1` with provider/model id `fedora/qwen3.6:27b`. This file is retained as migration history for the old Ollama setup.
+
+The current Fedora command is `llm-serve`, which defaults to `unsloth/Qwen3.6-27B-GGUF`, `Qwen3.6-27B-UD-Q4_K_XL.gguf`, 128K context, and port 8080.
+
+## Old Ollama Setup
 
 ## Mac
 

@@ -36,21 +36,21 @@
 
 ### 5. Local LLM Serving
 
-Ollama runs on both machines (port 11434). Use `ollama pull <model>` to fetch models.
+Fedora serves the primary local model with llama.cpp on its default port 8080.
 
-- **Mac endpoint:** `http://localhost:11434/v1` (MLX backend)
-- **Fedora endpoint:** `http://fedora:11434/v1` (CUDA backend, via Tailscale)
-- **Primary model:** `gemma4:26b` (18GB, 256K ctx, multimodal)
+- **Fedora endpoint:** `http://fedora:8080/v1` (CUDA backend, via Tailscale)
+- **Primary model:** `qwen3.6:27b` (Qwen3.6 27B, 128K ctx, llama.cpp)
+- **Serve command on Fedora:** `llm-serve` (defaults to `unsloth/Qwen3.6-27B-GGUF`, `Qwen3.6-27B-UD-Q4_K_XL.gguf`, `0.0.0.0:8080`)
 
 Agent integrations:
 
 | Agent    | Config location                     | How to select                                    |
 | -------- | ----------------------------------- | ------------------------------------------------ |
-| pi       | `~/.pi/agent/models.json`; settings patched by `.chezmoiscripts/run_onchange_configure-pi-settings.sh` | Model picker (`ollama`/`ollama-fedora`/`llama-fedora` provider) |
+| pi       | `~/.pi/agent/models.json`; settings patched by `.chezmoiscripts/run_onchange_configure-pi-settings.sh` | Default provider `fedora` |
 | opencode | `dot_config/opencode/opencode.json` | Model picker                                     |
 | droid    | `dot_factory/settings.json`         | `/model` selector                                |
 
-`pi-local` and `pi-fedora` are convenience wrappers for `--provider ollama/ollama-fedora`.
+`pi-fedora` is a convenience wrapper for `--provider fedora`.
 
 Config ownership: files that apps rewrite frequently should not be managed as whole files. Codex `~/.codex/config.toml` and Pi `~/.pi/agent/settings.json` are patched by chezmoi scripts so generated plugin/runtime/version state stays local.
 

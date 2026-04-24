@@ -2,23 +2,9 @@
 {
   "customModels": [
     {
-      "model": "qwen3.6:latest",
-      "displayName": "Qwen3.6 35B-A3B (local)",
-      "baseUrl": "http://localhost:11434/v1",
-      "apiKey": "ollama",
-      "provider": "generic-chat-completion-api"
-    },
-    {
       "model": "qwen3.6:27b",
-      "displayName": "Qwen3.6 27B 128K (Fedora)",
-      "baseUrl": "http://fedora:11434/v1",
-      "apiKey": "ollama",
-      "provider": "generic-chat-completion-api"
-    },
-    {
-      "model": "qwen3.6:27b-llama",
-      "displayName": "Qwen3.6 27B 262K (llama.cpp Fedora)",
-      "baseUrl": "http://fedora:11435/v1",
+      "displayName": "fedora/qwen3.6:27b",
+      "baseUrl": "http://fedora:8080/v1",
       "apiKey": "llama",
       "provider": "generic-chat-completion-api"
     },
@@ -59,7 +45,7 @@
       "provider": "generic-chat-completion-api"
     }
   ],
-  "model": "moonshotai/kimi-k2.6:floor",
+  "model": "qwen3.6:27b",
   "reasoningEffort": "medium",
   "autonomyMode": "auto-high",
   "diffMode": "github",

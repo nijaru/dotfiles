@@ -1,5 +1,10 @@
 # Status
 
+## Current Focus
+
+- Local agent configs now target Fedora llama.cpp Qwen3.6 27B on `http://fedora:8080/v1`.
+- Ollama providers are retired from Pi, OpenCode, Droid/Factory, Crush, and Zed managed configs.
+
 Skills sync fully simplified. Chezmoi state clean.
 
 ## Current State
@@ -22,4 +27,4 @@ Skills sync fully simplified. Chezmoi state clean.
 - `ai/skills-sync.md` — skill path architecture and tool discovery table
 - `ai/shell-migration.md` — tide/starship/nushell migration notes
 - `ai/research/claude-code-statusline-api.md` — statusline JSON schema and gotchas
-- `ai/ollama-setup.md` — ollama install, Fedora gotchas, 64K context Modelfile
+- `ai/ollama-setup.md` — stale Ollama setup notes, retained only as migration history

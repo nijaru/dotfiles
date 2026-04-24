@@ -20,10 +20,10 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
         case Linux
             set model unsloth/Qwen3.6-27B-GGUF
             set gguf_file Qwen3.6-27B-UD-Q4_K_XL.gguf
-            set served_model_name qwen3.6:27b-llama
+            set served_model_name qwen3.6:27b
             set backend llama
-            set ctx 262144
-            set port 11435
+            set ctx 131072
+            set port 8080
             set host 0.0.0.0
         case '*'
             set_color red
@@ -38,15 +38,15 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
             case qwen36-llama
                 set model unsloth/Qwen3.6-27B-GGUF
                 set gguf_file Qwen3.6-27B-UD-Q4_K_XL.gguf
-                set served_model_name qwen3.6:27b-llama
+                set served_model_name qwen3.6:27b
                 set backend llama
-                set ctx 262144
+                set ctx 131072
             case qwen36-llama-q4km
                 set model unsloth/Qwen3.6-27B-GGUF
                 set gguf_file Qwen3.6-27B-Q4_K_M.gguf
-                set served_model_name qwen3.6:27b-llama
+                set served_model_name qwen3.6:27b
                 set backend llama
-                set ctx 262144
+                set ctx 131072
             case qwen36-4090
                 set model LibertAIDAI/Qwen3.6-27B-W4A16-G128
                 set served_model_name qwen3.6:27b-4090
@@ -103,7 +103,7 @@ function llm-serve --description "Serve an HF model via mlx-lm, llama.cpp, vLLM,
                 echo "  macOS  mlx-community/Qwen3.6-35B-A3B-6bit"
                 echo "         backend=mlx host=127.0.0.1 port=8081 ctx=262144"
                 echo "  Linux  unsloth/Qwen3.6-27B-GGUF"
-                echo "         file=Qwen3.6-27B-UD-Q4_K_XL.gguf backend=llama host=0.0.0.0 port=11435 ctx=262144"
+                echo "         file=Qwen3.6-27B-UD-Q4_K_XL.gguf backend=llama host=0.0.0.0 port=8080 ctx=131072"
                 return 0
             case '-*'
                 set_color red

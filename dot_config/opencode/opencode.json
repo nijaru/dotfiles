@@ -3,46 +3,19 @@
   "skills": {
     "paths": ["~/.agents/skills"]
   },
+  "model": "fedora/qwen3.6:27b",
   "provider": {
-    "ollama": {
+    "fedora": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (local)",
+      "name": "Fedora llama.cpp",
       "options": {
-        "baseURL": "http://localhost:11434/v1",
-        "apiKey": "ollama"
-      },
-      "models": {
-        "qwen3.6:latest": {
-          "name": "Qwen3.6 35B-A3B",
-          "limit": { "context": 262144, "output": 32768 }
-        }
-      }
-    },
-    "ollama-fedora": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (Fedora)",
-      "options": {
-        "baseURL": "http://fedora:11434/v1",
-        "apiKey": "ollama"
+        "baseURL": "http://fedora:8080/v1",
+        "apiKey": "llama"
       },
       "models": {
         "qwen3.6:27b": {
           "name": "Qwen3.6 27B 128K",
           "limit": { "context": 131072, "output": 32768 }
-        }
-      }
-    },
-    "llama-fedora": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp (Fedora)",
-      "options": {
-        "baseURL": "http://fedora:11435/v1",
-        "apiKey": "llama"
-      },
-      "models": {
-        "qwen3.6:27b-llama": {
-          "name": "Qwen3.6 27B 262K",
-          "limit": { "context": 262144, "output": 32768 }
         }
       }
     }

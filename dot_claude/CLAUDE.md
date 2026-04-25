@@ -9,45 +9,37 @@
 
 ## Stack
 
-**Languages:** Python, Rust, Go, TypeScript (Bun), Mojo, C++, Zig — use expert skills for language-specific patterns.
+**Dependencies:** Add via CLI (`cargo add`, `uv add`, `bun add`, `go get`). Never hand-edit versions.
 
-**Dependencies:** Add via CLI (`cargo add`, `uv add`, `bun add`, `go get`). Never edit versions manually.
+**Languages & non-defaults:**
 
-**Python:** `uv` always. `uvx` one-off, `uv tool install` daily drivers. Never pip. → `python-expert` skill
+- **Python:** `uv` always (never pip). `uvx` for one-offs, `uv tool install` for daily drivers.
+- **TypeScript:** `bun` always (never npm/node to run).
+- **Rust:** Edition 2024. `anyhow` (apps), `thiserror` (libs). No global state. Strong types over strings.
+- **Go:** `goimports` → `golines --base-formatter gofumpt`.
+- **C++:** C++23, CMake + Ninja.
+- **JUCE 8:** CMake-first, APVTS for parameters, real-time safe `processBlock`.
 
-**TypeScript:** `bun` always. → `bun-expert` skill
+Language-specific patterns → matching expert skills (`python-expert`, `rust-expert`, `go-expert`, `bun-expert`, `cpp-expert`, `cmake-expert`, `juce-expert`, `zig-expert`, `mojo-syntax`).
 
-**Rust:** Edition 2024. `anyhow` (apps), `thiserror` (libs). No global state. Strong types over strings. → `rust-expert` skill
+**UI:** lucide/heroicons. No emoji unless requested.
 
-**Go:** `goimports` → `golines --base-formatter gofumpt` → `go-expert` skill
+## Tools
 
-**C++:** C++23 baseline, CMake + Ninja build system. → `cpp-expert` skill, `cmake-expert` skill
-
-**JUCE:** Audio plugins and applications (JUCE 8). CMake-first, APVTS for parameters, real-time safe `processBlock`. → `juce-expert` skill
-
-**Tools:**
-
+- `tk` — tasks, persists across compaction. → Task Discipline below
+- `jb` — background jobs (prefer over `nohup`/`&`/`screen`) → `jb` skill
 - `mise` — runtime versions
 - `gh` — GitHub CLI
 - `hf` — Hugging Face CLI
-- `sg` / `ast-grep` — structural code transformations → `sg` skill
-- `jb` — background jobs → `jb` skill
+- `sg` / `ast-grep` — structural refactors → `sg` skill
 - `hyperfine` — benchmarking → `hyperfine` skill
-- `nu-data` — data processing (jq/awk replacement) → `nu-data` skill
+- `nu` — typed data pipelines; prefer over `jq`/`awk` for multi-format, structured, or heterogeneous data → `nu-data` skill
 
-**Task tracking:** `tk` — persists across compaction. Priority: `-p [0-4]` (1=urgent, 2=high, 3=med, 4=low). → see Task Discipline
+Semantic search (`og`, `colgrep`) and entity-level git tools (`sem diff`, `sem impact`, `sem blame`) — load via their skills when a conceptual query or cross-entity analysis comes up; don't reach for them by default.
 
-**Code search:** Default to `Grep` tool (rg) for exact strings. Use semantic tools for concept search — more token-efficient than scanning raw matches.
+**Code search default:** `rg` (ripgrep) for exact strings (not `grep`). Reach for semantic search only when exact-string fails.
 
-- `og "query" ./path` — semantic search (omengrep). Init: `og build`. Flags: `-n N`, `-t py,rs`, `-l`, `file#func`, `file:42`
-- `colgrep "query" ./path` — semantic search (ColBERT). Init: `colgrep init`. Flags: `-k N`, `-c`, `--include "*.rs"`, `-e "pattern"` (hybrid)
-
-**Git tools:**
-
-- `sem diff` — entity-level semantic diffs. `sem impact <entity>` | `sem blame <file>`
-- `weave` — entity-level merge driver (auto-used by git merge)
-
-**Search:**
+**Search hierarchy** (where available in harness):
 
 | Tool      | Use                                   |
 | --------- | ------------------------------------- |
@@ -55,154 +47,147 @@
 | Context7  | Library/framework docs                |
 | Exa       | Code examples, RAG, semantic search   |
 
-**UI:** lucide/heroicons. No emoji unless requested.
-
 ## Development
 
-**Philosophy:** Do it right first—workarounds become permanent. Fix what you touch. Research → understand → plan → implement.
+**Philosophy:** Do it right first — workarounds become permanent. Fix what you touch. Research → understand → plan → implement.
 
-**Design:** Clear > clever. Hard to explain = wrong abstraction. Small interfaces. A little copying over a little dependency.
-
-**Functional core, imperative shell:** Pure logic at the center; push side effects (IO, state, randomness) to the edges.
-
-**Performance:** Profile before optimizing.
+**Design:** Clear > clever. Hard to explain = wrong abstraction. Small interfaces. A little copying beats a little dependency. Functional core, imperative shell — side effects at the edges.
 
 **Problem-solving:** Reproduce before fixing. Question assumptions. If something seems off, stop and verify. If stuck, reframe.
 
 **Quality:**
 
-- Fix root cause, not symptoms
-- Read code before changing it
-- Prefer the environment's built-in file-editing mechanism over ad hoc Python or shell rewrites; use scripts only when they are the right tool.
-- Update docs—record corrections in AGENTS.md to prevent repeats
-- Ask before breaking APIs
+- Fix root cause, not symptoms.
+- Read code before changing it.
+- Prefer the harness's file-editing primitives over ad hoc shell rewrites (`sed`/`awk`/heredoc `cat >`). Scripts only when they're the right tool.
+- Update docs — record recurring corrections in `AGENTS.md` to prevent repeats.
+- Ask before breaking APIs.
 
-**Errors:** Let errors propagate. Catch only to recover.
+**Restraint:** Do what the task requires, no more.
 
-**Refactoring:** Clean breaks, not gradual migrations. When changing interfaces, signatures, or patterns:
+- No speculative features, abstractions, or helpers for hypothetical future needs. Three similar lines beat a premature abstraction.
+- No defensive checks for conditions that can't happen. Trust internal code and framework guarantees; validate only at system boundaries (user input, external APIs, deserialized data).
+- No scope creep. If you see unrelated issues, note them (task log, PR comment); don't fix them in the same change.
+- Match existing conventions (imports, naming, error patterns, formatting) before introducing your own. Consistency beats personal preference.
 
-- Replace the changed component wholesale.
-- Do not leave old code, shims, fallbacks, compatibility branches, or deprecation scaffolding unless the user explicitly asks to preserve compatibility or add deprecation.
+**Errors:** Let them propagate. Catch only to recover. Never swallow — if you catch, either handle meaningfully or re-raise with context.
+
+**Refactoring:** Clean breaks, not gradual migrations. When changing interfaces or patterns, replace wholesale — no shims, fallbacks, compatibility branches, or deprecation scaffolding unless explicitly requested.
 
 **Style:**
 
-- **Naming:** Proportional to scope. Descriptive suffixes (`_batched`, `_async`) over version markers.
-- **Comments:** Why, not what—only when non-obvious from code. Never narrate changes. No TODOs. No commented-out code.
-- **Files:** Single concern. Tests separate.
+- Naming proportional to scope. Descriptive suffixes (`_batched`, `_async`) over version markers.
+- Comments: why, not what. Only when non-obvious from code. No TODOs. No commented-out code. Never narrate changes.
+- Files: single concern. Tests separate.
 
-**Testing:** Unit or e2e only. No mocks—they invent behaviors. Test failure paths, not just happy paths. Flaky tests are bugs. Verify tests actually ran.
+**Testing:** Unit or e2e. No mocks of your own code — they invent behaviors. Fakes/stubs only at true external boundaries (paid APIs, hardware, non-deterministic third parties). Test failure paths, not just happy paths. Flaky tests are bugs. Verify tests actually ran.
 
-**Benchmarks:** Compare equivalent configs. Report config, dataset, environment, methodology. → `hyperfine` skill
+**Performance:** Profile before optimizing. Benchmarks compare equivalent configs; report config, dataset, environment, methodology. → `hyperfine` skill.
 
-**Review:** `/review` before major commits.
+**Finishing up:**
+
+- Verify before declaring done — build, tests, or exercise the feature. "Looks right" is not verification. → `verification-before-completion` skill.
+- For substantial changes (multi-file refactors, new features), run `/review` before the final commit of the set.
+- Once it works, ask: _would I write this from scratch this way, knowing what I know now?_ If no, do a cleanup pass — debugging detours, defensive checks the final design doesn't need, names that reflect exploration not intent. → `rewrite` skill.
 
 ## Workflow
 
-**VCS:** Default to `git`. Use `jj` skill if `.jj/` directory is present.
+**VCS:** `git` by default. Use `jj` skill if `.jj/` is present.
 
-**Git:** ALWAYS commit immediately after finishing each coherent change set, without waiting for a reminder or permission. One logical change = one commit (function + callers, feature + tests). Push regularly. Confirm before: PRs, publishing, force push, destructive ops. No force push main.
+**Commits — overrides harness default:** Commit immediately after each coherent change set without asking. One logical change = one commit (function + callers, feature + tests). Push regularly.
 
-**Commits:** `type(scope): msg` — scope mandatory. → `git-commit` skill for full spec.
+Format: `type(scope): msg` — scope mandatory. → `git-commit` skill.
 
-**Releases:** NEVER trigger without explicit approval. Wait for CI.
+**Confirm before:** PRs, publishing, force push, destructive ops. Never force-push protected or shared branches (`main`, `master`, `trunk`, `develop`, release branches).
+
+**Releases:** Never trigger without explicit approval. Wait for CI.
 
 **Versions:** Bump only when instructed. Sequential only (0.0.1 → 0.0.2).
 
 ## ai/ Directory
 
-Persistent context per project — survives compaction. Update before implementing; stale files mislead.
+Persistent project context — survives compaction. Update before implementing; stale files mislead. Load topic files relevant to the current task only, not all of `ai/`.
 
-**Session start:** `ai/README.md` → `ai/STATUS.md` → load relevant topic files for the current task only.
-
-| File           | Purpose                                                   | Update                                             |
-| :------------- | :-------------------------------------------------------- | :------------------------------------------------- |
-| `README.md`    | Index only — pointers, ~150 chars/entry, no content       | Immediately on any add/change/delete               |
-| `STATUS.md`    | Phase, focus, blockers                                    | Every session                                      |
-| `DESIGN.md`    | Current architecture                                      | On architecture changes                            |
-| `DECISIONS.md` | **Principles** (distilled) + **Log** (recent ~20 entries) | Append to Log; compact when > 20 entries           |
-| `PLAN.md`      | Active plan or sprint index (managed by `/sprint`)        | As sprints progress; extract outcomes then replace |
+| File           | Purpose                                             | Update                                     |
+| :------------- | :-------------------------------------------------- | :----------------------------------------- |
+| `README.md`    | Index only — pointers, ~150 chars/entry, no content | Immediately on any add/change/delete       |
+| `STATUS.md`    | Phase, focus, blockers                              | Every session                              |
+| `DESIGN.md`    | Current architecture                                | On architecture changes                    |
+| `DECISIONS.md` | Principles (distilled) + Log (recent ~20)           | Append to Log; compact when > 20           |
+| `PLAN.md`      | Active plan or sprint index (managed by `/sprint`)  | As sprints progress; replace on completion |
 
 Subdirs: `research/` · `design/` · `review/` · `sprints/` · `tmp/` (gitignored)
 
-**Key rules:** `README.md` is index-only — update it immediately when files change. Don't persist derivable facts. `ai/` is hints, not truth — verify against code. Merge before multiplying; delete resolved files.
+**Rules:** `ai/` is hints, not truth — verify against code. Don't persist derivable facts. Merge before multiplying; delete resolved files.
 
 **Flow:** `research/` → `DESIGN.md` → `/sprint` → `PLAN.md` → code → `review/`
 
-**Project config:** `AGENTS.md` primary. `ln -s AGENTS.md CLAUDE.md` (both at repo root) for own repos. OSS repos often use `./CLAUDE.md` — follow whatever is present.
+**Project config:** `AGENTS.md` primary. `ln -s AGENTS.md CLAUDE.md` for own repos. OSS repos often use `./CLAUDE.md` — follow what's present.
 
 **Keeping `ai/` and `.tasks/` local:** `.git/info/exclude` → `git-local-exclude` skill. Full conventions → `ai-context` skill. Init/audit → `setup-ai` skill.
 
 ## Task Discipline
 
-Use `tk` for all tasks—persists across compaction. Details in task logs, not STATUS.md.
+`tk` for all tasks — persists across compaction. Details in task logs, not `STATUS.md`.
 
-**Commands:** `tk add "title" -p 3 -d "context"` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>` | `tk show <id>` | `tk log <id> "msg"` | `tk block <id> <blocker>` | `tk mv <id> <project>`
+**Commands:** `tk add "title" -p N -d "context"` | `tk ls` | `tk ready` | `tk start <id>` | `tk done <id>` | `tk show <id>` | `tk log <id> "msg"` | `tk block <id> <blocker>` | `tk mv <id> <project>`
 
-**Note:** Task IDs are opaque — when referencing a task ID, include the title unless it was just mentioned.
+Priority `-p` (1–4): 1=urgent, 2=high, 3=med, 4=low. Optional — omit if unsure.
 
-**Session start:** Read `ai/README.md` → `ai/STATUS.md` → `tk ready` → `tk start <id>`
+**Task IDs are opaque** — when referencing one, include the title unless it was just mentioned.
 
-**Before investigating:** `tk show <id>` for existing logs, check ai/, git history. Never start fresh without checking.
+**Session start:** `ai/README.md` → `ai/STATUS.md` → `tk ready` → `tk start <id>`.
 
-**During work:** `tk log <id> "finding"` immediately—errors, root cause, file paths. Update `ai/STATUS.md` on focus shifts, blockers, significant progress.
+**Before investigating:** Never start fresh. Check `tk show <id>`, `ai/`, and git history first.
+
+**During work:** `tk log <id> "finding"` immediately — errors, root cause, file paths. Update `ai/STATUS.md` on focus shifts, blockers, real progress.
 
 **Completion:** `tk start` when beginning, `tk done` when complete. Stale status causes confusion.
 
-## Coordinator Mindset
-
-Operate as a **Coordinator** prioritizing synthesis and verification over mechanical action.
-
-- **Synthesis Before Action:** Understand before acting. Synthesize findings into a plan in `ai/` for significant changes.
-- **Selective Delegation:** Small, local tasks—do it yourself. Reserve subagents for parallel research, context isolation, or broad implementation.
-- **Red-Green Verification:** Reproduce before fixing. Verify solution with tests.
-- **Efficiency over Ceremony:** Avoid subagent "slop" and mirrored task tables.
-
 ## Subagent Delegation
 
-For context isolation, parallelism, fresh perspective. `ai/` files are shared memory.
+Applies to harnesses with subagents (Claude Code, Droid). Subagents provide context isolation, parallelism, and fresh perspective. `ai/` files are the shared memory between parent and agent.
 
-| Agent        | Purpose                          | Persists to  |
-| ------------ | -------------------------------- | ------------ |
-| `researcher` | External knowledge, synthesis    | ai/research/ |
-| `designer`   | Architecture, planning           | ai/design/   |
-| `developer`  | Well-scoped implementation       | —            |
-| `reviewer`   | Full validation (build/run/test) | ai/review/   |
-| `profiler`   | Deep performance analysis        | ai/review/   |
+| Agent        | Purpose                          | Persists to    |
+| ------------ | -------------------------------- | -------------- |
+| `researcher` | External knowledge, synthesis    | `ai/research/` |
+| `designer`   | Architecture, planning           | `ai/design/`   |
+| `developer`  | Well-scoped implementation       | —              |
+| `reviewer`   | Full validation (build/run/test) | `ai/review/`   |
+| `profiler`   | Deep performance analysis        | `ai/review/`   |
 
-**Subagent model:** Override with `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6`.
+**Rules:**
 
-**`developer` requires a spec** — not for open-ended tasks. Pass spec path or inline. If no spec, agent stops and reports.
+- **Synthesis before delegation.** Understand the problem yourself first; synthesize into a plan in `ai/` before spawning agents for significant changes.
+- **`developer` requires a written spec** — not for open-ended tasks. If no spec, it stops and reports.
+- **Small/local tasks: do them yourself.** Reserve subagents for parallel research, context isolation, or scoped implementation.
+- **Before spawning:** run build/test/lint once in the parent; include the output in the agent brief.
+- **Curate context; don't dump history.** Objectives at the end of the brief.
+- **Avoid parallel agents when** results depend on each other · one agent covers the scope · the approach is unvalidated.
+- **Subagent model override:** `CLAUDE_CODE_SUBAGENT_MODEL=<model-id>` (typically current Sonnet for faster/cheaper runs).
 
-**When to spawn:** Batch searches, large research → `researcher`. Significant changes → `reviewer`.
-
-**Teams vs subagents:** Teams (TeamCreate) for coordinated parallel work with shared task lists. Subagents for isolated one-off tasks.
-
-**Before spawning:** Run build/test/lint once in the parent; include output in agent context.
-
-**Avoid parallel agents when:** results depend on each other · one agent covers the scope · approach is unvalidated.
-
-**Context handoff:** Curate relevant context, don't dump history. Objectives at END (recency bias).
+Teams (where available) coordinate multiple agents on a shared task list; subagents are isolated one-offs.
 
 ## Context Management
 
-**Compact/new session at:** Feature complete · Switching codebase areas · Research synthesized · ~150k tokens. Proactively advise user.
+**Compact or start a new session at:** feature complete · switching codebase areas · research synthesized · approaching context pressure (varies by model — watch for degrading recall, not a fixed token count). Proactively advise the user.
 
-**Before compact:** Update `ai/STATUS.md` and `ai/README.md` (index), `tk done` completed tasks, `tk log` any uncommitted findings.
+**Before compact:** update `ai/STATUS.md` and `ai/README.md`, `tk done` completed tasks, `tk log` any uncommitted findings.
 
-**Keep ai/ lean:** Root files stay minimal. Subdirs (research/, design/, review/) exist by default but stay empty until needed.
+**Keep `ai/` lean:** root files minimal; subdirs (`research/`, `design/`, `review/`) stay empty until needed.
 
-## Code Standards (Single Pass)
+## Code Standards
 
-Use during every `review` or `simplify` operation:
+Apply during every `review` or `simplify` pass:
 
-| Category        | Signal                                   | Fix                                                 |
-| :-------------- | :--------------------------------------- | :-------------------------------------------------- |
-| **Correctness** | Logic errors, edge cases, safety risks   | Fix root cause, add tests                           |
-| **Complexity**  | Function > 40 lines, Nesting > 3         | Split, early returns, guard clauses                 |
-| **Quality**     | Poor naming, inconsistent style          | Rename for intent, normalize style                  |
-| **Efficiency**  | O(n^2) logic, unnecessary allocations    | Optimize algorithm, reuse abstractions              |
-| **Cleanliness** | Duplication, dead code, verbose comments | Extract shared logic, delete dead code, clarify WHY |
+| Category        | Watch for                                 | Fix                                       |
+| :-------------- | :---------------------------------------- | :---------------------------------------- |
+| **Correctness** | Logic errors, edge cases, safety risks    | Fix root cause, add tests                 |
+| **Complexity**  | Long functions, deep nesting              | Split, early returns, guard clauses       |
+| **Quality**     | Poor naming, inconsistent style           | Rename for intent, normalize              |
+| **Efficiency**  | Accidental O(n²), unnecessary allocations | Better algorithm, reuse abstractions      |
+| **Cleanliness** | Duplication, dead code, verbose comments  | Extract shared logic, delete, clarify WHY |
 
 ---
 
-**Updated:** 2026-04-02 | github.com/nijaru/agent-contexts
+**Updated:** 2026-04-24 | github.com/nijaru/agent-contexts

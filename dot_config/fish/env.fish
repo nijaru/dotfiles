@@ -2,7 +2,7 @@
 # Core environment configuration for Fish
 
 # Core environment variables
-set -gx EDITOR "zed"
+set -gx EDITOR zed
 set -gx VISUAL "zed --wait"
 set -gx MOAR "--style=catppuccin-macchiato --quit-if-one-screen --no-statusbar --wrap"
 set -gx BAT_THEME "Catppuccin Macchiato"
@@ -12,11 +12,8 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_STATE_HOME "$HOME/.local/state"
-switch $__fish_uname
-    case Darwin
-        set -gx XDG_RUNTIME_DIR "$HOME/Library/Application Support/Ladybird"
-    case '*'
-        set -gx XDG_RUNTIME_DIR "/run/user/$UID"
+if test "$__fish_uname" != Darwin
+    set -gx XDG_RUNTIME_DIR "/run/user/"(id -u)
 end
 
 # XDG directories are created by chezmoi run_once script
@@ -34,7 +31,7 @@ set -gx COMPOSE_DOCKER_CLI_BUILD 1
 # Go Language Settings
 set -gx GOPATH "$HOME/go"
 set -gx GOBIN "$GOPATH/bin"
-set -gx GOTOOLCHAIN "local"
+set -gx GOTOOLCHAIN local
 set -gx GOFLAGS "-buildvcs=false -trimpath"
 
 # Rust Language Settings
@@ -43,14 +40,14 @@ set -gx RUSTUP_HOME "$HOME/.rustup"
 set -gx RUST_BACKTRACE 1
 
 # Node.js Settings
-set -gx NODE_ENV "development"
+set -gx NODE_ENV development
 set -gx NPM_CONFIG_USERCONFIG "$XDG_CONFIG_HOME/npm/npmrc"
 
 # Python Settings
 set -gx PYTHONDONTWRITEBYTECODE 1 # Prevent .pyc files
-set -gx PYTHONUNBUFFERED 1        # Disable output buffering
-set -gx PYTHONFAULTHANDLER 1      # Better tracebacks
-set -gx PYTHONHASHSEED "random"   # Secure hash seeds
+set -gx PYTHONUNBUFFERED 1 # Disable output buffering
+set -gx PYTHONFAULTHANDLER 1 # Better tracebacks
+set -gx PYTHONHASHSEED random # Secure hash seeds
 
 # Ruby Configuration
 set -gx GEM_HOME "$XDG_DATA_HOME/gem"
@@ -69,10 +66,10 @@ switch $__fish_uname
         # GPG Configuration
         set -gx GPG_TTY (tty)
         # CPU/Memory optimizations
-        set -gx OBJC_DISABLE_INITIALIZE_FORK_SAFETY "YES"
+        set -gx OBJC_DISABLE_INITIALIZE_FORK_SAFETY YES
         # Container Configuration (Docker & OrbStack)
         set -gx DOCKER_HOST "unix://$HOME/.orbstack/run/docker.sock"
-        set -gx DOCKER_DEFAULT_PLATFORM "linux/arm64"
+        set -gx DOCKER_DEFAULT_PLATFORM linux/arm64
 
         # Homebrew setup (cached, auto-invalidates on brew update)
         set -l brew_prefix (test $__fish_uname_m = arm64 && echo /opt/homebrew || echo /usr/local)
@@ -80,18 +77,18 @@ switch $__fish_uname
         set -l brew_bin "$brew_prefix/bin/brew"
         # Invalidate cache if brew binary is newer than cache
         if not test -f $brew_cache; or test $brew_bin -nt $brew_cache
-            $brew_bin shellenv > $brew_cache
+            $brew_bin shellenv >$brew_cache
         end
         source $brew_cache
 
         # Homebrew performance optimizations
-        set -gx HOMEBREW_DOWNLOAD_CONCURRENCY "auto"  # Enable parallel downloads (4.6.0+)
-        set -gx HOMEBREW_NO_AUTO_UPDATE 1              # Disable auto-update on install (update manually)
-        set -gx HOMEBREW_NO_INSTALL_CLEANUP 1          # Skip cleanup during install (cleanup manually)
-        set -gx HOMEBREW_NO_ENV_HINTS 1                # Reduce verbose output
-        set -gx HOMEBREW_NO_ANALYTICS 1                # Disable analytics
-        set -gx HOMEBREW_BOOTSNAP 1                    # Enable bootsnap for faster Ruby startup
-        set -gx HOMEBREW_NO_INSECURE_REDIRECT 1        # Enforce HTTPS only (security)
+        set -gx HOMEBREW_DOWNLOAD_CONCURRENCY auto # Enable parallel downloads (4.6.0+)
+        set -gx HOMEBREW_NO_AUTO_UPDATE 1 # Disable auto-update on install (update manually)
+        set -gx HOMEBREW_NO_INSTALL_CLEANUP 1 # Skip cleanup during install (cleanup manually)
+        set -gx HOMEBREW_NO_ENV_HINTS 1 # Reduce verbose output
+        set -gx HOMEBREW_NO_ANALYTICS 1 # Disable analytics
+        set -gx HOMEBREW_BOOTSNAP 1 # Enable bootsnap for faster Ruby startup
+        set -gx HOMEBREW_NO_INSECURE_REDIRECT 1 # Enforce HTTPS only (security)
 end
 
 # Load API keys (secrets.fish is NOT tracked by chezmoi)

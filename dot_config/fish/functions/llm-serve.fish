@@ -101,6 +101,14 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
                 echo "llm-serve: systemd-run not found; use 'llm-serve serve' instead" >&2
                 return 1
             end
+            if not set -q XDG_RUNTIME_DIR
+                set -gx XDG_RUNTIME_DIR /run/user/(id -u)
+            end
+            if not test -S $XDG_RUNTIME_DIR/bus
+                echo "llm-serve: systemd user bus not reachable at $XDG_RUNTIME_DIR/bus" >&2
+                echo "  fix: sudo loginctl enable-linger "(id -un)"; then re-login" >&2
+                return 1
+            end
             if systemctl --user is-active --quiet $unit.service
                 echo "$unit.service is already running"
                 systemctl --user status $unit.service --no-pager

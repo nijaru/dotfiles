@@ -39,16 +39,16 @@
 Fedora serves the primary local model with llama.cpp on its default port 8080.
 
 - **Fedora endpoint:** `http://fedora:8080/v1` (CUDA backend, via Tailscale)
-- **Primary model:** `qwen3.6:27b` (Qwen3.6 27B, 128K ctx, llama.cpp)
+- **Provider / model:** `fedora` / `qwen3.6:27b` (Qwen3.6 27B, 256K ctx, llama.cpp)
 - **Serve command on Fedora:** `llm-serve start` (systemd user service) or `llm-serve serve` foreground; bare `llm-serve` prints help.
 
 Agent integrations:
 
-| Agent    | Config location                     | How to select                                    |
-| -------- | ----------------------------------- | ------------------------------------------------ |
+| Agent    | Config location                                                                                        | How to select             |
+| -------- | ------------------------------------------------------------------------------------------------------ | ------------------------- |
 | pi       | `~/.pi/agent/models.json`; settings patched by `.chezmoiscripts/run_onchange_configure-pi-settings.sh` | Default provider `fedora` |
-| opencode | `dot_config/opencode/opencode.json` | Model picker                                     |
-| droid    | `dot_factory/settings.json`         | `/model` selector                                |
+| opencode | `dot_config/opencode/opencode.json`                                                                    | Model picker              |
+| droid    | `dot_factory/settings.json`                                                                            | `/model` selector         |
 
 `pi-fedora` is a convenience wrapper for `--provider fedora`.
 

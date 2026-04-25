@@ -113,8 +113,8 @@
         "available_models": [
           {
             "name": "qwen3.6:27b",
-            "display_name": "fedora/qwen3.6:27b",
-            "max_tokens": 131072,
+            "display_name": "qwen3.6:27b",
+            "max_tokens": 262144,
             "max_output_tokens": 32768,
             "capabilities": {
               "tools": true,

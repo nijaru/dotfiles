@@ -50,9 +50,9 @@
       "models": [
         {
           "id": "qwen3.6:27b",
-          "name": "Qwen3.6 27B 128K",
+          "name": "qwen3.6:27b",
           "input": ["text"],
-          "contextWindow": 131072
+          "contextWindow": 262144
         }
       ]
     },

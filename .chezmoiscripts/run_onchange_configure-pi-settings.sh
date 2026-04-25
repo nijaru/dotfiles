@@ -43,7 +43,7 @@ providers["fedora"] = {
     "baseUrl": "http://fedora:8080/v1",
     "api": "openai-completions",
     "apiKey": "llama",
-    "models": [{"id": "qwen3.6:27b", "contextWindow": 131072}],
+    "models": [{"id": "qwen3.6:27b", "contextWindow": 262144}],
 }
 providers.pop("llama-fedora", None)
 

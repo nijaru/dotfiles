@@ -79,10 +79,6 @@ def pullall [] {
     print ""
 }
 
-def --wrapped llm-serve [...args: string] {
-    ^llm-serve ...$args
-}
-
 # ── Aliases ─────────────────────────────────────────────
 
 # Navigation

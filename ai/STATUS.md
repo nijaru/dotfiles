@@ -11,6 +11,7 @@
 - `llm-serve` is a fish/Nushell function wrapping `hf download` + `llama-server`; bare `llm-serve` prints help. `--unc` selects the HauhauCS Aggressive uncensored secondary model on normal subcommands.
 
 Skills sync fully simplified. Skill updates stay in chezmoi source under `dot_claude/skills/`, then apply via chezmoi after review.
+Save skill clarified: agents should persist only to existing `ai/`/`tk` surfaces, avoid initializing new systems during save, and avoid commits purely because the skill ran.
 
 ## Current State
 

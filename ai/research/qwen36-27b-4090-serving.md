@@ -40,6 +40,15 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
   - `yo`, `max_tokens=64`: prompt `145.92 tok/s`, decode `45.29 tok/s`, wall `1.51s`.
   - `llm-serve <command> --unc` selects it with alias `qwen3.6:27b-uncensored`, default port `8080`, and systemd unit `llm-serve-uncensored`.
 
+## Watch Items
+
+- `antirez/deepseek-v4-gguf` + `antirez/llama.cpp-deepseek-v4-flash`
+  - User-observed 2026-04-26 via X: antirez is running a DeepSeek v4 Flash GGUF path, with external chatter about a DeepSeek-v4-flash quant.
+  - Quick source check: the fork describes experimental DeepSeek v4 Flash support in llama.cpp, targeting 128 GB MacBooks with 2-bit quantization of routed experts; it says the path was not extensively tested and currently emphasizes CPU/Metal rather than CUDA.
+  - Hugging Face currently lists `antirez/deepseek-v4-gguf` as GGUF/conversational, MIT, `284B` params, `deepseek4` architecture, empty model-card content, and no detected quantization variants.
+  - Do not switch Fedora defaults for this now. Current `qwen3.6:27b` on Fedora remains the practical baseline because it is already wired into agents, verified on the 4090, and fits the desired long-context serving shape.
+  - Revisit only after upstream llama.cpp or a CUDA-capable fork lands clean support, the GGUF/quant details stabilize, and a coding-agent eval shows a quality gain large enough to justify lower maturity and likely lower speed.
+
 ## vLLM Findings
 
 `Lorbus/Qwen3.6-27B-int4-AutoRound` is promising on paper because it preserves MTP, but mainline vLLM `0.19.1` cannot serve 262k on the 4090:

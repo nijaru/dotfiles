@@ -240,6 +240,99 @@ alias gcleanup = git clean -xfd
 alias ggarbage = git gc --aggressive --prune=now
 alias gsubr = git config submodule.recurse true
 
+def llm-serve [
+    command?: string
+    --file (-f): string = "Qwen3.6-27B-Q5_K_M.gguf"
+    --served-name: string = "qwen3.6:27b"
+    --ctx (-c): int = 262144
+    --batch (-b): int = 2048
+    --ubatch: int = 512
+    --port (-p): int = 8080
+    --host (-H): string = "0.0.0.0"
+    --download-only
+    --verify-only
+] {
+    let run_input = ($command | default "help")
+    let command = (if ($run_input | str starts-with "-") { "serve" } else { $run_input })
+    let model = "unsloth/Qwen3.6-27B-GGUF"
+    let unit = "llm-serve"
+    let pattern = 'llama-server .*Qwen3\.6-27B|llama-server .*--alias qwen3\.6:27b'
+
+    if $command in ["help", "-h", "--help"] {
+        print "Usage: llm-serve [serve|start|stop|restart|status] [options]"
+        print ""
+        print "Options:"
+        print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)"
+        print "  --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)"
+        print "  --port, -p        listen port (default 8080)"
+        print "  --host, -H        bind address (default 0.0.0.0)"
+        print "  --ctx, -c         max context length (default 262144)"
+        print "  --batch, -b       llama.cpp logical batch size (default 2048)"
+        print "  --ubatch          llama.cpp physical microbatch size (default 512)"
+        print "  --download-only   prefetch model and exit"
+        print "  --verify-only     verify tooling/auth/model snapshot, then exit"
+        return
+    }
+
+    if $command == "stop" {
+        if (which systemctl | is-not-empty) { systemctl --user stop $"($unit).service" err> /dev/null }
+        if (which pkill | is-not-empty) { pkill -f $pattern err> /dev/null }
+        return
+    }
+
+    if $command == "status" {
+        if (which systemctl | is-not-empty) and ((systemctl --user is-active --quiet $"($unit).service"; $env.LAST_EXIT_CODE) == 0) {
+            systemctl --user status $"($unit).service" --no-pager
+            return
+        }
+        if (which pgrep | is-not-empty) { pgrep -af $pattern }
+        return
+    }
+
+    mut run_command = $command
+    if $command == "restart" {
+        if (which systemctl | is-not-empty) { systemctl --user stop $"($unit).service" err> /dev/null }
+        if (which pkill | is-not-empty) { pkill -f $pattern err> /dev/null }
+        $run_command = "start"
+    }
+
+    if not ($run_command in ["serve", "start"]) {
+        error make {msg: $"llm-serve: unknown command ($command)"}
+    }
+    if (which llama-server | is-empty) { error make {msg: "llm-serve: llama-server not found; build llama.cpp with CUDA and put it on PATH"} }
+    if (which hf | is-empty) { error make {msg: "llm-serve: hf not found; install Hugging Face CLI"} }
+    hf auth whoami --format json | ignore
+
+    print $"Preparing ($model)"
+    print $"  alias        ($served_name)"
+    print $"  endpoint     http://($host):($port)/v1"
+    print $"  ctx          ($ctx)"
+    print $"  batch        ($batch)"
+    print $"  ubatch       ($ubatch)"
+    print $"  file         ($file)"
+    print "  cache        ~/.cache/huggingface/hub/"
+
+    HF_HUB_DISABLE_PROGRESS_BARS=1 hf download $model --include $file | ignore
+    let local_model = (ls ($"~/.cache/huggingface/hub/models--($model | str replace -a '/' '--')/snapshots/*/($file)" | path expand) | get name | first)
+    print $"Verified GGUF: ($local_model)"
+    if $download_only or $verify_only { return }
+
+    let llama_cmd = [
+        llama-server -m $local_model --alias $served_name
+        --host $host --port ($port | into string) -ngl "99" -c ($ctx | into string) -np "1" -fa "on"
+        --cache-type-k q4_0 --cache-type-v q4_0
+        -b ($batch | into string) -ub ($ubatch | into string) --split-mode none
+    ]
+
+    if $run_command == "serve" {
+        ^$llama_cmd.0 ...($llama_cmd | skip 1)
+    } else {
+        if (which systemd-run | is-empty) { error make {msg: "llm-serve: systemd-run not found; use 'llm-serve serve' instead"} }
+        systemd-run --user --unit $unit --collect ...$llama_cmd
+        systemctl --user status $"($unit).service" --no-pager
+    }
+}
+
 # ── Vendor Autoload Bootstrap ───────────────────────────
 # Integration scripts are generated once, then auto-sourced on startup.
 # Regenerate with: rm ($nu.data-dir | path join "vendor/autoload/*.nu")

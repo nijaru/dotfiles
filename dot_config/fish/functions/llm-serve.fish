@@ -1,8 +1,10 @@
 function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l model unsloth/Qwen3.6-27B-GGUF
-    set -l file Qwen3.6-27B-UD-Q4_K_XL.gguf
+    set -l file Qwen3.6-27B-Q5_K_M.gguf
     set -l alias qwen3.6:27b
     set -l ctx 262144
+    set -l batch 2048
+    set -l ubatch 512
     set -l host 0.0.0.0
     set -l port 8080
     set -l unit llm-serve
@@ -14,6 +16,8 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
             case serve start stop restart status help -h --help
                 set command $argv[1]
                 set -e argv[1]
+            case '--*' '-*'
+                set command serve
         end
     end
 
@@ -31,6 +35,12 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
             case --ctx -c
                 set i (math $i + 1)
                 set ctx $argv[$i]
+            case --batch -b
+                set i (math $i + 1)
+                set batch $argv[$i]
+            case --ubatch -ub
+                set i (math $i + 1)
+                set ubatch $argv[$i]
             case --port -p
                 set i (math $i + 1)
                 set port $argv[$i]
@@ -80,6 +90,8 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     echo "  alias        $alias"
     echo "  endpoint     http://$host:$port/v1"
     echo "  ctx          $ctx"
+    echo "  batch        $batch"
+    echo "  ubatch       $ubatch"
     echo "  file         $file"
     echo "  cache        ~/.cache/huggingface/hub/"
 
@@ -91,7 +103,8 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
 
     set -l llama_cmd llama-server -m $local_model --alias $alias \
         --host $host --port $port -ngl 99 -c $ctx -np 1 -fa on \
-        --cache-type-k q4_0 --cache-type-v q4_0
+        --cache-type-k q4_0 --cache-type-v q4_0 \
+        -b $batch -ub $ubatch --split-mode none
 
     switch $command
         case serve
@@ -130,11 +143,13 @@ Commands:
   status          show systemd status or matching server processes
 
 Options:
-  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)
+  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)
   --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)
   --port, -p        listen port (default 8080)
   --host, -H        bind address (default 0.0.0.0)
   --ctx, -c         max context length (default 262144)
+  --batch, -b       llama.cpp logical batch size (default 2048)
+  --ubatch, -ub     llama.cpp physical microbatch size (default 512)
   --download-only   prefetch model and exit
   --verify-only     verify tooling/auth/model snapshot, then exit"
 end

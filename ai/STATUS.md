@@ -2,6 +2,7 @@
 
 ## Current Focus
 
+- Qwen3.6 27B serving research: quality-first default should be stock llama.cpp with Unsloth `Q5_K_M` at 262k context; see `ai/research/qwen36-27b-4090-serving.md`.
 - VCS agent skills tightened: `jj` and GitButler CLI (`but`) source and destination are in sync.
 - Local agent configs now target Fedora llama.cpp Qwen3.6 27B on `http://fedora:8080/v1`.
 - Ollama providers are retired from Pi, OpenCode, Droid/Factory, Crush, and Zed managed configs.

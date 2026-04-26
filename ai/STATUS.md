@@ -3,6 +3,7 @@
 ## Current Focus
 
 - Qwen3.6 27B serving research: stable default is stock llama.cpp with Unsloth `UD-Q4_K_XL` at 262k context; `Q5_K_M` fits idle but crashed on long Pi prompts; see `ai/research/qwen36-27b-4090-serving.md`.
+- Latest vLLM/TurboQuant 3090 report is recorded as an experiment path, not a default replacement: patched vLLM can be faster at lower context, but the corrected single-card path trades away the current 262k llama.cpp shape.
 - VCS agent skills tightened: `jj` and GitButler CLI (`but`) source and destination are in sync.
 - Local agent configs now target Fedora llama.cpp Qwen3.6 27B on `http://fedora:8080/v1`.
 - Ollama providers are retired from Pi, OpenCode, Droid/Factory, Crush, and Zed managed configs.
@@ -31,4 +32,3 @@ Skills sync fully simplified. Skill updates stay in chezmoi source under `dot_cl
 - `ai/skills-sync.md` — skill path architecture and tool discovery table
 - `ai/shell-migration.md` — tide/starship/nushell migration notes
 - `ai/research/claude-code-statusline-api.md` — statusline JSON schema and gotchas
-- `ai/ollama-setup.md` — stale Ollama setup notes, retained only as migration history

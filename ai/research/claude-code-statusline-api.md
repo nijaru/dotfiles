@@ -1,3 +1,9 @@
+---
+date: 2026-02-28
+summary: Claude Code statusline JSON schema, trigger behavior, and shell rendering gotchas.
+status: active
+---
+
 # Claude Code Statusline API
 
 **Last verified:** v2.1.37-2.1.38 (Feb 2026)

@@ -1,6 +1,10 @@
-# Qwen3.6 27B on RTX 4090
+---
+date: 2026-04-26
+summary: Measured Qwen3.6 27B serving tradeoffs on Fedora RTX 4090, with llama.cpp default and vLLM experiments.
+status: active
+---
 
-Date: 2026-04-25
+# Qwen3.6 27B on RTX 4090
 
 Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RTX 4090, prioritizing quality first, then max/high context, then speed.
 
@@ -44,7 +48,14 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
 - No MTP + fp8 KV: available `3.03 GiB`; required `8.18 GiB`.
 - `--language-model-only`: available `3.78 GiB`, estimated max length `119168`.
 
-The TurboQuant vLLM fork may change this with `tq-t4nc`, but it is not the quality-first default until it is tested locally.
+External 3090 vLLM/TurboQuant reports from 2026-04-25 are useful but not a reason to switch defaults yet:
+
+- The reported fast path uses vLLM nightly, `Lorbus/Qwen3.6-27B-int4-AutoRound`, TurboQuant KV, MTP speculative decoding, Genesis hybrid/TurboQuant patches, and a CUDA-graph workaround.
+- Headline result was about `85 tok/s` at `125k` context on a single 24 GB RTX 3090 with vision enabled, but the same write-up's 2026-04-25 update says the original CUDA-graph bypass was mathematically wrong for spec-decode continuation prefill.
+- Genesis `v7.14` P65 routes spec-decode continuation to eager execution instead; reported single-card 24 GB Ampere numbers drop to about `55 tok/s` narrative / `70 tok/s` code at `32k`, while dual-card TP=2 is the cleaner long-context path.
+- Do not bypass vLLM's max-model-len/KV pre-checks. Hybrid DeltaNet/Mamba state, prefix-cache storage, spec-dec scratch blocks, and fragmentation consume capacity beyond the printed KV pool.
+- If revisiting vLLM, test it as a separate service on another port with reproducible SHA verification, tool-call correctness tests, and long-context agent prompts before replacing the current llama.cpp default.
+- The article's llama.cpp suggestion is directly relevant: try mainline llama.cpp speculative decoding with `--model-draft`, pairing the current Qwen3.6 27B GGUF target with a small Qwen draft model. This preserves the 262k-context shape and may improve decode speed without adopting the vLLM patch stack.
 
 ## Recommended Q5 Command
 

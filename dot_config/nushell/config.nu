@@ -251,14 +251,13 @@ def llm-serve [
     --host (-H): string = "0.0.0.0"
     --unc
     --uncensored
-    --gemma
     --download-only
     --verify-only
 ] {
     let run_input = ($command | default "help")
     let command = (if ($run_input | str starts-with "-") { "serve" } else { $run_input })
     let variant_uncensored = ($unc or $uncensored)
-    let variant_selected = ($variant_uncensored or $gemma)
+    let variant_selected = $variant_uncensored
     let default_file = "Qwen3.6-27B-UD-Q4_K_XL.gguf"
     let default_served_name = "qwen3.6:27b"
     let variants = [
@@ -280,30 +279,8 @@ def llm-serve [
             name: "uncensored Qwen3.6 27B"
             stop_command: "llm-serve stop --unc"
         }
-        {
-            unit: "llm-serve-gemma"
-            model: "unsloth/gemma-4-31B-it-GGUF"
-            file: "gemma-4-31B-it-UD-Q4_K_XL.gguf"
-            served_name: "gemma4:31b"
-            pattern: 'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )'
-            name: "Gemma 4 31B"
-            stop_command: "llm-serve stop --gemma"
-        }
-        {
-            unit: "llm-serve-gemma-uncensored"
-            model: "TrevorJS/gemma-4-31B-it-uncensored-GGUF"
-            file: "gemma-4-31B-it-uncensored-Q4_K_M.gguf"
-            served_name: "gemma4:31b-uncensored"
-            pattern: 'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
-            name: "uncensored Gemma 4 31B"
-            stop_command: "llm-serve stop --gemma --unc"
-        }
     ]
-    let selected = (if $gemma and $variant_uncensored {
-        $variants | where unit == "llm-serve-gemma-uncensored" | first
-    } else if $gemma {
-        $variants | where unit == "llm-serve-gemma" | first
-    } else if $variant_uncensored {
+    let selected = (if $variant_uncensored {
         $variants | where unit == "llm-serve-uncensored" | first
     } else {
         $variants | where unit == "llm-serve" | first
@@ -320,7 +297,6 @@ def llm-serve [
         print ""
         print "Options:"
         print "  --unc            use HauhauCS Aggressive uncensored defaults"
-        print "  --gemma          use Gemma 4 31B dense defaults; combine with --unc for uncensored Gemma"
         print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)"
         print "  --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)"
         print "  --port, -p        listen port (default 8080 for both variants)"

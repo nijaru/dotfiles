@@ -10,7 +10,6 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l unit llm-serve
     set -l pattern 'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
     set -l uncensored 0
-    set -l gemma 0
     set -l variant_selected 0
 
     set -l command help
@@ -53,9 +52,6 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
             case --unc --uncensored
                 set uncensored 1
                 set variant_selected 1
-            case --gemma
-                set gemma 1
-                set variant_selected 1
             case --download-only
                 set download_only 1
             case --verify-only
@@ -67,23 +63,7 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
         set i (math $i + 1)
     end
 
-    if test $gemma -eq 1; and test $uncensored -eq 1
-        set model TrevorJS/gemma-4-31B-it-uncensored-GGUF
-        test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
-        and set file gemma-4-31B-it-uncensored-Q4_K_M.gguf
-        test "$alias" = qwen3.6:27b
-        and set alias gemma4:31b-uncensored
-        set unit llm-serve-gemma-uncensored
-        set pattern 'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
-    else if test $gemma -eq 1
-        set model unsloth/gemma-4-31B-it-GGUF
-        test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
-        and set file gemma-4-31B-it-UD-Q4_K_XL.gguf
-        test "$alias" = qwen3.6:27b
-        and set alias gemma4:31b
-        set unit llm-serve-gemma
-        set pattern 'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )'
-    else if test $uncensored -eq 1
+    if test $uncensored -eq 1
         set model HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive
         test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
         and set file Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf
@@ -188,7 +168,6 @@ Commands:
 
 Options:
   --unc            use HauhauCS Aggressive uncensored defaults
-  --gemma          use Gemma 4 31B dense defaults; combine with --unc for uncensored Gemma
   --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)
   --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)
   --port, -p        listen port (default 8080 for both variants)
@@ -223,12 +202,10 @@ function __llm_serve_status --argument-names unit pattern
 end
 
 function __llm_serve_stop_all
-    set -l units llm-serve llm-serve-uncensored llm-serve-gemma llm-serve-gemma-uncensored
+    set -l units llm-serve llm-serve-uncensored
     set -l patterns \
         'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )' \
-        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )' \
-        'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )' \
-        'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
+        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
 
     for unit in $units
         if type -q systemctl
@@ -244,14 +221,12 @@ function __llm_serve_stop_all
 end
 
 function __llm_serve_refuse_if_any_other_running --argument-names selected_unit
-    set -l units llm-serve llm-serve-uncensored llm-serve-gemma llm-serve-gemma-uncensored
-    set -l names "regular Qwen3.6 27B" "uncensored Qwen3.6 27B" "Gemma 4 31B" "uncensored Gemma 4 31B"
-    set -l stop_commands "llm-serve stop" "llm-serve stop --unc" "llm-serve stop --gemma" "llm-serve stop --gemma --unc"
+    set -l units llm-serve llm-serve-uncensored
+    set -l names "regular Qwen3.6 27B" "uncensored Qwen3.6 27B"
+    set -l stop_commands "llm-serve stop" "llm-serve stop --unc"
     set -l patterns \
         'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )' \
-        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )' \
-        'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )' \
-        'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
+        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
 
     for i in (seq 1 (count $units))
         test $units[$i] = $selected_unit

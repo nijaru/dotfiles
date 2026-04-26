@@ -3,14 +3,13 @@
 ## Current Focus
 
 - Qwen3.6 27B serving research: stable default is stock llama.cpp with Unsloth `UD-Q4_K_XL` at 262k context; `Q5_K_M` fits idle but crashed on long Pi prompts; see `ai/research/qwen36-27b-4090-serving.md`.
-- Gemma 4 31B dense is now a non-default `llm-serve --gemma` experiment path: base Gemma uses Unsloth `UD-Q4_K_XL`; `--gemma --unc` uses TrevorJS uncensored `Q4_K_M`. Test long-prompt stability before making either default.
 - DeepSeek v4 Flash GGUF via antirez is recorded as a watch item only; do not replace Fedora Qwen unless CUDA support, quant details, and coding-agent quality/perf are verified.
 - Latest vLLM/TurboQuant 3090 report is recorded as an experiment path, not a default replacement: patched vLLM can be faster at lower context, but the corrected single-card path trades away the current 262k llama.cpp shape. llama.cpp speculative decoding with `Qwen3-0.6B-Q8_0` draft was tested and was slower than baseline.
 - VCS agent skills tightened: `jj` and GitButler CLI (`but`) source and destination are in sync.
 - Local agent configs now target Fedora llama.cpp Qwen3.6 27B on `http://fedora:8080/v1`.
 - Ollama providers are retired from Pi, OpenCode, Droid/Factory, Crush, and Zed managed configs.
 - Zed uses `agent.default_model` plus `language_models.openai_compatible.fedora` for the custom endpoint.
-- `llm-serve` is a fish/Nushell function wrapping `hf download` + `llama-server`; bare `llm-serve` prints help. `--unc` selects HauhauCS Aggressive Qwen, `--gemma` selects Gemma 4 31B, and `--gemma --unc` selects uncensored Gemma; all reuse default port `8080`. Plain `llm-serve stop` stops all known variants.
+- `llm-serve` is a fish/Nushell function wrapping `hf download` + `llama-server`; bare `llm-serve` prints help. `--unc` selects the HauhauCS Aggressive uncensored Qwen secondary model, reusing default port `8080`. Plain `llm-serve stop` stops both regular and uncensored Qwen variants.
 
 Skills sync fully simplified. Skill updates stay in chezmoi source under `dot_claude/skills/`, then apply via chezmoi after review.
 Save skill clarified: agents should persist only to existing `ai/`/`tk` surfaces, avoid initializing new systems during save, and avoid commits purely because the skill ran.

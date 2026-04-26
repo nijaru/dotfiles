@@ -7,7 +7,7 @@
 - Local agent configs now target Fedora llama.cpp Qwen3.6 27B on `http://fedora:8080/v1`.
 - Ollama providers are retired from Pi, OpenCode, Droid/Factory, Crush, and Zed managed configs.
 - Zed uses `agent.default_model` plus `language_models.openai_compatible.fedora` for the custom endpoint.
-- `llm-serve` is a fish function (`dot_config/fish/functions/llm-serve.fish`) wrapping `hf download` + `llama-server`; bare `llm-serve` prints help.
+- `llm-serve` is a fish/Nushell function wrapping `hf download` + `llama-server`; bare `llm-serve` prints help. `llm-serve unc ...` or `llm-serve --unc ...` selects the HauhauCS Aggressive uncensored secondary model.
 
 Skills sync fully simplified. Skill updates stay in chezmoi source under `dot_claude/skills/`, then apply via chezmoi after review.
 

@@ -9,8 +9,18 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l port 8080
     set -l unit llm-serve
     set -l pattern 'llama-server .*Qwen3\.6-27B|llama-server .*--alias qwen3\.6:27b'
+    set -l uncensored 0
 
     set -l command help
+    while test (count $argv) -gt 0
+        switch $argv[1]
+            case unc uncensored --unc --uncensored
+                set uncensored 1
+                set -e argv[1]
+            case '*'
+                break
+        end
+    end
     if test (count $argv) -gt 0
         switch $argv[1]
             case serve start stop restart status help -h --help
@@ -47,6 +57,8 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
             case --host -H
                 set i (math $i + 1)
                 set host $argv[$i]
+            case --unc --uncensored
+                set uncensored 1
             case --download-only
                 set download_only 1
             case --verify-only
@@ -56,6 +68,18 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
                 return 1
         end
         set i (math $i + 1)
+    end
+
+    if test $uncensored -eq 1
+        set model HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive
+        test "$file" = Qwen3.6-27B-Q5_K_M.gguf
+        and set file Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf
+        test "$alias" = qwen3.6:27b
+        and set alias qwen3.6:27b-uncensored
+        test "$port" = 8080
+        and set port 8081
+        set unit llm-serve-uncensored
+        set pattern 'llama-server .*Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored'
     end
 
     switch $command
@@ -143,9 +167,11 @@ Commands:
   status          show systemd status or matching server processes
 
 Options:
+  unc, uncensored  use HauhauCS Aggressive uncensored defaults
+  --unc            use HauhauCS Aggressive uncensored defaults
   --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)
   --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)
-  --port, -p        listen port (default 8080)
+  --port, -p        listen port (default 8080, uncensored 8081)
   --host, -H        bind address (default 0.0.0.0)
   --ctx, -c         max context length (default 262144)
   --batch, -b       llama.cpp logical batch size (default 2048)

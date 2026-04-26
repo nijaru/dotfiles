@@ -21,6 +21,19 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
    - `yo`, `max_tokens=64`: prompt `147.27 tok/s`, decode `50.20 tok/s`, wall `1.36s`.
    - Keep as an experiment or fallback; it is a 3-bit/TurboQuant path, so do not make it primary without quality evals.
 
+## Additional Candidates
+
+- `DavidAU/Qwen3.6-27B-NEO-CODE-Di-IMatrix-MAX-GGUF` `Q5_K_M`
+  - Fits full `262144` context with the same Q5 serving flags.
+  - `yo`, `max_tokens=64`: prompt `130.94 tok/s`, decode `41.62 tok/s`, wall `1.63s`.
+  - No speed win over Unsloth Q5. Only replace the primary if a coding eval shows better quality.
+
+- `HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive` `Q4_K_P`
+  - Secondary uncensored model. Fits full `262144` context with stock llama.cpp and the same KV/cache flags.
+  - GPU memory while loaded: about `22110 MiB` used, `1971 MiB` free.
+  - `yo`, `max_tokens=64`: prompt `145.92 tok/s`, decode `45.29 tok/s`, wall `1.51s`.
+  - `llm-serve unc ...` or `llm-serve --unc ...` selects it with alias `qwen3.6:27b-uncensored`, default port `8081`, and systemd unit `llm-serve-uncensored`.
+
 ## vLLM Findings
 
 `Lorbus/Qwen3.6-27B-int4-AutoRound` is promising on paper because it preserves MTP, but mainline vLLM `0.19.1` cannot serve 262k on the 4090:

@@ -229,7 +229,7 @@ function __llm_serve_wait_ready --argument-names unit host port alias
 
     set -l url http://$probe_host:$port/v1/models
     echo "Waiting for $alias at $url ..."
-    for _ in (seq 1 120)
+    for attempt in (seq 1 120)
         if curl -fsS $url >/dev/null 2>&1
             echo "$alias is ready"
             return 0

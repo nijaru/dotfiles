@@ -32,7 +32,7 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
   - Secondary uncensored model. Fits full `262144` context with stock llama.cpp and the same KV/cache flags.
   - GPU memory while loaded: about `22110 MiB` used, `1971 MiB` free.
   - `yo`, `max_tokens=64`: prompt `145.92 tok/s`, decode `45.29 tok/s`, wall `1.51s`.
-  - `llm-serve unc ...` or `llm-serve --unc ...` selects it with alias `qwen3.6:27b-uncensored`, default port `8081`, and systemd unit `llm-serve-uncensored`.
+  - `llm-serve <command> --unc` selects it with alias `qwen3.6:27b-uncensored`, default port `8081`, and systemd unit `llm-serve-uncensored`.
 
 ## vLLM Findings
 

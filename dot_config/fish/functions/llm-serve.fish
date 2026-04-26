@@ -8,19 +8,14 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l host 0.0.0.0
     set -l port 8080
     set -l unit llm-serve
-    set -l pattern 'llama-server .*Qwen3\.6-27B|llama-server .*--alias qwen3\.6:27b'
+    set -l pattern 'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
+    set -l other_unit llm-serve-uncensored
+    set -l other_pattern 'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
+    set -l other_name "uncensored Qwen3.6 27B"
+    set -l other_stop_command "llm-serve stop --unc"
     set -l uncensored 0
 
     set -l command help
-    while test (count $argv) -gt 0
-        switch $argv[1]
-            case unc uncensored --unc --uncensored
-                set uncensored 1
-                set -e argv[1]
-            case '*'
-                break
-        end
-    end
     if test (count $argv) -gt 0
         switch $argv[1]
             case serve start stop restart status help -h --help
@@ -79,7 +74,11 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
         test "$port" = 8080
         and set port 8081
         set unit llm-serve-uncensored
-        set pattern 'llama-server .*Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored'
+        set pattern $other_pattern
+        set other_unit llm-serve
+        set other_pattern 'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
+        set other_name "regular Qwen3.6 27B"
+        set other_stop_command "llm-serve stop"
     end
 
     switch $command
@@ -95,6 +94,10 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
         case restart
             __llm_serve_stop $unit $pattern
             set command start
+    end
+
+    if test $download_only -eq 0; and test $verify_only -eq 0
+        __llm_serve_refuse_if_other_running $other_unit $other_pattern $other_name $other_stop_command; or return 1
     end
 
     if not type -q llama-server
@@ -167,7 +170,6 @@ Commands:
   status          show systemd status or matching server processes
 
 Options:
-  unc, uncensored  use HauhauCS Aggressive uncensored defaults
   --unc            use HauhauCS Aggressive uncensored defaults
   --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)
   --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)
@@ -200,6 +202,20 @@ function __llm_serve_status --argument-names unit pattern
     end
     echo "llm-serve: no supported status checker found" >&2
     return 1
+end
+
+function __llm_serve_refuse_if_other_running --argument-names other_unit other_pattern other_name other_stop_command
+    if type -q systemctl; and systemctl --user is-active --quiet $other_unit.service
+        echo "llm-serve: $other_name is already running as $other_unit.service" >&2
+        echo "  stop it first: $other_stop_command" >&2
+        return 1
+    end
+    if type -q pgrep; and pgrep -af $other_pattern >/dev/null 2>&1
+        echo "llm-serve: $other_name is already running" >&2
+        pgrep -af $other_pattern >&2
+        return 1
+    end
+    return 0
 end
 
 function __llm_serve_download --argument-names model file

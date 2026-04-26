@@ -241,8 +241,7 @@ alias ggarbage = git gc --aggressive --prune=now
 alias gsubr = git config submodule.recurse true
 
 def llm-serve [
-    selector_or_command?: string
-    action?: string
+    command?: string
     --file (-f): string = "Qwen3.6-27B-Q5_K_M.gguf"
     --served-name: string = "qwen3.6:27b"
     --ctx (-c): int = 262144
@@ -255,26 +254,32 @@ def llm-serve [
     --download-only
     --verify-only
 ] {
-    let first = ($selector_or_command | default "help")
-    let variant_uncensored = ($unc or $uncensored or ($first in ["unc", "uncensored"]))
-    let run_input = (if ($first in ["unc", "uncensored"]) { $action | default "help" } else { $first })
+    let run_input = ($command | default "help")
     let command = (if ($run_input | str starts-with "-") { "serve" } else { $run_input })
+    let variant_uncensored = ($unc or $uncensored)
     let model = (if $variant_uncensored { "HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive" } else { "unsloth/Qwen3.6-27B-GGUF" })
     let file = (if $variant_uncensored and $file == "Qwen3.6-27B-Q5_K_M.gguf" { "Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf" } else { $file })
     let served_name = (if $variant_uncensored and $served_name == "qwen3.6:27b" { "qwen3.6:27b-uncensored" } else { $served_name })
     let port = (if $variant_uncensored and $port == 8080 { 8081 } else { $port })
     let unit = (if $variant_uncensored { "llm-serve-uncensored" } else { "llm-serve" })
     let pattern = (if $variant_uncensored {
-        'llama-server .*Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored'
+        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
     } else {
-        'llama-server .*Qwen3\.6-27B|llama-server .*--alias qwen3\.6:27b'
+        'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
     })
+    let other_unit = (if $variant_uncensored { "llm-serve" } else { "llm-serve-uncensored" })
+    let other_pattern = (if $variant_uncensored {
+        'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
+    } else {
+        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
+    })
+    let other_name = (if $variant_uncensored { "regular Qwen3.6 27B" } else { "uncensored Qwen3.6 27B" })
+    let other_stop_command = (if $variant_uncensored { "llm-serve stop" } else { "llm-serve stop --unc" })
 
     if $command in ["help", "-h", "--help"] {
         print "Usage: llm-serve [serve|start|stop|restart|status] [options]"
         print ""
         print "Options:"
-        print "  unc, uncensored  use HauhauCS Aggressive uncensored defaults"
         print "  --unc            use HauhauCS Aggressive uncensored defaults"
         print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)"
         print "  --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)"
@@ -312,6 +317,17 @@ def llm-serve [
 
     if not ($run_command in ["serve", "start"]) {
         error make {msg: $"llm-serve: unknown command ($command)"}
+    }
+    if not ($download_only or $verify_only) {
+        if (which systemctl | is-not-empty) and ((systemctl --user is-active --quiet $"($other_unit).service"; $env.LAST_EXIT_CODE) == 0) {
+            error make {msg: $"llm-serve: ($other_name) is already running as ($other_unit).service; stop it first: ($other_stop_command)"}
+        }
+        if (which pgrep | is-not-empty) {
+            let matching_processes = (pgrep -af $other_pattern | complete)
+            if $matching_processes.exit_code == 0 {
+                error make {msg: $"llm-serve: ($other_name) is already running\n($matching_processes.stdout)"}
+            }
+        }
     }
     if (which llama-server | is-empty) { error make {msg: "llm-serve: llama-server not found; build llama.cpp with CUDA and put it on PATH"} }
     if (which hf | is-empty) { error make {msg: "llm-serve: hf not found; install Hugging Face CLI"} }

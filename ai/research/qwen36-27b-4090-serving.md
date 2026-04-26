@@ -44,7 +44,7 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
 
 ## Gemma 4 31B Watch
 
-Do not replace Qwen defaults yet. If testing Gemma, test the dense `31B` quality path first, not the `26B A4B` MoE speed path.
+Do not replace Qwen defaults yet. If testing Gemma, test the dense `31B` quality path first, not the `26B A4B` MoE speed path. `llm-serve --gemma` selects the base Gemma path; `llm-serve --gemma --unc` selects the uncensored Gemma path.
 
 Relevant HF dry-run artifact sizes:
 
@@ -61,12 +61,12 @@ Relevant HF dry-run artifact sizes:
 
 Interpretation:
 
-- Gemma `31B` `Q4_K_M` and the TrevorJS uncensored `Q4_K_M` are both plausible 4090 experiments because they are below the known Qwen `Q5_K_M` failure boundary, but they are close enough to require real long-prompt testing.
+- Gemma `31B` `UD-Q4_K_XL` and the TrevorJS uncensored `Q4_K_M` are both plausible 4090 experiments because they are below the known Qwen `Q5_K_M` failure boundary, but they are close enough to require real long-prompt testing.
 - File size alone is not enough. Qwen3.6 uses a hybrid DeltaNet/gated-attention layout, while Gemma 4 31B uses a different hybrid local/global attention layout with 60 dense layers. KV/cache and scratch allocation can differ even when artifact sizes look close.
-- The current uncensored Qwen service leaves about `1.8 GiB` free at idle with `-c 262144`. If Gemma overhead were identical, Gemma `Q4_K_M` would likely load, and uncensored Gemma `Q4_K_M` would be tight but plausible. If Gemma allocates materially more cache/scratch than Qwen, it may need a lower context.
+- The current uncensored Qwen service leaves about `1.8 GiB` free at idle with `-c 262144`. If Gemma overhead were identical, base Gemma `UD-Q4_K_XL` would be tight but plausible, and uncensored Gemma `Q4_K_M` would be similarly tight. If Gemma allocates materially more cache/scratch than Qwen, it may need a lower context.
 - Start Gemma at `-c 262144` only as a load test. For practical agent trials, expect `192k` or `128k` to be the safer starting point unless the 262k load survives a large prefill prompt.
 - Skip Gemma `Q5_K_M` on the 4090 for now. It is larger than the Qwen `Q5_K_M` artifact that already fit idle but crashed on a large Pi request.
-- Test order: `unsloth/gemma-4-31B-it-GGUF` `Q4_K_M`; then `TrevorJS/gemma-4-31B-it-uncensored-GGUF` `Q4_K_M`; then only try `UD-Q4_K_XL` if `Q4_K_M` quality is promising and memory has room.
+- Test order: `unsloth/gemma-4-31B-it-GGUF` `UD-Q4_K_XL`; then `TrevorJS/gemma-4-31B-it-uncensored-GGUF` `Q4_K_M`. Fall back to base Gemma `Q4_K_M` only if `UD-Q4_K_XL` has memory trouble.
 
 ## Watch Items
 

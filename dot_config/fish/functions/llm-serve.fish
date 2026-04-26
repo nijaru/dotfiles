@@ -9,11 +9,9 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l port 8080
     set -l unit llm-serve
     set -l pattern 'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
-    set -l other_unit llm-serve-uncensored
-    set -l other_pattern 'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
-    set -l other_name "uncensored Qwen3.6 27B"
-    set -l other_stop_command "llm-serve stop --unc"
     set -l uncensored 0
+    set -l gemma 0
+    set -l variant_selected 0
 
     set -l command help
     if test (count $argv) -gt 0
@@ -54,6 +52,10 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
                 set host $argv[$i]
             case --unc --uncensored
                 set uncensored 1
+                set variant_selected 1
+            case --gemma
+                set gemma 1
+                set variant_selected 1
             case --download-only
                 set download_only 1
             case --verify-only
@@ -65,18 +67,30 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
         set i (math $i + 1)
     end
 
-    if test $uncensored -eq 1
+    if test $gemma -eq 1; and test $uncensored -eq 1
+        set model TrevorJS/gemma-4-31B-it-uncensored-GGUF
+        test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
+        and set file gemma-4-31B-it-uncensored-Q4_K_M.gguf
+        test "$alias" = qwen3.6:27b
+        and set alias gemma4:31b-uncensored
+        set unit llm-serve-gemma-uncensored
+        set pattern 'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
+    else if test $gemma -eq 1
+        set model unsloth/gemma-4-31B-it-GGUF
+        test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
+        and set file gemma-4-31B-it-UD-Q4_K_XL.gguf
+        test "$alias" = qwen3.6:27b
+        and set alias gemma4:31b
+        set unit llm-serve-gemma
+        set pattern 'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )'
+    else if test $uncensored -eq 1
         set model HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive
         test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
         and set file Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf
         test "$alias" = qwen3.6:27b
         and set alias qwen3.6:27b-uncensored
         set unit llm-serve-uncensored
-        set pattern $other_pattern
-        set other_unit llm-serve
-        set other_pattern 'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
-        set other_name "regular Qwen3.6 27B"
-        set other_stop_command "llm-serve stop"
+        set pattern 'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
     end
 
     switch $command
@@ -84,6 +98,10 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
             __llm_serve_help
             return 0
         case stop
+            if test $variant_selected -eq 0
+                __llm_serve_stop_all
+                return 0
+            end
             __llm_serve_stop $unit $pattern
             return 0
         case status
@@ -95,7 +113,7 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     end
 
     if test $download_only -eq 0; and test $verify_only -eq 0
-        __llm_serve_refuse_if_other_running $other_unit $other_pattern $other_name $other_stop_command; or return 1
+        __llm_serve_refuse_if_any_other_running $unit; or return 1
     end
 
     if not type -q llama-server
@@ -170,6 +188,7 @@ Commands:
 
 Options:
   --unc            use HauhauCS Aggressive uncensored defaults
+  --gemma          use Gemma 4 31B dense defaults; combine with --unc for uncensored Gemma
   --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)
   --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)
   --port, -p        listen port (default 8080 for both variants)
@@ -203,17 +222,53 @@ function __llm_serve_status --argument-names unit pattern
     return 1
 end
 
-function __llm_serve_refuse_if_other_running --argument-names other_unit other_pattern other_name other_stop_command
-    if type -q systemctl; and systemctl --user is-active --quiet $other_unit.service
-        echo "llm-serve: $other_name is already running as $other_unit.service" >&2
-        echo "  stop it first: $other_stop_command" >&2
-        return 1
+function __llm_serve_stop_all
+    set -l units llm-serve llm-serve-uncensored llm-serve-gemma llm-serve-gemma-uncensored
+    set -l patterns \
+        'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )' \
+        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )' \
+        'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )' \
+        'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
+
+    for unit in $units
+        if type -q systemctl
+            systemctl --user stop $unit.service >/dev/null 2>&1
+        end
     end
-    if type -q pgrep; and pgrep -af $other_pattern >/dev/null 2>&1
-        echo "llm-serve: $other_name is already running" >&2
-        pgrep -af $other_pattern >&2
-        return 1
+
+    for pattern in $patterns
+        if type -q pkill
+            pkill -f $pattern >/dev/null 2>&1
+        end
     end
+end
+
+function __llm_serve_refuse_if_any_other_running --argument-names selected_unit
+    set -l units llm-serve llm-serve-uncensored llm-serve-gemma llm-serve-gemma-uncensored
+    set -l names "regular Qwen3.6 27B" "uncensored Qwen3.6 27B" "Gemma 4 31B" "uncensored Gemma 4 31B"
+    set -l stop_commands "llm-serve stop" "llm-serve stop --unc" "llm-serve stop --gemma" "llm-serve stop --gemma --unc"
+    set -l patterns \
+        'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )' \
+        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )' \
+        'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )' \
+        'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
+
+    for i in (seq 1 (count $units))
+        test $units[$i] = $selected_unit
+        and continue
+
+        if type -q systemctl; and systemctl --user is-active --quiet $units[$i].service
+            echo "llm-serve: $names[$i] is already running as $units[$i].service" >&2
+            echo "  stop it first: $stop_commands[$i]" >&2
+            return 1
+        end
+        if type -q pgrep; and pgrep -af $patterns[$i] >/dev/null 2>&1
+            echo "llm-serve: $names[$i] is already running" >&2
+            pgrep -af $patterns[$i] >&2
+            return 1
+        end
+    end
+
     return 0
 end
 

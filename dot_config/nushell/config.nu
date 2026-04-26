@@ -251,36 +251,76 @@ def llm-serve [
     --host (-H): string = "0.0.0.0"
     --unc
     --uncensored
+    --gemma
     --download-only
     --verify-only
 ] {
     let run_input = ($command | default "help")
     let command = (if ($run_input | str starts-with "-") { "serve" } else { $run_input })
     let variant_uncensored = ($unc or $uncensored)
-    let model = (if $variant_uncensored { "HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive" } else { "unsloth/Qwen3.6-27B-GGUF" })
-    let file = (if $variant_uncensored and $file == "Qwen3.6-27B-UD-Q4_K_XL.gguf" { "Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf" } else { $file })
-    let served_name = (if $variant_uncensored and $served_name == "qwen3.6:27b" { "qwen3.6:27b-uncensored" } else { $served_name })
+    let variant_selected = ($variant_uncensored or $gemma)
+    let default_file = "Qwen3.6-27B-UD-Q4_K_XL.gguf"
+    let default_served_name = "qwen3.6:27b"
+    let variants = [
+        {
+            unit: "llm-serve"
+            model: "unsloth/Qwen3.6-27B-GGUF"
+            file: "Qwen3.6-27B-UD-Q4_K_XL.gguf"
+            served_name: "qwen3.6:27b"
+            pattern: 'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
+            name: "regular Qwen3.6 27B"
+            stop_command: "llm-serve stop"
+        }
+        {
+            unit: "llm-serve-uncensored"
+            model: "HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive"
+            file: "Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf"
+            served_name: "qwen3.6:27b-uncensored"
+            pattern: 'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
+            name: "uncensored Qwen3.6 27B"
+            stop_command: "llm-serve stop --unc"
+        }
+        {
+            unit: "llm-serve-gemma"
+            model: "unsloth/gemma-4-31B-it-GGUF"
+            file: "gemma-4-31B-it-UD-Q4_K_XL.gguf"
+            served_name: "gemma4:31b"
+            pattern: 'llama-server .*models--unsloth--gemma-4-31B-it-GGUF|llama-server .*--alias gemma4:31b($| )'
+            name: "Gemma 4 31B"
+            stop_command: "llm-serve stop --gemma"
+        }
+        {
+            unit: "llm-serve-gemma-uncensored"
+            model: "TrevorJS/gemma-4-31B-it-uncensored-GGUF"
+            file: "gemma-4-31B-it-uncensored-Q4_K_M.gguf"
+            served_name: "gemma4:31b-uncensored"
+            pattern: 'llama-server .*models--TrevorJS--gemma-4-31B-it-uncensored-GGUF|llama-server .*--alias gemma4:31b-uncensored($| )'
+            name: "uncensored Gemma 4 31B"
+            stop_command: "llm-serve stop --gemma --unc"
+        }
+    ]
+    let selected = (if $gemma and $variant_uncensored {
+        $variants | where unit == "llm-serve-gemma-uncensored" | first
+    } else if $gemma {
+        $variants | where unit == "llm-serve-gemma" | first
+    } else if $variant_uncensored {
+        $variants | where unit == "llm-serve-uncensored" | first
+    } else {
+        $variants | where unit == "llm-serve" | first
+    })
+    let model = $selected.model
+    let file = (if $file == $default_file { $selected.file } else { $file })
+    let served_name = (if $served_name == $default_served_name { $selected.served_name } else { $served_name })
     let port = $port
-    let unit = (if $variant_uncensored { "llm-serve-uncensored" } else { "llm-serve" })
-    let pattern = (if $variant_uncensored {
-        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
-    } else {
-        'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
-    })
-    let other_unit = (if $variant_uncensored { "llm-serve" } else { "llm-serve-uncensored" })
-    let other_pattern = (if $variant_uncensored {
-        'llama-server .*models--unsloth--Qwen3\.6-27B-GGUF|llama-server .*--alias qwen3\.6:27b($| )'
-    } else {
-        'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
-    })
-    let other_name = (if $variant_uncensored { "regular Qwen3.6 27B" } else { "uncensored Qwen3.6 27B" })
-    let other_stop_command = (if $variant_uncensored { "llm-serve stop" } else { "llm-serve stop --unc" })
+    let unit = $selected.unit
+    let pattern = $selected.pattern
 
     if $command in ["help", "-h", "--help"] {
         print "Usage: llm-serve [serve|start|stop|restart|status] [options]"
         print ""
         print "Options:"
         print "  --unc            use HauhauCS Aggressive uncensored defaults"
+        print "  --gemma          use Gemma 4 31B dense defaults; combine with --unc for uncensored Gemma"
         print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)"
         print "  --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)"
         print "  --port, -p        listen port (default 8080 for both variants)"
@@ -294,8 +334,13 @@ def llm-serve [
     }
 
     if $command == "stop" {
-        if (which systemctl | is-not-empty) { systemctl --user stop $"($unit).service" err> /dev/null }
-        if (which pkill | is-not-empty) { pkill -f $pattern err> /dev/null }
+        let targets = (if $variant_selected { [$selected] } else { $variants })
+        for target in $targets {
+            if (which systemctl | is-not-empty) { systemctl --user stop $"($target.unit).service" err> /dev/null }
+        }
+        for target in $targets {
+            if (which pkill | is-not-empty) { pkill -f $target.pattern err> /dev/null }
+        }
         return
     }
 
@@ -319,13 +364,15 @@ def llm-serve [
         error make {msg: $"llm-serve: unknown command ($command)"}
     }
     if not ($download_only or $verify_only) {
-        if (which systemctl | is-not-empty) and ((systemctl --user is-active --quiet $"($other_unit).service"; $env.LAST_EXIT_CODE) == 0) {
-            error make {msg: $"llm-serve: ($other_name) is already running as ($other_unit).service; stop it first: ($other_stop_command)"}
-        }
-        if (which pgrep | is-not-empty) {
-            let matching_processes = (pgrep -af $other_pattern | complete)
-            if $matching_processes.exit_code == 0 {
-                error make {msg: $"llm-serve: ($other_name) is already running\n($matching_processes.stdout)"}
+        for other in ($variants | where unit != $unit) {
+            if (which systemctl | is-not-empty) and ((systemctl --user is-active --quiet $"($other.unit).service"; $env.LAST_EXIT_CODE) == 0) {
+                error make {msg: $"llm-serve: ($other.name) is already running as ($other.unit).service; stop it first: ($other.stop_command)"}
+            }
+            if (which pgrep | is-not-empty) {
+                let matching_processes = (pgrep -af $other.pattern | complete)
+                if $matching_processes.exit_code == 0 {
+                    error make {msg: $"llm-serve: ($other.name) is already running\n($matching_processes.stdout)"}
+                }
             }
         }
     }

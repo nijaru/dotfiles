@@ -1,6 +1,6 @@
 function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l model unsloth/Qwen3.6-27B-GGUF
-    set -l file Qwen3.6-27B-Q5_K_M.gguf
+    set -l file Qwen3.6-27B-UD-Q4_K_XL.gguf
     set -l alias qwen3.6:27b
     set -l ctx 262144
     set -l batch 2048
@@ -67,7 +67,7 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
 
     if test $uncensored -eq 1
         set model HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive
-        test "$file" = Qwen3.6-27B-Q5_K_M.gguf
+        test "$file" = Qwen3.6-27B-UD-Q4_K_XL.gguf
         and set file Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf
         test "$alias" = qwen3.6:27b
         and set alias qwen3.6:27b-uncensored
@@ -172,7 +172,7 @@ Commands:
 
 Options:
   --unc            use HauhauCS Aggressive uncensored defaults
-  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)
+  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)
   --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)
   --port, -p        listen port (default 8080, uncensored 8081)
   --host, -H        bind address (default 0.0.0.0)

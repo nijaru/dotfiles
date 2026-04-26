@@ -242,7 +242,7 @@ alias gsubr = git config submodule.recurse true
 
 def llm-serve [
     command?: string
-    --file (-f): string = "Qwen3.6-27B-Q5_K_M.gguf"
+    --file (-f): string = "Qwen3.6-27B-UD-Q4_K_XL.gguf"
     --served-name: string = "qwen3.6:27b"
     --ctx (-c): int = 262144
     --batch (-b): int = 2048
@@ -258,7 +258,7 @@ def llm-serve [
     let command = (if ($run_input | str starts-with "-") { "serve" } else { $run_input })
     let variant_uncensored = ($unc or $uncensored)
     let model = (if $variant_uncensored { "HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive" } else { "unsloth/Qwen3.6-27B-GGUF" })
-    let file = (if $variant_uncensored and $file == "Qwen3.6-27B-Q5_K_M.gguf" { "Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf" } else { $file })
+    let file = (if $variant_uncensored and $file == "Qwen3.6-27B-UD-Q4_K_XL.gguf" { "Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf" } else { $file })
     let served_name = (if $variant_uncensored and $served_name == "qwen3.6:27b" { "qwen3.6:27b-uncensored" } else { $served_name })
     let port = (if $variant_uncensored and $port == 8080 { 8081 } else { $port })
     let unit = (if $variant_uncensored { "llm-serve-uncensored" } else { "llm-serve" })
@@ -281,7 +281,7 @@ def llm-serve [
         print ""
         print "Options:"
         print "  --unc            use HauhauCS Aggressive uncensored defaults"
-        print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-Q5_K_M.gguf)"
+        print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)"
         print "  --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)"
         print "  --port, -p        listen port (default 8080, uncensored 8081)"
         print "  --host, -H        bind address (default 0.0.0.0)"

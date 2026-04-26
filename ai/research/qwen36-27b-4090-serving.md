@@ -6,14 +6,16 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
 
 ## Current Ranking
 
-1. `unsloth/Qwen3.6-27B-GGUF` `Qwen3.6-27B-Q5_K_M.gguf`
-   - Best quality-first 262k candidate tested so far.
-   - Fits full `262144` context with stock llama.cpp `b8934-b760272f1` using `q4_0/q4_0` KV, `-b 2048 -ub 512`.
-   - `yo`, `max_tokens=64`: prompt `144.7 tok/s`, decode `41.97 tok/s`, wall `1.61s`.
-
-2. `unsloth/Qwen3.6-27B-GGUF` `Qwen3.6-27B-UD-Q4_K_XL.gguf`
-   - Safer speed/memory option at full 262k.
+1. `unsloth/Qwen3.6-27B-GGUF` `Qwen3.6-27B-UD-Q4_K_XL.gguf`
+   - Stable default for Pi/local coding-agent use at full `262144` context.
    - Stock llama.cpp with `q4_0/q4_0` KV: decode around `45 tok/s` on the `yo` request.
+   - Restored as the default after Q5 crashed under a long Pi prompt.
+
+2. `unsloth/Qwen3.6-27B-GGUF` `Qwen3.6-27B-Q5_K_M.gguf`
+   - Higher-quality candidate but not the stable default for agent use.
+   - Fits full `262144` context while idle with stock llama.cpp `b8934-b760272f1` using `q4_0/q4_0` KV, `-b 2048 -ub 512`.
+   - `yo`, `max_tokens=64`: prompt `144.7 tok/s`, decode `41.97 tok/s`, wall `1.61s`.
+   - Crashed on a large Pi request with CUDA OOM during long prefill/checkpoint handling.
 
 3. `YTan2000/Qwen3.6-27B-TQ3_4S`
    - Built and tested with `turbo-tan/llama.cpp-tq3` fork `c87aeb58b`.

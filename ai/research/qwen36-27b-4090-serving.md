@@ -55,7 +55,8 @@ External 3090 vLLM/TurboQuant reports from 2026-04-25 are useful but not a reaso
 - Genesis `v7.14` P65 routes spec-decode continuation to eager execution instead; reported single-card 24 GB Ampere numbers drop to about `55 tok/s` narrative / `70 tok/s` code at `32k`, while dual-card TP=2 is the cleaner long-context path.
 - Do not bypass vLLM's max-model-len/KV pre-checks. Hybrid DeltaNet/Mamba state, prefix-cache storage, spec-dec scratch blocks, and fragmentation consume capacity beyond the printed KV pool.
 - If revisiting vLLM, test it as a separate service on another port with reproducible SHA verification, tool-call correctness tests, and long-context agent prompts before replacing the current llama.cpp default.
-- The article's llama.cpp suggestion is directly relevant: try mainline llama.cpp speculative decoding with `--model-draft`, pairing the current Qwen3.6 27B GGUF target with a small Qwen draft model. This preserves the 262k-context shape and may improve decode speed without adopting the vLLM patch stack.
+- The article's llama.cpp suggestion was tested with `Qwen/Qwen3-0.6B-GGUF` `Qwen3-0.6B-Q8_0.gguf` as draft, current `UD-Q4_K_XL` as target, target context `262144`, draft context `4096`, and draft KV `q4_0/q4_0`. It fit in VRAM but was slower: baseline held about `45.3 tok/s`, while draft decoding was about `38-40 tok/s` on short and code prompts. Do not add this draft path to `llm-serve`.
+- Logs showed low effective draft utility despite per-call acceptance reporting: cumulative draft stats after six requests had `1465` generated draft tokens and only `141` accepted tokens, plus about `2.8s` spent in draft generation. A draft model needs much higher accepted-token yield or lower overhead to help on this setup.
 
 ## Recommended Q5 Command
 

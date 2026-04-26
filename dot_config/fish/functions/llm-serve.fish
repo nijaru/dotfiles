@@ -131,7 +131,7 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l llama_cmd llama-server -m $local_model --alias $alias \
         --host $host --port $port -ngl 99 -c $ctx -np 1 -fa on \
         --cache-type-k q4_0 --cache-type-v q4_0 \
-        -b $batch -ub $ubatch --split-mode none
+        -b $batch -ub $ubatch --split-mode none --reasoning off
 
     switch $command
         case serve
@@ -155,6 +155,7 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
                 return 0
             end
             systemd-run --user --unit $unit --collect $llama_cmd; or return 1
+            __llm_serve_wait_ready $unit $host $port $alias; or return 1
             systemctl --user status $unit.service --no-pager
     end
 end
@@ -179,7 +180,10 @@ Options:
   --batch, -b       llama.cpp logical batch size (default 2048)
   --ubatch, -ub     llama.cpp physical microbatch size (default 512)
   --download-only   prefetch model and exit
-  --verify-only     verify tooling/auth/model snapshot, then exit"
+  --verify-only     verify tooling/auth/model snapshot, then exit
+
+Notes:
+  reasoning is disabled for OpenAI client compatibility"
 end
 
 function __llm_serve_stop --argument-names unit pattern
@@ -216,6 +220,26 @@ function __llm_serve_refuse_if_other_running --argument-names other_unit other_p
         return 1
     end
     return 0
+end
+
+function __llm_serve_wait_ready --argument-names unit host port alias
+    set -l probe_host $host
+    test "$probe_host" = 0.0.0.0
+    and set probe_host 127.0.0.1
+
+    set -l url http://$probe_host:$port/v1/models
+    echo "Waiting for $alias at $url ..."
+    for _ in (seq 1 120)
+        if curl -fsS $url >/dev/null 2>&1
+            echo "$alias is ready"
+            return 0
+        end
+        sleep 1
+    end
+
+    echo "llm-serve: timed out waiting for $alias at $url" >&2
+    systemctl --user status $unit.service --no-pager >&2 2>/dev/null
+    return 1
 end
 
 function __llm_serve_download --argument-names model file

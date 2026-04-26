@@ -290,6 +290,9 @@ def llm-serve [
         print "  --ubatch          llama.cpp physical microbatch size (default 512)"
         print "  --download-only   prefetch model and exit"
         print "  --verify-only     verify tooling/auth/model snapshot, then exit"
+        print ""
+        print "Notes:"
+        print "  reasoning is disabled for OpenAI client compatibility"
         return
     }
 
@@ -351,7 +354,7 @@ def llm-serve [
         llama-server -m $local_model --alias $served_name
         --host $host --port ($port | into string) -ngl "99" -c ($ctx | into string) -np "1" -fa "on"
         --cache-type-k q4_0 --cache-type-v q4_0
-        -b ($batch | into string) -ub ($ubatch | into string) --split-mode none
+        -b ($batch | into string) -ub ($ubatch | into string) --split-mode none --reasoning off
     ]
 
     if $run_command == "serve" {
@@ -359,6 +362,23 @@ def llm-serve [
     } else {
         if (which systemd-run | is-empty) { error make {msg: "llm-serve: systemd-run not found; use 'llm-serve serve' instead"} }
         systemd-run --user --unit $unit --collect ...$llama_cmd
+        let probe_host = (if $host == "0.0.0.0" { "127.0.0.1" } else { $host })
+        let probe_url = $"http://($probe_host):($port)/v1/models"
+        print $"Waiting for ($served_name) at ($probe_url) ..."
+        mut ready = false
+        for _ in 1..120 {
+            let probe = (curl -fsS $probe_url | complete)
+            if $probe.exit_code == 0 {
+                $ready = true
+                break
+            }
+            sleep 1sec
+        }
+        if not $ready {
+            systemctl --user status $"($unit).service" --no-pager
+            error make {msg: $"llm-serve: timed out waiting for ($served_name) at ($probe_url)"}
+        }
+        print $"($served_name) is ready"
         systemctl --user status $"($unit).service" --no-pager
     }
 }

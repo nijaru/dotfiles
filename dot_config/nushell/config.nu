@@ -260,7 +260,7 @@ def llm-serve [
     let model = (if $variant_uncensored { "HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive" } else { "unsloth/Qwen3.6-27B-GGUF" })
     let file = (if $variant_uncensored and $file == "Qwen3.6-27B-UD-Q4_K_XL.gguf" { "Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf" } else { $file })
     let served_name = (if $variant_uncensored and $served_name == "qwen3.6:27b" { "qwen3.6:27b-uncensored" } else { $served_name })
-    let port = (if $variant_uncensored and $port == 8080 { 8081 } else { $port })
+    let port = $port
     let unit = (if $variant_uncensored { "llm-serve-uncensored" } else { "llm-serve" })
     let pattern = (if $variant_uncensored {
         'llama-server .*models--HauhauCS--Qwen3\.6-27B-Uncensored-HauhauCS-Aggressive|llama-server .*--alias qwen3\.6:27b-uncensored($| )'
@@ -283,7 +283,7 @@ def llm-serve [
         print "  --unc            use HauhauCS Aggressive uncensored defaults"
         print "  --file, -f        GGUF filename within the HF repo (default Qwen3.6-27B-UD-Q4_K_XL.gguf)"
         print "  --served-name     OpenAI model id exposed by llama-server (default qwen3.6:27b)"
-        print "  --port, -p        listen port (default 8080, uncensored 8081)"
+        print "  --port, -p        listen port (default 8080 for both variants)"
         print "  --host, -H        bind address (default 0.0.0.0)"
         print "  --ctx, -c         max context length (default 262144)"
         print "  --batch, -b       llama.cpp logical batch size (default 2048)"

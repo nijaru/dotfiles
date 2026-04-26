@@ -290,9 +290,6 @@ def llm-serve [
         print "  --ubatch          llama.cpp physical microbatch size (default 512)"
         print "  --download-only   prefetch model and exit"
         print "  --verify-only     verify tooling/auth/model snapshot, then exit"
-        print ""
-        print "Notes:"
-        print "  reasoning is disabled for OpenAI client compatibility"
         return
     }
 
@@ -354,7 +351,7 @@ def llm-serve [
         llama-server -m $local_model --alias $served_name
         --host $host --port ($port | into string) -ngl "99" -c ($ctx | into string) -np "1" -fa "on"
         --cache-type-k q4_0 --cache-type-v q4_0
-        -b ($batch | into string) -ub ($ubatch | into string) --split-mode none --reasoning off
+        -b ($batch | into string) -ub ($ubatch | into string) --split-mode none
     ]
 
     if $run_command == "serve" {

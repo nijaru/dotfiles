@@ -131,7 +131,7 @@ function llm-serve --description "Serve Qwen3.6 27B via llama.cpp on Fedora"
     set -l llama_cmd llama-server -m $local_model --alias $alias \
         --host $host --port $port -ngl 99 -c $ctx -np 1 -fa on \
         --cache-type-k q4_0 --cache-type-v q4_0 \
-        -b $batch -ub $ubatch --split-mode none --reasoning off
+        -b $batch -ub $ubatch --split-mode none
 
     switch $command
         case serve
@@ -180,10 +180,7 @@ Options:
   --batch, -b       llama.cpp logical batch size (default 2048)
   --ubatch, -ub     llama.cpp physical microbatch size (default 512)
   --download-only   prefetch model and exit
-  --verify-only     verify tooling/auth/model snapshot, then exit
-
-Notes:
-  reasoning is disabled for OpenAI client compatibility"
+  --verify-only     verify tooling/auth/model snapshot, then exit"
 end
 
 function __llm_serve_stop --argument-names unit pattern

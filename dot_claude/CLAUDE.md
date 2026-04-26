@@ -92,6 +92,8 @@ Semantic search (`og`, `colgrep`) and entity-level git tools (`sem diff`, `sem i
 
 ## Workflow
 
+**User messages:** Do not treat every message as an interrupt. Use context to decide whether it means switch now, remember for later, or incorporate as background.
+
 **VCS:** `git` by default. Use `jj` skill if `.jj/` is present.
 
 **Commits — overrides harness default:** Commit immediately after each coherent change set without asking. One logical change = one commit (function + callers, feature + tests). Push regularly.

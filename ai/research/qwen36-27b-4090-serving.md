@@ -36,9 +36,37 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
 
 - `HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive` `Q4_K_P`
   - Secondary uncensored model. Fits full `262144` context with stock llama.cpp and the same KV/cache flags.
-  - GPU memory while loaded: about `22110 MiB` used, `1971 MiB` free.
+  - HF dry-run artifact size: `17.5G`.
+  - Live Fedora check on 2026-04-26 while loaded at `-c 262144`: `22244 MiB` used, `1837 MiB` free on the 4090.
+  - This proves idle/full-context reservation loads, not that it survives a filled 262k prompt. Long prompt stability is still untested.
   - `yo`, `max_tokens=64`: prompt `145.92 tok/s`, decode `45.29 tok/s`, wall `1.51s`.
   - `llm-serve <command> --unc` selects it with alias `qwen3.6:27b-uncensored`, default port `8080`, and systemd unit `llm-serve-uncensored`.
+
+## Gemma 4 31B Watch
+
+Do not replace Qwen defaults yet. If testing Gemma, test the dense `31B` quality path first, not the `26B A4B` MoE speed path.
+
+Relevant HF dry-run artifact sizes:
+
+| Model | Quant | Size | Delta vs uncensored Qwen `Q4_K_P` |
+| --- | --- | ---: | ---: |
+| `HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive` | `Q4_K_P` | `17.5G` | baseline |
+| `unsloth/Qwen3.6-27B-GGUF` | `UD-Q4_K_XL` | `17.6G` | `+0.1G` |
+| `unsloth/Qwen3.6-27B-GGUF` | `Q5_K_M` | `19.5G` | `+2.0G` |
+| `unsloth/gemma-4-31B-it-GGUF` | `Q4_K_S` | `17.4G` | `-0.1G` |
+| `unsloth/gemma-4-31B-it-GGUF` | `Q4_K_M` | `18.3G` | `+0.8G` |
+| `TrevorJS/gemma-4-31B-it-uncensored-GGUF` | `Q4_K_M` | `18.7G` | `+1.2G` |
+| `unsloth/gemma-4-31B-it-GGUF` | `UD-Q4_K_XL` | `18.8G` | `+1.3G` |
+| `unsloth/gemma-4-31B-it-GGUF` | `Q5_K_M` | `21.7G` | `+4.2G` |
+
+Interpretation:
+
+- Gemma `31B` `Q4_K_M` and the TrevorJS uncensored `Q4_K_M` are both plausible 4090 experiments because they are below the known Qwen `Q5_K_M` failure boundary, but they are close enough to require real long-prompt testing.
+- File size alone is not enough. Qwen3.6 uses a hybrid DeltaNet/gated-attention layout, while Gemma 4 31B uses a different hybrid local/global attention layout with 60 dense layers. KV/cache and scratch allocation can differ even when artifact sizes look close.
+- The current uncensored Qwen service leaves about `1.8 GiB` free at idle with `-c 262144`. If Gemma overhead were identical, Gemma `Q4_K_M` would likely load, and uncensored Gemma `Q4_K_M` would be tight but plausible. If Gemma allocates materially more cache/scratch than Qwen, it may need a lower context.
+- Start Gemma at `-c 262144` only as a load test. For practical agent trials, expect `192k` or `128k` to be the safer starting point unless the 262k load survives a large prefill prompt.
+- Skip Gemma `Q5_K_M` on the 4090 for now. It is larger than the Qwen `Q5_K_M` artifact that already fit idle but crashed on a large Pi request.
+- Test order: `unsloth/gemma-4-31B-it-GGUF` `Q4_K_M`; then `TrevorJS/gemma-4-31B-it-uncensored-GGUF` `Q4_K_M`; then only try `UD-Q4_K_XL` if `Q4_K_M` quality is promising and memory has room.
 
 ## Watch Items
 

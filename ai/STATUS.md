@@ -3,6 +3,7 @@
 ## Current Focus
 
 - Qwen3.6 27B serving research: stable default is stock llama.cpp with Unsloth `UD-Q4_K_XL` at 262k context; `Q5_K_M` fits idle but crashed on long Pi prompts; see `ai/research/qwen36-27b-4090-serving.md`.
+- Gemma 4 31B dense is now documented as a non-default experiment path: `Q4_K_M` base and TrevorJS uncensored `Q4_K_M` are plausible on the 4090, but should be tested for long-prompt stability before any config changes.
 - DeepSeek v4 Flash GGUF via antirez is recorded as a watch item only; do not replace Fedora Qwen unless CUDA support, quant details, and coding-agent quality/perf are verified.
 - Latest vLLM/TurboQuant 3090 report is recorded as an experiment path, not a default replacement: patched vLLM can be faster at lower context, but the corrected single-card path trades away the current 262k llama.cpp shape. llama.cpp speculative decoding with `Qwen3-0.6B-Q8_0` draft was tested and was slower than baseline.
 - VCS agent skills tightened: `jj` and GitButler CLI (`but`) source and destination are in sync.

@@ -1,54 +1,76 @@
 ---
 name: jj
-description: Use for version control when a repository contains a .jj/ directory. Focuses on the "revision-first" workflow and conflict-object management.
+description: Use when a repository contains `.jj/`, when the user asks to use Jujutsu/jj, or when recovering/inspecting jj operation history.
 allowed-tools: Bash, Read
 ---
 
-# jj (Jujutsu Version Control)
+# jj (Jujutsu)
 
-## Core Mandates
+## Iron Law
 
-- **Discovery First:** Before using any VCS tool, check for `.jj/`. If present, use `jj` as the primary interface.
-- **Logless Workflow:** Every change in the working copy is automatically snapshotted. No manual `git add`.
-- **Conflict Management:** Conflicts in `jj` are first-class objects in the graph. You MUST resolve or `jj describe` them; do not leave the graph in an ambiguous state.
+If `.jj/` exists, use `jj` for VCS writes. Do not use `git add`, `git commit`, `git checkout`, `git rebase`, `git merge`, `git stash`, or `git reset` in that workspace.
 
-## Technical Standards
+## Operating Model
 
-### 1. Discovery & State
+- The working copy is a commit: `@`. Most `jj` commands snapshot file changes before they run. There is no staging area.
+- Revisions are edited directly. Start new work with `jj new`; finish by giving the revision a useful description with `jj describe -m "..."`.
+- Bookmarks are Git branch equivalents, but there is no current bookmark. Creating a revision does not move a bookmark.
+- Recovery is operation-based. Prefer `jj op log`, `jj undo`, and `jj redo` over manual Git recovery.
+
+## Default Flow
+
 ```bash
-# Check if repo uses jj
-ls -d .jj/ 2>/dev/null && echo "Using jj" || echo "Using git"
-
-# Check status and where the working copy (@) is
 jj st
+jj log -r 'ancestors(@, 8) | @'
+jj new
+# edit files
+jj st
+jj diff
+jj describe -m "type(scope): message"
 ```
 
-### 2. Revision Lifecycle
-| Task | Command | Purpose |
-| :--- | :--- | :--- |
-| **New Change** | `jj new` | Create a child revision and edit it. |
-| **Describe** | `jj desc -m "msg"` | Set or update the revision's description. |
-| **Absorb** | `jj absorb` | Automatically move changes into the stack of mutable revisions. |
-| **Undo** | `jj undo` | Revert the last operation (safe recovery). |
+When using Git remotes:
 
-### 3. Handling Conflicts
-- **Detect:** Conflicts appear in `jj st` and `jj log`.
-- **Resolve:** Edit the files to resolve markers, then `jj describe` to confirm the fix.
-- **Avoid:** Do not `jj git push` if conflicts exist in the current stack.
+```bash
+jj bookmark set <name> -r @      # create or move the bookmark to the revision to publish
+jj git push --bookmark <name> --dry-run
+jj git push --bookmark <name>
+```
 
-## jj vs. Git for Agents
+Use `jj git push --change @` only for temporary/generated bookmark names. Use explicit bookmarks for normal branches and PRs.
 
-| Factor | jj Mindset | Git Mindset |
-| :--- | :--- | :--- |
-| **Staging** | Automatic (Snapshotting) | Manual (`git add`) |
-| **Stashing** | Use `jj new` | Use `git stash` |
-| **Commits** | "Revisions" (can be empty/anonymous) | "Commits" (require message) |
-| **Pushing** | `jj git push` | `git push` |
+## Common Commands
+
+| Task | Command |
+| :--- | :--- |
+| Status | `jj st` |
+| Recent graph | `jj log -r 'ancestors(@, 12) | descendants(@, 2)'` |
+| New child revision | `jj new` |
+| Edit another revision | `jj edit <rev>` |
+| Update message | `jj describe -m "msg"` |
+| Split current revision | `jj split` |
+| Move changes into ancestors | `jj absorb` |
+| Squash into parent | `jj squash` |
+| Rebase revision | `jj rebase -r <rev> -d <dest>` |
+| Restore a file | `jj restore <path>` |
+| Operation history | `jj op log` |
+| Undo/redo operation | `jj undo` / `jj redo` |
+
+## Conflicts
+
+Conflicts are first-class revision state and may be materialized as file markers when you edit the conflicted revision.
+
+1. Detect with `jj st`, `jj log`, or `jj show <rev>`.
+2. Enter/edit the conflicted revision if needed: `jj edit <rev>`.
+3. Resolve by editing files directly or running `jj resolve <path>` with the configured merge tool.
+4. Run `jj st` and verify no conflicts remain before pushing.
+
+Do not push a stack with conflicted revisions or conflicted bookmarks.
 
 ## Anti-Rationalization
 
 | Excuse | Reality |
 | :--- | :--- |
-| "I'll stage this later" | There's no staging in `jj`. Snapshotting is automatic. |
-| "I'm lost in the graph" | Run `jj log` to visualize the stack and `jj st` to see where you are (`@`). |
-| "Git commands failed" | If `.jj/` exists, standard `git` commands may conflict with the `jj` working copy. Use `jj`. |
+| "I'll stage this later" | There is no staging; snapshotting is automatic. Use `jj split`, `jj squash`, or `jj absorb` to shape revisions. |
+| "The commit exists, so it will push" | Git remotes see bookmarks. Set/move a bookmark or use `jj git push --change`. |
+| "Git is familiar for this one command" | In a jj workspace, Git write commands bypass jj's operation model and can desync the working copy. |

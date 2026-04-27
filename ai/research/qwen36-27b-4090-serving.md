@@ -44,6 +44,14 @@ Goal: regular Qwen3.6 27B as the primary local coding-agent model on a single RT
 
 ## Watch Items
 
+### 3090 Q4_K_M External Report
+
+User-shared 2026-04-26 X report: RTX 3090 24 GB + `unsloth/Qwen3.6-27B-GGUF` `Q4_K_M` + stock CUDA llama.cpp/`llama-server` was the only simple OpenAI-compatible setup that worked after other local deployment recipes failed or required about 80 GB VRAM. Reported numbers were decode about `37 tok/s`, prompt eval about `342-430 tok/s`, VRAM about `17.8/24 GB`, GPU util about `96%`, and power about `385W`.
+
+Interpretation for this repo: this supports the current default architecture, not a replacement. Fedora has a 4090 and our managed default is already llama.cpp + Unsloth GGUF + OpenAI-compatible API on port `8080`. Keep `UD-Q4_K_XL` as the stable agent default because it was verified at full `262144` context and survived long Pi-style prompts, while Q5 crashed under long prefill. `Q4_K_M` is worth a small A/B only if latency or quality regressions appear, and it should be tested with the same long-prompt/tool-call workload before replacing `UD-Q4_K_XL`.
+
+Do not switch defaults to DFlash/vLLM yet. Treat DFlash, DDTree, patched vLLM, and TurboQuant reports as experiment paths until they have repeatable single-24GB full/long-context serving, tool-call correctness, and coding-agent quality evidence.
+
 - `antirez/deepseek-v4-gguf` + `antirez/llama.cpp-deepseek-v4-flash`
   - User-observed 2026-04-26 via X: antirez is running a DeepSeek v4 Flash GGUF path, with external chatter about a DeepSeek-v4-flash quant.
   - Quick source check: the fork describes experimental DeepSeek v4 Flash support in llama.cpp, targeting 128 GB MacBooks with 2-bit quantization of routed experts; it says the path was not extensively tested and currently emphasizes CPU/Metal rather than CUDA.
